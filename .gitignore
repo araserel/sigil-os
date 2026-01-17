@@ -1,0 +1,8 @@
+# Analysis folder (temporary research)
+_analysis/
+
+# Reference repositories (not part of Prism OS)
+Public Spec Driven Repos/
+
+# OS files
+.DS_Store
