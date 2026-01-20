@@ -196,4 +196,4 @@ User: /spec Create the checkout flow based on these mockups
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0.0 | 2024-01-15 | Initial release |
+| 1.0.0 | 2026-01-20 | Initial release |

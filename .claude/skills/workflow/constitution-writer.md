@@ -1,11 +1,11 @@
 ---
 name: constitution-writer
-description: Creates project constitution through guided conversation. Invoke when setting up a new project or when user says "constitution", "project principles", or "project setup".
-version: 1.0.0
+description: Creates project constitution through guided conversation. Invoke when setting up a new project or when user says "constitution", "project principles", or "project setup". Can be pre-populated from project foundation.
+version: 1.1.0
 category: workflow
-chainable: false
+chainable: true
 invokes: []
-invoked_by: []
+invoked_by: [foundation-writer, orchestrator]
 tools: Read, Write, Edit, Glob
 ---
 
@@ -21,6 +21,7 @@ Guide users through creating their project constitution—the immutable principl
 - User requests `/constitution`
 - User asks about "project principles" or "project rules"
 - No constitution exists in `/memory/constitution.md`
+- After Discovery chain completes (invoked by foundation-writer)
 
 ## Inputs
 
@@ -34,7 +35,37 @@ Guide users through creating their project constitution—the immutable principl
   - `database`: string — Database (if any)
 - `existing_constitution`: string — Path to existing constitution to update
 
+**From Discovery Chain (when invoked by foundation-writer):**
+- `foundation_path`: string — Path to approved foundation document
+- `pre_populated_constitution`: object — Pre-filled data from Discovery
+  ```json
+  {
+    "article_1": {
+      "language": "TypeScript",
+      "language_version": "5.x",
+      "framework": "Next.js",
+      "framework_version": "14.x",
+      "database": "PostgreSQL",
+      "database_version": "15+",
+      "orm": "Prisma"
+    }
+  }
+  ```
+
 ## Process
+
+### Step 0: Check for Foundation Document
+
+```
+Check if invoked from Discovery chain:
+- If foundation_path provided:
+  1. Load /memory/project-foundation.md
+  2. Extract pre_populated_constitution data
+  3. Pre-fill Article 1 (Technology Stack)
+  4. Note which questions can be skipped
+- If no foundation:
+  1. Proceed with standard guided conversation
+```
 
 ### Step 1: Check for Existing Constitution
 
@@ -101,10 +132,20 @@ Using gathered responses:
 
 ### Article 1: Technology Stack
 
-**Opening:**
+**Opening (Standard):**
 "Let's start with your technology choices. These are the core technologies your project will use—agents will respect these choices and won't suggest alternatives unless you ask."
 
-**Questions:**
+**Opening (From Foundation):**
+"I have your technology stack from the Discovery phase. Let me confirm these choices for your constitution:
+
+- **Language:** [pre_populated.language] [pre_populated.language_version]
+- **Framework:** [pre_populated.framework] [pre_populated.framework_version]
+- **Database:** [pre_populated.database] [pre_populated.database_version]
+- **ORM:** [pre_populated.orm]
+
+Is this correct, or would you like to make changes?"
+
+**Questions (if not pre-populated):**
 - "What programming language will this project use? (e.g., TypeScript, Python, Go)"
 - "What version? Or should we use the latest stable?"
 - "Are you using a framework? If so, which one?"
@@ -192,19 +233,82 @@ Using gathered responses:
 - User confirms each article before proceeding
 - Final constitution shown for approval before saving
 
+## Foundation Integration
+
+When invoked from the Discovery chain (via `foundation-writer`):
+
+### Pre-Population Behavior
+
+| Article | Pre-Populated Data | User Action |
+|---------|-------------------|-------------|
+| Article 1 | Language, framework, database, ORM, hosting | Confirm or modify |
+| Article 2 | Framework-appropriate defaults suggested | Answer remaining questions |
+| Article 3 | Framework-appropriate test framework suggested | Answer remaining questions |
+| Article 4 | Standard security defaults | Answer remaining questions |
+| Article 5 | Based on stack patterns | Answer remaining questions |
+| Article 6 | Standard defaults | Answer remaining questions |
+| Article 7 | WCAG 2.1 AA default | Confirm or upgrade to AAA |
+
+### Abbreviated Flow
+
+When foundation data is available:
+
+```
+1. Present Article 1 with pre-filled values
+   → User confirms or modifies
+
+2. For Articles 2-7:
+   → Present smart defaults based on selected stack
+   → Ask only questions that aren't answered by foundation
+   → User confirms or customizes
+
+3. Generate constitution
+   → Show summary highlighting what came from foundation
+   → User approves
+```
+
+### Conversation Example (From Foundation)
+
+```
+Assistant: "Great news! Since we went through Discovery, I already have your
+           technology stack figured out:
+
+           **Article 1: Technology Stack**
+           - Language: TypeScript 5.x
+           - Framework: Next.js 14.x
+           - Database: PostgreSQL 15+ with Prisma
+
+           Does this look correct?"
+
+User: "Yes, that's right"
+
+Assistant: "Perfect\! Moving on to coding standards for TypeScript/Next.js.
+           I'll suggest some sensible defaults - just let me know what to change.
+
+           **Article 2: Code Standards**
+           Suggested for your stack:
+           - Prettier with default config
+           - ESLint with Next.js rules
+           - Strict TypeScript (no any types)
+
+           Any customizations?"
+
+User: "Looks good, use those"
+
+Assistant: "Great\! For testing, Jest is standard for Next.js...
+           [continues with remaining articles]"
+```
+
 ## Error Handling
 
 - If user skips an article: Note as "To be defined" and flag for follow-up
 - If user provides unclear answers: Ask clarifying questions
 - If template not found: Use embedded fallback template
+- If foundation data conflicts with user input: User input takes precedence
 
 ## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0.0 | 2024-01-15 | Initial release |
-
-## Example Session
-
-```
-User: /constitution
+| 1.0.0 | 2026-01-20 | Initial release |
+| 1.1.0 | 2026-01-20 | Added Foundation integration, pre-population support |

@@ -33,6 +33,7 @@ When a request arrives:
 
 | Agent | Trigger Words | Priority |
 |-------|--------------|----------|
+| **Discovery Chain** | "new project", "start fresh", "greenfield", "what should I build", "beginning" | Highest |
 | Business Analyst | "feature", "requirement", "user story", "spec", "I want", "we need" | High |
 | Architect | "architecture", "design", "how should", "approach", "technical", "system" | High |
 | Task Planner | "break down", "tasks", "sprint", "stories", "backlog", "prioritize" | Medium |
@@ -139,6 +140,105 @@ When starting a new feature:
 4. Route to Business Analyst to begin Specify phase
 5. Initialize workflow state
 
+## Discovery Track Initialization
+
+When starting a new project (greenfield or scaffolded codebase):
+
+### Detection
+
+Invoke Discovery chain when:
+- User explicitly says "new project", "start fresh", "greenfield"
+- No `/memory/constitution.md` exists
+- No `/memory/project-context.md` exists
+- User asks "what should I build" in empty or minimal directory
+
+### Process
+
+1. **Invoke `codebase-assessment` skill**
+   - Scan for dependency manifests, code files, test infrastructure
+   - Classify as: greenfield, scaffolded, or mature
+   - Present classification to user for confirmation
+
+2. **Route based on classification:**
+
+   **Greenfield/Scaffolded → Discovery Chain:**
+   ```
+   codebase-assessment → problem-framing → constraint-discovery
+       → stack-recommendation → foundation-writer → constitution-writer
+   ```
+
+   **Mature → Standard Workflow:**
+   ```
+   Skip Discovery, route to complexity-assessor and full-pipeline
+   ```
+
+3. **Track Discovery state:**
+   ```markdown
+   ## Discovery Status
+
+   **Classification:** [Greenfield | Scaffolded | Mature]
+   **Phase:** [Problem Framing | Constraints | Stack | Foundation | Constitution]
+
+   ### Progress
+   - [x] Codebase Assessment
+   - [ ] Problem Framing
+   - [ ] Constraint Discovery
+   - [ ] Stack Recommendation
+   - [ ] Foundation Document
+   - [ ] Constitution Creation
+   ```
+
+### Discovery Trigger Words
+
+- "new project" — Start full Discovery chain
+- "start fresh" — Start full Discovery chain
+- "greenfield" — Start full Discovery chain
+- "what should I build" — Check codebase state, may trigger Discovery
+- "beginning" — Check if Discovery needed
+- "foundation" — View or create project foundation
+- "discover" — Trigger Discovery chain
+
+### Discovery Interaction Patterns
+
+**Pattern 1: Empty Directory**
+```
+User: "I want to build something"
+
+Orchestrator: "I notice this is a new project. Let me guide you through
+discovery to make sure we start on solid ground.
+
+First, tell me about what you want to build."
+
+→ Invoke problem-framing skill
+```
+
+**Pattern 2: Partial Setup**
+```
+User: "Help me with this project"
+
+Orchestrator: "I found an existing package.json with React configured.
+Is this the stack you want to use, or should we reconsider?
+
+- Use existing setup (React)
+- Start fresh with Discovery"
+
+→ Route based on user choice
+```
+
+**Pattern 3: Mature Codebase**
+```
+User: "New project"
+
+Orchestrator: "This codebase already has substantial code, tests, and CI.
+I recommend we skip Discovery and go straight to feature development.
+
+Would you like to:
+- Add a new feature
+- Review the existing setup"
+
+→ Route to standard workflow
+```
+
 ## Session Startup Behavior
 
 **On every session start**, before processing user requests:
@@ -190,14 +290,29 @@ See `/docs/context-management.md` for full protocol.
 | `complexity-assessor` | Determine workflow track for new requests |
 | `handoff-packager` | Generate Technical Review Package for engineer handoff |
 | `status-reporter` | Generate formatted workflow status on demand |
+| `codebase-assessment` | Classify codebase state for Discovery routing |
+| `problem-framing` | Capture problem statement and extract preferences |
+| `constraint-discovery` | Progressive constraint gathering |
+| `stack-recommendation` | Generate and present technology stack options |
+| `foundation-writer` | Compile Discovery outputs into foundation document |
 
 ## Trigger Words
 
+### General
 - "help" — Show available commands and current status
 - "start" — Initialize new feature workflow
 - "status" — Report current workflow state
 - "what should" — Suggest next action
 - "where are we" — Report current phase and progress
+
+### Discovery
+- "new project" — Start Discovery chain
+- "start fresh" — Start Discovery chain
+- "greenfield" — Start Discovery chain
+- "foundation" — View or create project foundation
+- "discover" — Trigger Discovery chain
+
+### Handoff
 - "engineer review" — Generate Technical Review Package
 - "technical review" — Generate Technical Review Package
 - "developer look at this" — Generate Technical Review Package
