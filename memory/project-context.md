@@ -1,27 +1,44 @@
 # Project Context
 
 > Auto-updated file tracking current project state across sessions.
+> Used by `/prism` command for workflow detection and resume capability.
 >
-> **Last Updated:** 2025-01-13
+> **Last Updated:** 2026-01-21
+
+---
+
+## Active Workflow
+
+> This section is read by `/prism continue` to resume work. Keep it current.
+
+- **Current Phase:** none
+- **Feature:** null
+- **Spec Path:** null
+- **Track:** null
+- **Started:** null
+- **Last Updated:** 2026-01-21
+
+### Phase Values
+<!-- Valid phases: specify | clarify | plan | tasks | implement | validate | review | none -->
 
 ---
 
 ## Current Work
 
 ### Active Feature
-- **Feature:** Prism OS Foundation
+- **Feature:** Prism OS v1.0
 - **Spec Path:** N/A (meta-project)
 - **Track:** Standard
 
 ### Current Phase
-- **Phase:** Foundation
-- **Status:** In Progress
-- **Active Agent:** Orchestrator
+- **Phase:** Complete
+- **Status:** v1.0 Released
+- **Active Agent:** None
 
 ### Current Task (if in Implement phase)
-- **Task ID:** Phase 1
-- **Description:** Create project structure, constitution, and base configuration
-- **Status:** In Progress
+- **Task ID:** N/A
+- **Description:** N/A
+- **Status:** N/A
 
 ---
 

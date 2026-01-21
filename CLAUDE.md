@@ -1046,23 +1046,44 @@ Prism synthesizes patterns from 7 analyzed frameworks. Here's what came from whe
 
 ## Quick Reference
 
-### Slash Commands
+### Primary Command
+
+**`/prism`** is the unified entry point for all Prism OS workflows:
+
+| Usage | What it Does |
+|-------|-------------|
+| `/prism` | Show status dashboard and suggest next action |
+| `/prism "description"` | Start building a new feature |
+| `/prism continue` | Resume where you left off |
+| `/prism status` | Detailed workflow status |
+| `/prism help` | Show available commands |
+
+**Natural language also works:** Just describe what you want!
+- "I want to add user authentication"
+- "Build me a dashboard"
+- "What am I working on?"
+- "Keep going"
+
+### All Slash Commands
 
 | Command | Purpose |
 |---------|---------|
+| `/prism` | **Unified entry point (recommended)** |
 | `/spec [description]` | Create a new feature specification |
 | `/clarify` | Start clarification Q&A for current spec |
 | `/plan` | Generate implementation plan from spec |
 | `/tasks` | Break plan into executable tasks |
+| `/validate` | Run QA validation checks |
 | `/status` | Show current workflow status |
 | `/constitution` | View or edit project constitution |
+| `/prime [focus]` | Load project context for a session |
 
 ### Key Files
 
 | File | Purpose |
 |------|---------|
 | `/memory/constitution.md` | Project principles (immutable) |
-| `/memory/project-context.md` | Current project state |
+| `/memory/project-context.md` | Current project state (used by /prism) |
 | `/specs/###-feature/spec.md` | Feature specification |
 | `/specs/###-feature/plan.md` | Implementation plan |
 | `/specs/###-feature/tasks.md` | Task breakdown |
@@ -1073,3 +1094,4 @@ Prism synthesizes patterns from 7 analyzed frameworks. Here's what came from whe
 - **"What should I do next?"** → Orchestrator provides guidance
 - **"I'm stuck on..."** → Orchestrator identifies blockers and solutions
 - **"Show me the status"** → Current phase, progress, next touchpoint
+- **`/prism help`** → Show all available commands

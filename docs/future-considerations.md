@@ -100,6 +100,136 @@ Ideas and enhancements to evaluate in future iterations. These are explicitly ou
 
 ---
 
+## Enterprise & Scaling
+
+### Supabase Integration for Team/Enterprise Use
+
+**Context:** Prism OS currently uses file-based storage (`memory/`, `specs/`, `templates/`). This works well for solo/personal use but limits collaboration and enterprise features. Research conducted (2026-01-20) analyzing Archon's Supabase architecture identified patterns applicable to Prism OS.
+
+**What Supabase Would Unlock:**
+
+| Capability | File-Based (Current) | Supabase-Enabled |
+|------------|---------------------|------------------|
+| Multi-user collaboration | Git merge conflicts on shared files | Real-time sync, row-level security |
+| Audit trail | Git history (if committed) | Automatic `created_at`, `updated_by`, change logs |
+| Cross-project learning | Manual copy-paste between repos | Query patterns across all projects |
+| Permissions | All-or-nothing repo access | Role-based: PM edits specs, Dev reads only |
+| Analytics | None | Cycle times, clarification rates, spec quality scores |
+| Integration API | Read files via filesystem | REST/GraphQL endpoints for Jira, Slack, dashboards |
+| Disaster recovery | Hope someone committed | Automatic backups, point-in-time restore |
+
+**Proposed Data Model:**
+
+```
+STAYS IN FILES (repo-local):
+├── CLAUDE.md              # Claude Code needs this locally
+├── .claude/               # Skills, agents, commands (code-like)
+├── templates/             # Document templates (code-like)
+└── specs/drafts/          # Work-in-progress specs
+
+MOVES TO SUPABASE (shared state):
+├── constitutions          # project_id, version, content, approved_by
+├── specs                  # id, project_id, status, content, created_by
+├── decisions              # spec_id, question, answer, decided_by
+├── projects               # id, name, foundation_json, stack_json
+├── project_members        # project_id, user_id, role
+├── audit_log              # action, entity, user_id, timestamp, diff
+└── embeddings             # entity_id, vector (for cross-project RAG)
+```
+
+**Hybrid Architecture Approach:**
+
+Design storage layer to work both ways:
+- Solo/personal use: File-based only, zero setup
+- Team use: Add Supabase connection string, enable collaboration
+- Enterprise: Self-host Supabase, add SSO, audit everything
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Developer Workstation                    │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐     │
+│  │ Claude Code │    │  Git Repo   │    │ Prism CLI   │     │
+│  │  + Prism OS │◄──►│  (local)    │◄──►│  (optional) │     │
+│  └──────┬──────┘    └─────────────┘    └──────┬──────┘     │
+└─────────┼──────────────────────────────────────┼────────────┘
+          │                                      │
+          ▼                                      ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    Supabase (Cloud/Self-hosted)              │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐    │
+│  │ Projects │  │  Specs   │  │ Decisions│  │  Audit   │    │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘    │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │           Supabase Edge Functions                     │   │
+│  │  • Spec validation webhooks                          │   │
+│  │  • Slack/Teams notifications                         │   │
+│  │  • Jira/Linear sync                                  │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Implementation Phases:**
+
+| Phase | Focus | Supabase? |
+|-------|-------|-----------|
+| Current | Validate workflow (personal use) | No — file-based |
+| Early adopters | Test with 2-3 trusted users | No — separate repos |
+| Team pilot | One real team uses it daily | **Yes** — need shared state |
+| Enterprise | Multiple teams, compliance needs | **Yes** — add RLS, audit, SSO |
+
+**Trigger for Implementation:** When you hear "we need two PMs to work on specs together" — that's the signal to add Supabase.
+
+**Evaluation Criteria:**
+- Is multi-user collaboration actually requested?
+- Does file-based + git provide sufficient collaboration for small teams?
+- What's the minimum viable Supabase schema?
+- Should Prism OS offer hosted Supabase or require self-setup?
+
+**Reference:** Archon project (`/Public Spec Driven Repos/Archon/`) uses Supabase for knowledge base, project/task management, settings persistence, and vector search (pgvector). Their `docker-compose.yml` and `/python/src/server/` provide implementation patterns.
+
+---
+
+### Distribution Strategy Options
+
+**Context:** Research conducted (2026-01-20) comparing Auto-Claude and Archon installation patterns. Current `install.sh` is functional but lacks versioning and update mechanisms.
+
+**Tier 1 (Current): Shell Installer**
+```bash
+curl -sSL https://prism-os.dev/install.sh | sh
+```
+- Zero dependencies beyond git and Claude Code CLI
+- Works in any git repository
+- Suitable for personal/private use
+
+**Tier 2 (Future): GitHub Template Repository**
+- "Use this template" button creates new repo with Prism OS pre-installed
+- Zero command-line knowledge required
+- Ideal for greenfield projects
+- Requires public repository
+
+**Tier 3 (Future): npx Initializer**
+```bash
+npx create-prism-os
+```
+- Interactive setup with prompts
+- Could run Discovery questions during install
+- Generates constitution from answers
+- Requires npm package publication
+
+**Install.sh Improvements Needed:**
+- `--version X.X.X` flag to pin specific releases
+- `--verify` flag to validate installation completeness
+- `--local /path` flag for offline/private installation
+- `.prism-os-version` file to track installed version
+- `--help` flag with usage documentation
+
+**Evaluation Criteria:**
+- Is public distribution actually desired?
+- What's the minimum viable installer for team adoption?
+- Should versioning match semantic versioning or date-based?
+
+---
+
 ## Testing & Validation
 
 ### Enterprise Track Flow Test
@@ -166,30 +296,103 @@ Ideas and enhancements to evaluate in future iterations. These are explicitly ou
 
 ---
 
-### Visual UI Layer (Auto Claude Integration)
-**Context:** Auto Claude is a community-built desktop application that wraps Claude Code with a visual UI (Electron + React) and multi-agent orchestration. It provides features like Kanban boards, parallel terminal sessions, and visual progress tracking that could benefit non-technical Prism users.
+### Visual UI Layer Options
 
-**Key Insight:** Auto Claude's approach mirrors VS Code's model — it presents a terminal UI to the user rather than making API calls directly. This means it uses the user's existing Claude Code authentication (Pro/Max subscription) rather than requiring separate API keys, which keeps it compliant with Anthropic's terms.
+**Context:** Research conducted (2026-01-20) comparing Auto-Claude and Archon projects to understand UI integration patterns for AI-assisted development tools.
 
-**Integration Approach:**
-- Prism OS remains a pure Claude Code workflow system (agents, skills, chains, templates)
-- Auto Claude (or similar UI) wraps the Claude Code CLI that runs Prism
-- UI layer is optional — power users can still use terminal directly
-- No changes needed to Prism OS core; it's a presentation layer choice
+#### Option A: Full Electron Desktop App (Auto-Claude Pattern)
 
-**Potential Benefits:**
-- Visual Kanban for spec/task tracking
-- Multiple parallel terminal sessions for complex workflows
-- Progress visualization for non-technical users
-- Git worktree isolation per feature (Auto Claude's model)
+**Architecture:**
+- Electron 39 + React 19 + TypeScript
+- Python backend subprocess spawned by Electron main process
+- xterm.js for multiple parallel agent terminals
+- IPC communication between processes
+- OAuth token stored in `.env` as `CLAUDE_CODE_OAUTH_TOKEN`
+
+**Features:**
+- Visual Kanban board for task management
+- Multiple parallel agent terminals visible simultaneously
+- Git worktree isolation per feature
+- Roadmap and insights chat interfaces
+- Graphiti + LadybugDB for memory/knowledge graph (embedded, no Docker)
+
+**Installation:**
+- Pre-built installers (exe/dmg/AppImage)
+- First launch triggers OAuth setup wizard
+- User selects git repository folder
+
+**Pros:**
+- Polished desktop experience
+- Multiple terminals visible at once
+- Works offline once authenticated
+
+**Cons:**
+- High complexity (Electron + Python + IPC)
+- Separate installation from Claude Code
+- Maintenance burden
+- Contradicts Prism's "no external dependencies" principle
+
+#### Option B: Web Dashboard (Archon Pattern)
+
+**Architecture:**
+- React 18 + Vite + TanStack Query
+- Python FastAPI backend (Docker-based)
+- Supabase PostgreSQL + pgvector for persistence
+- MCP server on port 8051 for tool integration
+
+**Features:**
+- Glassmorphism UI with Radix UI primitives
+- Real-time updates via Socket.IO
+- Knowledge base with RAG search
+- Project and task management exposed as MCP tools
+
+**Installation:**
+- Docker-first: `docker compose up --build -d`
+- Requires Supabase account setup
+- Hybrid mode for development
+
+**Pros:**
+- Web-based, no desktop install
+- MCP integration enables cross-tool access
+- Powerful knowledge base features
+
+**Cons:**
+- Requires Docker and database
+- More infrastructure to maintain
+- Higher barrier to entry
+
+#### Option C: Minimal Read-Only Dashboard (Recommended for Future)
+
+**Architecture:**
+- Single-file HTML + vanilla JS (~500 lines)
+- Express for serving, chokidar for file watching
+- Reads existing markdown files, no database
+
+**Features:**
+- Current workflow status visualization
+- Spec and task progress display
+- Links to open markdown files
+- Runs via `npx prism-os ui`
+
+**Pros:**
+- Minimal complexity
+- No new dependencies
+- Supplements CLI, doesn't replace it
+- Maintains file-first philosophy
+
+**Cons:**
+- Read-only (can't edit from UI)
+- Less sophisticated than Electron option
 
 **Evaluation Criteria:**
 - Does the UI layer actually help non-technical users, or add confusion?
-- Is Auto Claude stable enough for production use?
-- Are there simpler UI options (VS Code extension, web dashboard)?
-- Does this create support burden for a community project we don't control?
+- Which option provides best value/complexity ratio?
+- Can we iterate from Option C toward Option A if demand exists?
+- Should UI be a separate project or part of Prism OS?
 
-**Notes:** This is a presentation layer decision, not a core architecture change. Prism should work identically whether accessed via terminal, VS Code, or a visual wrapper like Auto Claude.
+**Decision (v1):** CLI-only. Revisit after user feedback indicates UI is needed.
+
+**Notes:** This is a presentation layer decision, not a core architecture change. Prism should work identically whether accessed via terminal, VS Code, or a visual wrapper.
 
 ---
 

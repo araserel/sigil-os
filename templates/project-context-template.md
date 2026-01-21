@@ -1,8 +1,25 @@
 # Project Context
 
 > Auto-updated file tracking current project state across sessions.
+> Used by `/prism` command for workflow detection and resume capability.
 >
 > **Last Updated:** [TIMESTAMP]
+
+---
+
+## Active Workflow
+
+> This section is read by `/prism continue` to resume work. Keep it current.
+
+- **Current Phase:** none
+- **Feature:** null
+- **Spec Path:** null
+- **Track:** null
+- **Started:** null
+- **Last Updated:** [TIMESTAMP]
+
+### Phase Values
+<!-- Valid phases: specify | clarify | plan | tasks | implement | validate | review | none -->
 
 ---
 
