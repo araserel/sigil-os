@@ -815,11 +815,12 @@ Skills are reusable, chainable workflow units. Each skill has defined inputs, ou
 
 | Category | Purpose | Skills |
 |----------|---------|--------|
-| **Workflow** | Core development workflow | `spec-writer`, `clarifier`, `technical-planner`, `task-decomposer`, `complexity-assessor`, `handoff-packager` |
+| **Workflow** | Core development workflow | `spec-writer`, `clarifier`, `technical-planner`, `task-decomposer`, `complexity-assessor`, `handoff-packager`, `constitution-writer`, `status-reporter`, `foundation-writer`, `visual-analyzer` |
 | **Engineering** | Code and architecture | `adr-writer` |
 | **Quality** | Validation and fixing | `qa-validator`, `qa-fixer` |
 | **Review** | Code, security, deploy checks | `code-reviewer`, `security-reviewer`, `deploy-checker` |
-| **Research** | Information gathering | `researcher`, `knowledge-search` |
+| **Research** | Information gathering | `researcher`, `knowledge-search`, `codebase-assessment`, `problem-framing`, `constraint-discovery`, `stack-recommendation` |
+| **Learning** | Institutional memory | `learning-capture`, `learning-reader`, `learning-review` |
 
 ### Skill Invocation Patterns
 
@@ -1044,6 +1045,98 @@ Prism synthesizes patterns from 7 analyzed frameworks. Here's what came from whe
 
 ---
 
+## 9. Learning Loop
+
+### Overview
+
+Prism captures learnings automatically as you work. This builds institutional memory that helps avoid repeating mistakes and surfaces validated patterns over time.
+
+### How It Works
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Before Each Task                              │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │  learning-reader loads:                                  │    │
+│  │  • Patterns (rules to follow)                           │    │
+│  │  • Gotchas (traps to avoid)                             │    │
+│  │  • Current feature notes                                │    │
+│  └─────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+                    [Task Implementation]
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                    After Each Task                               │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │  learning-capture records:                               │    │
+│  │  • What was done (task notes)                           │    │
+│  │  • Surprises encountered (gotchas)                      │    │
+│  │  • Choices made (decisions)                             │    │
+│  │  • Potential patterns [PATTERN?]                        │    │
+│  └─────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Learning Categories
+
+| Category | What It Contains | Loaded |
+|----------|------------------|--------|
+| **Patterns** | Validated rules to follow | Always |
+| **Gotchas** | Project-specific traps to avoid | Always |
+| **Decisions** | Architectural choices and rationale | On demand |
+| **Feature Notes** | Per-feature task details | Current feature only |
+
+### Token Budget
+
+Learnings are capped to preserve context:
+
+| Category | Max Items | Est. Tokens |
+|----------|-----------|-------------|
+| Patterns | 30 | ~900 |
+| Gotchas | 30 | ~900 |
+| Decisions | 20 | ~800 |
+| Feature notes | 20 per feature | ~600 |
+
+**Typical load:** ~2,400 tokens (~3% of context)
+
+### Lifecycle
+
+1. **Capture** — Learnings recorded automatically after each task
+2. **Reference** — Relevant learnings loaded before each task
+3. **Review** — Periodic pruning and promotion via `/learn --review`
+4. **Promote** — Validated patterns moved to patterns.md
+5. **Archive** — Completed feature notes moved to archived/
+
+### Manual Review
+
+To review and clean up learnings:
+
+```
+/learn --review
+```
+
+This prompts you to:
+- Promote validated pattern candidates
+- Archive completed feature notes
+- Remove duplicates
+- Prune stale entries
+
+### File Structure
+
+```
+/memory/learnings/
+├── active/
+│   ├── patterns.md       # Promoted patterns (always loaded)
+│   ├── gotchas.md        # Project traps (always loaded)
+│   ├── decisions.md      # Architectural choices (on demand)
+│   └── features/
+│       └── [feature-id].md   # Per-feature task notes
+└── archived/             # Historical learnings
+```
+
+---
+
 ## Quick Reference
 
 ### Primary Command
@@ -1076,6 +1169,7 @@ Prism synthesizes patterns from 7 analyzed frameworks. Here's what came from whe
 | `/validate` | Run QA validation checks |
 | `/status` | Show current workflow status |
 | `/constitution` | View or edit project constitution |
+| `/learn` | View, search, or review project learnings |
 | `/prime [focus]` | Load project context for a session |
 
 ### Key Files
@@ -1084,6 +1178,8 @@ Prism synthesizes patterns from 7 analyzed frameworks. Here's what came from whe
 |------|---------|
 | `/memory/constitution.md` | Project principles (immutable) |
 | `/memory/project-context.md` | Current project state (used by /prism) |
+| `/memory/learnings/active/patterns.md` | Validated patterns to follow |
+| `/memory/learnings/active/gotchas.md` | Project-specific traps to avoid |
 | `/specs/###-feature/spec.md` | Feature specification |
 | `/specs/###-feature/plan.md` | Implementation plan |
 | `/specs/###-feature/tasks.md` | Task breakdown |

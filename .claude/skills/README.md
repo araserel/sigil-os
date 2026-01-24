@@ -14,6 +14,10 @@ Core development workflow skills:
 - `task-decomposer.md` — Break plans into tasks
 - `handoff-packager.md` — Generate technical review packages
 - `status-reporter.md` — Generate workflow status reports
+- `foundation-writer.md` — Compile Discovery outputs into foundation document
+- `visual-analyzer.md` — Analyze mockups and wireframes (stub)
+- `sprint-planner.md` — Organize tasks into sprints (stub)
+- `story-preparer.md` — Convert tasks to user story format (stub)
 
 ### qa/
 Validation and fixing skills:
@@ -27,8 +31,19 @@ Code and deployment review skills:
 - `deploy-checker.md` — Deployment readiness
 
 ### research/
-Information gathering skills:
+Information gathering and Discovery skills:
 - `researcher.md` — Technical research
+- `codebase-assessment.md` — Analyze codebase state for Discovery
+- `problem-framing.md` — Capture problem statement and user preferences
+- `constraint-discovery.md` — Progressive constraint gathering
+- `stack-recommendation.md` — Generate technology stack options
+- `knowledge-search.md` — Search project knowledge base (stub)
+
+### learning/
+Institutional memory and learning loop skills:
+- `learning-capture.md` — Record learnings after task completion
+- `learning-reader.md` — Load relevant learnings before tasks
+- `learning-review.md` — Prune, promote, and archive learnings
 
 ## Skill Definition Format
 

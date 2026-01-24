@@ -40,9 +40,21 @@ You should see something like `v18.17.0` or higher. If you see "command not foun
 
 ### 2. Claude Code CLI (with active subscription)
 
-Claude Code is the AI that powers Prism. You'll need a Claude Pro, Max, or API subscription.
+Claude Code is the AI that powers Prism. You'll need an Anthropic subscription.
 
-**Check if you have it:**
+**Which plan do I need?**
+
+| Plan | Best For |
+|------|----------|
+| **Claude Pro** | Personal projects, learning |
+| **Claude Max** | Heavy usage, multiple projects |
+| **API** | Developers, production apps |
+
+> **Recommendation:** Start with Claude Pro. It's enough for most personal projects. You can upgrade later if needed.
+>
+> See [anthropic.com/pricing](https://www.anthropic.com/pricing) for current pricing.
+
+**Check if you have Claude Code installed:**
 ```bash
 claude --version
 ```
@@ -52,12 +64,14 @@ If you see a version number, you're good. If not, install it:
 npm install -g @anthropic-ai/claude-code
 ```
 
-Then authenticate:
+Then connect your Anthropic account:
 ```bash
 claude auth login
 ```
 
-Follow the prompts to connect your Anthropic account.
+Follow the prompts — you'll sign in through your browser and return to the terminal.
+
+> **Don't have an account?** Sign up at [anthropic.com](https://anthropic.com) and subscribe to a plan.
 
 ### 3. Git
 
@@ -82,35 +96,90 @@ cd my-project
 git init
 ```
 
+### Starting from Zero? (No Project Yet)
+
+If you have an idea but no code yet — that's perfect. Prism is designed for exactly this.
+
+```bash
+mkdir my-new-app
+cd my-new-app
+git init
+```
+
+After installing Prism, run `/prism`. It will detect you're starting fresh and guide you through **Discovery** — a conversation that helps you choose a tech stack:
+
+```
+> /prism
+
+I notice this is a new project. Let's set things up!
+I'll ask a few questions to recommend a tech stack.
+
+What are you building?
+> A website where users can track their habits
+
+Will users need to create accounts?
+> Yes
+
+Based on your answers, here are my recommendations:
+
+Option A: Next.js Fullstack (Recommended)
+├── TypeScript + Next.js + PostgreSQL
+├── Free hosting on Vercel
+└── Great for web apps with user accounts
+
+Option B: Django Fullstack
+├── Python + Django + PostgreSQL
+└── Excellent for rapid development
+
+Which option? (A/B)
+> A
+
+Great choice! Now let's complete your project constitution...
+```
+
+You don't need to know what framework or database to use — Prism recommends options based on what you're building.
+
 ---
 
 ## Installation
 
-Installing Prism adds the AI-powered workflow system to your project. It takes about 2 minutes.
+Installing Prism adds the AI-powered workflow system to your project.
 
 ### Step 1: Get Prism
 
-If you have access to the Prism repository:
+Clone the Prism repository to a permanent location on your computer:
+
 ```bash
-git clone git@github.com:your-org/prism-os.git
+cd ~
+git clone <REPOSITORY_URL>
 ```
+
+> **What this does:** Downloads Prism to your home folder (`~/prism-os`). You only do this once, and it works for all your projects.
+>
+> Replace `<REPOSITORY_URL>` with the URL you received. If you're in a private beta, use the URL provided by your organization.
 
 ### Step 2: Navigate to Your Project
 
-Open a terminal and go to your project folder. For example:
+Open a terminal and go to your project folder:
+
 ```bash
 cd ~/Projects/my-app
 ```
 
-Replace `~/Projects/my-app` with the actual path to your project.
+Replace `~/Projects/my-app` with your actual project path.
+
+> **Finding Your Project Path:**
+> - **Mac:** Right-click your project folder in Finder → "Get Info" → copy the path after "Where:"
+> - **Windows:** Right-click folder → "Copy as path"
+> - **VS Code:** Right-click folder in sidebar → "Copy Path"
 
 ### Step 3: Run the Installer
 
 ```bash
-/path/to/prism-os/install.sh --local /path/to/prism-os
+~/prism-os/install.sh --local ~/prism-os
 ```
 
-Replace `/path/to/prism-os` with wherever you cloned Prism.
+> **Note:** If you cloned Prism somewhere other than `~/prism-os`, replace both paths above with your actual location.
 
 You'll see output like this:
 ```
@@ -166,6 +235,7 @@ graph TD
 
     D --> D1[constitution.md - Project rules]
     D --> D2[project-context.md - Current state]
+    D --> D3[learnings/ - Patterns and gotchas]
 
     E --> E1[Your features go here]
 
@@ -179,7 +249,7 @@ graph TD
 |--------|------------------|
 | `.claude/` | The AI's instructions for each command |
 | `templates/` | Document templates for specs, plans, etc. |
-| `memory/` | Project rules and current workflow state |
+| `memory/` | Project rules, state, and learnings |
 | `specs/` | Feature specifications you create |
 | `CLAUDE.md` | The main configuration file |
 
@@ -455,13 +525,36 @@ npm run dev
 
 Then open your browser and try the new feature.
 
+### What Prism Learned
+
+During implementation, Prism automatically captured lessons for future features:
+- **Patterns** — Reusable rules it discovered while building
+- **Gotchas** — Traps it encountered and how to avoid them
+- **Decisions** — Why certain choices were made
+
+Run `/learn` to see what was captured. These learnings help future features go smoother — Prism remembers what worked and avoids past mistakes.
+
 ### Commit Your Changes
 
-When you're happy with the feature:
+When you're happy with the feature, save it to your project history:
+
 ```bash
 git add .
 git commit -m "Add contact form feature"
 ```
+
+> **New to Git?** Here's what these commands do:
+> - `git add .` — Stages all changed files (tells Git "I want to save these")
+> - `git commit -m "..."` — Saves a snapshot with a description
+>
+> Think of it like saving a document, but with a note about what changed.
+
+**Want Prism to handle commits?** Just ask:
+```
+Commit these changes with a good message
+```
+
+Prism will create an appropriate commit message and run the commands for you.
 
 ---
 
@@ -538,7 +631,7 @@ When new versions of Prism are released, update your installation:
 ### Step 1: Update the Prism Source
 
 ```bash
-cd /path/to/prism-os
+cd ~/prism-os
 git pull
 ```
 
@@ -546,7 +639,7 @@ git pull
 
 From your project directory:
 ```bash
-/path/to/prism-os/install.sh --local /path/to/prism-os
+~/prism-os/install.sh --local ~/prism-os
 ```
 
 The installer won't overwrite your existing specifications or constitution.
@@ -554,7 +647,7 @@ The installer won't overwrite your existing specifications or constitution.
 ### Step 3: Verify
 
 ```bash
-/path/to/prism-os/install.sh --verify
+~/prism-os/install.sh --verify
 ```
 
 ---
@@ -571,6 +664,7 @@ Here's everything you need, in one place:
 | `/prism status` | See detailed progress |
 | `/prism help` | Show all available commands |
 | `/constitution` | Set up or update project rules |
+| `/learn` | View patterns and lessons Prism has learned |
 
 ### Natural Language Alternatives
 
@@ -583,9 +677,28 @@ You don't have to remember commands. Just say what you mean:
 | `/prism continue` | "Keep going" or "Next step" |
 | `/prism help` | "What can you do?" |
 
+### All Commands
+
+The commands above cover most use cases. For direct access to individual workflow phases, see the [Command Reference](command-reference.md):
+
+| Command | Purpose |
+|---------|---------|
+| `/spec` | Create specification directly |
+| `/clarify` | Resolve ambiguities |
+| `/plan` | Generate implementation plan |
+| `/tasks` | Break plan into tasks |
+| `/validate` | Run QA checks |
+| `/learn --review` | Clean up and promote learnings |
+| `/prime` | Load project context |
+
 ---
 
-## Architecture Overview
+## How It Works (Optional Reading)
+
+> **Skip this section** if you just want to build things. Come back when you're curious about what's happening under the hood.
+
+<details>
+<summary>Click to expand: Architecture Overview</summary>
 
 Here's how all the pieces fit together:
 
@@ -629,15 +742,20 @@ flowchart TD
 
 **You** describe what you want in plain English.
 
-**Prism** routes your request to specialized AI agents (like a Business Analyst for specs or a Developer for code).
+**Prism** routes your request to specialized AI agents:
+- **Business Analyst** — Turns your description into a specification
+- **Architect** — Designs how the code should be structured
+- **Developer** — Writes the actual code
+- **QA Engineer** — Tests everything works correctly
 
-**Claude Code** powers the AI agents with advanced language understanding.
+**Claude Code** powers these agents with advanced language understanding.
 
 **Your Project** receives working, tested code.
 
----
+</details>
 
-## The Full Workflow
+<details>
+<summary>Click to expand: The Full Workflow</summary>
 
 Here's the complete journey from idea to working code:
 
@@ -684,6 +802,8 @@ sequenceDiagram
         Prism-->>You: Feature complete!
     end
 ```
+
+</details>
 
 ---
 
