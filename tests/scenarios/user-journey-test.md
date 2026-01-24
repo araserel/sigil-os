@@ -400,9 +400,11 @@ Sarah wants to know exact syntax for `/spec` command.
 
 | Term | Location | Impact | Recommendation |
 |------|----------|--------|----------------|
-| "API endpoint" | quick-start.md:167 | Low — context clear | Consider footnote |
-| "Lint/format" | user-guide.md:183 | Medium — PM may not know | Add brief explanation |
+| "API endpoint" | quick-start.md:167 | Low — context clear | ✓ Defined in [glossary.md](/docs/glossary.md) |
+| "Lint/format" | user-guide.md:183 | Medium — PM may not know | ✓ Defined in [glossary.md](/docs/glossary.md) |
 | "WCAG 2.1 AA" | constitution example | Low — optional section | Keep as-is |
+
+> **Note:** Technical terms are now defined in `/docs/glossary.md` which provides plain-language explanations for non-technical users.
 
 ### Potentially Confusing Sections
 
@@ -417,8 +419,8 @@ Sarah wants to know exact syntax for `/spec` command.
 
 | ID | Severity | Description | Location | Status |
 |----|----------|-------------|----------|--------|
-| USR-001 | Minor | "API endpoint" used without definition | quick-start.md:167 | Open |
-| USR-002 | Minor | "Lint/format" not explained | user-guide.md:183 | Open |
+| USR-001 | Minor | "API endpoint" used without definition | quick-start.md:167 | Closed (defined in glossary) |
+| USR-002 | Minor | "Lint/format" not explained | user-guide.md:183 | Closed (defined in glossary) |
 | USR-003 | Minor | Installation not covered | quick-start.md prerequisites | Open (separate concern) |
 
 ---

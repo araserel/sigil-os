@@ -8,9 +8,7 @@ Contains skill chain definitions that orchestrate multi-skill workflows.
 |-------|------|----------|
 | Full Pipeline | `full-pipeline.md` | Standard/Enterprise track features |
 | Quick Flow | `quick-flow.md` | Bug fixes, small changes |
-| Research-First | `research-first.md` | New technology decisions |
-| QA Loop | `qa-loop.md` | Validation and fix cycle |
-| Review Pipeline | `review-pipeline.md` | Pre-merge reviews |
+| Discovery Chain | `discovery-chain.md` | New project setup and stack selection |
 
 ## Chain Definition Format
 

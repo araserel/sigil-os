@@ -404,31 +404,19 @@ The following minor issues were identified during Phase 7 validation (2026-01-16
 
 ### Documentation Jargon: API Endpoint
 
-**Context:** Non-technical user journey test found "API endpoint" used without definition in quick-start.md (around line 167).
-**Issue:** PM/PO users may not understand technical terms.
-**Options:**
-- Add inline definition
-- Add glossary reference
-- Create hover tooltips in rendered docs
+**Status:** ✅ RESOLVED (2026-01-21)
 
-**Evaluation Criteria:**
-- Does this actually confuse users in practice?
-- Is the inline definition approach scalable?
+**Context:** Non-technical user journey test found "API endpoint" used without definition in quick-start.md (around line 167).
+**Resolution:** Term defined in `/docs/glossary.md` with plain-language explanation: "A URL where your application receives or sends data (like a mailbox address for software)".
 
 ---
 
 ### Documentation Jargon: Lint/Format
 
-**Context:** "Lint/format" mentioned in user-guide.md (around line 183) without explanation.
-**Issue:** Technical terminology unexplained for non-technical audience.
-**Options:**
-- Add brief explanation inline
-- Add to glossary
-- Remove or simplify references
+**Status:** ✅ RESOLVED (2026-01-21)
 
-**Evaluation Criteria:**
-- Should user docs mention lint/format at all?
-- Is glossary the right approach vs inline definitions?
+**Context:** "Lint/format" mentioned in user-guide.md (around line 183) without explanation.
+**Resolution:** Term defined in `/docs/glossary.md` with plain-language explanation: "Automated tools that check and fix code style — like spell-check for code".
 
 ---
 
@@ -449,15 +437,12 @@ The following minor issues were identified during Phase 7 validation (2026-01-16
 
 ### CLAUDE.md Skills List Incomplete
 
-**Context:** Section 6 workflow skills list doesn't include `constitution-writer` and `status-reporter`.
-**Issue:** Documentation doesn't reflect actual implementation.
-**Options:**
-- Update CLAUDE.md skills list
-- Generate skills list dynamically from files
+**Status:** ✅ RESOLVED (2026-01-21)
 
-**Evaluation Criteria:**
-- How often does skills list drift from implementation?
-- Should this be part of automated workflow linting?
+**Context:** Section 6 workflow skills list didn't include `constitution-writer`, `status-reporter`, `foundation-writer`, `visual-analyzer`, and Discovery skills.
+**Resolution:** Updated CLAUDE.md Section 6 Skills Framework table to include all implemented skills:
+- Workflow: Added `constitution-writer`, `status-reporter`, `foundation-writer`, `visual-analyzer`
+- Research: Added `codebase-assessment`, `problem-framing`, `constraint-discovery`, `stack-recommendation`
 
 ---
 

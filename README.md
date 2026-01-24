@@ -145,6 +145,7 @@ See **[Quick Start Guide](docs/quick-start.md)** for a 30-minute tutorial.
 prism-os/
 ├── CLAUDE.md              # Main system configuration
 ├── .claude/
+│   ├── commands/          # Slash commands (/prism, /spec, etc.)
 │   ├── agents/            # AI agent definitions
 │   ├── skills/            # Reusable skill modules
 │   └── chains/            # Multi-step workflows
