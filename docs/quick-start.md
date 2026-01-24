@@ -1,67 +1,231 @@
-# Quick-Start Tutorial
+# Quick Start Guide
 
-> Build your first feature specification in 30 minutes.
-
-This hands-on tutorial walks you through creating a complete feature specification using Prism. By the end, you'll have a fully documented feature ready for engineering handoff.
+> Go from idea to working code in plain English. No coding required.
 
 ---
 
-## What You'll Learn
+## What is Prism?
 
-- How to set up your project constitution (the rules your project follows)
-- How to create a feature specification from a plain-language description
-- How to answer clarification questions to remove ambiguity
-- How to review and hand off the final documentation
+Prism is like having a technical team that speaks your language. You describe what you want to build in plain English, and Prism turns that into working software — with checkpoints along the way where you review and approve.
+
+Think of it like this: You're the architect describing your dream house. Prism is the construction crew that builds it, but checks in with you at each major step to make sure they understood correctly.
+
+```mermaid
+flowchart LR
+    A[Your Idea] --> B[Prism]
+    B --> C[Working Code]
+
+    style A fill:#e0f2fe,stroke:#0ea5e9
+    style B fill:#6366f1,stroke:#4f46e5,color:#fff
+    style C fill:#d1fae5,stroke:#10b981
+```
 
 ---
 
 ## Prerequisites
 
-- Prism installed and running
-- 30 minutes of uninterrupted time
-- No technical knowledge required
+Before you start, you'll need a few things installed on your computer. Don't worry — we'll show you how to check if you have them.
+
+### 1. Node.js (version 18 or newer)
+
+Node.js is a tool that runs JavaScript code. Prism needs it to work.
+
+**Check if you have it:**
+Open your terminal (on Mac: search for "Terminal" in Spotlight) and type:
+```bash
+node --version
+```
+
+You should see something like `v18.17.0` or higher. If you see "command not found" or a version lower than 18, [download Node.js here](https://nodejs.org/).
+
+### 2. Claude Code CLI (with active subscription)
+
+Claude Code is the AI that powers Prism. You'll need a Claude Pro, Max, or API subscription.
+
+**Check if you have it:**
+```bash
+claude --version
+```
+
+If you see a version number, you're good. If not, install it:
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+Then authenticate:
+```bash
+claude auth login
+```
+
+Follow the prompts to connect your Anthropic account.
+
+### 3. Git
+
+Git tracks changes to your code. Most developers already have it.
+
+**Check if you have it:**
+```bash
+git --version
+```
+
+If you see "command not found":
+- **Mac:** Install Xcode Command Line Tools: `xcode-select --install`
+- **Windows:** [Download Git here](https://git-scm.com/download/win)
+- **Linux:** `sudo apt install git` (Ubuntu/Debian)
+
+### 4. A Project Repository
+
+You need a git repository for your project. If you don't have one yet:
+```bash
+mkdir my-project
+cd my-project
+git init
+```
 
 ---
 
-## Part 1: First-Time Setup (10 minutes)
+## Installation
 
-Before creating features, you need to establish your project's constitution. This is a one-time setup that defines the standards all features must follow.
+Installing Prism adds the AI-powered workflow system to your project. It takes about 2 minutes.
 
-### What is a Constitution?
+### Step 1: Get Prism
 
-A **constitution** is your project's rulebook. It answers questions like:
+If you have access to the Prism repository:
+```bash
+git clone git@github.com:your-org/prism-os.git
+```
 
-- What programming language does the project use?
-- What database stores the data?
-- What testing standards must be met?
-- What accessibility requirements apply?
+### Step 2: Navigate to Your Project
 
-Having these decisions documented prevents debates during implementation and ensures consistency across features.
+Open a terminal and go to your project folder. For example:
+```bash
+cd ~/Projects/my-app
+```
 
-### Setting Up Your Constitution
+Replace `~/Projects/my-app` with the actual path to your project.
 
-**Step 1:** Start the constitution wizard.
+### Step 3: Run the Installer
 
+```bash
+/path/to/prism-os/install.sh --local /path/to/prism-os
+```
+
+Replace `/path/to/prism-os` with wherever you cloned Prism.
+
+You'll see output like this:
+```
+Prism OS Installer v1.0.0
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Checking prerequisites...
+✓ Git repository detected
+✓ Claude Code CLI found (1.0.0)
+
+Creating directory structure...
+✓ Created .claude/ directory structure
+✓ Created templates/ directory
+✓ Created memory/ directory
+✓ Created specs/ directory
+✓ Created docs/ directory
+
+Installing Prism OS files...
+✓ Installed CLAUDE.md
+✓ Installed templates/
+✓ Installed .claude/ (commands, agents, skills)
+✓ Created .prism-os-version
+✓ Created memory/constitution.md (template)
+✓ Created memory/project-context.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Prism OS installed successfully!
+```
+
+### Step 4: Verify Installation
+
+```bash
+/path/to/prism-os/install.sh --verify
+```
+
+You should see checkmarks next to all required files.
+
+### What Did Installation Create?
+
+The installer added these folders to your project:
+
+```mermaid
+graph TD
+    A[your-project/] --> B[.claude/]
+    A --> C[templates/]
+    A --> D[memory/]
+    A --> E[specs/]
+    A --> F[CLAUDE.md]
+
+    B --> B1[commands/ - Slash commands]
+    B --> B2[agents/ - AI agent definitions]
+    B --> B3[skills/ - Reusable workflows]
+
+    D --> D1[constitution.md - Project rules]
+    D --> D2[project-context.md - Current state]
+
+    E --> E1[Your features go here]
+
+    style A fill:#f0f9ff,stroke:#0ea5e9
+    style B fill:#fef3c7,stroke:#f59e0b
+    style D fill:#d1fae5,stroke:#10b981
+    style E fill:#e0e7ff,stroke:#6366f1
+```
+
+| Folder | What It Contains |
+|--------|------------------|
+| `.claude/` | The AI's instructions for each command |
+| `templates/` | Document templates for specs, plans, etc. |
+| `memory/` | Project rules and current workflow state |
+| `specs/` | Feature specifications you create |
+| `CLAUDE.md` | The main configuration file |
+
+---
+
+## Initialize Your Project
+
+Before building features, tell Prism about your project. This is a one-time setup.
+
+### Step 1: Start Claude Code
+
+From your project folder:
+```bash
+claude
+```
+
+This opens an interactive session with Claude Code. You'll see a prompt where you can type commands.
+
+### Step 2: Set Up Project Principles
+
+Type:
 ```
 /constitution
 ```
 
-**Step 2:** Answer the questions about your project.
+Prism will ask questions about your project in plain language:
 
-Prism will ask about:
+```
+Let's set up your project constitution.
+I'll ask a few questions about your preferences.
 
-| Topic | Example Questions |
-|-------|-------------------|
-| Technology | What language? What framework? What database? |
-| Standards | What testing coverage? What code style? |
-| Security | What authentication method? What data protection? |
-| Accessibility | What compliance level? WCAG AA? AAA? |
+What programming language will this project use?
+> TypeScript
 
-**Step 3:** Review and confirm.
+What framework, if any?
+> Next.js
 
-Prism shows a summary of your choices. Review it, make any corrections, and confirm.
+What database will you use?
+> PostgreSQL
+```
 
-**Example Constitution Summary:**
+Answer each question based on your project (or skip if unsure — you can update later).
+
+### What This Creates
+
+Your answers become your project's **constitution** — rules that Prism follows for all features:
 
 ```
 Technology Stack
@@ -76,312 +240,463 @@ Standards
 └── Accessibility: WCAG 2.1 AA
 ```
 
-**Tip:** If you're unsure about technical choices, skip this step and come back to it with your tech lead. For now, you can proceed with the default constitution.
-
 ---
 
-## Part 2: Creating Your Feature (15 minutes)
+## Start Your First Feature
 
-Now let's create a feature specification. We'll use a simple example: adding a contact form to a website.
+Now the fun part — building something!
 
-### The Scenario
+### Step 1: Describe What You Want
 
-Your marketing team wants a contact form on the website. Visitors should be able to:
-
-- Enter their name, email, and message
-- Submit the form
-- See a confirmation that their message was received
-- Receive an email copy of their submission
-
-### Step 1: Describe Your Feature
-
-**Command:**
+In your Claude Code session, just describe the feature in plain English:
 
 ```
-/spec Add a contact form to the website
+/prism "Add a contact form where visitors can send messages to our support team"
 ```
 
-**What to Include:**
+Or simply type naturally:
+```
+I want to add a contact form to the website
+```
 
-Describe the feature in plain language. More detail means fewer clarification questions later.
+Prism understands both.
 
-**Example Input:**
+### Step 2: Watch Prism Create the Specification
 
-> "Add a contact form to the marketing website. Users should enter their name, email address, and a message. When they submit, show a confirmation and send them an email copy. The form should work on mobile phones and be accessible to screen reader users. We want to prevent spam submissions."
+Prism analyzes your request and creates a structured specification — a detailed description of what will be built.
 
-**What Prism Produces:**
+```mermaid
+sequenceDiagram
+    participant You
+    participant Prism
+    participant Spec as Specification
 
-A structured specification with:
+    You->>Prism: "Add a contact form"
+    Prism->>Prism: Analyze request
+    Prism->>Spec: Create specification
+    Prism-->>You: Show spec for review
 
-1. **User Scenarios** - Who uses this and why
-2. **Requirements** - Exactly what the system must do
-3. **Key Entities** - What data is involved
-4. **Success Criteria** - How to know it's working
+    Note over You,Prism: ⏸️ Checkpoint: Review & Approve
 
-**Example Output (abbreviated):**
+    You->>Prism: "Looks good" or "Change X"
+    Prism->>Prism: Continue to planning...
+```
+
+You'll see something like:
 
 ```
-User Scenarios
-├── US-001 [P1]: As a visitor, I want to submit a contact form
-├── US-002 [P1]: As a visitor, I want confirmation my message was sent
-├── US-003 [P2]: As a visitor, I want an email copy of my submission
-└── US-004 [P2]: As an admin, I want spam protection
+Creating specification for: Contact Form
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Track: Standard (feature with moderate complexity)
+
+User Scenarios (P1 = Must Have)
+├── US-001 [P1]: As a visitor, I can submit a message
+├── US-002 [P1]: As a visitor, I see confirmation my message was sent
+└── US-003 [P2]: As a visitor, I receive an email copy
 
 Requirements
 ├── FR-001 [P1]: Form accepts name, email, message
 ├── FR-002 [P1]: Form validates email format
 ├── FR-003 [P1]: Success message shown on submit
-├── FR-004 [P2]: Confirmation email sent to user
-├── NFR-001 [P1]: Form works on mobile devices
-└── NFR-002 [P1]: Form meets WCAG 2.1 AA
+└── NFR-001 [P1]: Form works on mobile devices
+
+Does this match what you want? (Y/n)
 ```
 
-**What the Priorities Mean:**
+### Step 3: Review and Approve
 
-| Priority | Meaning | Included In |
-|----------|---------|-------------|
-| P1 | Must have | Initial release |
-| P2 | Should have | Initial release if possible |
-| P3 | Nice to have | Future enhancement |
+This is your checkpoint. Read through the specification and:
 
-### Step 2: Answer Clarification Questions
+- **If it looks right:** Type `Y` or `yes` or just press Enter
+- **If something's wrong:** Describe what needs to change
+- **If you have questions:** Just ask
 
-Prism may have questions to resolve ambiguities.
-
-**Command:**
-
+For example:
 ```
-/clarify
+> The form should also have a phone number field
+
+Got it. I'll add an optional phone number field to the specification.
 ```
 
-**Example Questions:**
+### Step 4: Answer Clarification Questions
 
-**Q1: Spam Protection Method**
-> "How should the form prevent spam?"
->
-> A) CAPTCHA (user solves a puzzle)
-> B) Honeypot field (invisible trap for bots)
-> C) Rate limiting (max submissions per hour)
-> D) Email verification required
-
-**Your Answer:** Consider your users. CAPTCHA is effective but adds friction. Honeypot is invisible to real users. Rate limiting might not stop determined spammers.
-
-For this example, choose **B) Honeypot field** - it's invisible to legitimate users but catches most bots.
-
-**Q2: Email Notification Recipients**
-> "Who should receive notification when a form is submitted?"
->
-> A) Single email address
-> B) Multiple team members
-> C) Department-specific routing
-> D) No internal notification (just logs)
-
-**Your Answer:** For a simple contact form, **A) Single email address** is usually sufficient. You can specify marketing@company.com or support@company.com.
-
-**After Clarification:**
-
-The specification is updated with your decisions. No ambiguity remains.
-
-### Step 3: Generate the Plan
-
-With requirements finalized, generate the implementation plan.
-
-**Command:**
+Prism may ask follow-up questions to remove ambiguity:
 
 ```
-/plan
+Clarification Questions
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q1: How should the form prevent spam?
+   A) CAPTCHA (user solves a puzzle)
+   B) Honeypot field (invisible trap for bots) ← Recommended
+   C) Rate limiting (max submissions per hour)
+
+Your choice (A/B/C):
 ```
 
-**What Prism Produces:**
+Just type your choice (like `B`). Prism updates the specification with your answer.
 
-A technical plan showing:
+---
 
-- What files will be created
-- What components are needed
-- How the feature integrates with existing code
-- What tests are required
+## Watch Prism Build
 
-**Example Output (abbreviated):**
+After you approve the specification, Prism automatically:
+
+1. Creates an implementation plan
+2. Breaks it into tasks
+3. Starts building
+
+```mermaid
+flowchart TD
+    A[You Approve Spec] --> B[Create Plan]
+    B --> C[Break into Tasks]
+    C --> D[Build Task 1]
+    D --> E[Build Task 2]
+    E --> F[Build Task 3]
+    F --> G[...]
+    G --> H[Run Quality Checks]
+    H --> I{All Tests Pass?}
+    I -->|Yes| J[Done!]
+    I -->|No| K[Fix Issues]
+    K --> H
+
+    style A fill:#d1fae5,stroke:#10b981
+    style J fill:#d1fae5,stroke:#10b981
+    style I fill:#fef3c7,stroke:#f59e0b
+```
+
+### What You'll See in the Terminal
+
+As Prism works, you'll see progress updates:
 
 ```
-Files to Create
+📋 Feature: Contact Form
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Specification - Complete (5 requirements)
+✅ Clarification - 2 questions resolved
+✅ Planning      - Complete
+🔄 Tasks        - 4/7 complete
+
+Current: Building form validation logic
+
+[████████░░░░░░░░] 57%
+```
+
+### Check Status Anytime
+
+If you want a detailed status update:
+```
+/prism status
+```
+
+Or just ask:
+```
+What's the progress?
+```
+
+### Stepping Away?
+
+You can close the terminal and come back later. Your progress is saved. When you return:
+```bash
+claude
+```
+
+Then:
+```
+/prism continue
+```
+
+Prism picks up exactly where it left off.
+
+---
+
+## Done! Now What?
+
+When Prism finishes, you'll see:
+
+```
+✅ Feature Complete: Contact Form
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+All tasks completed successfully!
+
+Files Created:
 ├── src/components/ContactForm.tsx
 ├── src/app/api/contact/route.ts
-├── src/lib/email/contact-confirmation.ts
-└── src/lib/validations/contact.ts
+├── src/lib/validations/contact.ts
+└── tests/contact-form.test.ts
 
-Integration Points
-├── Email service (SendGrid) - configured
-├── Database - not needed (email only)
-└── Analytics - track form submissions
+Quality Checks:
+├── ✅ All tests passing (12/12)
+├── ✅ No linting errors
+└── ✅ Accessibility validated
 
-Testing Strategy
-├── Unit: Form validation
-├── Integration: Email sending
-└── E2E: Full form submission flow
+Next steps:
+1. Review the changes in your code editor
+2. Test the feature manually
+3. Commit when ready: git add . && git commit -m "Add contact form"
 ```
 
-**What to Review:**
+### Review the Changes
 
-1. **Does this match what you asked for?** Check that all your requirements appear.
-2. **Are there any surprises?** New files or integrations you didn't expect?
-3. **Is anything missing?** Features you mentioned but don't see?
+Open your code editor and look at the new files. Even if you don't understand the code, you can:
+- Check that file names make sense
+- See that tests exist
+- Look for any comments Prism added
 
-### Step 4: Create Tasks
+### Test the Feature
 
-Convert the plan into a task list for your engineering team.
-
-**Command:**
-
-```
-/tasks
+If your project has a development server:
+```bash
+npm run dev
 ```
 
-**What Prism Produces:**
+Then open your browser and try the new feature.
 
-A prioritized list of tasks with dependencies.
+### Commit Your Changes
 
-**Example Output:**
-
-```
-Phase 1: Foundation
-├── T001 [B]: Create validation schemas
-├── T002 [P]: Build ContactForm component
-└── T003 [P]: Set up form styling
-
-Phase 2: Backend
-├── T004 [B]: Create API endpoint (depends on T001)
-├── T005: Integrate email service (depends on T004)
-└── T006: Add honeypot spam protection
-
-Phase 3: Polish
-├── T007: Add loading states
-├── T008: Write unit tests
-└── T009: Write E2E tests
-```
-
-**Understanding the Symbols:**
-
-| Symbol | Meaning |
-|--------|---------|
-| `[B]` | Blocking - other tasks wait for this |
-| `[P]` | Parallel - can run alongside other `[P]` tasks |
-| (depends on T00X) | Must wait for that task to finish |
-
-**What This Tells Your Team:**
-
-- Start with T001 (validation schemas) - it blocks other work
-- T002 and T003 can happen simultaneously
-- T004 needs T001 done first
-- T007, T008, T009 are independent finishing touches
-
----
-
-## Part 3: Next Steps (5 minutes)
-
-### Hand Off to Engineering
-
-When you're ready, create a handoff package.
-
-**Command:**
-
-```
-/handoff
-```
-
-This generates a complete package containing:
-
-- Feature specification
-- Clarification decisions
-- Implementation plan
-- Task breakdown
-
-Your engineers receive everything they need without a lengthy kickoff meeting.
-
-### Check Progress Later
-
-As work proceeds, check status anytime.
-
-**Command:**
-
-```
-/status
-```
-
-**Example Output:**
-
-```
-Feature: Contact Form
-Phase: Implementation
-Progress: ████████░░ 80%
-
-Completed: 7/9 tasks
-├── [x] T001: Create validation schemas
-├── [x] T002: Build ContactForm component
-├── [x] T003: Set up form styling
-├── [x] T004: Create API endpoint
-├── [x] T005: Integrate email service
-├── [x] T006: Add honeypot spam protection
-├── [x] T007: Add loading states
-├── [~] T008: Write unit tests
-└── [ ] T009: Write E2E tests
+When you're happy with the feature:
+```bash
+git add .
+git commit -m "Add contact form feature"
 ```
 
 ---
 
-## Quick Reference Card
+## If Something Goes Wrong
 
-### Commands
+Don't worry — things don't always go perfectly. Here's how to handle common situations.
 
-| Command | Purpose | When to Use |
-|---------|---------|-------------|
-| `/constitution` | Set project rules | Once per project |
-| `/spec [description]` | Create specification | Start of each feature |
-| `/clarify` | Resolve ambiguities | After spec, if questions exist |
-| `/plan` | Generate implementation plan | After clarification complete |
-| `/tasks` | Create task breakdown | After plan approved |
-| `/status` | Check progress | Anytime |
-| `/handoff` | Create engineer package | When ready for development |
+### Prism Gets Stuck
 
-### Workflow
+If Prism seems frozen or you're not sure what's happening:
 
 ```
-/constitution  (one time)
-      │
-      ▼
-   /spec ──► /clarify ──► /plan ──► /tasks ──► /handoff
-      │          │          │         │           │
-   Create    Resolve    Generate   Create    Hand to
-   spec      questions   plan      tasks     engineers
+/prism status
 ```
 
-### Priority Definitions
+This shows exactly where things stand. You might see:
+```
+⚠️ Blocked: Waiting for clarification
 
-| Priority | Label | Meaning |
-|----------|-------|---------|
-| P1 | Must have | Required for release |
-| P2 | Should have | Include if possible |
-| P3 | Nice to have | Future enhancement |
+Question pending: "Should the form require all fields?"
+```
 
-### Task Symbols
+Just answer the question to continue.
 
-| Symbol | Meaning |
-|--------|---------|
-| `[ ]` | Not started |
-| `[~]` | In progress |
-| `[x]` | Complete |
-| `[B]` | Blocking (do first) |
-| `[P]` | Can run in parallel |
+### The Spec Doesn't Match What You Want
+
+Before approving, you can request changes:
+
+```
+Actually, I don't want the email confirmation feature.
+Just show a success message on the page.
+```
+
+Prism will update the specification and show it again for approval.
+
+### Tests Are Failing
+
+Prism automatically tries to fix test failures. If it can't after several attempts, you'll see:
+
+```
+⚠️ Escalation: Test failures require attention
+
+Failing: tests/contact-form.test.ts
+- Expected: Form submits successfully
+- Actual: API returns 500 error
+
+This may require manual investigation.
+Options:
+1. Let me try a different approach
+2. Skip this test for now
+3. Get help from a developer
+
+Your choice (1/2/3):
+```
+
+Choose option 1 to let Prism try again, or option 3 if you want to involve a developer.
+
+### You Made a Mistake
+
+You can always start over:
+
+```
+/spec "Add a contact form"
+```
+
+This creates a new specification from scratch.
+
+---
+
+## Updating Prism
+
+When new versions of Prism are released, update your installation:
+
+### Step 1: Update the Prism Source
+
+```bash
+cd /path/to/prism-os
+git pull
+```
+
+### Step 2: Re-run the Installer
+
+From your project directory:
+```bash
+/path/to/prism-os/install.sh --local /path/to/prism-os
+```
+
+The installer won't overwrite your existing specifications or constitution.
+
+### Step 3: Verify
+
+```bash
+/path/to/prism-os/install.sh --verify
+```
+
+---
+
+## Command Cheat Sheet
+
+Here's everything you need, in one place:
+
+| Command | What It Does |
+|---------|--------------|
+| `/prism` | Show status and what to do next |
+| `/prism "..."` | Start building a feature from your description |
+| `/prism continue` | Resume work on an in-progress feature |
+| `/prism status` | See detailed progress |
+| `/prism help` | Show all available commands |
+| `/constitution` | Set up or update project rules |
+
+### Natural Language Alternatives
+
+You don't have to remember commands. Just say what you mean:
+
+| Instead of... | You can say... |
+|---------------|----------------|
+| `/prism "Add login"` | "I want to add user login" |
+| `/prism status` | "What's the progress?" |
+| `/prism continue` | "Keep going" or "Next step" |
+| `/prism help` | "What can you do?" |
+
+---
+
+## Architecture Overview
+
+Here's how all the pieces fit together:
+
+```mermaid
+flowchart TD
+    subgraph You
+        A[Your Ideas]
+    end
+
+    subgraph Prism[Prism OS]
+        B[Orchestrator]
+        B --> C[Business Analyst]
+        B --> D[Architect]
+        B --> E[Developer]
+        B --> F[QA Engineer]
+
+        C --> G[Specifications]
+        D --> H[Plans]
+        E --> I[Code]
+        F --> J[Quality Checks]
+    end
+
+    subgraph Claude[Claude Code]
+        K[AI Engine]
+    end
+
+    subgraph Project[Your Project]
+        L[Working Software]
+    end
+
+    A --> B
+    B --> K
+    K --> B
+    J --> L
+
+    style You fill:#e0f2fe,stroke:#0ea5e9
+    style Prism fill:#e0e7ff,stroke:#6366f1
+    style Claude fill:#fef3c7,stroke:#f59e0b
+    style Project fill:#d1fae5,stroke:#10b981
+```
+
+**You** describe what you want in plain English.
+
+**Prism** routes your request to specialized AI agents (like a Business Analyst for specs or a Developer for code).
+
+**Claude Code** powers the AI agents with advanced language understanding.
+
+**Your Project** receives working, tested code.
+
+---
+
+## The Full Workflow
+
+Here's the complete journey from idea to working code:
+
+```mermaid
+sequenceDiagram
+    participant You
+    participant Prism
+    participant Agents as AI Agents
+    participant Code as Your Code
+
+    rect rgb(224, 242, 254)
+        Note over You,Prism: 1. Describe
+        You->>Prism: "Add a contact form"
+    end
+
+    rect rgb(224, 231, 255)
+        Note over Prism,Agents: 2. Specify
+        Prism->>Agents: Analyze request
+        Agents->>Prism: Create specification
+        Prism-->>You: Show spec for review
+        You->>Prism: Approve (or request changes)
+    end
+
+    rect rgb(254, 243, 199)
+        Note over Prism,Agents: 3. Clarify
+        Prism->>Agents: Check for ambiguities
+        Agents-->>You: Ask clarifying questions
+        You->>Prism: Provide answers
+    end
+
+    rect rgb(209, 250, 229)
+        Note over Prism,Code: 4. Build
+        Prism->>Agents: Create plan
+        Agents->>Agents: Break into tasks
+        loop Each Task
+            Agents->>Code: Write code
+            Agents->>Agents: Run tests
+        end
+    end
+
+    rect rgb(220, 252, 231)
+        Note over Prism,You: 5. Deliver
+        Agents->>Agents: Quality checks
+        Prism-->>You: Feature complete!
+    end
+```
 
 ---
 
 ## What's Next?
 
-- **See a complete example:** Read the [User Authentication Walkthrough](examples/user-auth-feature/README.md) for a more complex feature
-- **Learn all commands:** See the [Command Reference](command-reference.md) for full details
-- **Deep dive:** Read the [User Guide](user-guide.md) for comprehensive coverage
-- **Troubleshooting:** See [Troubleshooting](troubleshooting.md) if you encounter issues
+You've built your first feature. Here's how to keep going:
+
+- **Build another feature:** Just describe it and Prism handles the rest
+- **See a complex example:** Read the [User Authentication Walkthrough](examples/user-auth-feature/README.md)
+- **Learn all commands:** See the [Command Reference](command-reference.md)
+- **Troubleshoot issues:** Check the [Troubleshooting Guide](troubleshooting.md)
+- **Understand the terms:** Browse the [Glossary](glossary.md)
 
 ---
 
-*Congratulations! You've completed your first feature specification with Prism.*
+*You're now ready to build software with Prism. Just describe what you want — and watch it happen.*
