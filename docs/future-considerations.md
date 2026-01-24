@@ -230,6 +230,533 @@ npx create-prism-os
 
 ---
 
+## MVP Development Path
+
+> Consolidated four-phase plan for productizing Prism OS as a standalone CLI tool with progressive enhancement.
+
+### Open Architecture Decision
+
+Before implementation, we need to decide between two models:
+
+#### Option A: Skills Model (spec-kit approach)
+
+```
+User runs Claude Code → Claude Code reads CLAUDE.md →
+CLAUDE.md points to .prism/ skills → Claude Code executes workflow
+```
+
+**Prism is:** A framework of skills and templates that Claude Code uses.
+
+**User experience:**
+```bash
+prism init                    # One-time setup
+claude                        # User runs Claude Code directly
+# Claude Code uses Prism skills automatically
+```
+
+**Pros:**
+- Simpler to build (less code)
+- Leverages Claude Code's existing capabilities
+- No subprocess management
+- Natural integration with Claude Code ecosystem
+
+**Cons:**
+- Less control over the execution loop
+- Harder to add features Claude Code doesn't support
+- User must understand Claude Code
+
+#### Option B: CLI Orchestrator Model (Auto-Claude approach)
+
+```
+User runs `prism run` → Prism CLI invokes Claude Code →
+Prism manages loop externally → Claude Code does individual tasks
+```
+
+**Prism is:** A standalone CLI that orchestrates Claude Code.
+
+**User experience:**
+```bash
+prism init                    # One-time setup
+prism run "add user auth"     # Prism drives everything
+```
+
+**Pros:**
+- Full control over execution flow
+- Can add features beyond Claude Code's capabilities
+- Cleaner UX for non-technical users
+- Better progress tracking and state management
+
+**Cons:**
+- More complex to build
+- Subprocess management overhead
+- Must handle Claude Code errors/edge cases
+
+**Recommendation:** Start with Option A (Skills Model) for Phase 1. It's faster to build and proves the core value. Add orchestrator capabilities in later phases if needed.
+
+---
+
+### Phase 1: CLI + File Storage + Learning Loop
+
+**Goal:** Non-technical user can initialize projects and run spec-driven development through Claude Code with accumulated learnings.
+
+#### Commands
+
+##### `prism init`
+
+**Purpose:** Prepare a project folder to work with Prism.
+
+**What it does:**
+1. Check prerequisites (git repo, Claude Code installed)
+2. Gather project info via prompts
+3. Detect tech stack from project files
+4. Create folder structure
+5. Generate CLAUDE.md with Prism instructions
+6. Generate constitution from user input
+
+**User interaction:**
+```
+$ cd ~/Projects/my-app
+$ prism init
+
+Welcome to Prism! Let's set up your project.
+
+? Project name: (my-app)
+? Describe this project in one sentence: E-commerce platform for handmade goods
+
+Detected:
+  ✔ Tech stack: Next.js, TypeScript, Tailwind
+  ✔ Package manager: npm
+  ✔ Test framework: Jest
+
+? Is this correct? (Y/n)
+
+? Any constraints or rules the AI should follow?
+  (e.g., "use Postgres", "no new dependencies", "follow existing patterns")
+  > Must use Supabase for all database operations
+
+Creating Prism structure...
+  ✔ /memory/constitution.md
+  ✔ /memory/project-context.md
+  ✔ /memory/learnings.md
+  ✔ /specs/
+  ✔ /.prism/
+  ✔ CLAUDE.md
+
+Done! Run 'claude' and describe what you want to build.
+```
+
+**Files created:**
+```
+my-app/
+├── .prism/                    # Prism config (hidden)
+│   ├── config.json            # Project settings
+│   └── skills/                # Prism skills for Claude Code
+│       ├── spec-writer.md
+│       ├── task-decomposer.md
+│       ├── quality-gate.md
+│       └── learning-capture.md
+├── memory/
+│   ├── constitution.md        # Project rules/constraints
+│   ├── project-context.md     # Current state tracking
+│   └── learnings.md           # Accumulated knowledge
+├── specs/                     # Feature specs (empty initially)
+└── CLAUDE.md                  # Instructions for Claude Code
+```
+
+##### `prism status`
+
+**Purpose:** Show current project state without changing anything.
+
+**Output when feature in progress:**
+```
+$ prism status
+
+Project: My App
+Feature: User Authentication
+Status:  In Progress
+
+Progress: ████████░░░░░░░░ 3/5 tasks
+
+  ✔ Create users table and auth schema
+  ✔ Build registration API endpoint
+  ✔ Build login API endpoint
+  ○ Add password reset flow
+  ○ Create login/register UI pages
+
+Learnings captured: 7 entries, 2 patterns
+
+Recent specs:
+  - /specs/001-user-auth/spec.md (in progress)
+```
+
+**Output when nothing in progress:**
+```
+$ prism status
+
+Project: My App
+Status:  Ready
+
+No feature in progress.
+
+Learnings captured: 12 entries, 4 patterns
+
+Recent specs:
+  - /specs/001-user-auth/ (complete)
+  - /specs/002-product-catalog/ (complete)
+
+Run 'claude' and describe what you want to build next.
+```
+
+##### `prism learn`
+
+**Purpose:** View and search accumulated learnings.
+
+**Output:**
+```
+$ prism learn
+
+Learnings: 12 entries, 4 patterns
+
+Patterns (reusable across features):
+  1. Use Supabase RLS policies for all user-scoped queries
+  2. Always add loading states to async UI components
+  3. Use zod for API request validation
+  4. Run `npm run typecheck` before committing
+
+Recent learnings:
+  - [001-user-auth] Password reset requires email service config
+  - [001-user-auth] Session tokens stored in httpOnly cookies
+  - [002-product-catalog] Image uploads need size validation
+
+$ prism learn --search "supabase"
+
+Found 3 matches:
+  1. [Pattern] Use Supabase RLS policies for all user-scoped queries
+  2. [001-user-auth] Supabase auth.users() requires service role key
+  3. [002-product-catalog] Supabase storage has 50MB default limit
+```
+
+#### Installation
+
+**Method:** Git clone + install script (private distribution)
+
+```bash
+# Clone the repo (requires access)
+git clone git@github.com:your-org/prism-os.git
+cd prism-os
+
+# Run install script
+./install.sh
+```
+
+#### Functional Requirements
+
+| ID | Requirement |
+|----|-------------|
+| FR-1 | Install globally via git clone + ./install.sh |
+| FR-2 | Verify Claude Code installed, warn if missing |
+| FR-3 | `prism --version` and `prism --help` work |
+| FR-4 | `prism init` scaffolds /memory/, /specs/, /.prism/, CLAUDE.md |
+| FR-5 | `prism init` prompts for project name, description, constraints |
+| FR-6 | `prism init` detects tech stack from project files |
+| FR-7 | `prism init` is idempotent (safe to run twice) |
+| FR-8 | `prism status` shows current feature and task progress |
+| FR-9 | `prism status` shows learnings count |
+| FR-10 | `prism learn` displays accumulated learnings |
+| FR-11 | `prism learn --search` filters learnings |
+| FR-12 | CLAUDE.md instructs Claude Code to use Prism workflow |
+| FR-13 | Constitution captures project rules and constraints |
+| FR-14 | Learnings persist across Claude Code sessions |
+
+#### Non-Functional Requirements
+
+| Requirement |
+|-------------|
+| Works offline (no network required for core functionality) |
+| Works on macOS, Linux, Windows (WSL) |
+| No Docker required |
+| No database required |
+| Init completes in < 30 seconds |
+| All state files are human-readable markdown |
+| All state files are git-friendly |
+
+#### Dependencies
+
+| Dependency | Required? | Purpose |
+|------------|-----------|---------|
+| Node.js 18+ | Yes | Runtime |
+| Claude Code CLI | Yes | AI execution |
+| Git | Yes | Version control |
+
+#### Out of Scope for Phase 1
+
+- Web UI
+- Database storage
+- Team collaboration
+- Multi-repo support
+- Custom skill creation
+- MCP integrations
+- External orchestration (Prism driving Claude Code)
+
+---
+
+### Phase 2: Local Web UI
+
+**Goal:** Visual dashboard for users who prefer GUI over terminal.
+
+#### New Command: `prism ui`
+
+**Purpose:** Open a visual dashboard in the browser.
+
+**What it does:**
+1. Start local web server on port 3737 (or next available)
+2. Auto-open browser to http://localhost:3737
+3. Serve React dashboard
+4. Keep running until Ctrl+C
+
+**User interaction:**
+```
+$ prism ui
+
+Starting Prism dashboard...
+Server running at http://localhost:3737
+
+Press Ctrl+C to stop.
+```
+
+#### Dashboard Features
+
+| Feature | Description |
+|---------|-------------|
+| Project overview | Name, tech stack, current status |
+| Spec browser | View all specs, their status |
+| Spec viewer | Read spec content with formatting |
+| Task progress | Visual progress of current feature |
+| Learnings browser | Search and view learnings |
+| Activity feed | Recent actions and changes |
+
+#### Tech Stack
+
+- **Framework:** Vite + React
+- **Styling:** Tailwind CSS
+- **Server:** Express (minimal)
+- **State:** File system (reads same files as CLI)
+
+#### Functional Requirements
+
+| ID | Requirement |
+|----|-------------|
+| FR-15 | `prism ui` starts local server |
+| FR-16 | Auto-opens browser to dashboard |
+| FR-17 | Dashboard shows project status |
+| FR-18 | Dashboard shows spec list and content |
+| FR-19 | Dashboard shows task progress |
+| FR-20 | Dashboard shows learnings with search |
+| FR-21 | Graceful shutdown on Ctrl+C |
+
+#### Out of Scope for Phase 2
+
+- User accounts/authentication
+- Cloud hosting
+- Multi-user collaboration
+- Mobile support
+- Real-time log streaming from Claude Code
+
+---
+
+### Phase 3: Supabase Sync
+
+**Goal:** Enable team collaboration and cross-project learnings via cloud persistence.
+
+#### New Commands
+
+##### `prism connect`
+
+**Purpose:** Link project to Supabase for cloud sync.
+
+**User interaction:**
+```
+$ prism connect
+
+? Supabase project URL: https://xyz.supabase.co
+? Supabase anon key: eyJ...
+
+Testing connection...
+✔ Connected successfully!
+
+? Sync learnings to cloud? (Y/n) Y
+? Sync specs to cloud? (Y/n) n
+
+Configuration saved.
+Learnings will sync automatically.
+```
+
+##### `prism disconnect`
+
+**Purpose:** Remove cloud connection, return to local-only.
+
+#### Sync Behavior
+
+| Data | Sync Direction | Conflict Resolution |
+|------|---------------|---------------------|
+| Learnings | Bidirectional | Latest write wins |
+| Specs | Optional, up | Manual merge |
+| Constitution | Up only | Local authoritative |
+| Project context | Local only | Not synced |
+
+#### Data Model
+
+```
+organizations
+  └── projects (repos)
+        ├── learnings
+        │     └── patterns (promoted)
+        ├── specs
+        │     └── tasks
+        └── constitution
+```
+
+#### Functional Requirements
+
+| ID | Requirement |
+|----|-------------|
+| FR-22 | `prism connect` prompts for Supabase credentials |
+| FR-23 | Credentials stored securely (keychain or encrypted) |
+| FR-24 | Learnings sync to Supabase after capture |
+| FR-25 | Learnings pull from Supabase on Claude Code start |
+| FR-26 | Works offline (queues writes, syncs when connected) |
+| FR-27 | `prism disconnect` removes cloud connection |
+| FR-28 | Graceful degradation to file-only if offline |
+
+#### Out of Scope for Phase 3
+
+- Self-hosted Supabase
+- Real-time collaboration
+- Billing/subscription management
+- Role-based access control (basic only)
+
+---
+
+### Phase 4: Desktop App
+
+**Goal:** Native desktop experience with system integration.
+
+#### Application
+
+- **Framework:** Tauri (Rust + Web)
+- **Platforms:** macOS, Windows, Linux
+- **Wraps:** Same React UI from Phase 2
+
+#### Features
+
+| Feature | Description |
+|---------|-------------|
+| System tray | Icon shows status, quick actions |
+| Notifications | Native alerts for completion, errors |
+| Auto-update | Check and install updates |
+| Deep links | `prism://open?project=my-app` |
+| Multi-project | Switch between projects in sidebar |
+
+#### Functional Requirements
+
+| ID | Requirement |
+|----|-------------|
+| FR-29 | Installable app for macOS, Windows, Linux |
+| FR-30 | System tray icon with status indicator |
+| FR-31 | Native notifications |
+| FR-32 | Auto-update mechanism |
+| FR-33 | Project switcher in sidebar |
+| FR-34 | Deep link support |
+
+#### Out of Scope for Phase 4
+
+- Mobile apps
+- Browser extension
+- IDE plugins
+
+---
+
+### Architecture Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         USER                                     │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+              ┌─────────────┴─────────────┐
+              ▼                           ▼
+┌─────────────────────────┐   ┌─────────────────────────┐
+│     Terminal (CLI)      │   │    Browser / Desktop    │
+│                         │   │                         │
+│  prism init             │   │  ┌─────────────────┐   │
+│  prism status           │   │  │   Dashboard     │   │
+│  prism learn            │   │  │   (React)       │   │
+│  prism ui ──────────────┼───┼─►│                 │   │
+│  prism connect          │   │  └─────────────────┘   │
+└───────────┬─────────────┘   └───────────┬───────────┘
+            │                             │
+            └─────────────┬───────────────┘
+                          ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     PRISM CORE                                   │
+│                                                                 │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────┐         │
+│  │ Config      │  │ State       │  │ Skills          │         │
+│  │ Manager     │  │ Reader      │  │ (templates)     │         │
+│  └─────────────┘  └─────────────┘  └─────────────────┘         │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     FILE SYSTEM                                  │
+│                                                                 │
+│  /memory/               /specs/              /.prism/            │
+│  ├── constitution.md    └── 001-feature/     ├── config.json    │
+│  ├── project-context.md     ├── spec.md      └── skills/        │
+│  └── learnings.md           └── tasks.md                        │
+│                                                                 │
+│  CLAUDE.md (root)                                               │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+                            │ reads instructions from
+                            ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     CLAUDE CODE                                  │
+│                                                                 │
+│  User runs 'claude' directly                                    │
+│  Claude Code reads CLAUDE.md                                    │
+│  CLAUDE.md points to .prism/ skills and /memory/                │
+│  Claude Code follows Prism workflow                             │
+│                                                                 │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+                            │ (Phase 3+)
+                            ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     SUPABASE                                     │
+│                                                                 │
+│  Learnings sync                                                 │
+│  Specs sync (optional)                                          │
+│  Team collaboration                                             │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### MVP Summary
+
+| Phase | Focus | Key Deliverables |
+|-------|-------|------------------|
+| 1 | CLI + Files | `prism init`, `prism status`, `prism learn`, CLAUDE.md generation |
+| 2 | Web UI | `prism ui`, React dashboard |
+| 3 | Cloud Sync | `prism connect`, Supabase integration |
+| 4 | Desktop | Tauri app, native features |
+
+**Critical decision needed:** Confirm Skills Model (Option A) vs CLI Orchestrator Model (Option B) before starting Phase 1.
+
+---
+
 ## Testing & Validation
 
 ### Enterprise Track Flow Test
