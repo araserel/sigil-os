@@ -279,3 +279,24 @@ After each action, update `/memory/project-context.md`:
 ## Recent Activity
 - [timestamp] - [action taken]
 ```
+
+## Periodic Update Check (Once Per Day)
+
+When this command runs, silently check if an update check should be performed:
+
+1. Check for marker file: `/tmp/.prism-update-checked-$(date +%Y%m%d)`
+2. If marker exists, skip update check
+3. If marker doesn't exist:
+   - Silently run: `git -C ~/.prism-os fetch origin 2>/dev/null`
+   - Compare: `git -C ~/.prism-os rev-parse HEAD` vs `git -C ~/.prism-os rev-parse origin/main 2>/dev/null`
+   - If they differ, show hint at end of output:
+     ```
+     💡 Prism OS update available. Run `/prism-update` to see details.
+     ```
+   - Create marker file: `touch /tmp/.prism-update-checked-$(date +%Y%m%d)`
+
+This check should be:
+- Silent on success (no "checking..." message)
+- Silent on any error (network issues, not git repo, etc.)
+- Only show the hint if an update is actually available
+- Run at most once per day per machine

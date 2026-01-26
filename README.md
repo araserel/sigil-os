@@ -6,25 +6,86 @@
 
 ## For Users
 
-**Want to use Prism OS?** See [`prism/README.md`](prism/README.md).
+**Want to use Prism OS?** Choose your installation method:
 
-### Quick Install
+### Option A: Global Install (Recommended)
+
+Install once, use in all projects. Includes automatic updates.
+
+**Using Claude Desktop (Non-Technical):**
+1. Download [`prism-install-instructions.md`](prism-install-instructions.md)
+2. Give it to Claude: "Please help me install Prism OS following these instructions"
+3. Claude will guide you through the process
+
+**Using Terminal (Technical):**
+```bash
+# Clone the repository
+git clone https://github.com/adamriedthaler/prism-os.git ~/.prism-os
+
+# Install globally
+~/.prism-os/install-global.sh
+
+# Verify installation
+~/.prism-os/install-global.sh --verify
+```
+
+**What Gets Installed:**
+| Location | Contents |
+|----------|----------|
+| `~/.prism-os/` | Source code (for updates) |
+| `~/.claude/commands/` | Slash commands (`/prism`, `/spec`, etc.) |
+| `~/.claude/agents/` | Agent definitions |
+| `~/.claude/skills/` | Skill implementations |
+
+**Per-Project Files** (created when you run `/prism`):
+| Location | Contents |
+|----------|----------|
+| `memory/constitution.md` | Project principles |
+| `memory/project-context.md` | Current state |
+| `specs/` | Feature specifications |
+
+### Option B: Per-Project Install (Legacy)
+
+Copy Prism OS directly into a single project.
 
 ```bash
-# Copy product files to your project (note the /. to include hidden dirs)
+# Copy product files to your project
 cp -r prism/. /path/to/your/project/
 ```
 
-### What You Get
+**Note:** This method doesn't support automatic updates.
 
+---
+
+### Updating Prism OS
+
+**Using the command (recommended):**
 ```
-your-project/
-├── CLAUDE.md         ← Prism's brain
-├── .claude/          ← Agents, skills, commands
-├── templates/        ← Document templates
-├── memory/           ← Project state
-└── docs/             ← Documentation
+/prism-update
 ```
+
+**Manually:**
+```bash
+cd ~/.prism-os && git pull && ./install-global.sh
+```
+
+### Uninstalling
+
+```bash
+~/.prism-os/install-global.sh --uninstall
+rm -rf ~/.prism-os  # Optional: remove source code
+```
+
+### Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| `git: command not found` | Install Git first. macOS: `xcode-select --install`. Linux: `sudo apt install git` |
+| `Permission denied` | Run `chmod +x ~/.prism-os/install-global.sh` |
+| Commands not working | Re-run `~/.prism-os/install-global.sh` |
+| WSL issues | Ensure you're in WSL terminal, not PowerShell |
+
+See [`prism-install-instructions.md`](prism-install-instructions.md) for detailed troubleshooting.
 
 ---
 
