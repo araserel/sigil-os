@@ -1,8 +1,30 @@
-# Analysis folder (temporary research)
-_analysis/
+# Development environment
+/CLAUDE.md
+/PROJECT_PLAN.md
+/STATUS.md
+/.prism-spec-progress.md
+/project-specs/
+/prompts/
+/specs/
+/tools/
+/tests/
+/test-runs/
+/_analysis/
+/Public Spec Driven Repos/
 
-# Reference repositories (not part of Prism OS)
-Public Spec Driven Repos/
+# Local config
+/.claude/
 
 # OS files
 .DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Build artifacts
+node_modules/
+__pycache__/
+*.pyc

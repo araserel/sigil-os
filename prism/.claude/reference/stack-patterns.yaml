@@ -1,0 +1,493 @@
+# Stack Patterns Reference
+# Used by stack-recommendation skill to generate viable stack options
+#
+# Structure:
+#   - Each pattern represents a common tech stack combination
+#   - Patterns are filtered by constraints (platform, budget, team_skills)
+#   - Scoring is based on skill match and constraint fit
+
+version: "1.0.0"
+
+# Platform-to-stack mappings
+platforms:
+  web:
+    - fullstack-nextjs
+    - fullstack-remix
+    - spa-react
+    - spa-vue
+    - traditional-django
+    - traditional-rails
+    - api-fastapi
+    - api-express
+
+  mobile:
+    - cross-platform-react-native
+    - cross-platform-flutter
+    - native-ios
+    - native-android
+
+  api:
+    - api-fastapi
+    - api-express
+    - api-go
+    - api-rails
+
+  cli:
+    - cli-node
+    - cli-python
+    - cli-go
+    - cli-rust
+
+  desktop:
+    - desktop-electron
+    - desktop-tauri
+
+# Stack definitions
+stacks:
+  # Web Fullstack
+  fullstack-nextjs:
+    name: "Next.js Fullstack"
+    description: "React framework with server-side rendering, API routes, and excellent DX"
+    language: "TypeScript"
+    framework: "Next.js"
+    database_options:
+      - "PostgreSQL (recommended)"
+      - "MySQL"
+      - "MongoDB"
+    orm_options:
+      - "Prisma (recommended)"
+      - "Drizzle"
+    hosting_options:
+      - "Vercel (easiest)"
+      - "AWS"
+      - "Railway"
+      - "Self-hosted"
+    best_for:
+      - "Modern web apps"
+      - "Content-heavy sites"
+      - "E-commerce"
+      - "SaaS products"
+    not_for:
+      - "Simple static sites"
+      - "Real-time heavy apps"
+    budget_tier: "free_to_low"
+    complexity: "medium"
+    learning_curve: "medium"
+    common_skills: ["JavaScript", "React", "Node.js"]
+
+  fullstack-remix:
+    name: "Remix Fullstack"
+    description: "Web standards-focused React framework with excellent data handling"
+    language: "TypeScript"
+    framework: "Remix"
+    database_options:
+      - "PostgreSQL"
+      - "SQLite"
+    orm_options:
+      - "Prisma"
+      - "Drizzle"
+    hosting_options:
+      - "Fly.io"
+      - "Railway"
+      - "Vercel"
+    best_for:
+      - "Data-heavy applications"
+      - "Progressive enhancement"
+      - "Complex forms"
+    not_for:
+      - "Static sites"
+      - "Simple CRUD apps"
+    budget_tier: "free_to_low"
+    complexity: "medium"
+    learning_curve: "medium-high"
+    common_skills: ["JavaScript", "React", "Node.js"]
+
+  spa-react:
+    name: "React SPA + API"
+    description: "Separate React frontend with dedicated API backend"
+    language: "TypeScript"
+    framework: "React + Vite"
+    backend_options:
+      - "Express.js"
+      - "FastAPI"
+      - "Rails API"
+    database_options:
+      - "PostgreSQL"
+      - "MongoDB"
+    best_for:
+      - "Complex UI interactions"
+      - "Team separation (frontend/backend)"
+      - "Mobile app companion"
+    not_for:
+      - "SEO-critical sites"
+      - "Simple apps"
+    budget_tier: "free_to_low"
+    complexity: "medium-high"
+    learning_curve: "medium"
+    common_skills: ["JavaScript", "React"]
+
+  spa-vue:
+    name: "Vue SPA"
+    description: "Vue.js single-page application with Nuxt or standalone"
+    language: "TypeScript"
+    framework: "Vue 3 / Nuxt"
+    database_options:
+      - "PostgreSQL"
+      - "MongoDB"
+    best_for:
+      - "Progressive adoption"
+      - "Teams new to frameworks"
+      - "Admin dashboards"
+    not_for:
+      - "Very complex state"
+      - "Large team separation"
+    budget_tier: "free_to_low"
+    complexity: "medium"
+    learning_curve: "low-medium"
+    common_skills: ["JavaScript", "Vue"]
+
+  traditional-django:
+    name: "Django Fullstack"
+    description: "Python web framework with batteries included"
+    language: "Python"
+    framework: "Django"
+    database_options:
+      - "PostgreSQL (recommended)"
+      - "MySQL"
+      - "SQLite"
+    hosting_options:
+      - "Railway"
+      - "Render"
+      - "AWS"
+      - "Heroku"
+    best_for:
+      - "Rapid prototyping"
+      - "Data-heavy apps"
+      - "Admin-heavy systems"
+      - "ML/AI integration"
+    not_for:
+      - "Real-time apps"
+      - "Microservices"
+    budget_tier: "free_to_low"
+    complexity: "medium"
+    learning_curve: "medium"
+    common_skills: ["Python"]
+
+  traditional-rails:
+    name: "Ruby on Rails"
+    description: "Opinionated full-stack framework for rapid development"
+    language: "Ruby"
+    framework: "Rails"
+    database_options:
+      - "PostgreSQL"
+      - "MySQL"
+    hosting_options:
+      - "Render"
+      - "Railway"
+      - "Heroku"
+    best_for:
+      - "Rapid MVP development"
+      - "Startups"
+      - "CRUD-heavy apps"
+    not_for:
+      - "Performance-critical apps"
+      - "Teams without Ruby experience"
+    budget_tier: "free_to_low"
+    complexity: "medium"
+    learning_curve: "medium"
+    common_skills: ["Ruby"]
+
+  # API-focused
+  api-fastapi:
+    name: "FastAPI"
+    description: "Modern, fast Python API framework with automatic docs"
+    language: "Python"
+    framework: "FastAPI"
+    database_options:
+      - "PostgreSQL"
+      - "MongoDB"
+    orm_options:
+      - "SQLAlchemy"
+      - "Tortoise ORM"
+    best_for:
+      - "REST APIs"
+      - "ML model serving"
+      - "High-performance APIs"
+      - "Auto-generated docs"
+    not_for:
+      - "Fullstack web apps"
+      - "Simple scripts"
+    budget_tier: "free"
+    complexity: "low-medium"
+    learning_curve: "low"
+    common_skills: ["Python"]
+
+  api-express:
+    name: "Express.js API"
+    description: "Minimal, flexible Node.js web framework"
+    language: "TypeScript"
+    framework: "Express.js"
+    database_options:
+      - "PostgreSQL"
+      - "MongoDB"
+    orm_options:
+      - "Prisma"
+      - "TypeORM"
+      - "Mongoose (MongoDB)"
+    best_for:
+      - "REST APIs"
+      - "Real-time with Socket.io"
+      - "Microservices"
+    not_for:
+      - "Complex business logic"
+      - "Strict type safety needs"
+    budget_tier: "free"
+    complexity: "low-medium"
+    learning_curve: "low"
+    common_skills: ["JavaScript", "Node.js"]
+
+  api-go:
+    name: "Go API"
+    description: "High-performance, concurrent API in Go"
+    language: "Go"
+    framework: "Chi / Gin / stdlib"
+    database_options:
+      - "PostgreSQL"
+      - "MySQL"
+    best_for:
+      - "High-performance APIs"
+      - "Microservices"
+      - "Cloud-native apps"
+    not_for:
+      - "Rapid prototyping"
+      - "Teams without Go experience"
+    budget_tier: "free"
+    complexity: "medium"
+    learning_curve: "medium-high"
+    common_skills: ["Go"]
+
+  # Mobile
+  cross-platform-react-native:
+    name: "React Native"
+    description: "Cross-platform mobile apps with React"
+    language: "TypeScript"
+    framework: "React Native / Expo"
+    backend_options:
+      - "Firebase"
+      - "Supabase"
+      - "Custom API"
+    best_for:
+      - "iOS + Android from one codebase"
+      - "Teams with React experience"
+      - "Rapid mobile development"
+    not_for:
+      - "Performance-critical apps"
+      - "Heavy native features"
+    budget_tier: "free_to_low"
+    complexity: "medium"
+    learning_curve: "medium"
+    common_skills: ["JavaScript", "React"]
+
+  cross-platform-flutter:
+    name: "Flutter"
+    description: "Google's cross-platform UI toolkit"
+    language: "Dart"
+    framework: "Flutter"
+    backend_options:
+      - "Firebase"
+      - "Supabase"
+      - "Custom API"
+    best_for:
+      - "Beautiful UI"
+      - "High-performance animations"
+      - "iOS + Android + Web"
+    not_for:
+      - "Teams without time to learn Dart"
+      - "Web-first apps"
+    budget_tier: "free"
+    complexity: "medium"
+    learning_curve: "medium-high"
+    common_skills: ["Dart", "Mobile development"]
+
+  # CLI
+  cli-node:
+    name: "Node.js CLI"
+    description: "Command-line tools in JavaScript/TypeScript"
+    language: "TypeScript"
+    framework: "Commander / Oclif"
+    best_for:
+      - "Developer tools"
+      - "NPM ecosystem integration"
+      - "Cross-platform CLIs"
+    not_for:
+      - "Performance-critical tools"
+      - "System-level utilities"
+    budget_tier: "free"
+    complexity: "low"
+    learning_curve: "low"
+    common_skills: ["JavaScript", "Node.js"]
+
+  cli-python:
+    name: "Python CLI"
+    description: "Command-line tools in Python"
+    language: "Python"
+    framework: "Click / Typer"
+    best_for:
+      - "Data processing scripts"
+      - "Automation tools"
+      - "ML/AI pipelines"
+    not_for:
+      - "Distribution-heavy tools"
+      - "Performance-critical"
+    budget_tier: "free"
+    complexity: "low"
+    learning_curve: "low"
+    common_skills: ["Python"]
+
+  cli-go:
+    name: "Go CLI"
+    description: "Fast, single-binary command-line tools"
+    language: "Go"
+    framework: "Cobra"
+    best_for:
+      - "Distributable binaries"
+      - "High-performance tools"
+      - "DevOps tooling"
+    not_for:
+      - "Rapid prototyping"
+      - "Script-like tools"
+    budget_tier: "free"
+    complexity: "medium"
+    learning_curve: "medium"
+    common_skills: ["Go"]
+
+  cli-rust:
+    name: "Rust CLI"
+    description: "Memory-safe, blazing fast CLI tools"
+    language: "Rust"
+    framework: "Clap"
+    best_for:
+      - "Performance-critical tools"
+      - "System utilities"
+      - "Safety-critical applications"
+    not_for:
+      - "Rapid prototyping"
+      - "Teams without Rust experience"
+    budget_tier: "free"
+    complexity: "high"
+    learning_curve: "high"
+    common_skills: ["Rust", "Systems programming"]
+
+  # Desktop
+  desktop-electron:
+    name: "Electron Desktop"
+    description: "Cross-platform desktop apps with web technologies"
+    language: "TypeScript"
+    framework: "Electron"
+    best_for:
+      - "Cross-platform desktop apps"
+      - "Teams with web experience"
+      - "Feature-rich applications"
+    not_for:
+      - "Resource-constrained apps"
+      - "Simple utilities"
+    budget_tier: "free"
+    complexity: "medium"
+    learning_curve: "medium"
+    common_skills: ["JavaScript", "React", "HTML/CSS"]
+
+  desktop-tauri:
+    name: "Tauri Desktop"
+    description: "Lightweight desktop apps with Rust backend and web frontend"
+    language: "TypeScript + Rust"
+    framework: "Tauri"
+    best_for:
+      - "Lightweight desktop apps"
+      - "Security-focused apps"
+      - "Small bundle sizes"
+    not_for:
+      - "Teams without Rust experience"
+      - "Rapid prototyping"
+    budget_tier: "free"
+    complexity: "medium-high"
+    learning_curve: "high"
+    common_skills: ["JavaScript", "Rust"]
+
+# Budget tier definitions
+budget_tiers:
+  free:
+    description: "Free tier only - no paid services"
+    allowed_services:
+      - "Vercel (free tier)"
+      - "Railway (free tier)"
+      - "Supabase (free tier)"
+      - "PlanetScale (free tier)"
+      - "GitHub Actions"
+    avoided_services:
+      - "Paid cloud services"
+      - "Enterprise databases"
+
+  free_to_low:
+    description: "Free tier with option for low-cost upgrades"
+    monthly_budget: "$0-50"
+    allowed_services:
+      - "All free tier services"
+      - "Vercel Pro"
+      - "Railway Starter"
+      - "Managed databases (small)"
+
+  moderate:
+    description: "Moderate budget for growing applications"
+    monthly_budget: "$50-500"
+    allowed_services:
+      - "All lower tier services"
+      - "AWS/GCP (moderate usage)"
+      - "Managed databases (medium)"
+      - "CDN services"
+
+  enterprise:
+    description: "Enterprise budget with compliance needs"
+    monthly_budget: "$500+"
+    allowed_services:
+      - "All services"
+      - "Enterprise support"
+      - "SOC2-compliant hosting"
+      - "Dedicated infrastructure"
+
+# Skill matching weights
+skill_matching:
+  exact_match: 3       # User knows the exact technology
+  category_match: 2    # User knows related technology (React -> Next.js)
+  language_match: 1    # User knows the language (JavaScript -> Express)
+  no_match: 0          # User has no related experience
+
+# Constraint compatibility matrix
+constraint_compatibility:
+  compliance_required:
+    compatible_stacks:
+      - "api-go"
+      - "api-fastapi"
+      - "traditional-django"
+    requires:
+      - "SOC2-compliant hosting"
+      - "Audit logging"
+      - "Data encryption"
+
+  offline_required:
+    compatible_stacks:
+      - "desktop-electron"
+      - "desktop-tauri"
+      - "cross-platform-react-native"
+      - "cross-platform-flutter"
+    requires:
+      - "Local data storage"
+      - "Sync capabilities"
+
+  real_time_required:
+    compatible_stacks:
+      - "api-express"
+      - "fullstack-nextjs"
+    additional_tech:
+      - "Socket.io"
+      - "WebSockets"
+      - "Pusher/Ably"

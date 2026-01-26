@@ -209,7 +209,14 @@ install_files() {
         version_source="local:$LOCAL_PATH"
     else
         # Prevent running in prism-os repo itself
-        if [ -f "CLAUDE.md" ] && grep -q "Prism OS: AI Development Operating System" CLAUDE.md 2>/dev/null; then
+        if [ -f "CLAUDE.md" ] && grep -q "Prism OS Development Environment" CLAUDE.md 2>/dev/null; then
+            echo -e "${YELLOW}!${NC} Detected Prism OS source repository"
+            echo "  Use --local to install to another directory:"
+            echo "  cd /your/project && /path/to/prism-os/install.sh --local /path/to/prism-os"
+            exit 0
+        fi
+        # Also check for prism/ subdirectory (new structure)
+        if [ -d "prism" ] && [ -f "prism/CLAUDE.md" ]; then
             echo -e "${YELLOW}!${NC} Detected Prism OS source repository"
             echo "  Use --local to install to another directory:"
             echo "  cd /your/project && /path/to/prism-os/install.sh --local /path/to/prism-os"
@@ -265,11 +272,18 @@ install_files() {
         fi
     fi
 
-    # Copy files (without overwriting existing)
+    # Copy files from prism/ subdirectory (without overwriting existing)
+    local product_dir="${source_dir}/prism"
+
+    # Fallback for older structure (before restructure)
+    if [ ! -d "$product_dir" ]; then
+        product_dir="$source_dir"
+    fi
+
     # Copy CLAUDE.md
-    if [ -f "${source_dir}/CLAUDE.md" ]; then
+    if [ -f "${product_dir}/CLAUDE.md" ]; then
         if [ ! -f "CLAUDE.md" ]; then
-            cp "${source_dir}/CLAUDE.md" ./CLAUDE.md
+            cp "${product_dir}/CLAUDE.md" ./CLAUDE.md
             echo -e "${GREEN}✓${NC} Installed CLAUDE.md"
         else
             echo -e "${YELLOW}!${NC} CLAUDE.md already exists, skipping"
@@ -277,15 +291,30 @@ install_files() {
     fi
 
     # Copy templates
-    if [ -d "${source_dir}/templates" ]; then
-        cp -rn "${source_dir}/templates/"* ./templates/ 2>/dev/null || true
+    if [ -d "${product_dir}/templates" ]; then
+        cp -rn "${product_dir}/templates/"* ./templates/ 2>/dev/null || true
         echo -e "${GREEN}✓${NC} Installed templates/"
     fi
 
     # Copy .claude contents
-    if [ -d "${source_dir}/.claude" ]; then
-        cp -rn "${source_dir}/.claude/"* ./.claude/ 2>/dev/null || true
+    if [ -d "${product_dir}/.claude" ]; then
+        cp -rn "${product_dir}/.claude/"* ./.claude/ 2>/dev/null || true
         echo -e "${GREEN}✓${NC} Installed .claude/ (commands, agents, skills)"
+    fi
+
+    # Copy docs
+    if [ -d "${product_dir}/docs" ]; then
+        cp -rn "${product_dir}/docs/"* ./docs/ 2>/dev/null || true
+        echo -e "${GREEN}✓${NC} Installed docs/"
+    fi
+
+    # Copy memory templates (but not user data)
+    if [ -d "${product_dir}/memory" ]; then
+        # Only copy template files, not user content
+        if [ -f "${product_dir}/memory/constitution.md" ] && [ ! -f "memory/constitution.md" ]; then
+            cp "${product_dir}/memory/constitution.md" ./memory/ 2>/dev/null || true
+        fi
+        echo -e "${GREEN}✓${NC} Installed memory/ templates"
     fi
 
     # Write version tracking file
