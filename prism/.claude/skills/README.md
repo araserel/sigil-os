@@ -15,9 +15,9 @@ Core development workflow skills:
 - `handoff-packager.md` — Generate technical review packages
 - `status-reporter.md` — Generate workflow status reports
 - `foundation-writer.md` — Compile Discovery outputs into foundation document
-- `visual-analyzer.md` — Analyze mockups and wireframes (stub)
-- `sprint-planner.md` — Organize tasks into sprints (stub)
-- `story-preparer.md` — Convert tasks to user story format (stub)
+- `visual-analyzer.md` — Analyze mockups and wireframes
+- `sprint-planner.md` — Organize tasks into sprints
+- `story-preparer.md` — Convert tasks to user story format
 
 ### qa/
 Validation and fixing skills:
@@ -37,7 +37,7 @@ Information gathering and Discovery skills:
 - `problem-framing.md` — Capture problem statement and user preferences
 - `constraint-discovery.md` — Progressive constraint gathering
 - `stack-recommendation.md` — Generate technology stack options
-- `knowledge-search.md` — Search project knowledge base (stub)
+- `knowledge-search.md` — Search project knowledge base
 
 ### learning/
 Institutional memory and learning loop skills:
