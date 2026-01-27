@@ -1,5 +1,7 @@
 # Prism OS
 
+> **Version 1.1.0** — Adds UI/UX Designer agent with component design, accessibility, and Figma integration.
+
 Specification-driven development for non-technical users.
 
 ## Installation

@@ -253,6 +253,28 @@ All Prism skills are currently at **v1.0.0** (initial release).
 | handoff-packager | 1.0.0 | Stable |
 | status-reporter | 1.0.0 | Stable |
 
+### Design Skills
+
+| Skill | Version | Status |
+|-------|---------|--------|
+| framework-selector | 1.0.0 | Stable |
+| ux-patterns | 1.0.0 | Stable |
+| ui-designer | 1.0.0 | Stable |
+| accessibility | 1.0.0 | Stable |
+| design-system-reader | 1.0.0 | Stable |
+| figma-review | 1.0.0 | Stable |
+
+### UI Implementation Skills
+
+| Skill | Version | Status |
+|-------|---------|--------|
+| react-ui | 1.0.0 | Stable |
+| react-native-ui | 1.0.0 | Stable |
+| flutter-ui | 1.0.0 | Stable |
+| vue-ui | 1.0.0 | Stable |
+| swift-ui | 1.0.0 | Stable |
+| design-skill-creator | 1.0.0 | Stable |
+
 ### Quality Skills
 
 | Skill | Version | Status |
