@@ -19,6 +19,24 @@ Core development workflow skills:
 - `sprint-planner.md` — Organize tasks into sprints
 - `story-preparer.md` — Convert tasks to user story format
 
+### design/
+UI/UX design and accessibility skills (invoked by UI/UX Designer agent):
+- `framework-selector.md` — Recommend UI framework based on target platforms
+- `ux-patterns.md` — Design user flows and interaction patterns
+- `ui-designer.md` — Create component hierarchies and specifications
+- `accessibility.md` — Generate WCAG 2.1 accessibility requirements
+- `design-system-reader.md` — Analyze existing UI patterns in codebase
+- `figma-review.md` — Extract design tokens from Figma (requires MCP)
+
+### ui/
+Framework-specific UI implementation skills (invoked by Developer agent):
+- `react-ui.md` — Generate React components from design specs
+- `react-native-ui.md` — Generate React Native components
+- `flutter-ui.md` — Generate Flutter widgets
+- `vue-ui.md` — Generate Vue 3 components
+- `swift-ui.md` — Generate SwiftUI views
+- `design-skill-creator.md` — Meta-skill to create new framework skills
+
 ### qa/
 Validation and fixing skills:
 - `qa-validator.md` — Run quality checks
@@ -54,7 +72,7 @@ Each skill file follows this structure:
 name: skill-name
 description: What this skill does
 version: 1.0.0
-category: workflow|qa|review|research
+category: workflow|design|ui|qa|review|research|learning|engineering
 chainable: true|false
 invokes: [skills this may call]
 invoked_by: [skills that may call this]

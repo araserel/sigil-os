@@ -248,25 +248,33 @@ flowchart TD
 ---
 
 #### Phase 3: Plan
-**Purpose:** Create technical implementation plan from clarified spec.
+**Purpose:** Create component design and technical implementation plan from clarified spec.
 
 **Entry:** Clarified specification.
 
 **Process:**
-1. `researcher` skill investigates unknowns (parallel)
-2. `technical-planner` skill creates implementation plan
-3. Constitution gates checked (simplicity, anti-abstraction, integration-first)
-4. `adr-writer` skill documents significant decisions
+1. **If feature has UI components:**
+   - `uiux-designer` agent determines framework (if not in constitution)
+   - `ux-patterns` skill creates user flows
+   - `ui-designer` skill creates component hierarchy
+   - `accessibility` skill generates WCAG requirements
+   - User reviews and approves design
+2. `researcher` skill investigates unknowns (parallel)
+3. `technical-planner` skill creates implementation plan (with UI framework as constraint)
+4. Constitution gates checked (simplicity, anti-abstraction, integration-first, accessibility)
+5. `adr-writer` skill documents significant decisions
 
-**Exit:** Technical plan with file changes, dependencies, and risk assessment.
+**Exit:** Component design (if applicable) and technical plan with file changes, dependencies, and risk assessment.
 
 **Artifacts:**
+- `design.md` — Component architecture and UX patterns (if UI feature)
+- `accessibility.md` — WCAG requirements (if UI feature)
 - `plan.md` — Implementation plan
 - `research.md` — Research findings (if applicable)
 - `data-model.md` — Data changes (if applicable)
 - `adr/` — Architecture Decision Records (if applicable)
 
-**Human Tier:** Review (user reviews plan, approves approach)
+**Human Tier:** Review (user reviews design + plan, approves approach)
 
 ---
 
@@ -362,7 +370,7 @@ flowchart TD
 
 ### The Core Team
 
-Prism OS uses 8 specialized agents. Each has clear responsibilities, trigger words for automatic invocation, and defined phase assignments.
+Prism OS uses 9 specialized agents. Each has clear responsibilities, trigger words for automatic invocation, and defined phase assignments.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -374,25 +382,27 @@ Prism OS uses 8 specialized agents. Each has clear responsibilities, trigger wor
           │                       │                       │
           ▼                       ▼                       ▼
 ┌───────────────────┐   ┌─────────────────┐   ┌─────────────────┐
-│  BUSINESS ANALYST │   │    ARCHITECT    │   │   TASK PLANNER  │
-│   Specs, Clarity  │   │  Design, Plans  │   │  Tasks, Stories │
+│  BUSINESS ANALYST │   │  UI/UX DESIGNER │   │    ARCHITECT    │
+│   Specs, Clarity  │   │ Components, A11y│   │  Design, Plans  │
 └───────────────────┘   └─────────────────┘   └─────────────────┘
           │                       │                       │
           └───────────────────────┼───────────────────────┘
                                   │
-                                  ▼
-                    ┌─────────────────────────┐
-                    │       DEVELOPER         │
-                    │   Implementation        │
-                    └─────────────────────────┘
-                                  │
-          ┌───────────────────────┼───────────────────────┐
-          │                       │                       │
-          ▼                       ▼                       ▼
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   QA ENGINEER   │     │    SECURITY     │     │     DEVOPS      │
-│   Validation    │     │  Security Review│     │   Deployment    │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
+                    ┌─────────────┴─────────────┐
+                    │                           │
+                    ▼                           ▼
+          ┌─────────────────┐         ┌─────────────────────┐
+          │   TASK PLANNER  │         │      DEVELOPER      │
+          │  Tasks, Stories │         │   Implementation    │
+          └─────────────────┘         └─────────────────────┘
+                                              │
+          ┌───────────────────────────────────┼───────────────────────┐
+          │                                   │                       │
+          ▼                                   ▼                       ▼
+┌─────────────────┐               ┌─────────────────┐     ┌─────────────────┐
+│   QA ENGINEER   │               │    SECURITY     │     │     DEVOPS      │
+│   Validation    │               │  Security Review│     │   Deployment    │
+└─────────────────┘               └─────────────────┘     └─────────────────┘
 ```
 
 ### Agent Definitions
@@ -432,6 +442,27 @@ Prism OS uses 8 specialized agents. Each has clear responsibilities, trigger wor
 **Skills Invoked:** `spec-writer`, `clarifier`, `visual-analyzer`
 
 **Tools:** Read, Write, Edit, Glob, Grep
+
+---
+
+#### UI/UX Designer
+**Role:** Component designer, UX specialist, and accessibility champion.
+
+**Responsibilities:**
+- Determine UI framework based on target platforms
+- Design component hierarchies and structures
+- Define UX patterns and user flows
+- Ensure accessibility (WCAG 2.1 AA minimum)
+- Integrate with Figma when available
+- Analyze existing design systems for consistency
+
+**Trigger Words:** "design", "UI", "UX", "component", "layout", "screen", "mockup", "wireframe", "accessible", "Figma"
+
+**Active Phases:** Plan (before Architect)
+
+**Skills Invoked:** `framework-selector`, `ux-patterns`, `ui-designer`, `accessibility`, `design-system-reader`, `figma-review`
+
+**Tools:** Read, Write, Edit, Glob, Grep, WebFetch, WebSearch
 
 ---
 
@@ -568,7 +599,8 @@ The Orchestrator routes requests based on trigger words and workflow context.
 | Agent | Primary Triggers | Secondary Triggers | Priority |
 |-------|------------------|-------------------|----------|
 | **Business Analyst** | "feature", "requirement", "spec" | "I want", "we need", "user story" | High |
-| **Architect** | "architecture", "design", "technical" | "how should", "approach", "system" | High |
+| **UI/UX Designer** | "UI", "UX", "component", "design" | "layout", "screen", "mockup", "Figma", "accessible" | High |
+| **Architect** | "architecture", "technical", "system" | "how should", "approach" | High |
 | **Security** | "security", "vulnerability", "auth" | "OWASP", "secure", "credentials" | High |
 | **Task Planner** | "break down", "tasks", "sprint" | "stories", "backlog", "prioritize" | Medium |
 | **Developer** | "implement", "build", "code" | "fix", "bug", "write" | Medium |
@@ -581,6 +613,7 @@ The Orchestrator routes requests based on trigger words and workflow context.
 1. **Explicit triggers** — If request matches primary trigger, route directly
 2. **Phase context** — If in active phase, prefer phase owner:
    - Specify/Clarify → Business Analyst
+   - Design (UI features) → UI/UX Designer
    - Plan → Architect
    - Tasks → Task Planner
    - Implement → Developer
@@ -842,6 +875,8 @@ Skills are reusable, chainable workflow units. Each skill has defined inputs, ou
 | Category | Purpose | Skills |
 |----------|---------|--------|
 | **Workflow** | Core development workflow | `spec-writer`, `clarifier`, `technical-planner`, `task-decomposer`, `complexity-assessor`, `handoff-packager`, `constitution-writer`, `status-reporter`, `foundation-writer`, `visual-analyzer` |
+| **Design** | UI/UX design and accessibility | `framework-selector`, `ux-patterns`, `ui-designer`, `accessibility`, `design-system-reader`, `figma-review` |
+| **UI Implementation** | Framework-specific UI code | `react-ui`, `react-native-ui`, `flutter-ui`, `vue-ui`, `swift-ui`, `design-skill-creator` |
 | **Engineering** | Code and architecture | `adr-writer` |
 | **Quality** | Validation and fixing | `qa-validator`, `qa-fixer` |
 | **Review** | Code, security, deploy checks | `code-reviewer`, `security-reviewer`, `deploy-checker` |

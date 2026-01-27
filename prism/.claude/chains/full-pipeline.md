@@ -43,6 +43,12 @@ The full pipeline is the standard workflow for features that need proper specifi
 │     clarifier       │ ← Loop until resolved (max 3 rounds)
 └─────────────────────┘
          │
+         │ [If feature has UI components]
+         ▼
+┌─────────────────────┐
+│   uiux-designer     │ ← Component design, framework selection, accessibility
+└─────────────────────┘
+         │
          │ [If Enterprise track]
          ▼
 ┌─────────────────────┐
@@ -51,7 +57,7 @@ The full pipeline is the standard workflow for features that need proper specifi
          │
          ▼
 ┌─────────────────────┐
-│ technical-planner   │
+│ technical-planner   │ ← Receives UI framework as constraint
 └─────────────────────┘
          │
          │ [If ADRs needed]
@@ -122,15 +128,30 @@ The full pipeline is the standard workflow for features that need proper specifi
 **Condition:** `iteration < max_iterations AND new_ambiguities`
 **Data Passed:** Updated spec with clarifications
 
-### clarifier → technical-planner
-**Trigger:** All ambiguities resolved
-**Condition:** `all_resolved: true`
+### clarifier → uiux-designer
+**Trigger:** All ambiguities resolved AND feature has UI components
+**Condition:** `all_resolved: true AND has_ui: true`
+**Data Passed:** `{ spec_path, clarifications_path, visual_assets }`
+
+### clarifier → technical-planner (direct, non-UI)
+**Trigger:** All ambiguities resolved AND no UI components
+**Condition:** `all_resolved: true AND has_ui: false`
 **Data Passed:** `{ spec_path, clarifications_path }`
 
-### spec-writer → technical-planner (direct)
-**Trigger:** No ambiguities in spec
-**Condition:** `requires_clarification: false`
+### spec-writer → uiux-designer (direct, UI feature)
+**Trigger:** No ambiguities in spec AND feature has UI
+**Condition:** `requires_clarification: false AND has_ui: true`
 **Data Passed:** `{ spec_path }`
+
+### spec-writer → technical-planner (direct, non-UI)
+**Trigger:** No ambiguities in spec AND no UI
+**Condition:** `requires_clarification: false AND has_ui: false`
+**Data Passed:** `{ spec_path }`
+
+### uiux-designer → technical-planner
+**Trigger:** Design approved
+**Condition:** User approves component design
+**Data Passed:** `{ spec_path, design_path, framework, accessibility_path }`
 
 ### technical-planner → researcher
 **Trigger:** Unknown technologies or approaches
@@ -174,6 +195,8 @@ The full pipeline is the standard workflow for features that need proper specifi
 | Track selection | Review | After complexity assessment |
 | Spec review | Review | After spec generation |
 | Clarification answers | Auto | User provides answers |
+| Design review | Review | After UI/UX design (if UI feature) |
+| Framework selection | Review | If no framework in constitution |
 | Plan approval | Review | After plan generation |
 | ADR approval | Review | For each ADR |
 | QA escalation | Review | After 5 failed fix attempts |
@@ -213,6 +236,9 @@ Between skills, preserve:
 - `spec_path`: Current spec location
 - `track`: Selected workflow track
 - `iteration_counts`: Loop counters for clarifier and QA
+- `has_ui`: Whether feature has UI components
+- `framework`: UI framework (if selected by uiux-designer)
+- `design_path`: Path to design artifacts (if UI feature)
 
 ## Example Execution
 
@@ -226,32 +252,43 @@ User: "Add user authentication with email and password"
 2. spec-writer
    → Creates /specs/001-user-auth/spec.md
    → Flags: "Session vs JWT unclear", "Password rules unspecified"
+   → Detects UI components (login form, password reset)
 
 3. clarifier
    → Round 1: 4 questions asked
    → User answers
    → All resolved
 
-4. technical-planner
+4. uiux-designer (feature has UI)
+   → Checks constitution for framework → None found
+   → Presents framework options (React recommended)
+   → User confirms React
+   → Designs login form components
+   → Creates accessibility requirements
+   → User approves design
+
+5. technical-planner
    → Creates /specs/001-user-auth/plan.md
+   → React framework is now a constraint
    → Recommends jose library for JWT
    → User approves
 
-5. task-decomposer
+6. task-decomposer
    → Creates 12 tasks in 4 phases
    → First task: T001 - Setup auth module
 
-6. Developer (per task)
+7. Developer (per task)
    → Implements T001
-   → qa-validator checks
+   → Uses react-ui skill for components
+   → qa-validator checks (includes accessibility)
    → Passes, moves to T002
    → ... continues ...
 
-7. code-reviewer
+8. code-reviewer
    → Reviews all changes
    → Approves
 
-8. Complete
+9. Complete
 ```
 
 ## Variants

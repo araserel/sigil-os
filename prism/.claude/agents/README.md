@@ -1,6 +1,6 @@
 # Agents Directory
 
-Contains definitions for the 8 core Prism OS agents.
+Contains definitions for the 9 core Prism OS agents.
 
 ## Core Team
 
@@ -8,12 +8,23 @@ Contains definitions for the 8 core Prism OS agents.
 |-------|------|------------------------|
 | Orchestrator | `orchestrator.md` | Route requests, manage workflow, track progress |
 | Business Analyst | `business-analyst.md` | Requirements, specs, clarification |
+| UI/UX Designer | `uiux-designer.md` | Component design, accessibility, framework selection |
 | Architect | `architect.md` | Technical design, research, ADRs |
 | Task Planner | `task-planner.md` | Task breakdown, sprint planning |
 | Developer | `developer.md` | Code implementation |
 | QA Engineer | `qa-engineer.md` | Validation, quality assurance |
 | Security | `security.md` | Security review |
 | DevOps | `devops.md` | Deployment, infrastructure |
+
+## Workflow Sequence
+
+For features with UI components, the standard handoff sequence is:
+
+```
+Orchestrator → Business Analyst → UI/UX Designer → Architect → Task Planner → Developer → QA Engineer → [Security/DevOps]
+```
+
+For backend-only features, UI/UX Designer is skipped.
 
 ## Agent Definition Format
 

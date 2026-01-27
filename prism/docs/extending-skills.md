@@ -21,7 +21,7 @@ Every skill file consists of two parts:
 name: skill-name
 description: One-line description of what this skill does
 version: 1.0.0
-category: workflow|qa|review|research
+category: workflow|design|ui|qa|review|research|learning|engineering
 chainable: true|false
 invokes: [list, of, skills, this, calls]
 invoked_by: [list, of, skills, that, call, this]
@@ -44,7 +44,7 @@ The skill definition including purpose, workflow, inputs/outputs, and version hi
 | `name` | string | Kebab-case identifier (e.g., `my-new-skill`) |
 | `description` | string | Brief description (< 100 chars) |
 | `version` | string | Semantic version (start at `1.0.0`) |
-| `category` | enum | One of: `workflow`, `qa`, `review`, `research` |
+| `category` | enum | One of: `workflow`, `design`, `ui`, `qa`, `review`, `research`, `learning`, `engineering` |
 | `chainable` | boolean | Can output feed into another skill? |
 | `invokes` | array | Skills this skill may call |
 | `invoked_by` | array | Skills that may call this skill |
@@ -164,9 +164,13 @@ Before creating a skill, answer:
 | Category | Use When |
 |----------|----------|
 | `workflow` | Core workflow operations (spec, plan, tasks) |
+| `design` | UI/UX design, component architecture, accessibility |
+| `ui` | Framework-specific UI implementation (React, Flutter, etc.) |
 | `qa` | Validation and fixing operations |
 | `review` | Code, security, or deployment review |
 | `research` | Information gathering and analysis |
+| `learning` | Institutional memory and knowledge management |
+| `engineering` | Architecture and code patterns (ADRs, etc.) |
 
 ### Step 3: Define the Contract
 

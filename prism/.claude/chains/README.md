@@ -6,9 +6,23 @@ Contains skill chain definitions that orchestrate multi-skill workflows.
 
 | Chain | File | Use Case |
 |-------|------|----------|
-| Full Pipeline | `full-pipeline.md` | Standard/Enterprise track features |
+| Full Pipeline | `full-pipeline.md` | Standard/Enterprise track features (includes UI/UX design phase) |
 | Quick Flow | `quick-flow.md` | Bug fixes, small changes |
 | Discovery Chain | `discovery-chain.md` | New project setup and stack selection |
+
+## Full Pipeline Overview
+
+The full pipeline now includes a design phase for features with UI components:
+
+```
+Spec → Clarify → [UI/UX Design] → Plan → Tasks → Implement → Validate → Review
+```
+
+The UI/UX Design phase is automatically inserted when the feature has UI components. It handles:
+- Framework selection (if not in constitution)
+- Component hierarchy design
+- Accessibility requirements (WCAG 2.1 AA)
+- Figma integration (if available)
 
 ## Chain Definition Format
 
