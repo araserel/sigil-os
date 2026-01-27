@@ -20,7 +20,7 @@ Install once, use in all projects. Includes automatic updates.
 **Using Terminal (Technical):**
 ```bash
 # Clone the repository
-git clone https://github.com/adamriedthaler/prism-os.git ~/.prism-os
+git clone https://github.com/araserel/prism-os.git ~/.prism-os
 
 # Install globally
 ~/.prism-os/install-global.sh

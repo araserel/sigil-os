@@ -164,7 +164,7 @@ Prism OS Update Check
 ❌ Prism OS is not installed globally
 
 To install:
-  git clone https://github.com/adamriedthaler/prism-os.git ~/.prism-os
+  git clone https://github.com/araserel/prism-os.git ~/.prism-os
   ~/.prism-os/install-global.sh
 ```
 
@@ -180,7 +180,7 @@ Prism OS is installed but the source directory is missing:
   Expected: ~/.prism-os
 
 To fix, re-clone and reinstall:
-  git clone https://github.com/adamriedthaler/prism-os.git ~/.prism-os
+  git clone https://github.com/araserel/prism-os.git ~/.prism-os
   ~/.prism-os/install-global.sh
 ```
 
@@ -200,7 +200,7 @@ To convert to git-based installation:
 
 Or manually:
   rm -rf ~/.prism-os
-  git clone https://github.com/adamriedthaler/prism-os.git ~/.prism-os
+  git clone https://github.com/araserel/prism-os.git ~/.prism-os
   ~/.prism-os/install-global.sh
 ```
 

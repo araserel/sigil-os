@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 # Installer version
 INSTALLER_VERSION="1.0.0"
-REPO_URL="https://github.com/adamriedthaler/prism-os"
+REPO_URL="https://github.com/araserel/prism-os"
 BRANCH="main"
 
 # Default options

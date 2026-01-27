@@ -20,7 +20,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 INSTALLER_VERSION="1.0.0"
-REPO_URL="https://github.com/adamriedthaler/prism-os"
+REPO_URL="https://github.com/araserel/prism-os"
 GLOBAL_CLAUDE="$HOME/.claude"
 PRISM_SOURCE="$HOME/.prism-os"
 BACKUP_DIR="$GLOBAL_CLAUDE/.prism-backups"
@@ -85,7 +85,7 @@ show_help() {
     echo ""
     echo "Examples:"
     echo "  # Fresh install"
-    echo "  git clone https://github.com/adamriedthaler/prism-os.git ~/.prism-os"
+    echo "  git clone https://github.com/araserel/prism-os.git ~/.prism-os"
     echo "  ~/.prism-os/install-global.sh"
     echo ""
     echo "  # Check status"

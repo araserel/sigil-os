@@ -63,7 +63,7 @@ git --version
 Run this command to download Prism OS:
 
 ```bash
-git clone https://github.com/adamriedthaler/prism-os.git ~/.prism-os
+git clone https://github.com/araserel/prism-os.git ~/.prism-os
 ```
 
 **What this does:** Downloads Prism OS to a hidden folder called `.prism-os` in your home directory.
@@ -178,7 +178,7 @@ The repository was already cloned. Either:
 - Or remove and re-clone:
   ```bash
   rm -rf ~/.prism-os
-  git clone https://github.com/adamriedthaler/prism-os.git ~/.prism-os
+  git clone https://github.com/araserel/prism-os.git ~/.prism-os
   ```
 
 ---
@@ -186,7 +186,7 @@ The repository was already cloned. Either:
 ## Getting Help
 
 - **In Claude:** Ask "How do I use Prism OS?" or type `/prism help`
-- **GitHub Issues:** https://github.com/adamriedthaler/prism-os/issues
+- **GitHub Issues:** https://github.com/araserel/prism-os/issues
 - **Documentation:** See `~/.prism-os/prism/docs/` after installation
 
 ---
