@@ -15,6 +15,19 @@ $ARGUMENTS
 
 ## Process
 
+### Step 0: Preflight and Enforcement
+
+Before doing anything else, read `~/.claude/skills/workflow/preflight-check.md` and execute its full process:
+
+- **Part A:** Verify Global Installation (check directories, files, counts)
+- **Part B:** Check/Inject Enforcement Section into project `./CLAUDE.md`
+
+If Part A returns **BLOCK** status (critical directories missing), STOP immediately — do not proceed to Step 1.
+
+If Part A returns **WARN** or **PASS**, proceed to Step 1 after Part B completes.
+
+---
+
 ### Step 1: State Detection
 
 Read the following files to understand current project state:
@@ -35,6 +48,24 @@ Read the following files to understand current project state:
 4. **Specs Directory:** `/specs/`
    - Scan for existing feature directories
    - Check for incomplete specs (missing plan.md or tasks.md)
+
+#### 1b. Context Staleness Check
+
+If `project-context.md` exists and reports an Active Workflow with a Spec Path, cross-reference the recorded phase against artifacts on disk:
+
+| Artifact exists at Spec Path | Implies phase completed |
+|------------------------------|------------------------|
+| `spec.md` | specify |
+| `clarifications.md` | clarify |
+| `plan.md` | plan |
+| `tasks.md` | tasks |
+| `qa/` directory with reports | validate |
+| `reviews/` directory with reports | review |
+
+Compare the highest completed phase (from artifacts) against the **Current Phase** in `project-context.md`:
+- If artifacts show a **later** phase than recorded → Context is stale. Update `project-context.md` to match the artifact evidence and warn: `Context was stale — updated phase to [phase] based on existing artifacts.`
+- If they match → Context is current. No action needed.
+- If artifacts show an **earlier** phase → The recorded phase may reflect in-progress work. No correction needed.
 
 ### Step 2: Route Based on Arguments
 

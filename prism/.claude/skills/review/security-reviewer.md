@@ -321,6 +321,16 @@ const user = await db.query('SELECT * FROM users WHERE id = $1', [id]);
 After fixes applied, re-run security review.
 ```
 
+## Pre-Execution Check
+
+Before starting, update `memory/project-context.md`:
+- Set **Current Phase** to `review`
+- Set **Feature** to the feature being reviewed
+- Set **Spec Path** to the active spec directory
+- Set **Last Updated** to the current timestamp
+
+If `memory/project-context.md` does not exist, create it using the State Tracking format from the `/prism` command.
+
 ## Workflow
 
 ```

@@ -36,6 +36,16 @@ Transform natural language feature descriptions into structured specifications. 
 - `existing_specs`: string[] — Paths to related specs for context
 - `priority_override`: string — Force P1/P2/P3 classification
 
+## Pre-Execution Check
+
+Before starting, update `memory/project-context.md`:
+- Set **Current Phase** to `specify`
+- Set **Feature** to the feature being specified
+- Set **Spec Path** to the target spec directory (e.g., `/specs/###-feature/`)
+- Set **Last Updated** to the current timestamp
+
+If `memory/project-context.md` does not exist, create it using the State Tracking format from the `/prism` command.
+
 ## Process
 
 ### Step 1: Context Gathering

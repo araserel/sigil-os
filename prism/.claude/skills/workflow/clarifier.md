@@ -34,6 +34,16 @@ Systematically reduce ambiguity in specifications through targeted questions. En
 **Auto-loaded:**
 - `max_iterations`: number — Maximum rounds before escalation (default: 3)
 
+## Pre-Execution Check
+
+Before starting, update `memory/project-context.md`:
+- Set **Current Phase** to `clarify`
+- Set **Feature** to the feature being clarified
+- Set **Spec Path** to the active spec directory
+- Set **Last Updated** to the current timestamp
+
+If `memory/project-context.md` does not exist, create it using the State Tracking format from the `/prism` command.
+
 ## Process
 
 ### Step 1: Load Context

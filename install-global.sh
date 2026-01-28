@@ -465,6 +465,13 @@ Prism OS is installed globally. Use `/prism` to start or check status.
 | `/prism continue` | Resume work |
 | `/prism-update` | Check for updates |
 
+## Enforcement
+
+When `/prism` runs in a project, it ensures enforcement rules exist in the
+project-level `./CLAUDE.md`. These rules are MANDATORY and ensure agents and skills
+are invoked via the correct tools (Skill tool, Task tool) rather than
+implemented inline. Do NOT remove or modify enforcement sections.
+
 ## Per-Project Files
 
 These files are project-specific (not global):

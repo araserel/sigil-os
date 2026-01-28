@@ -34,6 +34,16 @@ Transform implementation plans into ordered, trackable tasks. Creates a clear ex
 **Auto-loaded:**
 - `project_context`: string — `/memory/project-context.md`
 
+## Pre-Execution Check
+
+Before starting, update `memory/project-context.md`:
+- Set **Current Phase** to `tasks`
+- Set **Feature** to the feature being decomposed
+- Set **Spec Path** to the active spec directory
+- Set **Last Updated** to the current timestamp
+
+If `memory/project-context.md` does not exist, create it using the State Tracking format from the `/prism` command.
+
 ## Process
 
 ### Step 1: Plan Analysis
