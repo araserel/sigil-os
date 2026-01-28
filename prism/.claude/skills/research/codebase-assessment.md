@@ -1,10 +1,10 @@
 ---
 name: codebase-assessment
 description: Analyzes codebase state to determine appropriate Discovery track. Invoke at the start of any new project or when "new project", "start fresh", or "greenfield" is mentioned.
-version: 1.0.0
+version: 1.1.0
 category: research
 chainable: true
-invokes: []
+invokes: [constitution-writer]
 invoked_by: [orchestrator]
 tools: Read, Glob, Grep, Bash
 ---
@@ -77,7 +77,134 @@ Scan for the presence of key indicators:
    - /specs/ directory
 ```
 
-### Step 2: Classification
+### Step 2: Stack Detection
+
+When manifest files are found, parse them to detect the technology stack:
+
+**package.json (Node/TypeScript):**
+```
+- Language: Check for `typescript` in dependencies/devDependencies → TypeScript, else JavaScript
+- Framework:
+  - `next` → Next.js
+  - `react` (without next) → React
+  - `vue` → Vue
+  - `@angular/core` → Angular
+  - `express` → Express
+  - `fastify` → Fastify
+- Database:
+  - `prisma` or `@prisma/client` → check prisma/schema.prisma for provider
+  - `pg` or `postgres` → PostgreSQL
+  - `mysql2` → MySQL
+  - `mongoose` or `mongodb` → MongoDB
+  - `better-sqlite3` or `sqlite3` → SQLite
+- ORM:
+  - `@prisma/client` → Prisma
+  - `sequelize` → Sequelize
+  - `typeorm` → TypeORM
+  - `drizzle-orm` → Drizzle
+- Test Framework:
+  - `jest` → Jest
+  - `vitest` → Vitest
+  - `mocha` → Mocha
+  - `@playwright/test` → Playwright
+  - `cypress` → Cypress
+```
+
+**go.mod:**
+```
+- Language: Go + version from `go X.XX` line
+- Framework:
+  - `github.com/gin-gonic/gin` → Gin
+  - `github.com/labstack/echo` → Echo
+  - `github.com/gofiber/fiber` → Fiber
+  - `github.com/gorilla/mux` → Gorilla Mux
+- Database:
+  - `github.com/lib/pq` → PostgreSQL
+  - `github.com/go-sql-driver/mysql` → MySQL
+  - `github.com/mattn/go-sqlite3` → SQLite
+- ORM:
+  - `gorm.io/gorm` → GORM
+  - `github.com/uptrace/bun` → Bun
+  - `entgo.io/ent` → Ent
+```
+
+**pyproject.toml / requirements.txt:**
+```
+- Language: Python + version from requires-python or python_requires
+- Framework:
+  - `django` → Django
+  - `fastapi` → FastAPI
+  - `flask` → Flask
+  - `starlette` → Starlette
+- Database:
+  - `psycopg2` or `psycopg` → PostgreSQL
+  - `pymysql` or `mysqlclient` → MySQL
+  - `pymongo` → MongoDB
+- ORM:
+  - `sqlalchemy` → SQLAlchemy
+  - `django` (implies) → Django ORM
+  - `tortoise-orm` → Tortoise ORM
+  - `peewee` → Peewee
+- Test Framework:
+  - `pytest` → pytest
+  - `unittest` (stdlib) → unittest
+```
+
+**Cargo.toml:**
+```
+- Language: Rust + edition from [package] section
+- Framework:
+  - `actix-web` → Actix Web
+  - `axum` → Axum
+  - `rocket` → Rocket
+  - `warp` → Warp
+- ORM:
+  - `diesel` → Diesel
+  - `sea-orm` → SeaORM
+  - `sqlx` → SQLx
+```
+
+**Gemfile:**
+```
+- Language: Ruby + version from .ruby-version or Gemfile ruby directive
+- Framework:
+  - `rails` → Rails
+  - `sinatra` → Sinatra
+  - `hanami` → Hanami
+- ORM:
+  - Rails implies → ActiveRecord
+  - `sequel` → Sequel
+- Database:
+  - `pg` → PostgreSQL
+  - `mysql2` → MySQL
+  - `sqlite3` → SQLite
+- Test Framework:
+  - `rspec` → RSpec
+  - `minitest` → Minitest
+```
+
+#### Confidence Rules
+
+| Confidence | Criteria |
+|------------|----------|
+| `confident` | Found in manifest file with explicit declaration (dependency, config key, or version) |
+| `uncertain` | File extensions only, OR conflicting signals (e.g., both jest and vitest), OR no version found |
+
+#### Stack Detection Output
+
+```json
+{
+  "detected_stack": {
+    "language": { "name": "TypeScript", "version": "5.x", "confidence": "confident", "source": "package.json" },
+    "framework": { "name": "Next.js", "version": "14.x", "confidence": "confident", "source": "package.json" },
+    "database": { "name": "PostgreSQL", "confidence": "confident", "source": "prisma/schema.prisma" },
+    "orm": { "name": "Prisma", "version": "5.x", "confidence": "confident", "source": "package.json" },
+    "test_framework": { "name": "Jest", "confidence": "confident", "source": "package.json:devDependencies" }
+  }
+}
+```
+
+### Step 3: Classification
 
 Apply classification logic based on detected signals:
 
@@ -98,7 +225,7 @@ MATURE when ANY of:
   - has_ci = true
 ```
 
-### Step 3: Confidence Assessment
+### Step 4: Confidence Assessment
 
 Determine confidence in classification:
 
@@ -116,7 +243,7 @@ LOW confidence when:
   - User override may be needed
 ```
 
-### Step 4: Generate Assessment Report
+### Step 5: Generate Assessment Report
 
 Create a structured report of findings.
 
@@ -128,22 +255,28 @@ Create a structured report of findings.
   "classification": "greenfield | scaffolded | mature",
   "confidence": "high | medium | low",
   "signals": {
-    "has_manifest": false,
-    "manifest_type": null,
-    "dependency_count": 0,
-    "code_file_count": 3,
-    "has_tests": false,
-    "has_ci": false,
+    "has_manifest": true,
+    "manifest_type": "package.json",
+    "dependency_count": 45,
+    "code_file_count": 127,
+    "has_tests": true,
+    "has_ci": true,
     "has_prism_artifacts": false,
-    "detected_stack": null
+    "detected_stack": {
+      "language": { "name": "TypeScript", "version": "5.x", "confidence": "confident", "source": "package.json" },
+      "framework": { "name": "Next.js", "version": "14.x", "confidence": "confident", "source": "package.json" },
+      "database": { "name": "PostgreSQL", "confidence": "confident", "source": "prisma/schema.prisma" },
+      "orm": { "name": "Prisma", "version": "5.x", "confidence": "confident", "source": "package.json" },
+      "test_framework": { "name": "Jest", "confidence": "confident", "source": "package.json:devDependencies" }
+    }
   },
-  "rationale": "No dependency manifest found. Only 3 code files detected. No test or CI infrastructure.",
-  "recommended_track": "discovery-greenfield",
+  "rationale": "Established codebase with 45 dependencies and 127 code files. Test and CI infrastructure present.",
+  "recommended_track": "assessment-constitution",
   "override_available": true
 }
 ```
 
-**Handoff Data:**
+**Handoff Data (Greenfield):**
 ```json
 {
   "assessment_complete": true,
@@ -152,6 +285,24 @@ Create a structured report of findings.
   "recommended_track": "discovery-greenfield",
   "detected_stack": null,
   "next_skill": "problem-framing"
+}
+```
+
+**Handoff Data (Scaffolded/Mature without Constitution):**
+```json
+{
+  "assessment_complete": true,
+  "classification": "mature",
+  "confidence": "high",
+  "recommended_track": "assessment-constitution",
+  "detected_stack": {
+    "language": { "name": "TypeScript", "version": "5.x", "confidence": "confident", "source": "package.json" },
+    "framework": { "name": "Next.js", "version": "14.x", "confidence": "confident", "source": "package.json" },
+    "database": { "name": "PostgreSQL", "confidence": "confident", "source": "prisma/schema.prisma" },
+    "orm": { "name": "Prisma", "version": "5.x", "confidence": "confident", "source": "package.json" },
+    "test_framework": { "name": "Jest", "confidence": "confident", "source": "package.json:devDependencies" }
+  },
+  "next_skill": "constitution-writer"
 }
 ```
 
@@ -244,6 +395,35 @@ For established codebases, we'll skip discovery and go directly to feature devel
 What would you like to build?
 ```
 
+### Assessment Path Routing
+
+When the classification is `scaffolded` or `mature` AND no constitution exists (`/memory/constitution.md` not found):
+
+1. Set `recommended_track: "assessment-constitution"`
+2. Include full `detected_stack` in handoff data
+3. Invoke `constitution-writer` with detected stack for pre-population
+
+**Assessment Path Presentation:**
+```
+## Established Codebase Detected
+
+This appears to be a [scaffolded/mature] project. I've detected your technology stack:
+
+| Component | Detected | Source |
+|-----------|----------|--------|
+| Language | TypeScript 5.x | package.json |
+| Framework | Next.js 14.x | package.json |
+| Database | PostgreSQL | prisma/schema.prisma |
+| ORM | Prisma 5.x | package.json |
+| Tests | Jest | package.json:devDependencies |
+
+Before we start building features, let's create a project constitution to capture your standards and principles.
+
+This will take just a few minutes and ensures consistent AI assistance.
+
+Ready to set up your constitution?
+```
+
 ## User Override
 
 If the user disagrees with the assessment:
@@ -285,8 +465,11 @@ Just describe what you'd like to build."
 ## Integration Points
 
 - **Invoked by:** `orchestrator` at project start
-- **Invokes:** None (assessment only)
-- **Hands off to:** `problem-framing` (greenfield/scaffolded) or standard workflow (mature)
+- **Invokes:** `constitution-writer` (when scaffolded/mature without constitution)
+- **Hands off to:**
+  - `problem-framing` — greenfield projects
+  - `constitution-writer` — scaffolded/mature without constitution (assessment-constitution track)
+  - Standard workflow — mature with existing constitution
 
 ## Example Assessments
 
@@ -335,3 +518,4 @@ Rationale: Established codebase with full infrastructure.
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2026-01-20 | Initial release |
+| 1.1.0 | 2026-01-27 | Added stack detection (Step 2), assessment-constitution track, constitution-writer invocation |

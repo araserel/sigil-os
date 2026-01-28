@@ -1,11 +1,11 @@
 ---
 name: constitution-writer
-description: Creates project constitution through guided conversation. Invoke when setting up a new project or when user says "constitution", "project principles", or "project setup". Can be pre-populated from project foundation.
-version: 1.1.0
+description: Creates project constitution through guided conversation. Invoke when setting up a new project or when user says "constitution", "project principles", or "project setup". Can be pre-populated from project foundation or codebase assessment.
+version: 1.2.0
 category: workflow
 chainable: true
-invokes: []
-invoked_by: [foundation-writer, orchestrator]
+invokes: [codebase-assessment]
+invoked_by: [foundation-writer, orchestrator, codebase-assessment]
 tools: Read, Write, Edit, Glob
 ---
 
@@ -52,19 +52,48 @@ Guide users through creating their project constitution—the immutable principl
   }
   ```
 
+**From Assessment Path (when invoked by codebase-assessment):**
+- `detected_stack`: object — Stack detected from codebase analysis
+  ```json
+  {
+    "language": { "name": "TypeScript", "version": "5.x", "confidence": "confident", "source": "package.json" },
+    "framework": { "name": "Next.js", "version": "14.x", "confidence": "confident", "source": "package.json" },
+    "database": { "name": "PostgreSQL", "confidence": "confident", "source": "prisma/schema.prisma" },
+    "orm": { "name": "Prisma", "version": "5.x", "confidence": "confident", "source": "package.json" },
+    "test_framework": { "name": "Jest", "confidence": "confident", "source": "package.json:devDependencies" }
+  }
+  ```
+- `classification`: string — "scaffolded" | "mature" (from codebase-assessment)
+
 ## Process
 
-### Step 0: Check for Foundation Document
+### Step 0: Check for Pre-Population Sources
 
 ```
-Check if invoked from Discovery chain:
-- If foundation_path provided:
-  1. Load /memory/project-foundation.md
-  2. Extract pre_populated_constitution data
-  3. Pre-fill Article 1 (Technology Stack)
-  4. Note which questions can be skipped
-- If no foundation:
-  1. Proceed with standard guided conversation
+Determine pre-population path (in priority order):
+
+1. IF foundation_path provided:
+   → Use Foundation Path (from Discovery chain)
+   - Load /memory/project-foundation.md
+   - Extract pre_populated_constitution data
+   - Pre-fill Article 1 (Technology Stack)
+   - Note which questions can be skipped
+
+2. ELSE IF detected_stack provided:
+   → Use Assessment Path (from codebase-assessment)
+   - Use detected_stack for Article 1 pre-population
+   - Show detection table for user confirmation
+   - Handle uncertain fields with clarifying questions
+
+3. ELSE IF no constitution exists AND repo appears established:
+   → Invoke codebase-assessment first
+   - Run assessment to detect stack
+   - If stack detected, continue with Assessment Path
+   - If no stack detected, fall through to Standard Path
+
+4. ELSE:
+   → Use Standard Path (guided conversation)
+   - Ask all questions interactively
 ```
 
 ### Step 1: Check for Existing Constitution
@@ -281,9 +310,8 @@ Assistant: "Great news! Since we went through Discovery, I already have your
            Does this look correct?"
 
 User: "Yes, that's right"
-
-Assistant: "Perfect\! Moving on to coding standards for TypeScript/Next.js.
-           I'll suggest some sensible defaults - just let me know what to change.
+Assistant: "Perfect! Moving on to coding standards for TypeScript/Next.js.
+           I will suggest some sensible defaults - just let me know what to change.
 
            **Article 2: Code Standards**
            Suggested for your stack:
@@ -294,17 +322,231 @@ Assistant: "Perfect\! Moving on to coding standards for TypeScript/Next.js.
            Any customizations?"
 
 User: "Looks good, use those"
-
-Assistant: "Great\! For testing, Jest is standard for Next.js...
+Assistant: "Great! For testing, Jest is standard for Next.js...
            [continues with remaining articles]"
+```
+
+## Assessment Path Integration
+
+When invoked from `codebase-assessment` (or when self-invoking assessment for established repos without constitution):
+
+### Trigger Conditions
+
+The Assessment Path is triggered when ALL of these are true:
+1. No `/memory/constitution.md` exists
+2. No `/memory/project-foundation.md` exists (not from Discovery chain)
+3. Codebase-assessment classifies repo as "scaffolded" or "mature"
+
+### Assessment Path Flow
+
+**Step A: Show Analysis Message**
+```
+## Analyzing Your Codebase...
+
+I am scanning your project to detect the technology stack.
+```
+
+**Step B: Present Detection Table**
+```
+## Technology Stack Detected
+
+I analyzed your codebase and found the following:
+
+| Setting | Detected | Confidence | Source |
+|---------|----------|------------|--------|
+| Language | TypeScript 5.x | confident | package.json |
+| Framework | Next.js 14.x | confident | package.json |
+| Database | PostgreSQL | confident | prisma/schema.prisma |
+| ORM | Prisma 5.x | confident | package.json |
+| Test Framework | Jest | confident | package.json:devDependencies |
+
+Does this look right? If anything is wrong, just tell me what to change.
+```
+
+**Step C: Handle User Response**
+
+*If confirmed ("Yes", "Looks good", "Correct"):*
+- Lock Article 1 with detected values
+- Continue to Article 2
+
+*If corrections needed ("Actually...", "No", user provides corrections):*
+- Accept inline corrections
+- Update the value and set source to "user correction"
+- Re-display updated table for confirmation
+- Example: "Actually we use MySQL" -> Update database row, confirm again
+
+**Step D: Handle Uncertain Fields**
+
+Fields with `confidence: "uncertain"` are marked in the table:
+
+```
+| Setting | Detected | Confidence | Source |
+|---------|----------|------------|--------|
+| Language | TypeScript 5.x | confident | package.json |
+| Test Framework | Jest or Vitest | uncertain | conflicting deps |
+```
+
+After initial confirmation, ask specifically about uncertain fields:
+```
+I found both Jest and Vitest in your dependencies. Which is your primary test framework?
+```
+
+**Step E: Handle Missing Fields**
+
+Fields not detected show "Not detected":
+
+```
+| Setting | Detected | Confidence | Source |
+|---------|----------|------------|--------|
+| Language | TypeScript 5.x | confident | package.json |
+| Framework | Next.js 14.x | confident | package.json |
+| Database | Not detected | - | - |
+| ORM | Not detected | - | - |
+| Test Framework | Jest | confident | package.json:devDependencies |
+```
+
+After confirming detected fields, ask standard questions for missing fields:
+```
+I did not detect a database in your project. Are you using one? If so, which database?
+```
+
+**Step F: Continue to Remaining Articles**
+
+After Article 1 is confirmed (with detections + corrections + missing field answers):
+- Proceed with Articles 2-7 using standard guided conversation
+- Suggest smart defaults based on detected stack (same as Foundation path)
+
+### Assessment Path Conversation Examples
+
+#### Happy Path (All Confident)
+
+```
+User: /constitution
+Assistant: "Analyzing your codebase...
+
+           I found an established TypeScript/Next.js project. Here is what I detected:
+
+           | Setting | Detected | Source |
+           |---------|----------|--------|
+           | Language | TypeScript 5.x | package.json |
+           | Framework | Next.js 14.x | package.json |
+           | Database | PostgreSQL | prisma/schema.prisma |
+           | ORM | Prisma | package.json |
+           | Test Framework | Jest | package.json |
+
+           Does this look right?"
+
+User: "Looks good"
+Assistant: "Great! I will lock those in for Article 1 of your constitution.
+
+           Now let us talk about **Code Standards**. Do you use a formatter
+           like Prettier? What about a linter?"
+
+[Continues with standard guided conversation for Articles 2-7]
+```
+
+#### Mixed Path (Some Uncertain)
+
+```
+Assistant: "Analyzing your codebase...
+
+           I found an established Python project. Here is what I detected:
+
+           | Setting | Detected | Source |
+           |---------|----------|--------|
+           | Language | Python 3.11 | pyproject.toml |
+           | Framework | FastAPI | pyproject.toml |
+           | Database | *Not detected* | - |
+           | ORM | SQLAlchemy | pyproject.toml |
+           | Test Framework | pytest | pyproject.toml |
+
+           I could not confidently detect your database. What database does
+           this project use?"
+
+User: "PostgreSQL"
+Assistant: "Got it. Here is your confirmed stack:
+
+           - Language: Python 3.11
+           - Framework: FastAPI
+           - Database: PostgreSQL
+           - ORM: SQLAlchemy
+           - Test Framework: pytest
+
+           Moving on to **Code Standards**..."
+```
+
+#### Correction Path
+
+```
+Assistant: "Analyzing your codebase...
+
+           I found an established Node.js project. Here is what I detected:
+
+           | Setting | Detected | Source |
+           |---------|----------|--------|
+           | Language | TypeScript 5.x | package.json |
+           | Framework | Express | package.json |
+           | Database | PostgreSQL | pg in package.json |
+           | ORM | None detected | - |
+           | Test Framework | Jest | package.json |
+
+           Does this look right?"
+
+User: "The database is actually MySQL, not PostgreSQL. We use the pg package
+      for a different service."
+Assistant: "Thanks for the correction. Updated:
+
+           - Database: MySQL
+
+           And you mentioned no ORM was detected. Do you use an ORM, or do
+           you write raw SQL?"
+
+User: "Raw SQL with a query builder"
+Assistant: "Got it. I will note 'Raw SQL / Query Builder' for your data access layer.
+
+           Your confirmed stack:
+           - Language: TypeScript 5.x
+           - Framework: Express
+           - Database: MySQL
+           - Data Access: Raw SQL / Query Builder
+           - Test Framework: Jest
+
+           Now let us move to **Code Standards**..."
+```
+
+#### Greenfield Redirect
+
+```
+Assistant: "Analyzing your codebase...
+
+           This looks like a new project without much code yet. I would
+           recommend going through the Discovery flow first to help you
+           choose your stack.
+
+           Would you like to start Discovery, or do you already know your
+           stack and want to proceed directly?"
+
+User: "I know my stack, let us proceed"
+Assistant: "Sounds good. Let us set up your constitution.
+
+           **Article 1: Technology Stack**
+
+           What programming language will this project use?"
+
+[Falls back to standard guided conversation]
 ```
 
 ## Error Handling
 
-- If user skips an article: Note as "To be defined" and flag for follow-up
-- If user provides unclear answers: Ask clarifying questions
-- If template not found: Use embedded fallback template
-- If foundation data conflicts with user input: User input takes precedence
+| Error | Resolution |
+|-------|------------|
+| User skips an article | Note as "To be defined" and flag for follow-up |
+| User provides unclear answers | Ask clarifying questions |
+| Template not found | Use embedded fallback template |
+| Foundation data conflicts with user input | User input takes precedence |
+| Assessment detection wrong | User correction updates value, source becomes "user correction" |
+| Monorepo with multiple manifests | Use root manifest; note uncertainty for sub-packages |
+| Conflicting signals in assessment | Mark as uncertain, ask user to clarify |
 
 ## Version History
 
@@ -312,3 +554,4 @@ Assistant: "Great\! For testing, Jest is standard for Next.js...
 |---------|------|---------|
 | 1.0.0 | 2026-01-20 | Initial release |
 | 1.1.0 | 2026-01-20 | Added Foundation integration, pre-population support |
+| 1.2.0 | 2026-01-27 | Added Assessment Path integration for established repos, codebase-assessment invocation |
