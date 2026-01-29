@@ -698,8 +698,8 @@ The commands above cover most use cases. For direct access to individual workflo
 |---------|---------|
 | `/spec` | Create specification directly |
 | `/clarify` | Resolve ambiguities |
-| `/plan` | Generate implementation plan |
-| `/tasks` | Break plan into tasks |
+| `/prism-plan` | Generate implementation plan |
+| `/prism-tasks` | Break plan into tasks |
 | `/validate` | Run QA checks |
 | `/learn --review` | Clean up and promote learnings |
 | `/prime` | Load project context |

@@ -93,7 +93,7 @@ Clarifications Applied: [Count]
 Remaining Questions: [Count]
 - [Any unresolved items]
 
-Status: [Ready for /plan | Needs more clarification]
+Status: [Ready for /prism-plan | Needs more clarification]
 ```
 
 ## Output Artifacts
@@ -106,7 +106,7 @@ Status: [Ready for /plan | Needs more clarification]
 - Questions should be answerable by non-technical stakeholders
 - Provide context so users understand why the question matters
 - Offer reasonable defaults when possible (recommend an option)
-- Don't ask about implementation details - that's for /plan
+- Don't ask about implementation details - that's for /prism-plan
 - Maximum 5 questions per round to avoid overwhelming the user
 - Maximum 3 clarification rounds before escalating
 

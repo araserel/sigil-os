@@ -46,7 +46,7 @@ For non-technical users, recognize conversational patterns and route through the
 #### Routing Precedence
 
 1. **Natural language patterns** — Check first for conversational requests
-2. **Slash commands** — Explicit commands (`/spec`, `/plan`, etc.) route directly
+2. **Slash commands** — Explicit commands (`/spec`, `/prism-plan`, etc.) route directly
 3. **Trigger words** — Technical trigger words route to specific agents
 4. **Phase context** — Default to phase owner if no clear match
 5. **Fallback** — Ask user to clarify

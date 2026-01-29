@@ -123,7 +123,7 @@ You are now primed to work on [focus area].
 
 Quick actions:
 - Continue implementation: "Implement TASK-NNN"
-- Check status: /status
+- Check status: /prism-status
 - Validate work: /validate
 ```
 

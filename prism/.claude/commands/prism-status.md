@@ -85,8 +85,8 @@ Completed: 3/10 tasks (30%)
 
 Based on current status:
 - `/clarify` - [If clarification needed]
-- `/plan` - [If ready for planning]
-- `/tasks` - [If ready for task breakdown]
+- `/prism-plan` - [If ready for planning]
+- `/prism-tasks` - [If ready for task breakdown]
 - `/validate` - [If implementation complete]
 
 ## Recent Activity
@@ -148,5 +148,5 @@ Prism OS: 2 active features
 001-user-auth    [████████░░] 80%  Phase: Implement
 002-dashboard    [██░░░░░░░░] 20%  Phase: Plan
 
-Run /status [feature-id] for details
+Run /prism-status [feature-id] for details
 ```

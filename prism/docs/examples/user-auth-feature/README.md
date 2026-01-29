@@ -152,7 +152,7 @@ Some requirements were ambiguous. Prism asked targeted questions to resolve them
 
 With requirements clarified, Prism generated an implementation plan.
 
-**Command:** `/plan`
+**Command:** `/prism-plan`
 
 **What Prism Produced:** A technical plan (see `plan.md`) with:
 
@@ -220,7 +220,7 @@ Potential problems and how they'd be prevented:
 
 Finally, Prism converted the plan into actionable tasks.
 
-**Command:** `/tasks`
+**Command:** `/prism-tasks`
 
 **What Prism Produced:** 18 tasks across 3 phases (see `tasks.md`):
 

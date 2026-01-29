@@ -11,11 +11,11 @@
 | `/prism` | **Unified entry point** — status, start, resume | Starting any workflow |
 | `/spec` | Create a feature specification | Starting a new feature |
 | `/clarify` | Resolve ambiguities | Spec has open questions |
-| `/plan` | Generate implementation plan | Spec is approved |
-| `/tasks` | Break plan into tasks | Plan is approved |
+| `/prism-plan` | Generate implementation plan | Spec is approved |
+| `/prism-tasks` | Break plan into tasks | Plan is approved |
 | `/validate` | Run QA validation checks | After implementation |
 | `/review` | Run structured code review | After QA validation passes |
-| `/status` | Show workflow progress | Anytime |
+| `/prism-status` | Show workflow progress | Anytime |
 | `/constitution` | View or edit project rules | First-time setup or updates |
 | `/learn` | View, search, or review learnings | Reviewing institutional memory |
 | `/prime` | Load project context for a session | Starting a new session |
@@ -37,9 +37,9 @@
         ↓
     /clarify (if needed)
         ↓
-      /plan
+      /prism-plan
         ↓
-      /tasks
+      /prism-tasks
         ↓
     [Implementation]
         ↓
@@ -50,7 +50,7 @@
      /handoff
 ```
 
-You can use `/prism`, `/status`, or `/prism status` at any point to see where you are.
+You can use `/prism`, `/prism-status`, or `/prism status` at any point to see where you are.
 
 ---
 
@@ -273,14 +273,14 @@ After answering, Prism:
 
 ---
 
-## /plan
+## /prism-plan
 
 Generate a technical implementation plan from your specification.
 
 ### Syntax
 
 ```
-/plan
+/prism-plan
 ```
 
 ### What It Does
@@ -294,7 +294,7 @@ Generate a technical implementation plan from your specification.
 
 **You type:**
 ```
-/plan
+/prism-plan
 ```
 
 **Prism creates:**
@@ -354,14 +354,14 @@ After reviewing:
 
 ---
 
-## /tasks
+## /prism-tasks
 
 Break the approved plan into executable work items.
 
 ### Syntax
 
 ```
-/tasks
+/prism-tasks
 ```
 
 ### What It Does
@@ -375,7 +375,7 @@ Break the approved plan into executable work items.
 
 **You type:**
 ```
-/tasks
+/prism-tasks
 ```
 
 **Prism creates:**
@@ -427,19 +427,19 @@ The task list shows:
 
 After tasks are created, implementation begins automatically:
 - Tasks are completed in order
-- You can check `/status` anytime
+- You can check `/prism-status` anytime
 - You'll be notified if something needs your attention
 
 ---
 
-## /status
+## /prism-status
 
 Show the current state of your workflow.
 
 ### Syntax
 
 ```
-/status
+/prism-status
 ```
 
 ### What It Does
@@ -842,10 +842,10 @@ Run the update? (Y/n)
 | `/prism` | Entry point — status + routing | `/prism "Add user login"` |
 | `/spec` | Start new feature | `/spec Add user login` |
 | `/clarify` | Answer questions | `/clarify` |
-| `/plan` | Create tech plan | `/plan` |
-| `/tasks` | Break into tasks | `/tasks` |
+| `/prism-plan` | Create tech plan | `/prism-plan` |
+| `/prism-tasks` | Break into tasks | `/prism-tasks` |
 | `/validate` | Run QA checks | `/validate` |
-| `/status` | Check progress | `/status` |
+| `/prism-status` | Check progress | `/prism-status` |
 | `/constitution` | Set project rules | `/constitution` |
 | `/learn` | View/review learnings | `/learn --review` |
 | `/prime` | Load session context | `/prime authentication` |
@@ -859,9 +859,9 @@ Run the update? (Y/n)
 2. /constitution  (one-time setup)
 3. /spec "feature description"
 4. /clarify (if questions arise)
-5. /plan
-6. /tasks
-7. /status (check progress)
+5. /prism-plan
+6. /prism-tasks
+7. /prism-status (check progress)
 8. /validate (verify quality)
 9. /handoff (before deployment)
 ```

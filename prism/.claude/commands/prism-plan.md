@@ -151,7 +151,7 @@ Risks Identified: [Count]
 
 Next Steps:
 - Review the plan
-- Run /tasks to create task breakdown
+- Run /prism-tasks to create task breakdown
 ```
 
 ## Guidelines
@@ -166,4 +166,4 @@ Next Steps:
 ## Human Checkpoint
 
 The plan should be reviewed before proceeding to task breakdown.
-User confirms approach before running `/tasks`.
+User confirms approach before running `/prism-tasks`.

@@ -95,7 +95,7 @@ When resuming implement phase:
 4. Do NOT attempt to resume mid-task. Each resume starts fresh at the task level.
 
 **"status":**
-→ Show detailed status of all workflows (delegate to /status)
+→ Show detailed status of all workflows (delegate to /prism-status)
 
 **"help":**
 → Show available commands and current capabilities
@@ -295,13 +295,13 @@ Primary Command:
 Individual Commands (for direct access):
   /spec "description"       Create a feature specification
   /clarify                  Resolve specification ambiguities
-  /plan                     Create implementation plan
-  /tasks                    Break plan into tasks
+  /prism-plan               Create implementation plan
+  /prism-tasks              Break plan into tasks
   /validate                 Run QA validation
   /review                   Run code review
   /constitution             View/edit project principles
   /prime                    Load project context
-  /status                   Show workflow status
+  /prism-status             Show workflow status
 
 Natural Language:
   Just describe what you want! Prism understands:

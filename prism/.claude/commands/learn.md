@@ -143,7 +143,7 @@ Start building features with /prism to begin capturing learnings.
 ## Related Commands
 
 - `/prism` — Main entry point, uses learnings automatically
-- `/status` — Shows workflow status
+- `/prism-status` — Shows workflow status
 - `/constitution` — Project principles (different from learnings)
 
 ## Skills Invoked

@@ -106,7 +106,7 @@ When you start Prism for the first time:
 
 2. **Check the status**
    ```
-   /status
+   /prism-status
    ```
    See what's in progress and what phase you're in.
 
@@ -258,7 +258,7 @@ Prism allows a maximum of 3 clarification rounds. If issues remain after 3 round
 
 ### Reading an Implementation Plan
 
-After clarification, `/plan` generates a technical plan. Here's how to interpret it:
+After clarification, `/prism-plan` generates a technical plan. Here's how to interpret it:
 
 **Constitution Gate Checks:** Verifies the plan follows your project rules. All boxes should be checked. If not, discuss with your tech lead.
 
@@ -276,7 +276,7 @@ After clarification, `/plan` generates a technical plan. Here's how to interpret
 
 ### Understanding Task Breakdowns
 
-The `/tasks` command produces an actionable task list. Here's how to read it:
+The `/prism-tasks` command produces an actionable task list. Here's how to read it:
 
 **Task Structure:**
 
@@ -379,7 +379,7 @@ Throughout the workflow, you'll make decisions that affect implementation. Here'
 
 ### Checking Progress
 
-Use `/status` anytime to see current state.
+Use `/prism-status` anytime to see current state.
 
 **Example Output:**
 
@@ -511,15 +511,15 @@ If you encounter issues not covered here, see the full [Troubleshooting Guide](t
 | `/constitution` | View or edit project rules |
 | `/spec [description]` | Create feature specification |
 | `/clarify` | Answer clarification questions |
-| `/plan` | Generate implementation plan |
-| `/tasks` | Create task breakdown |
-| `/status` | Check current progress |
+| `/prism-plan` | Generate implementation plan |
+| `/prism-tasks` | Create task breakdown |
+| `/prism-status` | Check current progress |
 | `/handoff` | Create engineering package |
 
 **Workflow:**
 
 ```
-/constitution (once) → /spec → /clarify → /plan → /tasks → /handoff
+/constitution (once) → /spec → /clarify → /prism-plan → /prism-tasks → /handoff
 ```
 
 **Priorities:**

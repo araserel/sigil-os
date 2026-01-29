@@ -21,7 +21,7 @@ Generate a clear, human-readable status report of the current workflow state. Th
 
 **Trigger phrases:**
 - "status"
-- "/status"
+- "/prism-status"
 - "Where are we?"
 - "What's the current state?"
 - "Show me progress"

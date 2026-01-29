@@ -18,7 +18,7 @@ Transform clarified specifications into actionable implementation plans. Identif
 ## When to Invoke
 
 - Spec is clarified (no remaining ambiguities)
-- User requests `/plan`
+- User requests `/prism-plan`
 - User says "how should we build this" or "create a plan"
 - Architect agent receives planning request
 
@@ -228,7 +228,7 @@ Architect: The user authentication spec is ready. Let me create an implementatio
 
 **With research:**
 ```
-User: /plan - but first research best practices for OAuth2 with Next.js
+User: /prism-plan - but first research best practices for OAuth2 with Next.js
 ```
 
 **After clarification:**

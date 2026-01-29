@@ -78,7 +78,7 @@ Open Questions: [Count] items need clarification
 
 Next Steps:
 - Run /clarify to resolve ambiguities
-- Or run /plan to proceed to technical planning
+- Or run /prism-plan to proceed to technical planning
 ```
 
 ## Guidelines

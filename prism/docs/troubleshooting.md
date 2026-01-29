@@ -111,10 +111,10 @@ When implementing a feature, the QA validation found issues that couldn't be aut
 
 **Step 1: Review the Error Details**
 
-Run `/status` to see what's failing:
+Run `/prism-status` to see what's failing:
 
 ```
-/status
+/prism-status
 ```
 
 Look for the specific validation that's failing repeatedly.
@@ -135,7 +135,7 @@ Share the error details with your technical team. Common resolutions:
 After identifying the issue:
 1. Update the specification if requirements need to change
 2. Update the constitution if project rules need adjustment
-3. Re-run `/plan` and `/tasks` with corrected information
+3. Re-run `/prism-plan` and `/prism-tasks` with corrected information
 
 **How to Prevent:**
 
@@ -208,7 +208,7 @@ Try:
 **What You See:**
 
 - Prism doesn't remember your previous work
-- `/status` shows no active features
+- `/prism-status` shows no active features
 - Asked to set up constitution again
 
 **Why This Happens:**
@@ -263,9 +263,9 @@ Previous specifications may exist in `/specs/` directory if they were completed.
 
 **If Caught Early (Before Tasks):**
 
-1. Review the specification carefully with `/status`
+1. Review the specification carefully with `/prism-status`
 2. Run `/clarify` again to address specific concerns
-3. Re-run `/plan` after changes
+3. Re-run `/prism-plan` after changes
 
 **If Caught Late (During Implementation):**
 
@@ -363,7 +363,7 @@ If you need to escalate an issue, gather:
 2. **What output did you get?** Copy the complete response
 3. **What did you expect?** Describe the expected behavior
 4. **What's in your constitution?** Run `/constitution` and share the output
-5. **What phase are you in?** Run `/status` and share the output
+5. **What phase are you in?** Run `/prism-status` and share the output
 
 ### Common Questions
 
@@ -393,7 +393,7 @@ Most issues fall into these categories:
 | Wrong direction | Rushed review | Take time to review each phase output |
 
 When in doubt:
-1. Check `/status` for current state
+1. Check `/prism-status` for current state
 2. Review the specification for accuracy
 3. Consult your tech lead for technical issues
 4. Start fresh if context is corrupted
