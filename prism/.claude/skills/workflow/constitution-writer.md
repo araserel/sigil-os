@@ -1,7 +1,7 @@
 ---
 name: constitution-writer
-description: Creates project constitution through guided conversation. Invoke when setting up a new project or when user says "constitution", "project principles", or "project setup". Can be pre-populated from project foundation or codebase assessment.
-version: 1.2.0
+description: Creates project constitution through guided conversation accessible to non-technical users. Uses tiered questions (auto-decide technical details, translate necessary questions, keep business decisions) with a maximum of 3 interaction rounds. Invoke when setting up a new project or when user says "constitution", "project principles", or "project setup". Can be pre-populated from project foundation or codebase assessment.
+version: 2.0.0
 category: workflow
 chainable: true
 invokes: [codebase-assessment]
@@ -13,7 +13,7 @@ tools: Read, Write, Edit, Glob
 
 ## Purpose
 
-Guide users through creating their project constitution—the immutable principles that govern all agent decisions. This is typically a one-time setup at project start.
+Guide users through creating their project constitution—the immutable principles that govern all agent decisions. Designed for non-technical users (product managers, founders, business stakeholders) with zero coding knowledge required. Technical details are auto-decided; user-facing questions use plain language.
 
 ## When to Invoke
 
@@ -23,6 +23,60 @@ Guide users through creating their project constitution—the immutable principl
 - No constitution exists in `/memory/constitution.md`
 - After Discovery chain completes (invoked by foundation-writer)
 
+## Design Principles
+
+### Tiered Question Strategy
+
+All constitution questions are categorized into three tiers:
+
+**Tier 1 — Auto-Decide (Never Ask User)**
+Technical implementation details decided by Prism based on detected stack and best practices:
+
+| Topic | Auto-Decision Logic |
+|-------|---------------------|
+| TypeScript strictness | Always strict mode for TS projects |
+| Naming conventions | Framework-appropriate (PascalCase components for React, etc.) |
+| Import organization | Standard for detected framework |
+| Error handling patterns | Best practices for stack |
+| Architecture patterns | Framework defaults (feature folders for React, etc.) |
+| Max file/function length | Sensible defaults (50 lines function, 300 lines file) |
+| Code organization rules | Infer from detected stack |
+| Type safety level | Strict for typed languages |
+| Formatter config | Framework standard (Prettier for JS/TS, Black for Python, etc.) |
+| Linter config | Framework standard (ESLint for JS/TS, Ruff for Python, etc.) |
+
+**Tier 2 — Translate (Ask in Plain Language)**
+Questions with user impact that need translation from technical to plain language:
+
+| Technical Concept | Plain Language Version |
+|-------------------|------------------------|
+| Test coverage target | "How thoroughly should features be tested before you see them?" |
+| Offline tolerance | "Should the app work when users have no internet?" |
+| Testing requirements | "How much testing do you want before features ship?" |
+| External service dependencies | "Should I ask before adding features that need external services (like payment processors or email senders)?" |
+| Accessibility level | "Should this work for everyone, including people with disabilities?" |
+
+**Tier 3 — Ask Directly (Business Decisions)**
+Questions users can answer without technical knowledge:
+
+| Question | Why Keep |
+|----------|----------|
+| Approval requirements | Users understand "Ask me before deleting files" |
+| What requires sign-off | Direct business decision |
+| Project type/rigor level | Users know if they're building an MVP or enterprise product |
+
+### Maximum 3 Interaction Rounds
+
+The setup flow MUST complete in 3 or fewer rounds. Never exceed this regardless of project complexity.
+
+### "Why This Matters" Context
+
+Every user-facing question includes a one-sentence explanation of real-world impact.
+
+### Smart Defaults with Opt-Out
+
+Replace open-ended questions with pre-configured defaults the user can accept or change.
+
 ## Inputs
 
 **Required:**
@@ -30,40 +84,15 @@ Guide users through creating their project constitution—the immutable principl
 
 **Optional:**
 - `tech_preferences`: object — Any known technology preferences
-  - `language`: string — Primary programming language
-  - `framework`: string — Framework (if any)
-  - `database`: string — Database (if any)
 - `existing_constitution`: string — Path to existing constitution to update
 
 **From Discovery Chain (when invoked by foundation-writer):**
 - `foundation_path`: string — Path to approved foundation document
 - `pre_populated_constitution`: object — Pre-filled data from Discovery
-  ```json
-  {
-    "article_1": {
-      "language": "TypeScript",
-      "language_version": "5.x",
-      "framework": "Next.js",
-      "framework_version": "14.x",
-      "database": "PostgreSQL",
-      "database_version": "15+",
-      "orm": "Prisma"
-    }
-  }
-  ```
 
 **From Assessment Path (when invoked by codebase-assessment):**
 - `detected_stack`: object — Stack detected from codebase analysis
-  ```json
-  {
-    "language": { "name": "TypeScript", "version": "5.x", "confidence": "confident", "source": "package.json" },
-    "framework": { "name": "Next.js", "version": "14.x", "confidence": "confident", "source": "package.json" },
-    "database": { "name": "PostgreSQL", "confidence": "confident", "source": "prisma/schema.prisma" },
-    "orm": { "name": "Prisma", "version": "5.x", "confidence": "confident", "source": "package.json" },
-    "test_framework": { "name": "Jest", "confidence": "confident", "source": "package.json:devDependencies" }
-  }
-  ```
-- `classification`: string — "scaffolded" | "mature" (from codebase-assessment)
+- `classification`: string — "scaffolded" | "mature"
 
 ## Process
 
@@ -76,14 +105,13 @@ Determine pre-population path (in priority order):
    → Use Foundation Path (from Discovery chain)
    - Load /memory/project-foundation.md
    - Extract pre_populated_constitution data
-   - Pre-fill Article 1 (Technology Stack)
-   - Note which questions can be skipped
+   - Pre-fill stack information
+   - Skip Round 1, go directly to Round 2
 
 2. ELSE IF detected_stack provided:
    → Use Assessment Path (from codebase-assessment)
-   - Use detected_stack for Article 1 pre-population
-   - Show detection table for user confirmation
-   - Handle uncertain fields with clarifying questions
+   - Use detected_stack for Round 1 pre-population
+   - Show detection summary for user confirmation
 
 3. ELSE IF no constitution exists AND repo appears established:
    → Invoke codebase-assessment first
@@ -92,50 +120,183 @@ Determine pre-population path (in priority order):
    - If no stack detected, fall through to Standard Path
 
 4. ELSE:
-   → Use Standard Path (guided conversation)
-   - Ask all questions interactively
+   → Use Standard Path
+   - Ask Round 1 with graceful stack question
 ```
 
 ### Step 1: Check for Existing Constitution
 
 ```
 Check if /memory/constitution.md exists:
-- If exists and not updating: Confirm user wants to replace
+
+- If exists and not updating:
+  Show: "This project already has a constitution. Would you like to
+         view it, or start fresh?"
+  Options: View current | Start fresh | Cancel
+
 - If exists and updating: Load for modification
+
 - If not exists: Proceed with new creation
 ```
 
-### Step 2: Guided Conversation
+### Step 2: Three-Round Guided Flow
 
-Walk through each article using conversational prompts. For each article:
+#### Round 1: Stack Validation
 
-1. Explain what the article covers and why it matters
-2. Ask targeted questions to gather requirements
-3. Offer examples for common choices
-4. Confirm selections before moving to next article
+**When stack detected (Assessment or Foundation path):**
+```
+I detected you're building with:
+- Language: [detected]
+- Framework: [detected]
+- Database: [detected]
 
-**Article Order:**
-1. Technology Stack (often has clearest answers)
-2. Code Standards (build on tech stack)
-3. Testing Requirements
-4. Security Mandates
-5. Architecture Principles
-6. Approval Requirements
-7. Accessibility Requirements
+Is this correct? Anything to add or change?
+```
 
-### Step 3: Generate Constitution
+**When stack NOT detected:**
+```
+I couldn't detect your tech stack automatically.
+What are you building with?
 
-Using gathered responses:
-1. Load template from `/templates/constitution-template.md`
-2. Fill in responses for each article
-3. Add project name and dates
-4. Write to `/memory/constitution.md`
+A few questions:
+- What programming language? (e.g., TypeScript, Python, Go)
+- Using a framework? (e.g., Next.js, Django, Express)
+- Using a database? (e.g., PostgreSQL, MongoDB, none yet)
+```
 
-### Step 4: Confirm and Explain
+**Error Case:** If detection fails entirely, show: "I couldn't detect your tech stack automatically. Let me ask a few questions instead." Then ask the above questions.
 
-- Show summary of constitution
-- Explain how it will be used
-- Remind that amendments require explicit approval
+#### Round 2: Project Type (Single Cascading Question)
+
+```
+What kind of project is this?
+
+Why this matters: This shapes how much testing, security checks,
+and documentation I set up. You can always adjust later.
+
+1. MVP / Prototype
+   Ship fast, add polish later. Minimal testing, flexible structure.
+
+2. Production App
+   Balance speed with stability. Standard testing, proven patterns.
+
+3. Enterprise
+   Maximum rigor. Comprehensive testing, full documentation,
+   strict reviews.
+```
+
+This single choice auto-configures ALL Tier 1 decisions:
+
+| Setting | MVP | Production | Enterprise |
+|---------|-----|------------|------------|
+| Test coverage | Essential paths only | 60%+ coverage | 80%+ coverage |
+| Test-first | Not required | For complex features | Required for all features |
+| Security rigor | Standard best practices | Standard + auth review | Maximum + audit trail |
+| Approval gates | Major changes only | Deps, DB, auth, deploys | All changes reviewed |
+| Documentation | Light | Standard | Comprehensive |
+| Code review | Optional | Required for key areas | Required for everything |
+| E2E testing | Critical flows only | Key user journeys | All user flows |
+
+#### Round 3: Optional Preferences
+
+```
+A few optional preferences (say "skip" to use smart defaults):
+
+1. Should I ask before adding features that need external
+   services (like payment processors or email senders)?
+
+   Why this matters: External services may have costs or require
+   accounts to set up.
+
+   - Yes (Recommended): I'll flag these for your approval
+   - No: I'll add them as needed
+
+2. Should the app work when users have no internet?
+
+   Why this matters: Offline mode means users can access their data
+   with poor signal, but adds complexity.
+
+   - Yes: Works offline, syncs when connected
+   - No (Default): Requires internet connection
+
+3. How accessible should this be?
+
+   Why this matters: Accessibility ensures people with disabilities
+   can use your app. It's also a legal requirement in many countries.
+
+   - Works for everyone (Recommended): Follows accessibility
+     standards so all users can participate
+   - Standard: Basic accessibility included
+```
+
+### Step 3: Auto-Configure and Generate
+
+Using the project type selection + stack detection + optional preferences:
+
+1. **Auto-decide all Tier 1 items** based on stack and project type
+2. **Load template** from `/templates/constitution-template.md`
+3. **Fill in all articles** with:
+   - Detected/confirmed stack (Article 1)
+   - Auto-decided code standards with jargon translations (Article 2)
+   - Project-type-appropriate testing (Article 3)
+   - Stack-appropriate security with translations (Article 4)
+   - Framework-standard architecture (Article 5)
+   - Project-type-appropriate approvals (Article 6)
+   - Selected accessibility level (Article 7)
+4. **Add inline jargon explanations** for all technical terms
+5. **Write to** `/memory/constitution.md`
+
+### Step 4: Gitignore Handling
+
+**Auto-add (no prompt needed):**
+```gitignore
+# Prism OS - Ephemeral artifacts (auto-added)
+memory/project-context.md
+specs/**/clarifications.md
+```
+
+**Prompt user:**
+```
+Should your team share the project constitution via git?
+
+Why this matters: If you work with a team, sharing the constitution
+means everyone (and all AI tools) follow the same rules.
+
+- Yes (Recommended for teams): Constitution is version controlled
+- No (Solo projects): Constitution stays local only
+```
+
+Implementation:
+- Check if `.gitignore` exists; create if not
+- Append entries without duplication
+- Use clear comment header: `# Prism OS - Ephemeral artifacts`
+- If user says No to sharing: also add `memory/constitution.md`
+
+**Error case:** If gitignore write fails, show: "Couldn't update .gitignore — you may need to add these entries manually: [list entries]"
+
+### Step 5: Confirm and Explain
+
+Show a plain-language summary:
+
+```
+Your constitution is ready!
+
+Here's what I set up:
+
+**Tech Stack:** [Language] + [Framework] + [Database]
+
+**Quality Level:** [Project Type]
+- Testing: [plain description, e.g., "Key features tested before shipping"]
+- Security: [plain description, e.g., "User data kept private, no secrets in code"]
+- Reviews: [plain description, e.g., "I'll ask before adding new tools or changing the database"]
+
+**Accessibility:** [plain description]
+
+This is saved at /memory/constitution.md. All AI agents will follow
+these rules automatically.
+
+To change it later, run /constitution edit.
+```
 
 ## Outputs
 
@@ -147,119 +308,103 @@ Using gathered responses:
 {
   "constitution_path": "/memory/constitution.md",
   "project_name": "Project Name",
+  "project_type": "mvp|production|enterprise",
   "articles_completed": 7,
   "key_decisions": [
     "TypeScript as primary language",
     "Next.js framework",
     "PostgreSQL database",
-    "80% test coverage required"
+    "Production-level testing and security"
   ]
 }
 ```
 
-## Guided Prompts
+## Project Type Cascade Details
 
-### Article 1: Technology Stack
+### MVP / Prototype
 
-**Opening (Standard):**
-"Let's start with your technology choices. These are the core technologies your project will use—agents will respect these choices and won't suggest alternatives unless you ask."
+Auto-configures:
+- **Article 2 (Code Standards):** Framework defaults, relaxed complexity limits (100 lines function, 500 lines file), standard formatting
+- **Article 3 (Testing):** Essential paths tested, no coverage mandate, test-first not required
+- **Article 4 (Security):** Standard best practices (no secrets in code, validate user input, auth where needed)
+- **Article 5 (Architecture):** Simple structure, pragmatic patterns, no strict layering
+- **Article 6 (Approvals):** Major changes only (new services, breaking changes)
+- **Article 7 (Accessibility):** Basic accessibility (keyboard nav, alt text, contrast)
 
-**Opening (From Foundation):**
-"I have your technology stack from the Discovery phase. Let me confirm these choices for your constitution:
+### Production App
 
-- **Language:** [pre_populated.language] [pre_populated.language_version]
-- **Framework:** [pre_populated.framework] [pre_populated.framework_version]
-- **Database:** [pre_populated.database] [pre_populated.database_version]
-- **ORM:** [pre_populated.orm]
+Auto-configures:
+- **Article 2:** Strict formatting, moderate complexity limits (50 lines function, 300 lines file), type safety enforced
+- **Article 3:** 60%+ coverage, integration tests for APIs, test-first for complex features, E2E for key flows
+- **Article 4:** Auth required by default, environment variables for secrets, input validation, dependency review
+- **Article 5:** Feature-based organization, service layer pattern, composition over inheritance
+- **Article 6:** Dependencies, database changes, auth changes, and production deploys require approval
+- **Article 7:** WCAG 2.1 AA minimum, keyboard navigation, screen reader support
 
-Is this correct, or would you like to make changes?"
+### Enterprise
 
-**Questions (if not pre-populated):**
-- "What programming language will this project use? (e.g., TypeScript, Python, Go)"
-- "What version? Or should we use the latest stable?"
-- "Are you using a framework? If so, which one?"
-- "What database will you use, if any?"
-- "Any other core technologies I should know about?"
+Auto-configures:
+- **Article 2:** Strict formatting, strict complexity limits (30 lines function, 200 lines file), full type safety, comprehensive documentation
+- **Article 3:** 80%+ coverage, all APIs tested, test-first required, E2E for all user flows, performance testing
+- **Article 4:** All endpoints authenticated, secrets manager, audit trail, security review for all changes, vulnerability SLA
+- **Article 5:** Strict layering, dependency injection, SOLID principles, documented architecture decisions
+- **Article 6:** All code changes reviewed, architecture decisions require approval, deployment plans required
+- **Article 7:** WCAG 2.1 AAA target, comprehensive assistive technology support, accessibility testing in CI
 
-**Examples:**
-- Web app: TypeScript + Next.js + PostgreSQL
-- API service: Python + FastAPI + PostgreSQL
-- CLI tool: Go + SQLite
-- Library: TypeScript (no framework, no database)
+## Jargon Translation
 
-### Article 2: Code Standards
+When generating the constitution, include inline explanations for technical terms:
 
-**Opening:**
-"Now let's define your coding standards. These ensure all generated code follows your team's conventions."
+| Technical Term | Inline Explanation |
+|----------------|-------------------|
+| RLS (Row-Level Security) | (keeps each user's data private) |
+| TypeScript strict mode | (catches more bugs before they reach users) |
+| React Query | (handles loading and caching data) |
+| Environment variables | (secure storage for passwords and API keys) |
+| Functional components | (modern React pattern, easier to maintain) |
+| E2E tests | (tests that simulate real user actions) |
+| CI/CD | (automatic testing and deployment) |
+| PascalCase | (naming style: MyComponent) |
+| camelCase | (naming style: myFunction) |
+| snake_case | (naming style: my_function) |
+| ORM | (tool that simplifies database access) |
+| JWT | (secure login tokens) |
+| SOLID principles | (design guidelines for maintainable code) |
+| Dependency injection | (pattern that makes code easier to test) |
+| WCAG | (Web Content Accessibility Guidelines — the international standard) |
+| ARIA | (attributes that help screen readers understand your app) |
+| Parameterized queries | (prevents database attacks from user input) |
+| Prettier | (automatic code formatting tool) |
+| ESLint | (automatic code quality checker) |
 
-**Questions:**
-- "Do you use a formatter like Prettier or Black? What configuration?"
-- "What's your maximum line length preference?"
-- "Do you require explicit type annotations everywhere?"
-- "Any specific naming conventions? (camelCase, snake_case, etc.)"
-- "Maximum function length or other complexity limits?"
+**Format in constitution:**
+```markdown
+- TypeScript strict mode (catches more bugs before they reach users) enabled
+- Row-Level Security (keeps each user's data private) enabled on ALL tables
+```
 
-### Article 3: Testing Requirements
+## Error Handling
 
-**Opening:**
-"Testing requirements ensure quality. Let's define what 'tested' means for your project."
+All errors shown to users MUST be plain language with actionable next steps. Log technical details for debugging; surface only the friendly message.
 
-**Questions:**
-- "What test coverage percentage do you target? (Common: 80%)"
-- "What testing framework do you use? (Jest, pytest, etc.)"
-- "Do you require integration tests for all API endpoints?"
-- "Do you use end-to-end testing? If so, which framework?"
-- "Should we enforce test-first development?"
-
-### Article 4: Security Mandates
-
-**Opening:**
-"Security mandates protect your application. These are non-negotiable requirements."
-
-**Questions:**
-- "Do all API endpoints require authentication by default?"
-- "How do you handle secrets? (Environment variables, vault, etc.)"
-- "Any specific input validation requirements?"
-- "How quickly must security vulnerabilities be addressed?"
-- "Do new dependencies require security review?"
-
-### Article 5: Architecture Principles
-
-**Opening:**
-"Architecture principles guide how your system is structured."
-
-**Questions:**
-- "Any design principles you follow? (SOLID, composition over inheritance, etc.)"
-- "How should layers be organized? (Can UI access database directly?)"
-- "How do you handle state management?"
-- "Any error handling conventions?"
-
-### Article 6: Approval Requirements
-
-**Opening:**
-"Let's define what requires human approval before the AI can proceed."
-
-**Questions:**
-- "What code changes require review? (Dependencies, schema, auth?)"
-- "Who approves production deployments?"
-- "Are there any architecture changes that need special approval?"
-- "Any other approval gates I should know about?"
-
-### Article 7: Accessibility Requirements
-
-**Opening:**
-"Accessibility ensures your application works for everyone. Let's define your standards."
-
-**Questions:**
-- "What WCAG level do you target? (Minimum: AA, Target: AAA)"
-- "Any specific contrast or font size requirements?"
-- "Do you require keyboard navigation for all features?"
-- "Any assistive technology testing requirements?"
+| Technical Error | User-Friendly Message |
+|-----------------|----------------------|
+| ENOENT / File not found | "I couldn't find [filename]. Make sure you're in the right project folder." |
+| EACCES / Permission denied | "I don't have permission to modify [file]. You may need to check your folder permissions." |
+| ETIMEDOUT / Network timeout | "Connection issues — couldn't reach [service]. Check your internet and try again." |
+| JSON parse error | "The [filename] file has formatting issues. I'll try to fix it, or you can restore from backup." |
+| Stack detection failed | "I couldn't detect your tech stack automatically. Let me ask a few questions instead." |
+| Git operation failed | "Couldn't update .gitignore — you may need to add these entries manually: [list entries]" |
+| Constitution already exists | "This project already has a constitution. Want to view it, or start fresh?" |
+| Template not found | Use embedded fallback template (no user-facing error) |
+| Foundation data conflicts | User input takes precedence (no error, just override) |
+| Monorepo detected | "I found multiple tech setups in your project. Let me focus on the main one — you can adjust if needed." |
 
 ## Human Checkpoints
 
 - **Review Tier:** Constitution creation (user reviews final document)
-- User confirms each article before proceeding
+- User confirms stack in Round 1
+- User selects project type in Round 2
 - Final constitution shown for approval before saving
 
 ## Foundation Integration
@@ -268,285 +413,52 @@ When invoked from the Discovery chain (via `foundation-writer`):
 
 ### Pre-Population Behavior
 
-| Article | Pre-Populated Data | User Action |
-|---------|-------------------|-------------|
-| Article 1 | Language, framework, database, ORM, hosting | Confirm or modify |
-| Article 2 | Framework-appropriate defaults suggested | Answer remaining questions |
-| Article 3 | Framework-appropriate test framework suggested | Answer remaining questions |
-| Article 4 | Standard security defaults | Answer remaining questions |
-| Article 5 | Based on stack patterns | Answer remaining questions |
-| Article 6 | Standard defaults | Answer remaining questions |
-| Article 7 | WCAG 2.1 AA default | Confirm or upgrade to AAA |
+| Data | Source | User Action |
+|------|--------|-------------|
+| Language, framework, database | Foundation document | Confirm in Round 1 (or skip if confident) |
+| All technical details | Auto-decided from stack + project type | None — automatic |
+| Project type | Asked in Round 2 | Select one option |
+| Optional preferences | Asked in Round 3 | Answer or skip |
 
 ### Abbreviated Flow
 
 When foundation data is available:
-
-```
-1. Present Article 1 with pre-filled values
-   → User confirms or modifies
-
-2. For Articles 2-7:
-   → Present smart defaults based on selected stack
-   → Ask only questions that aren't answered by foundation
-   → User confirms or customizes
-
-3. Generate constitution
-   → Show summary highlighting what came from foundation
-   → User approves
-```
-
-### Conversation Example (From Foundation)
-
-```
-Assistant: "Great news! Since we went through Discovery, I already have your
-           technology stack figured out:
-
-           **Article 1: Technology Stack**
-           - Language: TypeScript 5.x
-           - Framework: Next.js 14.x
-           - Database: PostgreSQL 15+ with Prisma
-
-           Does this look correct?"
-
-User: "Yes, that's right"
-Assistant: "Perfect! Moving on to coding standards for TypeScript/Next.js.
-           I will suggest some sensible defaults - just let me know what to change.
-
-           **Article 2: Code Standards**
-           Suggested for your stack:
-           - Prettier with default config
-           - ESLint with Next.js rules
-           - Strict TypeScript (no any types)
-
-           Any customizations?"
-
-User: "Looks good, use those"
-Assistant: "Great! For testing, Jest is standard for Next.js...
-           [continues with remaining articles]"
-```
+1. Show detected stack from foundation → User confirms (Round 1)
+2. Ask project type (Round 2)
+3. Ask optional preferences (Round 3)
+4. Generate constitution with auto-decided technical details
 
 ## Assessment Path Integration
 
-When invoked from `codebase-assessment` (or when self-invoking assessment for established repos without constitution):
+When invoked from `codebase-assessment`:
 
 ### Trigger Conditions
 
-The Assessment Path is triggered when ALL of these are true:
 1. No `/memory/constitution.md` exists
-2. No `/memory/project-foundation.md` exists (not from Discovery chain)
+2. No `/memory/project-foundation.md` exists
 3. Codebase-assessment classifies repo as "scaffolded" or "mature"
 
 ### Assessment Path Flow
 
-**Step A: Show Analysis Message**
-```
-## Analyzing Your Codebase...
+1. Show: "Analyzing your project..."
+2. Present detected stack in plain language (Round 1)
+3. Ask project type (Round 2)
+4. Ask optional preferences (Round 3)
+5. Generate constitution
 
-I am scanning your project to detect the technology stack.
-```
+### Handling Detection Issues
 
-**Step B: Present Detection Table**
-```
-## Technology Stack Detected
+- **Uncertain fields:** Show what was found, ask user to clarify in plain language
+- **Missing fields:** Ask gracefully: "I couldn't detect a database. Are you using one?"
+- **Conflicting signals:** Show: "I found multiple [items]. Which one is your primary?"
+- **Detection failure:** Fall back to friendly manual questions (no error shown)
 
-I analyzed your codebase and found the following:
+## Backward Compatibility
 
-| Setting | Detected | Confidence | Source |
-|---------|----------|------------|--------|
-| Language | TypeScript 5.x | confident | package.json |
-| Framework | Next.js 14.x | confident | package.json |
-| Database | PostgreSQL | confident | prisma/schema.prisma |
-| ORM | Prisma 5.x | confident | package.json |
-| Test Framework | Jest | confident | package.json:devDependencies |
-
-Does this look right? If anything is wrong, just tell me what to change.
-```
-
-**Step C: Handle User Response**
-
-*If confirmed ("Yes", "Looks good", "Correct"):*
-- Lock Article 1 with detected values
-- Continue to Article 2
-
-*If corrections needed ("Actually...", "No", user provides corrections):*
-- Accept inline corrections
-- Update the value and set source to "user correction"
-- Re-display updated table for confirmation
-- Example: "Actually we use MySQL" -> Update database row, confirm again
-
-**Step D: Handle Uncertain Fields**
-
-Fields with `confidence: "uncertain"` are marked in the table:
-
-```
-| Setting | Detected | Confidence | Source |
-|---------|----------|------------|--------|
-| Language | TypeScript 5.x | confident | package.json |
-| Test Framework | Jest or Vitest | uncertain | conflicting deps |
-```
-
-After initial confirmation, ask specifically about uncertain fields:
-```
-I found both Jest and Vitest in your dependencies. Which is your primary test framework?
-```
-
-**Step E: Handle Missing Fields**
-
-Fields not detected show "Not detected":
-
-```
-| Setting | Detected | Confidence | Source |
-|---------|----------|------------|--------|
-| Language | TypeScript 5.x | confident | package.json |
-| Framework | Next.js 14.x | confident | package.json |
-| Database | Not detected | - | - |
-| ORM | Not detected | - | - |
-| Test Framework | Jest | confident | package.json:devDependencies |
-```
-
-After confirming detected fields, ask standard questions for missing fields:
-```
-I did not detect a database in your project. Are you using one? If so, which database?
-```
-
-**Step F: Continue to Remaining Articles**
-
-After Article 1 is confirmed (with detections + corrections + missing field answers):
-- Proceed with Articles 2-7 using standard guided conversation
-- Suggest smart defaults based on detected stack (same as Foundation path)
-
-### Assessment Path Conversation Examples
-
-#### Happy Path (All Confident)
-
-```
-User: /constitution
-Assistant: "Analyzing your codebase...
-
-           I found an established TypeScript/Next.js project. Here is what I detected:
-
-           | Setting | Detected | Source |
-           |---------|----------|--------|
-           | Language | TypeScript 5.x | package.json |
-           | Framework | Next.js 14.x | package.json |
-           | Database | PostgreSQL | prisma/schema.prisma |
-           | ORM | Prisma | package.json |
-           | Test Framework | Jest | package.json |
-
-           Does this look right?"
-
-User: "Looks good"
-Assistant: "Great! I will lock those in for Article 1 of your constitution.
-
-           Now let us talk about **Code Standards**. Do you use a formatter
-           like Prettier? What about a linter?"
-
-[Continues with standard guided conversation for Articles 2-7]
-```
-
-#### Mixed Path (Some Uncertain)
-
-```
-Assistant: "Analyzing your codebase...
-
-           I found an established Python project. Here is what I detected:
-
-           | Setting | Detected | Source |
-           |---------|----------|--------|
-           | Language | Python 3.11 | pyproject.toml |
-           | Framework | FastAPI | pyproject.toml |
-           | Database | *Not detected* | - |
-           | ORM | SQLAlchemy | pyproject.toml |
-           | Test Framework | pytest | pyproject.toml |
-
-           I could not confidently detect your database. What database does
-           this project use?"
-
-User: "PostgreSQL"
-Assistant: "Got it. Here is your confirmed stack:
-
-           - Language: Python 3.11
-           - Framework: FastAPI
-           - Database: PostgreSQL
-           - ORM: SQLAlchemy
-           - Test Framework: pytest
-
-           Moving on to **Code Standards**..."
-```
-
-#### Correction Path
-
-```
-Assistant: "Analyzing your codebase...
-
-           I found an established Node.js project. Here is what I detected:
-
-           | Setting | Detected | Source |
-           |---------|----------|--------|
-           | Language | TypeScript 5.x | package.json |
-           | Framework | Express | package.json |
-           | Database | PostgreSQL | pg in package.json |
-           | ORM | None detected | - |
-           | Test Framework | Jest | package.json |
-
-           Does this look right?"
-
-User: "The database is actually MySQL, not PostgreSQL. We use the pg package
-      for a different service."
-Assistant: "Thanks for the correction. Updated:
-
-           - Database: MySQL
-
-           And you mentioned no ORM was detected. Do you use an ORM, or do
-           you write raw SQL?"
-
-User: "Raw SQL with a query builder"
-Assistant: "Got it. I will note 'Raw SQL / Query Builder' for your data access layer.
-
-           Your confirmed stack:
-           - Language: TypeScript 5.x
-           - Framework: Express
-           - Database: MySQL
-           - Data Access: Raw SQL / Query Builder
-           - Test Framework: Jest
-
-           Now let us move to **Code Standards**..."
-```
-
-#### Greenfield Redirect
-
-```
-Assistant: "Analyzing your codebase...
-
-           This looks like a new project without much code yet. I would
-           recommend going through the Discovery flow first to help you
-           choose your stack.
-
-           Would you like to start Discovery, or do you already know your
-           stack and want to proceed directly?"
-
-User: "I know my stack, let us proceed"
-Assistant: "Sounds good. Let us set up your constitution.
-
-           **Article 1: Technology Stack**
-
-           What programming language will this project use?"
-
-[Falls back to standard guided conversation]
-```
-
-## Error Handling
-
-| Error | Resolution |
-|-------|------------|
-| User skips an article | Note as "To be defined" and flag for follow-up |
-| User provides unclear answers | Ask clarifying questions |
-| Template not found | Use embedded fallback template |
-| Foundation data conflicts with user input | User input takes precedence |
-| Assessment detection wrong | User correction updates value, source becomes "user correction" |
-| Monorepo with multiple manifests | Use root manifest; note uncertainty for sub-packages |
-| Conflicting signals in assessment | Mark as uncertain, ask user to clarify |
+- Existing constitutions in `/memory/constitution.md` continue to work unchanged
+- The 7-article structure is preserved
+- Only the creation flow changes — the output format stays the same
+- Constitutions created by previous versions are fully valid
 
 ## Version History
 
@@ -554,4 +466,5 @@ Assistant: "Sounds good. Let us set up your constitution.
 |---------|------|---------|
 | 1.0.0 | 2026-01-20 | Initial release |
 | 1.1.0 | 2026-01-20 | Added Foundation integration, pre-population support |
-| 1.2.0 | 2026-01-27 | Added Assessment Path integration for established repos, codebase-assessment invocation |
+| 1.2.0 | 2026-01-27 | Added Assessment Path integration for established repos |
+| 2.0.0 | 2026-01-29 | Non-technical user refactor: tiered questions, 3-round max, plain language, smart defaults, jargon translation, gitignore handling, friendly errors |

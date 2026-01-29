@@ -249,7 +249,7 @@ All Prism skills are currently at **v1.0.0** (initial release).
 | clarifier | 1.0.0 | Stable |
 | technical-planner | 1.0.0 | Stable |
 | task-decomposer | 1.0.0 | Stable |
-| constitution-writer | 1.0.0 | Stable |
+| constitution-writer | 2.0.0 | Stable |
 | handoff-packager | 1.0.0 | Stable |
 | status-reporter | 1.0.0 | Stable |
 

@@ -275,23 +275,31 @@ Type:
 /constitution
 ```
 
-Prism will ask questions about your project in plain language:
+Prism guides you through 3 quick rounds in plain language:
 
 ```
-Let's set up your project constitution.
-I'll ask a few questions about your preferences.
+Round 1: I scanned your project and found:
+- Language: TypeScript
+- Framework: Next.js
+- Database: PostgreSQL
 
-What programming language will this project use?
-> TypeScript
+Is this correct? Anything to add or change?
+> Looks good
 
-What framework, if any?
-> Next.js
+Round 2: What kind of project is this?
+1. MVP / Prototype — Ship fast, add polish later
+2. Production App — Balance speed with stability
+3. Enterprise — Maximum rigor
+> 2
 
-What database will you use?
-> PostgreSQL
+Round 3: A few optional preferences (say "skip" for defaults):
+- Should I ask before adding external services? (Yes/No)
+- Should the app work offline? (Yes/No)
+- Accessibility: Works for everyone, or standard?
+> skip
 ```
 
-Answer each question based on your project (or skip if unsure — you can update later).
+That's it — Prism handles all the technical details automatically based on your choices.
 
 ### What This Creates
 
@@ -302,11 +310,12 @@ Technology Stack
 ├── Language: TypeScript
 ├── Framework: Next.js
 ├── Database: PostgreSQL
-└── Auth: NextAuth.js
+└── Quality: Production App
 
-Standards
-├── Test Coverage: 60% minimum
-├── Code Style: Prettier defaults
+Standards (auto-configured)
+├── Test Coverage: 60%+ minimum
+├── Code Style: Prettier + ESLint
+├── Security: Auth required, secrets in env vars
 └── Accessibility: WCAG 2.1 AA
 ```
 

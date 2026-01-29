@@ -4,29 +4,27 @@
 >
 > **Created:** [DATE]
 > **Last Modified:** [DATE]
+> **Project Type:** [MVP / Production / Enterprise]
 > **Status:** Active
 
 ---
 
 ## Article 1: Technology Stack
 
-Define the core technologies for this project. Agents will not suggest alternatives unless explicitly asked.
+The core technologies for this project. Agents will not suggest alternatives unless explicitly asked.
 
 ### Primary Language
 - **Language:** [e.g., TypeScript, Python, Go]
 - **Version:** [e.g., TypeScript 5.x, Python 3.11+]
-- **Rationale:** [Why this language was chosen]
 
 ### Framework
 - **Framework:** [e.g., Next.js, FastAPI, none]
 - **Version:** [e.g., Next.js 14.x]
-- **Rationale:** [Why this framework was chosen]
 
 ### Database
 - **Database:** [e.g., PostgreSQL, MongoDB, SQLite]
 - **Version:** [e.g., PostgreSQL 15+]
-- **ORM/Driver:** [e.g., Prisma, SQLAlchemy]
-- **Rationale:** [Why this database was chosen]
+- **ORM/Driver:** [e.g., Prisma (tool that simplifies database access), SQLAlchemy]
 
 ### Additional Technologies
 <!-- Add any other core technologies (caching, queuing, etc.) -->
@@ -36,145 +34,135 @@ Define the core technologies for this project. Agents will not suggest alternati
 
 ## Article 2: Code Standards
 
-Define the coding standards that all generated code must follow.
+Coding standards that all generated code must follow. These were auto-configured based on the detected stack and project type.
 
 ### Style & Formatting
-- [ ] [e.g., Use Prettier with default configuration]
+- [ ] [e.g., Prettier (automatic code formatting tool) with default configuration]
+- [ ] [e.g., ESLint (automatic code quality checker) with framework rules]
 - [ ] [e.g., Maximum line length: 100 characters]
-- [ ] [e.g., Use semicolons at end of statements]
 
 ### Type Safety
-- [ ] [e.g., All functions must have explicit return types]
-- [ ] [e.g., No `any` types except in test files]
-- [ ] [e.g., Prefer interfaces over type aliases for object shapes]
+<!-- For typed languages like TypeScript -->
+- [ ] [e.g., TypeScript strict mode (catches more bugs before they reach users) enabled]
+- [ ] [e.g., No `any` types — all data must have defined shapes]
 
 ### Naming Conventions
-- [ ] [e.g., Use camelCase for variables and functions]
-- [ ] [e.g., Use PascalCase for classes and components]
-- [ ] [e.g., Use SCREAMING_SNAKE_CASE for constants]
+- [ ] [e.g., PascalCase (naming style: MyComponent) for components]
+- [ ] [e.g., camelCase (naming style: myFunction) for variables and functions]
+- [ ] [e.g., SCREAMING_SNAKE_CASE for constants]
 
 ### Code Organization
+- [ ] [e.g., Feature-based folders — all code for a feature lives together]
 - [ ] [e.g., One component per file]
-- [ ] [e.g., Imports ordered: external, internal, relative]
 - [ ] [e.g., Maximum function length: 50 lines]
+- [ ] [e.g., Maximum file length: 300 lines]
 
 ---
 
 ## Article 3: Testing Requirements
 
-Define the testing standards that all code must meet.
+How thoroughly code is tested before shipping. Configured for [PROJECT TYPE] level rigor.
 
 ### Unit Testing
-- **Required Coverage:** [e.g., 80% minimum]
+- **Required Coverage:** [e.g., 60% minimum]
 - **Framework:** [e.g., Jest, pytest, Go testing]
 - **Requirements:**
   - [ ] [e.g., All public functions must have unit tests]
-  - [ ] [e.g., Edge cases must be tested explicitly]
-  - [ ] [e.g., Mocks must be used for external dependencies]
+  - [ ] [e.g., Edge cases tested for critical paths]
 
 ### Integration Testing
 - **Framework:** [e.g., Supertest, httpx, built-in]
 - **Requirements:**
   - [ ] [e.g., All API endpoints must have integration tests]
-  - [ ] [e.g., Database operations must be tested with real database]
+  - [ ] [e.g., Database operations tested with real database]
 
-### End-to-End Testing
+### End-to-End Testing (tests that simulate real user actions)
 - **Framework:** [e.g., Playwright, Cypress, none]
 - **Requirements:**
   - [ ] [e.g., Critical user flows must have E2E tests]
-  - [ ] [e.g., E2E tests run in CI before merge]
+  - [ ] [e.g., E2E tests run in CI (automatic testing pipeline) before merge]
 
 ### Test-First Pattern
-- [ ] Tests must be written before implementation
-- [ ] Tests must fail before implementation is complete
-- [ ] Implementation is complete when tests pass
+- [ ] [e.g., Tests written before code for complex features]
 
 ---
 
 ## Article 4: Security Mandates
 
-Define security requirements that cannot be bypassed.
+Non-negotiable security requirements that protect users and data.
 
-### Authentication
-- [ ] [e.g., All API endpoints require authentication except public endpoints]
-- [ ] [e.g., Use JWT tokens with 1-hour expiration]
-- [ ] [e.g., Refresh tokens must be stored securely]
+### Authentication (verifying who users are)
+- [ ] [e.g., All features require login unless marked public]
+- [ ] [e.g., JWT (secure login tokens) with appropriate expiration]
+- [ ] [e.g., Refresh tokens stored securely]
 
-### Authorization
-- [ ] [e.g., Role-based access control required]
-- [ ] [e.g., All data access must be scoped to user/tenant]
+### Authorization (controlling what users can access)
+- [ ] [e.g., Row-Level Security (keeps each user's data private) where supported]
+- [ ] [e.g., All data access scoped to the logged-in user]
 
-### Secrets Management
-- [ ] [e.g., No secrets in code—use environment variables]
-- [ ] [e.g., .env files must be in .gitignore]
-- [ ] [e.g., Production secrets managed via vault/secrets manager]
+### Secrets Management (protecting passwords and API keys)
+- [ ] [e.g., No secrets in code — use environment variables (secure storage for passwords and API keys)]
+- [ ] [e.g., .env files must be in .gitignore (prevents accidental sharing)]
 
-### Input Validation
-- [ ] [e.g., All user input must be validated]
-- [ ] [e.g., SQL queries must use parameterized statements]
-- [ ] [e.g., File uploads must be validated for type and size]
+### Input Validation (preventing attacks from user input)
+- [ ] [e.g., All user input must be validated before processing]
+- [ ] [e.g., Parameterized queries (prevents database attacks from user input) required]
 
 ### Dependency Security
-- [ ] [e.g., New dependencies require security review]
-- [ ] [e.g., Dependencies must be updated monthly]
-- [ ] [e.g., Known vulnerabilities must be addressed within 7 days]
+- [ ] [e.g., New packages require review before adding]
+- [ ] [e.g., Known vulnerabilities addressed promptly]
 
 ---
 
 ## Article 5: Architecture Principles
 
-Define architectural decisions that guide system design.
+How the system is structured. Auto-configured based on stack and project type.
 
 ### Design Principles
-- [ ] [e.g., Prefer composition over inheritance]
-- [ ] [e.g., Follow SOLID principles]
-- [ ] [e.g., Use dependency injection for testability]
+- [ ] [e.g., Prefer composition over inheritance (build by combining small pieces)]
+- [ ] [e.g., Keep it simple — straightforward solutions preferred]
+- [ ] [e.g., Dependency injection (pattern that makes code easier to test) for testability]
 
 ### Layering
-- [ ] [e.g., No direct database access from UI components]
-- [ ] [e.g., Business logic must be in service layer]
-- [ ] [e.g., API controllers should be thin—validation and delegation only]
+- [ ] [e.g., No direct database access from UI — go through a service layer]
+- [ ] [e.g., Business logic separated from display logic]
 
 ### State Management
-- [ ] [e.g., Use React Context for global state]
+- [ ] [e.g., React Query (handles loading and caching data) for server state]
 - [ ] [e.g., Prefer server state over client state]
-- [ ] [e.g., No state in services—stateless design]
 
 ### Error Handling
-- [ ] [e.g., All errors must be caught and logged]
-- [ ] [e.g., User-facing errors must be sanitized]
-- [ ] [e.g., Use structured error types, not strings]
+- [ ] [e.g., All errors caught and logged]
+- [ ] [e.g., User-facing errors show helpful messages, not technical details]
 
 ---
 
 ## Article 6: Approval Requirements
 
-Define what requires human approval before proceeding.
+What requires human sign-off before the AI proceeds. Configured for [PROJECT TYPE] level oversight.
 
 ### Code Changes
-- [ ] [e.g., New dependencies require security review]
-- [ ] [e.g., Database schema changes require DBA approval]
-- [ ] [e.g., Changes to authentication require security review]
+- [ ] [e.g., New dependencies (external packages) require review]
+- [ ] [e.g., Database schema changes require approval]
+- [ ] [e.g., Changes to login/security require review]
 
 ### Deployments
-- [ ] [e.g., Production deployments require PM approval]
-- [ ] [e.g., Database migrations require manual verification]
-- [ ] [e.g., Rollback plan required for all production changes]
+- [ ] [e.g., Production releases require approval]
+- [ ] [e.g., Database migrations (structural database changes) require verification]
 
 ### Architecture
-- [ ] [e.g., New services require architecture review]
-- [ ] [e.g., Third-party integrations require security review]
-- [ ] [e.g., Breaking API changes require version bump and migration plan]
+- [ ] [e.g., New services require review]
+- [ ] [e.g., Third-party integrations (external service connections) require approval]
 
 ---
 
 ## Article 7: Accessibility Requirements
 
-Define accessibility standards that all UI code must meet.
+Standards ensuring the application works for all users, including those with disabilities.
 
 ### Compliance Standards
-- **Minimum:** WCAG 2.1 Level AA
-- **Target:** WCAG 2.1 Level AAA (where feasible)
+- **Minimum:** WCAG 2.1 (Web Content Accessibility Guidelines) Level [AA/AAA]
+- **Target:** WCAG 2.1 Level [AAA] (where feasible)
 - **Validation:** Accessibility checks included in QA phase
 
 ### Visual Requirements
@@ -190,7 +178,7 @@ Define accessibility standards that all UI code must meet.
 - [ ] Skip links provided for navigation
 
 ### Assistive Technology Requirements
-- [ ] Proper ARIA labels, roles, and live regions
+- [ ] Proper ARIA (attributes that help screen readers understand your app) labels and roles
 - [ ] All images have meaningful alt text
 - [ ] Form inputs have associated labels
 - [ ] Error messages announced to screen readers
@@ -199,7 +187,6 @@ Define accessibility standards that all UI code must meet.
 - [ ] Proper heading hierarchy (h1 → h2 → h3)
 - [ ] Landmark regions used (main, nav, footer)
 - [ ] Tables have headers and captions
-- [ ] Lists used for list content
 
 ---
 
@@ -237,4 +224,3 @@ See Article 6 for the complete list. Key items:
 - Database migrations
 - New dependencies
 - Security-related changes
-- Breaking API changes

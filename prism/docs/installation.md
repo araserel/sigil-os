@@ -125,20 +125,24 @@ mkdir -p specs
 
 ## Initial Setup
 
-### Step 1: Review the Constitution
+### Step 1: Set Up the Constitution
 
-The constitution defines rules that apply to all work in your project. Review and customize it:
+The constitution defines rules that apply to all work in your project. Run the guided setup:
 
 ```bash
-# Open the constitution
-cat memory/constitution.md
+# Start Claude Code
+claude
+
+# Run the constitution setup
+> /constitution
 ```
 
-Edit to match your project's requirements:
-- Accessibility standards (WCAG AA is the default)
-- Security requirements
-- Coding standards
-- Any non-negotiable rules
+Prism walks you through 3 quick rounds:
+1. **Confirm your tech stack** (auto-detected from your project)
+2. **Choose project type** (MVP, Production, or Enterprise)
+3. **Optional preferences** (external services, offline support, accessibility)
+
+All technical details (code style, testing levels, security rules) are configured automatically based on your choices.
 
 ### Step 2: Initialize Project Context
 

@@ -295,9 +295,10 @@ User: "I want to build a task manager app"
    → User: "Approved"
 
 6. constitution-writer
-   → Pre-populates Article 1 with TypeScript, Next.js, PostgreSQL
-   → Guides through remaining articles
-   → Creates constitution
+   → Pre-populates stack from foundation (Round 1 auto-confirmed)
+   → Asks project type in Round 2 (MVP/Production/Enterprise)
+   → Optional preferences in Round 3
+   → Auto-configures all technical details and creates constitution
 
 7. Complete
    → "Discovery complete! You're ready to start building.

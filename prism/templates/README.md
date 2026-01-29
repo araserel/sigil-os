@@ -21,7 +21,9 @@ The `prompts/` subdirectory contains conversational scripts that help non-techni
 
 | Prompt File | Helps With |
 |-------------|------------|
-| `constitution-prompts.md` | Setting up project principles |
+| `constitution-prompts.md` | 3-round guided constitution setup (plain language) |
+| `constitution-questions.md` | Question bank with tiered questions and cascade configs |
+| `constitution-errors.md` | User-friendly error message translations |
 | `spec-prompts.md` | Creating feature specifications |
 | `plan-prompts.md` | Technical planning decisions |
 | `clarify-prompts.md` | Resolving ambiguities |

@@ -1,287 +1,253 @@
 # Guided Constitution Setup
 
-> Prompts to help users define their project's foundational principles.
+> Plain-language prompts for a 3-round constitution setup accessible to non-technical users.
 
 ---
 
 ## Opening
 
-"Let's set up your project's constitution. This is a one-time setup that defines the rules all future work will follow. Think of it as writing down 'how we do things here' so the AI always respects your standards.
+"Let's set up your project's constitution — a short document that tells AI agents the rules for your project. Think of it as writing down 'how we do things here' so every tool respects your standards automatically.
 
-Don't worry if you're not sure about everything—I'll offer sensible defaults you can adjust later."
-
----
-
-## Article 1: Technology Stack
-
-### Main Language
-
-"What programming language does (or will) this project use?"
-
-**Options:**
-- A) TypeScript / JavaScript
-- B) Python
-- C) Go
-- D) Other (please specify)
-
-**If unsure:**
-"What kind of project is this? I can suggest a language:
-- Web app → TypeScript is common
-- Data / ML → Python is common
-- System tool → Go is common"
-
-### Framework
-
-"Are you using a framework?"
-
-**Options:**
-- A) Yes — [which one?]
-- B) No framework (plain language)
-- C) Not sure yet
-
-**If web app:**
-"For web apps, common choices are:
-- Next.js (React-based, full-stack)
-- Express (Node.js API server)
-- Django / FastAPI (Python)
-
-Which fits best, or should we skip this for now?"
-
-### Database
-
-"What database will you use, if any?"
-
-**Options:**
-- A) PostgreSQL (robust, widely used)
-- B) MySQL / MariaDB
-- C) MongoDB (document database)
-- D) SQLite (simple, file-based)
-- E) None / Not sure yet
-
-**Default suggestion:**
-"If you're not sure, PostgreSQL is a safe default for most projects."
+This takes about 3 questions. I'll handle the technical details and just ask you the decisions that matter."
 
 ---
 
-## Article 2: Code Standards
+## Round 1: Stack Validation
 
-### Style
+### When Stack Detected
 
-"How strict should code formatting be?"
+"I scanned your project and found:
 
-**Options:**
-- A) Strict — enforce consistent style everywhere
-- B) Moderate — enforce basics, flexibility on details
-- C) Relaxed — minimal rules
+- **Language:** [detected]
+- **Framework:** [detected]
+- **Database:** [detected]
 
-**Default:** "Most teams do well with Moderate—consistent enough to read easily, flexible enough not to be annoying."
+Is this correct? Anything to add or change?"
 
-### Type Safety (if TypeScript/typed language)
+### When Stack Detected from Foundation
 
-"How strict should type checking be?"
+"I have your technology choices from the Discovery phase:
 
-**Options:**
-- A) Strict — all types explicit, no shortcuts
-- B) Moderate — types required for public APIs, flexible internally
-- C) Relaxed — types where helpful, not mandatory
+- **Language:** [language] [version]
+- **Framework:** [framework] [version]
+- **Database:** [database] [version]
 
-**Default:** "Moderate is usually the sweet spot."
+Does this look right?"
 
----
+### When Stack NOT Detected
 
-## Article 3: Testing
+"I couldn't detect your tech stack automatically. No worries — a few quick questions:
 
-### Coverage Requirement
+- What programming language? (e.g., TypeScript, Python, Go)
+- Using a framework? (e.g., Next.js, Django, Express)
+- Using a database? (e.g., PostgreSQL, MongoDB, or none yet)
 
-"What level of testing do you want?"
+If you're not sure about any of these, just say so and I'll suggest something."
 
-**Options:**
-- A) High (80%+ coverage) — thorough, catches most issues
-- B) Moderate (60%+ coverage) — good balance of safety and speed
-- C) Essential only — test critical paths, trust the rest
+### When Detection Partially Succeeds
 
-**Default:** "Moderate (60%+) is a good starting point for most projects."
+"I found some of your setup:
 
-### Test-First Approach
+- **Language:** [detected]
+- **Framework:** [detected or 'Not detected']
+- **Database:** [detected or 'Not detected']
 
-"Should tests be written before implementation?"
+[For each undetected item:]
+I couldn't detect your [item]. Are you using one? If so, which?"
 
-**Options:**
-- A) Yes — tests first, then code (test-driven development)
-- B) Sometimes — for complex features
-- C) Not required — test after implementation is fine
+### User Says "I Don't Know"
 
-**Default:** "Option B (sometimes) works well—rigor where it matters, flexibility where it doesn't."
+"No problem! Based on [what I can see / common choices], I'd suggest:
+- [Suggested stack with one-line rationale each]
 
----
-
-## Article 4: Security
-
-### Authentication Default
-
-"Should features require users to be logged in by default?"
-
-**Options:**
-- A) Yes — everything requires auth unless marked public
-- B) No — features are public unless marked protected
-- C) Depends — I'll specify per feature
-
-**Default:** "Option A is safer—it's easier to make things public than to realize you forgot to protect something."
-
-### Secret Handling
-
-"How should secrets (passwords, API keys) be handled?"
-
-**Options:**
-- A) Environment variables only — no secrets in code ever
-- B) Secrets manager — use a vault or service
-- C) Not sure yet
-
-**Default:** "Option A (environment variables) is standard and works for most projects."
+Want to go with this? You can always change it later."
 
 ---
 
-## Article 5: Architecture
+## Round 2: Project Type
 
-### Code Organization
+"What kind of project is this?
 
-"How should code be organized?"
+Why this matters: This shapes how much testing, security, and documentation I set up. You can always adjust later.
 
-**Options:**
-- A) By feature — all code for a feature in one folder
-- B) By layer — separate folders for models, services, controllers
-- C) Hybrid — layers within feature folders
-- D) Whatever works — no strict rule
+**1. MVP / Prototype**
+Ship fast, add polish later. Minimal testing, flexible structure. Good for validating ideas quickly.
 
-**If unsure:**
-"This often depends on team size. For smaller teams, A (by feature) is usually cleaner. For larger teams, B (by layer) helps coordination."
+**2. Production App**
+Balance speed with stability. Standard testing, proven patterns. Good for apps real users depend on.
 
-### Complexity Philosophy
+**3. Enterprise**
+Maximum rigor. Comprehensive testing, full documentation, strict reviews. Good for regulated industries or large teams."
 
-"When adding new functionality, what's the priority?"
+### If User Says "Suggest" or "I Don't Know"
 
-**Options:**
-- A) Simplicity — prefer straightforward solutions, even if less elegant
-- B) Elegance — invest in clean abstractions that scale
-- C) Pragmatic — whatever fits the situation
+"Here's a quick way to decide:
 
-**Default:** "Option A (simplicity) tends to age better. You can always add elegance later."
+- **Building something to test an idea?** → MVP
+- **Building something people will use daily?** → Production App
+- **Building for a large company or regulated industry?** → Enterprise
+
+If you're not sure, **Production App** is a safe middle ground."
+
+### After Selection — Confirmation
+
+"Got it — **[Selected Type]**. Here's what I'll configure:
+
+- **Testing:** [plain description]
+- **Security:** [plain description]
+- **Code reviews:** [plain description]
+- **Documentation:** [plain description]
+
+These are sensible defaults for [type]. Want to change anything, or move on?"
+
+#### MVP Confirmation Details
+
+- **Testing:** Essential paths tested before shipping
+- **Security:** Standard protections — no secrets in code, user data stays private
+- **Code reviews:** Major changes flagged for your approval
+- **Documentation:** Light — just enough to stay organized
+
+#### Production Confirmation Details
+
+- **Testing:** Key features tested thoroughly, critical user journeys verified end-to-end
+- **Security:** Login required by default, all user input validated, dependencies reviewed
+- **Code reviews:** New packages, database changes, and security changes require your sign-off
+- **Documentation:** Standard — clear enough for someone new to understand the project
+
+#### Enterprise Confirmation Details
+
+- **Testing:** Comprehensive coverage required, all features tested before shipping, performance verified
+- **Security:** Maximum protection — audit trail, security review for all changes, vulnerability response plan
+- **Code reviews:** All code changes reviewed, architecture decisions require explicit approval
+- **Documentation:** Full documentation for every significant feature
 
 ---
 
-## Article 6: Approvals
+## Round 3: Optional Preferences
 
-### What Requires Approval
+"A few optional preferences. Say 'skip' to use smart defaults for all of these:
 
-"What changes should require your explicit approval?"
+**1. External service approval**
 
-**Check all that apply:**
-- [ ] New dependencies / packages
-- [ ] Database changes
-- [ ] Changes to authentication/security
-- [ ] Anything affecting production
-- [ ] Architecture decisions
+Should I ask before adding features that need external services (like payment processors, email senders, or cloud storage)?
 
-**Default:** "All of these are checked by default. You can always approve quickly, but it ensures you're aware of significant changes."
+Why this matters: External services may have costs or require accounts to set up.
 
-### Production Safety
+- **Yes (Recommended):** I'll flag these for your approval first
+- **No:** I'll add them as needed
 
-"How careful should we be with production changes?"
+**2. Offline support**
 
-**Options:**
-- A) Very careful — always require approval, have rollback plan
-- B) Careful — require approval for risky changes
-- C) Standard — normal review process
+Should the app work when users have no internet?
 
-**Default:** "Option A for production is almost always right."
+Why this matters: Offline mode means users can still access their data with poor signal, but it adds complexity.
+
+- **Yes:** Works offline, syncs when connected
+- **No (Default):** Requires internet connection
+
+**3. Accessibility level**
+
+How accessible should this be?
+
+Why this matters: Accessibility ensures people with disabilities can use your app. It's also required by law in many countries.
+
+- **Works for everyone (Recommended):** Follows international accessibility standards so all users can participate
+- **Standard:** Basic accessibility included (keyboard navigation, readable text)"
+
+### If User Says "Skip"
+
+"Using smart defaults:
+- I'll ask before adding external services
+- Internet required (no offline mode)
+- Full accessibility standards
+
+Moving on to generate your constitution."
+
+### If User Says "I Don't Understand" to Any Question
+
+For external services:
+"No worries. Basically: if building a feature requires signing up for another company's service (like Stripe for payments), should I check with you first? Most people say yes."
+
+For offline:
+"This means: can people use your app in airplane mode or with bad wifi? If you're not sure, 'No' is the simpler choice."
+
+For accessibility:
+"This means: will the app work for people who use screen readers, keyboard-only navigation, or have vision impairments? 'Works for everyone' is recommended and ensures you're covered."
 
 ---
 
-## Article 7: Accessibility
+## Gitignore Prompt
 
-### Compliance Level
+"One more thing — should your team share the project constitution via git?
 
-"What accessibility standard should we follow?"
+Why this matters: If you work with a team, sharing the constitution means everyone (and all AI tools) follow the same rules. If you're working solo, it can stay local.
 
-**Options:**
-- A) WCAG 2.1 AA (standard compliance) — required for most commercial software
-- B) WCAG 2.1 AAA (highest level) — best possible accessibility
-- C) Basic accessibility — essential needs only
-
-**Explanation:**
-"AA is the standard most companies aim for. AAA is ideal but can require significant effort. Basic is a minimum but may exclude some users."
-
-**Default:** "AA minimum, AAA target is a good balance."
-
-### Specific Requirements
-
-"Any specific accessibility needs for your users?"
-
-**Prompts:**
-- "Will users with visual impairments use this? (screen readers)"
-- "Will users need keyboard-only navigation?"
-- "Any users with motor limitations?"
+- **Yes (Recommended for teams):** Constitution is version controlled — everyone sees the same rules
+- **No (Solo projects):** Constitution stays on your machine only"
 
 ---
 
 ## Summary and Confirmation
 
-### Recap
+"Your constitution is ready! Here's what I set up:
 
-"Here's your constitution:
+**Tech Stack:** [Language] + [Framework] + [Database]
 
-**Technology:** [Language] + [Framework] + [Database]
-**Code Style:** [Level]
-**Testing:** [Coverage level], [Test-first?]
-**Security:** [Auth default], [Secrets handling]
-**Architecture:** [Organization], [Complexity preference]
-**Approvals:** [What requires approval]
-**Accessibility:** [Standard]
+**Quality Level:** [Project Type]
+- Testing: [plain description]
+- Security: [plain description]
+- Reviews: [plain description]
 
-Does this look right?"
+**Accessibility:** [plain description]
 
-### Amendments
+This is saved at `/memory/constitution.md`. All AI agents will follow these rules automatically.
 
-"Remember: this constitution can be amended later, but it should be rare. These are your foundational rules, not temporary preferences.
+Does this look right? Say 'yes' to confirm, or tell me what to change."
 
-To change it later, just say 'update constitution' and we'll review together."
+### After Confirmation
 
----
+"Constitution saved. All future work on this project will follow these rules.
 
-## Quick Setup Option
-
-For users who want to go fast:
-
-"Would you like to:
-- A) Go through each article step by step (recommended for new projects)
-- B) Use sensible defaults and adjust later (faster)
-- C) Copy settings from a similar project"
-
-**If Option B (defaults):**
-
-"Here's a sensible default constitution:
-- TypeScript + [appropriate framework]
-- Moderate style enforcement
-- 60% test coverage, test-first for complex features
-- Auth required by default, env vars for secrets
-- Simplicity-first, feature-based organization
-- Approval required for deps, database, security, production
-- WCAG 2.1 AA accessibility
-
-Want to use this and adjust specific items?"
+To view it later: `/constitution`
+To update it: `/constitution edit`"
 
 ---
 
-## Tips
+## Handling "Suggest" and "Accept Defaults"
+
+When a user says "suggest", "default", "whatever you think", or similar at any point:
+
+**DO:** Provide a clear explanation of what was configured.
+
+"I've set up [specific choice]. This means [one-sentence impact explanation]. You can change this anytime by running `/constitution edit`."
+
+**DON'T:** Silently accept without explanation.
+
+---
+
+## Handling Existing Constitution
+
+"This project already has a constitution set up.
+
+- **View it:** I'll show you what's configured
+- **Start fresh:** I'll guide you through creating a new one (the old one will be replaced)
+- **Cancel:** Keep everything as-is"
+
+---
+
+## Tips for the AI Agent
 
 ### For decisive users
-Move quickly, confirm at the end.
+Move quickly through rounds. Confirm at the end.
 
 ### For uncertain users
-Offer defaults freely. "If you're not sure, [X] works well for most projects."
+Offer defaults at every step. "If you're not sure, [X] is a safe choice."
 
-### For technical users
-Can go into more detail if they want, but don't assume they want complexity.
+### For "suggest" / "accept" responses
+Always explain what was configured and why. Never silently accept.
 
-### For first-time projects
-Simpler is better. They can add strictness later as needs become clear.
+### For technical users who want details
+Respect their knowledge but don't assume everyone is technical. If they ask for specifics, provide them. But keep the default flow plain-language.
+
+### For non-English speakers
+Keep sentences short and clear. Avoid idioms and cultural references.
