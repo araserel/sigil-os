@@ -60,7 +60,7 @@ Prism OS is a system of interconnected markdown files. Changes to one component 
 
 4. **Register the skill:**
    - Add to the owning agent's "Skills" section
-   - Add to CLAUDE.md Section 6 if it's a core workflow skill
+   - Add to `docs/extending-skills.md` skill categories table if it's a core workflow skill
    - Add to relevant chain files if it participates in chains
 
 5. **Run linter:** `python tools/workflow-linter.py`
@@ -77,7 +77,7 @@ Prism OS is a system of interconnected markdown files. Changes to one component 
    - Human Oversight Tier
 
 3. **Register the agent:**
-   - Add to CLAUDE.md Section 4 (Agent Routing)
+   - Add to orchestrator agent file (`.claude/agents/orchestrator.md`)
    - Add trigger words to routing table
    - Define handoff relationships with adjacent agents
 
@@ -107,7 +107,7 @@ Prism OS is a system of interconnected markdown files. Changes to one component 
    - Handoff data (what passes between skills)
    - Exit conditions (when the chain completes or fails)
 
-3. **Register in CLAUDE.md** Section 5 (Skill Chains)
+3. **Register in `docs/extending-skills.md`** skill chain overview section
 
 4. **Run linter:** `python tools/workflow-linter.py`
 
@@ -125,7 +125,6 @@ Renaming is high-risk because references exist in multiple files.
    ```
 
 2. **Update all references** in:
-   - CLAUDE.md
    - Agent files that reference the component
    - Skill files that reference the component
    - Chain files
@@ -167,7 +166,7 @@ Tier changes affect when humans are prompted for input.
    - Security findings should remain Approve
    - Scope changes should remain Review minimum
 
-3. **Update both** the skill/agent file AND CLAUDE.md tier table
+3. **Update both** the skill/agent file AND `docs/user-guide.md` approval tiers table
 
 ---
 
@@ -251,7 +250,7 @@ After modifying the linter:
 - Reference specific files and line numbers where helpful
 - Explain the "why" not just the "what"
 
-### For System Files (CLAUDE.md, Agents, Skills)
+### For System Files (Agents, Skills)
 
 - Consistent section structure
 - Complete metadata
@@ -303,7 +302,7 @@ For doc changes:
 
 | Component | Location |
 |-----------|----------|
-| Main config | `CLAUDE.md` |
+| Documentation | `docs/*.md` |
 | Agents | `.claude/agents/*.md` |
 | Skills | `.claude/skills/{category}/*.md` |
 | Chains | `.claude/chains/*.md` |
@@ -341,5 +340,3 @@ If you're unsure about a change:
 2. Review the relevant section of this guide
 3. Run the linter to catch obvious issues
 4. When in doubt, make the change additive (don't remove/rename)
-
-For architectural questions, check `/docs/future-considerations.md` — your question may already be documented there.

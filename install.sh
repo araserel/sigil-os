@@ -114,7 +114,6 @@ verify_installation() {
 
     local all_ok=true
     local required_files=(
-        "CLAUDE.md"
         ".claude/commands/prism.md"
         ".claude/commands/spec.md"
         ".claude/commands/status.md"
@@ -216,7 +215,7 @@ install_files() {
             exit 0
         fi
         # Also check for prism/ subdirectory (new structure)
-        if [ -d "prism" ] && [ -f "prism/CLAUDE.md" ]; then
+        if [ -d "prism" ] && [ -d "prism/.claude" ]; then
             echo -e "${YELLOW}!${NC} Detected Prism OS source repository"
             echo "  Use --local to install to another directory:"
             echo "  cd /your/project && /path/to/prism-os/install.sh --local /path/to/prism-os"
@@ -280,15 +279,9 @@ install_files() {
         product_dir="$source_dir"
     fi
 
-    # Copy CLAUDE.md
-    if [ -f "${product_dir}/CLAUDE.md" ]; then
-        if [ ! -f "CLAUDE.md" ]; then
-            cp "${product_dir}/CLAUDE.md" ./CLAUDE.md
-            echo -e "${GREEN}✓${NC} Installed CLAUDE.md"
-        else
-            echo -e "${YELLOW}!${NC} CLAUDE.md already exists, skipping"
-        fi
-    fi
+    # Note: CLAUDE.md is no longer copied from the product directory.
+    # The preflight-check skill creates PRISM.md with enforcement rules
+    # and adds a pointer to the project's CLAUDE.md on the first /prism run.
 
     # Copy templates
     if [ -d "${product_dir}/templates" ]; then

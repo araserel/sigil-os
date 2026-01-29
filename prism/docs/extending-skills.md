@@ -10,6 +10,54 @@ Skills are reusable, chainable units of work that encapsulate specific capabilit
 
 ---
 
+## Skill Categories
+
+Prism organizes skills into 8 categories. Before creating a new skill, review existing ones to avoid duplication.
+
+| Category | Purpose | Skills |
+|----------|---------|--------|
+| **Workflow** | Core development workflow | `spec-writer`, `clarifier`, `technical-planner`, `task-decomposer`, `complexity-assessor`, `handoff-packager`, `constitution-writer`, `status-reporter`, `foundation-writer`, `visual-analyzer` |
+| **Design** | UI/UX design and accessibility | `framework-selector`, `ux-patterns`, `ui-designer`, `accessibility`, `design-system-reader`, `figma-review` |
+| **UI Implementation** | Framework-specific UI code | `react-ui`, `react-native-ui`, `flutter-ui`, `vue-ui`, `swift-ui`, `design-skill-creator` |
+| **Engineering** | Code and architecture | `adr-writer` |
+| **Quality** | Validation and fixing | `qa-validator`, `qa-fixer` |
+| **Review** | Code, security, deploy checks | `code-reviewer`, `security-reviewer`, `deploy-checker` |
+| **Research** | Information gathering | `researcher`, `knowledge-search`, `codebase-assessment`, `problem-framing`, `constraint-discovery`, `stack-recommendation` |
+| **Learning** | Institutional memory | `learning-capture`, `learning-reader`, `learning-review` |
+
+---
+
+## Skill Chain Overview
+
+Skills are often invoked in sequences called **chains**. Understanding these helps you design skills that integrate smoothly.
+
+**Chain 1: Full Pipeline** (Standard and Enterprise tracks)
+```
+complexity-assessor → spec-writer ←→ clarifier (loop) → technical-planner ← researcher (parallel)
+    → task-decomposer → [Per Task: Developer → qa-validator ←→ qa-fixer (loop)]
+    → code-reviewer + security-reviewer (parallel) → Complete
+```
+
+**Chain 2: Quick Flow** (Bug fixes, small changes)
+```
+complexity-assessor → quick-spec → task-decomposer → implement → qa-validator → Complete
+```
+
+**Chain 3: Research-First** (New technology decisions)
+```
+researcher (parallel) → technical-planner → adr-writer → [continue to implementation]
+```
+
+**Chain 4: Validate → Review** (Quality gate before deployment)
+```
+qa-validator → qa-fixer ←→ qa-validator (loop max 5) → code-reviewer + security-reviewer (parallel)
+    → deploy-checker → Human Approval (if production)
+```
+
+When creating a new skill, determine which chain(s) it fits into and update your `invokes` / `invoked_by` fields accordingly.
+
+---
+
 ## Skill Anatomy
 
 Every skill file consists of two parts:

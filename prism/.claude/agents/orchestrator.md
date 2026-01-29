@@ -300,6 +300,24 @@ Would you like to:
    **Suggested Next Step:** [Based on current phase and status]
    ```
 
+   **If phase is `implement`:**
+   Additionally read `tasks.md` from the spec path and report:
+   - Total tasks and completed count
+   - Current/next task ID and description
+   - Suggested action: "Continue implementation loop"
+
+   Example:
+   ```
+   ## Resuming: [Feature Name]
+
+   **Phase:** implement | **Track:** Standard | **Status:** In Progress
+
+   **Implementation Progress:** 3/8 tasks complete
+   **Next Task:** T004 - Add input validation to login form
+
+   **Suggested Next Step:** Continue implementation loop
+   ```
+
 3. **Validate State** — Check that referenced artifacts exist:
    - If spec path set, verify spec.md exists
    - If plan path set, verify plan.md exists

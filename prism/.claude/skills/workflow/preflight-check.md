@@ -1,7 +1,7 @@
 ---
 name: preflight-check
-description: Verifies global Prism OS installation integrity and ensures enforcement rules exist in the project's CLAUDE.md.
-version: 1.0.0
+description: Verifies global Prism OS installation integrity. Creates PRISM.md with enforcement rules and adds a pointer to the project's CLAUDE.md.
+version: 1.1.0
 category: workflow
 chainable: true
 invoked_by: [orchestrator]
@@ -12,7 +12,7 @@ tools: Bash, Read, Write, Edit, Glob
 
 ## Purpose
 
-Verify that the global Prism OS installation is intact before running any workflow, and ensure the project's CLAUDE.md contains mandatory enforcement rules that instruct Claude Code to use Prism's agents and skills via the correct tools.
+Verify that the global Prism OS installation is intact before running any workflow. Create a standalone `PRISM.md` file with mandatory enforcement rules and ensure the project's `CLAUDE.md` contains a lightweight pointer to it.
 
 ## Constants
 
@@ -61,35 +61,50 @@ Then try /prism again.
 Warning: Prism installation may be incomplete (found 7/9 agents). Run /prism-update to repair.
 ```
 
-### Part B: Check/Inject Enforcement Section in Project CLAUDE.md
+### Part B: Create/Update PRISM.md and Add Pointer to CLAUDE.md
 
-After installation is verified, ensure the project's `./CLAUDE.md` contains the enforcement section.
+After installation is verified, ensure a standalone `./PRISM.md` exists with enforcement rules and that `./CLAUDE.md` contains a pointer to it.
 
 #### Logic
 
 1. Read `./CLAUDE.md` from the project root.
-2. **Dev repo guard:** If the file contains the string `Prism OS Development Environment`, skip injection entirely. This is the Prism development repository — enforcement rules are not appropriate here. Report nothing.
-3. **No CLAUDE.md exists:** Create `./CLAUDE.md` with only the enforcement section (wrapped in markers).
-4. **CLAUDE.md exists, no markers found:** Append the enforcement section (with a blank line separator) to the end of the file.
-5. **Markers found, check version:** Extract the version from the start marker (`<!-- PRISM-OS-ENFORCEMENT-START v1.0.0 -->`).
-   - Same version as `ENFORCEMENT_VERSION` → Skip. Report nothing.
-   - Older version → Replace everything between (and including) the start and end markers with the current enforcement section. Report: `Updated Prism enforcement rules to v1.0.0.`
-6. **Markers found, no version or unparseable:** Treat as older version — replace.
+2. **Dev repo guard:** If the file contains the string `Prism OS Development Environment`, skip entirely. This is the Prism development repository — enforcement rules are not appropriate here. Report nothing.
+3. **Check/create PRISM.md:**
+   - If `./PRISM.md` exists, check for version marker `<!-- PRISM-OS v1.0.0 -->` on the first line.
+     - Same version as `ENFORCEMENT_VERSION` → skip (already current).
+     - Older version or missing version → overwrite with current PRISM.md content. Report: `Updated PRISM.md enforcement rules to v1.0.0.`
+   - If `./PRISM.md` does not exist → create it with current content. Report: `Created PRISM.md with Prism enforcement rules (v1.0.0).`
+4. **Check CLAUDE.md for pointer:**
+   - Look for `<!-- Project: Check for ./PRISM.md and follow all rules if present -->`.
+   - If found → done (pointer already present).
+   - If legacy `<!-- PRISM-OS-ENFORCEMENT-START` block found → remove the entire block (from `<!-- PRISM-OS-ENFORCEMENT-START` through `<!-- PRISM-OS-ENFORCEMENT-END -->`), then add the pointer. Report: `Migrated legacy enforcement block to PRISM.md.`
+   - If no pointer and no legacy block → add the pointer as the **first line** of the file (or after any frontmatter/YAML header). Report: `Added PRISM.md pointer to ./CLAUDE.md.`
+   - If no `./CLAUDE.md` exists → create it with only the pointer line. Report: `Created ./CLAUDE.md with PRISM.md pointer.`
+
+#### Pointer Line
+
+Use this exact content as the pointer:
+
+```
+<!-- Project: Check for ./PRISM.md and follow all rules if present -->
+```
 
 #### Report
 
 Only print a message if something changed:
-- Created CLAUDE.md: `Created ./CLAUDE.md with Prism enforcement rules (v1.0.0).`
-- Appended to existing: `Added Prism enforcement rules (v1.0.0) to ./CLAUDE.md.`
-- Updated version: `Updated Prism enforcement rules to v1.0.0.`
-- Skipped (current or dev repo): Print nothing.
+- Created PRISM.md: `Created PRISM.md with Prism enforcement rules (v1.0.0).`
+- Updated PRISM.md version: `Updated PRISM.md enforcement rules to v1.0.0.`
+- Created CLAUDE.md: `Created ./CLAUDE.md with PRISM.md pointer.`
+- Added pointer to existing CLAUDE.md: `Added PRISM.md pointer to ./CLAUDE.md.`
+- Migrated legacy block: `Migrated legacy enforcement block to PRISM.md.`
+- Skipped (current version and pointer present, or dev repo): Print nothing.
 
-## Enforcement Section Content
+## PRISM.md Content
 
-The following is the canonical enforcement section. Use this exact content (substituting the current `ENFORCEMENT_VERSION` into the marker) when injecting into a project's CLAUDE.md.
+The following is the canonical PRISM.md content. Use this exact content (substituting the current `ENFORCEMENT_VERSION` into the version marker) when creating or updating the file.
 
 ```markdown
-<!-- PRISM-OS-ENFORCEMENT-START v1.0.0 -->
+<!-- PRISM-OS v1.0.0 -->
 # Prism OS — Enforcement Rules
 
 These rules are MANDATORY. They override default Claude Code behavior for all workflow actions.
@@ -113,6 +128,7 @@ When performing workflow actions, you MUST use the Skill tool with the exact ski
 | Create implementation plan | `Skill(skill: "plan")` | Write a plan.md file yourself |
 | Break plan into tasks | `Skill(skill: "tasks")` | Create tasks with TaskCreate directly |
 | Run QA validation | `Skill(skill: "validate")` | Review code yourself without the skill |
+| Run code review | `Skill(skill: "review")` | Review code yourself without the skill |
 | View/edit constitution | `Skill(skill: "constitution")` | Edit constitution.md directly |
 | Capture learnings | `Skill(skill: "learn")` | Write to learnings files directly |
 | Load project context | `Skill(skill: "prime")` | Read context files ad-hoc |
@@ -145,11 +161,36 @@ At the start of any workflow, you MUST read these files (if they exist):
 
 ## Mandatory State Updates
 
-After each phase transition (e.g., spec complete → planning), you MUST update `memory/project-context.md` with:
+After each phase transition (e.g., spec complete -> planning), you MUST update `memory/project-context.md` with:
 - Current phase name
 - Feature being worked on
 - Spec path
 - Timestamp of transition
+
+## Automatic Workflow Handoffs
+
+When these artifacts are created during a /prism workflow, the next phase begins automatically:
+
+| After Creating | Next Phase | How |
+|----------------|-----------|-----|
+| `spec.md` | Clarification | Auto-continue to clarifier |
+| `clarifications.md` | Planning | Auto-continue to technical-planner |
+| `plan.md` | Task Breakdown | Auto-continue to task-decomposer |
+| `tasks.md` | Implementation | Auto-continue to Developer agent |
+| Task code changes | Validation | Invoke qa-validator |
+| All tasks validated | Code Review | Invoke `Skill(skill: "review")` |
+
+## Implementation Loop Rule
+
+After `tasks.md` is created, the develop/validate loop runs automatically:
+1. Pick the first unblocked incomplete task
+2. Implement it (following developer.md protocol)
+3. Validate it (following qa-engineer.md protocol)
+4. If validation fails, fix and re-validate (max 5 attempts)
+5. Move to the next task
+6. After all tasks pass validation, run `Skill(skill: "review")` on all changed files
+
+Do NOT wait for user input between tasks. The loop continues until all tasks are complete or a blocker requires human decision.
 
 ## Correct vs Incorrect Examples
 
@@ -164,11 +205,10 @@ INCORRECT: Start writing code using default Claude Code behavior.
 
 CORRECT: Use `Skill(skill: "validate")` to run QA checks.
 INCORRECT: Review the code yourself and declare it "looks good."
-<!-- PRISM-OS-ENFORCEMENT-END -->
 ```
 
 ## Outputs
 
 - **Status:** `PASS` (all checks pass or only warnings), `BLOCK` (not installed)
-- **Side effect:** CLAUDE.md may be created or modified with enforcement section
-- **Console:** Warnings and injection status (single line each, only if something changed)
+- **Side effect:** `PRISM.md` may be created or updated; `CLAUDE.md` may have pointer added or legacy block removed
+- **Console:** Warnings and creation/update status (single line each, only if something changed)

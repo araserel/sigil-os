@@ -316,6 +316,10 @@ Standards
 
 Now the fun part — building something!
 
+### What `/prism` Does Automatically
+
+The first time you run `/prism` (and every time after), Prism runs a quick preflight check. It verifies your installation is correct, sets up enforcement rules in your project's `CLAUDE.md`, and detects any stale context that needs correcting. You don't need to do anything — this happens in the background. If something needs attention, Prism tells you.
+
 ### Step 1: Describe What You Want
 
 In your Claude Code session, just describe the feature in plain English:

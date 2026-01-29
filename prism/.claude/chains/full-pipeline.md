@@ -111,6 +111,15 @@ The full pipeline is the standard workflow for features that need proper specifi
       Complete
 ```
 
+## Implementation Note
+
+The per-task loop (Developer -> qa-validator -> qa-fixer -> review) is
+orchestrated by the `/prism` command's Step 4b (Implementation Loop). This chain
+file documents the sequence and state transitions; the `/prism` command executes them.
+
+When `/prism continue` is invoked with `Current Phase: implement`, the prism command
+reads the task list and resumes the implementation loop at the current task.
+
 ## State Transitions
 
 ### complexity-assessor → spec-writer
@@ -183,7 +192,7 @@ The full pipeline is the standard workflow for features that need proper specifi
 **Condition:** Fix attempt complete
 **Data Passed:** `{ fixes_applied, iteration }`
 
-### qa-validator → code-reviewer
+### qa-validator → review
 **Trigger:** All tasks validated
 **Condition:** All tasks pass validation
 **Data Passed:** `{ spec_path, changed_files }`

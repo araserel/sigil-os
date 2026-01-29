@@ -20,7 +20,7 @@ $ARGUMENTS
 Before doing anything else, read `~/.claude/skills/workflow/preflight-check.md` and execute its full process:
 
 - **Part A:** Verify Global Installation (check directories, files, counts)
-- **Part B:** Check/Inject Enforcement Section into project `./CLAUDE.md`
+- **Part B:** Create/update `./PRISM.md` with enforcement rules and add pointer to `./CLAUDE.md`
 
 If Part A returns **BLOCK** status (critical directories missing), STOP immediately — do not proceed to Step 1.
 
@@ -74,8 +74,25 @@ Compare the highest completed phase (from artifacts) against the **Current Phase
 → Suggest next logical action based on state
 
 **"continue" or "next":**
-→ Find incomplete work from project-context.md
-→ Resume at the current phase in the workflow chain
+Read project-context.md to find current phase and feature, then route:
+
+| Current Phase | Action |
+|--------------|--------|
+| specify | Resume spec-writer |
+| clarify | Resume clarifier |
+| plan | Resume technical-planner |
+| tasks | Resume task-decomposer |
+| implement | Go to Step 4b — resume implementation loop |
+| validate | Resume qa-validator on current task |
+| review | Resume code review via Skill(skill: "review") |
+| none | Show status, suggest next action |
+
+**Resume behavior for implement phase:**
+When resuming implement phase:
+1. Re-read `tasks.md` from spec path
+2. Find first incomplete task (respecting dependency order)
+3. Resume the per-task cycle from that task
+4. Do NOT attempt to resume mid-task. Each resume starts fresh at the task level.
 
 **"status":**
 → Show detailed status of all workflows (delegate to /status)
@@ -121,12 +138,74 @@ After each phase completes successfully:
 | spec-writer | clarifier | Auto-continue (always check for ambiguities) |
 | clarifier | technical-planner | Auto-continue if no blocking questions |
 | technical-planner | task-decomposer | Auto-continue |
-| task-decomposer | implementation | **PAUSE** - show tasks, ask which to start |
+| task-decomposer | implementation | Auto-continue — show task summary, begin first task |
 
 **Pause conditions:**
 - Blocking questions require user decision
-- Task breakdown complete (user chooses which task)
+- QA validation fails after 5 attempts (escalate to user)
 - Any error or escalation
+
+### Step 4b: Implementation Loop
+
+Runs after task-decomposer completes OR when `/prism continue` resumes an implement phase.
+
+#### Entry: Show Tasks and Begin
+
+1. Read tasks file from spec path (`/specs/###-feature/tasks.md`)
+2. Display brief task summary (total count, phases, first unblocked task)
+3. Auto-continue to first unblocked task (do NOT wait for user to pick)
+4. Update project-context.md: Current Phase -> implement, add Current Task field
+
+#### Per-Task Cycle
+
+For each incomplete task (respecting dependency order):
+
+**A. Developer Phase**
+- Read `~/.claude/agents/developer.md` and adopt its behavior/protocol
+- Pass task details: task_id, description, files, acceptance_criteria
+- Developer executes: load learnings -> understand -> test first -> implement -> verify -> capture learnings
+- Emit progress: `Implementation Loop: [completed]/[total] tasks - Task T### implementing`
+
+**B. QA Validation Phase**
+- Invoke `Skill(skill: "validate")` with task context
+- Emit progress: `Implementation Loop: [completed]/[total] tasks - Task T### validating (attempt N/5)`
+- If passes -> mark task complete, continue to C
+- If fails -> fix loop:
+  - Apply fixes based on QA feedback
+  - Re-validate (max 5 attempts)
+  - If still failing after 5: PAUSE, present issues to user with options (fix manually / skip task / stop)
+
+**C. Task Completion**
+1. Mark task done in tasks.md
+2. Update project-context.md: Tasks Completed count, add to Recent Activity
+3. Emit: `Implementation Loop: [completed]/[total] tasks - Task T### complete`
+4. Auto-continue to next unblocked task
+
+**Invocation distinction:**
+- Agents (developer, qa-engineer) -> Read the agent .md file and adopt its behavior
+- Skills (validate, review) -> Invoke via `Skill(skill: "skill-name")`
+
+#### After All Tasks: Code Review
+
+1. Invoke `Skill(skill: "review")` with all changed files across all tasks + spec_path
+2. If blockers found -> present to user for decision
+3. If approved -> show completion summary, update context: Current Phase -> none
+
+#### Progress Indicator
+
+After each phase transition within a task, emit:
+```
+Implementation Loop: [completed]/[total] tasks - Task T### [status] (attempt N/5 if validating)
+```
+
+Examples:
+```
+Implementation Loop: 2/8 tasks - Task T003 implementing
+Implementation Loop: 2/8 tasks - Task T003 validating (attempt 1/5)
+Implementation Loop: 3/8 tasks - Task T004 implementing
+```
+
+---
 
 ### Step 5: Visual Status Format
 
@@ -219,6 +298,7 @@ Individual Commands (for direct access):
   /plan                     Create implementation plan
   /tasks                    Break plan into tasks
   /validate                 Run QA validation
+  /review                   Run code review
   /constitution             View/edit project principles
   /prime                    Load project context
   /status                   Show workflow status
@@ -306,6 +386,12 @@ After each action, update `/memory/project-context.md`:
 - **Spec Path:** [path to active spec or null]
 - **Started:** [timestamp]
 - **Last Updated:** [timestamp]
+
+## Implementation Progress
+- **Current Task:** [T### or null]
+- **Task Status:** [implementing | validating | complete]
+- **QA Iteration:** [0-5]
+- **Tasks Completed:** [N of M]
 
 ## Recent Activity
 - [timestamp] - [action taken]

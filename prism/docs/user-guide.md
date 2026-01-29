@@ -41,6 +41,38 @@ Prism is a tool that helps you create clear, complete feature specifications. Yo
 
 The result is documentation that engineers can implement without confusion or back-and-forth questions.
 
+### Design Principles
+
+Prism is built on 7 core principles that guide every decision:
+
+**1. Spec-First Development**
+Specifications are the source of truth. Before any code is written, there is a written spec describing what will be built, why it matters, and what success looks like. If the spec is wrong, the code will be wrong — so we invest in getting the spec right.
+
+**2. Guided Decision-Making**
+You should never face a technical choice without context. When a technical decision is needed (framework, architecture, security), the system presents options in plain language with trade-offs. You choose based on business needs; the system handles the technical details.
+
+**3. Scale-Adaptive Tracks**
+The right amount of process for the right size of work. A bug fix doesn't need a 30-page PRD. A new product doesn't ship with a 5-minute spec. Prism automatically selects the appropriate workflow depth:
+
+| Track | For | Workflow Depth |
+|-------|-----|----------------|
+| **Quick Flow** | Bug fixes, small tweaks | Lightweight spec → Tasks → Implement |
+| **Standard** | Features, enhancements | Full spec → Clarify → Plan → Tasks → Implement → Validate |
+| **Enterprise** | New systems, architectural changes | Extended spec → Research → Architecture → Plan → Tasks → Implement → Validate → Review |
+| **Discovery** | Greenfield projects, new tech decisions | Problem → Constraints → Options → Decision → Foundation Doc |
+
+**4. Constitutional Boundaries**
+Each project has a constitution — immutable principles that guide all decisions. "We use TypeScript." "All APIs require authentication." The AI agents respect these boundaries without being reminded.
+
+**5. Human-in-the-Loop**
+Automate the routine. Pause for the consequential. Not every action needs approval. Prism uses a three-tier model: Auto (safe, reversible actions), Review (scope or design changes), and Approve (production deployments, security changes).
+
+**6. Visible Progress**
+If you can't see it, you can't manage it. You can see exactly where work stands — which phase, which task, what's blocking — at any time.
+
+**7. Accessibility by Default**
+Build for everyone from the start, not as an afterthought. All generated code, interfaces, and documentation meet WCAG 2.1 AA standards as a minimum, validated during the QA phase.
+
 ### Key Concepts
 
 Before diving in, familiarize yourself with these terms:
@@ -52,6 +84,15 @@ Before diving in, familiarize yourself with these terms:
 | **Track** | The workflow path based on feature size: Quick (small), Standard (medium), Enterprise (large) |
 | **Phase** | A stage in the workflow: Assess, Specify, Clarify, Plan, Tasks, Implement, Validate, Review |
 | **Priority** | How important a requirement is: P1 (must have), P2 (should have), P3 (nice to have) |
+
+### What Happens Behind the Scenes
+
+When you run `/prism`, several things happen automatically to keep your project healthy:
+
+- **Preflight check** — Every `/prism` run verifies that Prism is installed correctly in your project. If any files are missing or out of date, it reports what needs attention.
+- **Enforcement rules** — Prism automatically adds operational rules to your project's `CLAUDE.md` file. These ensure agents follow the correct workflow, respect your constitution, and use the right skills. You don't need to manage this.
+- **Context staleness detection** — Prism checks whether `project-context.md` matches the actual state of your spec artifacts. If your project says you're in the "Specify" phase but a `plan.md` already exists, Prism auto-corrects the recorded phase to match reality.
+- **Pre-execution context hooks** — Before skills run, they automatically update `project-context.md` so your project state is always current.
 
 ### Your First Session
 
@@ -111,6 +152,27 @@ Not all requests traverse all phases. Quick Flow may skip directly from Assessme
 **Validate:** Automated checks verify quality before review.
 
 **Review:** Final approval before deployment.
+
+### Discovery Track — Starting a New Project
+
+If you're starting from scratch with no existing codebase or tech stack, Prism enters the **Discovery Track**. This is a guided conversation that helps you make foundational decisions before building anything.
+
+**When Discovery activates:**
+- You say "new project," "new idea," or "starting from scratch"
+- No existing tech stack context is found
+- You ask "what tech should I use?"
+
+**How it works:**
+
+| Phase | What Happens |
+|-------|-------------|
+| Problem Clarity | Define what you're solving and for whom |
+| Constraints Gathering | Discuss budget, timeline, team skills, compliance, and scale |
+| Tech Stack Options | Prism presents 2-3 viable options as a decision matrix |
+| Decision Capture | Your chosen stack is documented in a Project Foundation |
+| Transition | The Standard track begins with your foundation as context |
+
+The output is a `project-foundation.md` file that serves as context for all subsequent features. You don't need to know what framework or database to use — Prism recommends options based on what you're building.
 
 ### Writing Good Feature Descriptions
 
@@ -243,6 +305,34 @@ T001: [Task description] [Symbols]
 3. **Note dependencies** - Ensure dependent tasks are scheduled after their prerequisites
 4. **Check test requirements** - "Test First: Yes" means tests should be written before the code
 
+### Approval Tiers — When Prism Pauses vs Proceeds
+
+Prism uses a three-tier model to balance speed with control. Here's when it will pause and ask you versus when it proceeds automatically:
+
+| Tier | Behavior | Your Experience |
+|------|----------|-----------------|
+| **Auto** | Agent acts immediately and logs the action | You see the result in a status update |
+| **Review** | Agent acts, then flags for your review | You review when convenient; work continues |
+| **Approve** | Agent pauses and waits for your explicit approval | Work stops until you approve |
+
+**What falls into each tier:**
+
+| Action | Tier | Notes |
+|--------|------|-------|
+| Status queries | Auto | — |
+| Research tasks | Auto | — |
+| Spec drafts | Review | You review before proceeding |
+| Clarification questions | Auto | Questions are generated; you provide answers |
+| Plan creation | Review | Escalates to Approve if architectural |
+| Task breakdown | Auto (≤20 tasks) | Review if >20 tasks |
+| Code implementation | Auto | Review if scope changes detected |
+| QA validation | Auto | Review if escalated after failures |
+| Code review | Review | — |
+| Security review | Approve | — |
+| Production deployment | Approve | — |
+| Database migrations | Approve | — |
+| New dependencies | Review | Approve if security-sensitive |
+
 ---
 
 ## Part 4: Working with Your Team
@@ -340,6 +430,37 @@ When blockers appear, they require action:
 | Constitution conflict | Review with tech lead, update constitution if needed |
 | External dependency | Coordinate with the team that owns that dependency |
 | Resource unavailable | Escalate to project leadership |
+
+### Learning Loop
+
+Prism captures learnings automatically as you work. This builds institutional memory that helps avoid repeating mistakes and surfaces validated patterns over time.
+
+**The 4 learning categories:**
+
+| Category | What It Contains | When Loaded |
+|----------|------------------|-------------|
+| **Patterns** | Validated rules to follow (e.g., "always use server actions for forms") | Every task |
+| **Gotchas** | Project-specific traps to avoid (e.g., "API rate limit is 100/min") | Every task |
+| **Decisions** | Architectural choices and their rationale | On demand |
+| **Feature Notes** | Per-feature task details and context | Current feature only |
+
+**Lifecycle:**
+
+1. **Capture** — Learnings are recorded automatically after each task
+2. **Reference** — Relevant learnings are loaded before each task begins
+3. **Review** — Periodic pruning and promotion via `/learn --review`
+4. **Promote** — Validated patterns move to the permanent patterns file
+5. **Archive** — Completed feature notes move to the archive
+
+**Using `/learn --review`:**
+
+Run this periodically to clean up learnings. You'll be prompted to:
+- Promote candidates that have proven reliable into permanent patterns
+- Archive completed feature notes
+- Remove duplicates
+- Prune stale entries
+
+Learnings are stored in `/memory/learnings/` and are kept lightweight — typically using only ~3% of context.
 
 ---
 

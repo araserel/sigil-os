@@ -8,21 +8,29 @@
 
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
+| `/prism` | **Unified entry point** — status, start, resume | Starting any workflow |
 | `/spec` | Create a feature specification | Starting a new feature |
 | `/clarify` | Resolve ambiguities | Spec has open questions |
 | `/plan` | Generate implementation plan | Spec is approved |
 | `/tasks` | Break plan into tasks | Plan is approved |
+| `/validate` | Run QA validation checks | After implementation |
+| `/review` | Run structured code review | After QA validation passes |
 | `/status` | Show workflow progress | Anytime |
 | `/constitution` | View or edit project rules | First-time setup or updates |
+| `/learn` | View, search, or review learnings | Reviewing institutional memory |
+| `/prime` | Load project context for a session | Starting a new session |
 | `/handoff` | Generate engineer review package | Ready for technical review |
+| `/prism-update` | Check for and install Prism updates | Keeping Prism current |
 
 ---
 
 ## Command Flow
 
-Commands follow this typical sequence:
+`/prism` is the recommended entry point. It detects your project state and routes to the right phase automatically.
 
 ```
+/prism (entry point — detects state, suggests next action)
+        ↓
 /constitution (one-time setup)
         ↓
     /spec "description"
@@ -35,10 +43,67 @@ Commands follow this typical sequence:
         ↓
     [Implementation]
         ↓
+    /validate
+        ↓
+    /review
+        ↓
      /handoff
 ```
 
-You can use `/status` at any point to see where you are.
+You can use `/prism`, `/status`, or `/prism status` at any point to see where you are.
+
+---
+
+## /prism
+
+The unified entry point for all Prism workflows. This is the recommended way to interact with Prism.
+
+### Syntax
+
+```
+/prism
+/prism "feature description"
+/prism continue
+/prism status
+/prism help
+```
+
+### Variants
+
+| Usage | What It Does |
+|-------|-------------|
+| `/prism` | Show status dashboard and suggest next action |
+| `/prism "description"` | Start building a new feature from your description |
+| `/prism continue` | Resume where you left off |
+| `/prism status` | Show detailed workflow status |
+| `/prism help` | Show all available commands |
+
+### What It Does
+
+1. Runs a **preflight check** to verify Prism is installed correctly
+2. Loads your project context from `project-context.md`
+3. Detects your current workflow state
+4. Routes to the appropriate action:
+   - No active workflow → Suggests starting one
+   - Active workflow → Shows status and suggests next step
+   - With a description → Starts the spec-first workflow
+
+### Natural Language Alternatives
+
+You don't need to remember the exact syntax. These all work:
+
+| Instead of... | You can say... |
+|---------------|----------------|
+| `/prism "Add login"` | "I want to add user login" |
+| `/prism status` | "What's the progress?" |
+| `/prism continue` | "Keep going" or "Next step" |
+| `/prism help` | "What can you do?" |
+
+### When to Use
+
+- **Every time you start a session** — `/prism` orients you
+- **Starting a new feature** — `/prism "your description"`
+- **Returning after a break** — `/prism continue`
 
 ---
 
@@ -596,28 +661,209 @@ Prism provides a summary you can copy:
 
 ---
 
+## /validate
+
+Run automated quality assurance checks on implemented code.
+
+### Syntax
+
+```
+/validate
+```
+
+### What It Does
+
+1. Runs automated quality checks against the current implementation:
+   - Tests pass
+   - Lint/type checks pass
+   - Requirements from the spec are covered
+   - No regressions detected
+2. If issues are found, attempts automatic remediation (up to 5 attempts)
+3. Escalates to you if issues persist after remediation
+
+### When to Use
+
+- After implementation is complete
+- Before requesting a handoff or review
+- When you want to verify quality at any point
+
+### Expected Output
+
+```markdown
+## Validation Results
+
+### Checks
+- [x] Tests passing (12/12)
+- [x] No lint errors
+- [x] Requirements coverage: 100%
+- [ ] Performance threshold: 1 issue
+
+### Issues Found
+1. Page load time exceeds 2s target (measured: 2.3s)
+   - Attempting fix...
+   - Fixed: Optimized image loading
+
+### Result: PASS (after 1 fix cycle)
+```
+
+---
+
+## /learn
+
+View, search, or review project learnings.
+
+### Syntax
+
+```
+/learn
+/learn --review
+/learn --search "query"
+```
+
+### Variants
+
+| Usage | What It Does |
+|-------|-------------|
+| `/learn` | Show current learnings summary |
+| `/learn --review` | Start interactive review and cleanup session |
+| `/learn --search "query"` | Search learnings for specific topics |
+
+### What It Does
+
+1. **Default:** Shows a summary of active learnings across all categories (patterns, gotchas, decisions, feature notes)
+2. **Review mode:** Walks you through learnings to promote, archive, or prune
+3. **Search:** Finds learnings matching your query
+
+### When to Use
+
+- After completing a feature — review what was learned
+- Starting a new feature — check relevant patterns
+- Periodically — clean up with `--review`
+
+### Expected Output
+
+```markdown
+## Active Learnings
+
+### Patterns (12 active)
+- Always validate form inputs server-side
+- Use server actions for mutations in Next.js
+- ...
+
+### Gotchas (5 active)
+- API rate limit is 100 requests/minute
+- ...
+
+### Recent Decisions (3)
+- Chose PostgreSQL over MongoDB for relational data
+- ...
+```
+
+---
+
+## /prime
+
+Load project context to prepare for a development session.
+
+### Syntax
+
+```
+/prime
+/prime [focus area]
+```
+
+### What It Does
+
+1. Reads your project constitution, current context, and active learnings
+2. Loads relevant patterns and gotchas into the session
+3. Optionally focuses on a specific area (e.g., a feature or module)
+4. Reports the current state so you can pick up where you left off
+
+### When to Use
+
+- At the start of every new Claude Code session
+- When switching between features or areas of work
+- When context seems stale or incomplete
+
+### Example
+
+```
+/prime authentication
+```
+
+Loads all context relevant to authentication work: constitution rules, auth-related learnings, and any active auth specs.
+
+---
+
+## /prism-update
+
+Check for and install Prism OS updates.
+
+### Syntax
+
+```
+/prism-update
+```
+
+### What It Does
+
+1. Checks the current installed version against the latest available
+2. Reports what's new in the latest version
+3. Guides you through the update process if an update is available
+
+### When to Use
+
+- Periodically to stay current
+- When you encounter unexpected behavior
+- When new features are announced
+
+### Expected Output
+
+```markdown
+## Prism OS Update Check
+
+Current version: 1.1.0
+Latest version: 1.2.0
+
+### What's New in 1.2.0
+- Added Discovery track for greenfield projects
+- Improved QA validation loop
+- Bug fixes for context staleness detection
+
+Run the update? (Y/n)
+```
+
+---
+
 ## Quick Reference Card
 
 | Command | Purpose | Example |
 |---------|---------|---------|
+| `/prism` | Entry point — status + routing | `/prism "Add user login"` |
 | `/spec` | Start new feature | `/spec Add user login` |
 | `/clarify` | Answer questions | `/clarify` |
 | `/plan` | Create tech plan | `/plan` |
 | `/tasks` | Break into tasks | `/tasks` |
+| `/validate` | Run QA checks | `/validate` |
 | `/status` | Check progress | `/status` |
 | `/constitution` | Set project rules | `/constitution` |
+| `/learn` | View/review learnings | `/learn --review` |
+| `/prime` | Load session context | `/prime authentication` |
 | `/handoff` | Engineer review | `/handoff` |
+| `/prism-update` | Check for updates | `/prism-update` |
 
 ### Typical Workflow
 
 ```
-1. /constitution  (one-time setup)
-2. /spec "feature description"
-3. /clarify (if questions arise)
-4. /plan
-5. /tasks
-6. /status (check progress)
-7. /handoff (before deployment)
+1. /prism (start here — detects state automatically)
+2. /constitution  (one-time setup)
+3. /spec "feature description"
+4. /clarify (if questions arise)
+5. /plan
+6. /tasks
+7. /status (check progress)
+8. /validate (verify quality)
+9. /handoff (before deployment)
 ```
 
 ---
