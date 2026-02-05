@@ -1,36 +1,14 @@
 {
-  "name": "prism-os-marketplace",
+  "name": "prism-os",
   "owner": {
-    "name": "araserel",
-    "email": "adam@araserel.com"
-  },
-  "metadata": {
-    "description": "Official Prism OS plugin marketplace - specification-driven development for Claude Code",
-    "version": "1.0.0",
-    "pluginRoot": "./prism-plugin"
+    "name": "Adam Riedthaler"
   },
   "plugins": [
     {
-      "name": "prism-os",
-      "source": ".",
-      "description": "Specification-driven development system for Claude Code. Transform natural language descriptions into implemented, tested features through structured workflows.",
-      "version": "2.0.0",
-      "author": {
-        "name": "araserel"
-      },
-      "homepage": "https://github.com/araserel/prism-os",
-      "repository": "https://github.com/araserel/prism-os",
-      "license": "ELv2",
-      "keywords": [
-        "workflow",
-        "specification",
-        "development",
-        "qa",
-        "review",
-        "agents",
-        "hooks"
-      ],
-      "category": "development"
+      "name": "prism",
+      "source": "./prism-plugin",
+      "description": "Spec-driven development framework for Claude Code",
+      "version": "2.0.0"
     }
   ]
 }
