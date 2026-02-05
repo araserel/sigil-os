@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.0.0] - 2025-02-05
+## [2.0.0] - 2026-02-05
 
 ### Changed
 - **BREAKING:** Migrated from configuration-layer framework to Claude Code plugin architecture
