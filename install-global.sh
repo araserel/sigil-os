@@ -11,6 +11,39 @@
 
 set -e
 
+# ============================================================================
+# DEPRECATION NOTICE
+# ============================================================================
+# This installation method is DEPRECATED as of Prism OS v2.0.
+#
+# Prism OS is now distributed as a Claude Code plugin. The recommended
+# installation method is:
+#
+#   claude plugin install prism-os
+#
+# This script remains available for users who cannot use the plugin system.
+# For migration instructions, see: docs/migration-from-global.md
+# ============================================================================
+
+show_deprecation_warning() {
+    echo ""
+    echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${YELLOW}⚠️  DEPRECATION WARNING${NC}"
+    echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+    echo "This installation method is deprecated. Prism OS v2.0+ uses the Claude Code"
+    echo "plugin system for installation and updates."
+    echo ""
+    echo "Recommended installation:"
+    echo "  ${GREEN}claude plugin install prism-os${NC}"
+    echo ""
+    echo "For migration instructions, see:"
+    echo "  ${BLUE}https://github.com/araserel/prism-os/blob/main/prism-plugin/docs/migration-from-global.md${NC}"
+    echo ""
+    echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+}
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -652,6 +685,7 @@ case "$ACTION" in
         convert_to_git
         ;;
     install)
+        show_deprecation_warning
         install_global
         ;;
 esac
