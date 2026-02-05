@@ -1,0 +1,14 @@
+{
+  "name": "prism-os",
+  "owner": {
+    "name": "Adam Riedthaler"
+  },
+  "plugins": [
+    {
+      "name": "prism",
+      "source": "./prism-plugin",
+      "description": "Spec-driven development framework for Claude Code",
+      "version": "2.0.0"
+    }
+  ]
+}

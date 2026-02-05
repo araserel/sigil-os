@@ -1,6 +1,6 @@
 # Prism OS Installation Instructions
 
-> **For Claude Desktop / Claude Code users who want to install Prism OS.**
+> **For Claude Code users who want to install Prism OS.**
 >
 > Give this file to Claude and ask: "Please help me install Prism OS following these instructions."
 
@@ -12,77 +12,63 @@ Prism OS helps you build software through structured specifications. You describ
 
 ## What Gets Installed
 
-| Location | What | Purpose |
-|----------|------|---------|
-| `~/.prism-os/` | Source code | For updates |
-| `~/.claude/` | Commands, agents, skills | Global functionality |
-| Per-project | `memory/`, `specs/` | Project-specific data |
+| Component | How | Purpose |
+|-----------|-----|---------|
+| Prism plugin | Claude Code plugin system | Commands, agents, skills |
+| Per-project files | Auto-created by `/prism` | `memory/`, `specs/`, `PRISM.md` |
 
 ---
 
 ## Prerequisites
 
-### Git (Required)
+### Claude Code (Required)
 
-Prism OS uses Git for version control and updates.
+Prism OS runs as a plugin for Claude Code.
 
-**Check if Git is installed:**
+**Check if Claude Code is installed:**
 ```bash
-git --version
+claude --version
 ```
 
 **If not installed:**
 
-- **macOS:** Open Terminal and run:
-  ```bash
-  xcode-select --install
-  ```
-  Click "Install" when prompted.
+Visit [claude.ai/code](https://claude.ai/code) for installation instructions, or run:
+```bash
+npm install -g @anthropic-ai/claude-code
+```
 
-- **Linux (Ubuntu/Debian):**
-  ```bash
-  sudo apt update && sudo apt install git
-  ```
-
-- **Linux (Fedora/RHEL):**
-  ```bash
-  sudo dnf install git
-  ```
-
-- **Windows (WSL):** First ensure you have WSL installed, then in WSL terminal:
-  ```bash
-  sudo apt update && sudo apt install git
-  ```
+Then authenticate:
+```bash
+claude auth login
+```
 
 ---
 
 ## Installation Steps
 
-### Step 1: Clone the Repository
-
-Run this command to download Prism OS:
+### Step 1: Add the Prism OS Marketplace
 
 ```bash
-git clone https://github.com/araserel/prism-os.git ~/.prism-os
+claude plugin marketplace add araserel/prism-os
 ```
 
-**What this does:** Downloads Prism OS to a hidden folder called `.prism-os` in your home directory.
+**What this does:** Registers the Prism OS plugin marketplace with Claude Code.
 
-### Step 2: Run the Global Installer
+### Step 2: Install the Plugin
 
 ```bash
-~/.prism-os/install-global.sh
+claude plugin install prism@prism-os
 ```
 
-**What this does:** Installs Prism commands, agents, and skills to `~/.claude/` where they're available in all your projects.
+**What this does:** Installs Prism commands, agents, and skills as a Claude Code plugin.
 
 ### Step 3: Verify Installation
 
 ```bash
-~/.prism-os/install-global.sh --verify
+claude plugin list
 ```
 
-You should see green checkmarks for all components.
+You should see `prism` in the list of installed plugins.
 
 ---
 
@@ -91,7 +77,7 @@ You should see green checkmarks for all components.
 ### Starting a New Project
 
 1. Create or navigate to your project folder
-2. Start Claude Code or Claude Desktop
+2. Start Claude Code: `claude`
 3. Type `/prism` to begin
 
 Prism will guide you through:
@@ -101,29 +87,28 @@ Prism will guide you through:
 
 ### Per-Project Files
 
-Each project using Prism needs its own:
+Each project using Prism will have:
+- `PRISM.md` - Enforcement rules (auto-created)
 - `memory/constitution.md` - Project principles
 - `specs/` - Feature specifications
 
-Prism will help you create these when you run `/prism` for the first time in a project.
+Prism creates these when you run `/prism` for the first time in a project.
 
 ---
 
 ## Updating Prism OS
 
-### Option 1: Using the Update Command
+### Using the Update Command
 
-From any project with Claude:
+From any project with Claude Code:
 ```
 /prism-update
 ```
 
-### Option 2: Manual Update
+### Using the CLI
 
 ```bash
-cd ~/.prism-os
-git pull
-./install-global.sh
+claude plugin update prism@prism-os
 ```
 
 ---
@@ -133,66 +118,54 @@ git pull
 To remove Prism OS:
 
 ```bash
-~/.prism-os/install-global.sh --uninstall
+claude plugin uninstall prism@prism-os
 ```
 
-To also remove the source code:
+To also remove the marketplace:
 ```bash
-rm -rf ~/.prism-os
+claude plugin marketplace remove prism-os
 ```
 
 ---
 
 ## Troubleshooting
 
-### "git: command not found"
+### "Plugin not found"
 
-Git is not installed. Follow the Git installation steps above for your operating system.
-
-### "Permission denied"
-
-The installer script needs to be executable:
+The marketplace may not be added:
 ```bash
-chmod +x ~/.prism-os/install-global.sh
+claude plugin marketplace add araserel/prism-os
 ```
 
-### "~/.claude/ not found" or commands not working
+### "claude: command not found"
 
-Try running the installer again:
+Claude Code is not installed. Visit [claude.ai/code](https://claude.ai/code) for installation.
+
+### `/prism` command not recognized
+
+The plugin may not be properly installed:
 ```bash
-~/.prism-os/install-global.sh
+claude plugin install prism@prism-os
 ```
 
-### WSL-Specific Issues
+Then start a new Claude Code session.
 
-If using Windows Subsystem for Linux:
+### PRISM.md not created
 
-1. Make sure you're running commands **inside WSL**, not in PowerShell/CMD
-2. Your home directory in WSL is `/home/yourusername`, not your Windows home
-3. If Claude Desktop doesn't see the files, you may need to configure it to use WSL
-
-### "fatal: destination path already exists"
-
-The repository was already cloned. Either:
-- Continue with step 2 (run the installer)
-- Or remove and re-clone:
-  ```bash
-  rm -rf ~/.prism-os
-  git clone https://github.com/araserel/prism-os.git ~/.prism-os
-  ```
+Run `/prism` in your project to trigger the preflight check and create `PRISM.md`.
 
 ---
 
 ## Getting Help
 
-- **In Claude:** Ask "How do I use Prism OS?" or type `/prism help`
+- **In Claude:** Type `/prism help`
 - **GitHub Issues:** https://github.com/araserel/prism-os/issues
-- **Documentation:** See `~/.prism-os/prism/docs/` after installation
+- **Documentation:** See `prism-plugin/docs/` in the repository
 
 ---
 
 ## Important Notes
 
-- **Keep `~/.prism-os/`** - This folder is needed for updates
-- **Don't delete `~/.claude/`** - This contains all your Claude configurations
-- **Each project is independent** - Project-specific files stay in each project folder
+- **Project files are independent** - Each project has its own `memory/` and `specs/`
+- **Plugin updates are safe** - Your project-specific files are never modified by updates
+- **Enforcement rules are auto-created** - `PRISM.md` is generated in each project as needed

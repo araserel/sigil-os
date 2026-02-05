@@ -3,8 +3,6 @@
 /PROJECT_PLAN.md
 /STATUS.md
 /.prism-spec-progress.md
-/project-specs/
-/prompts/
 /specs/
 /tools/
 /tests/
@@ -12,8 +10,10 @@
 /_analysis/
 /analysis/
 /feedback/
-/future-considerations.md
 /Public Spec Driven Repos/
+
+# Archived development artifacts
+/archive/
 
 # Local config
 /.claude/
