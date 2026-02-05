@@ -1,8 +1,10 @@
 {
-  "name": "prism-os",
+  "name": "prism",
   "version": "2.0.0",
-  "description": "Specification-driven development system for Claude Code. Transform natural language descriptions into implemented, tested features through structured workflows.",
-  "author": "araserel",
+  "description": "Specification-driven development system for Claude Code",
+  "author": {
+    "name": "Adam Riedthaler"
+  },
   "repository": "https://github.com/araserel/prism-os",
   "license": "ELv2",
   "keywords": [
@@ -10,12 +12,6 @@
     "specification",
     "development",
     "qa",
-    "review",
-    "agents"
-  ],
-  "commands": "commands/",
-  "agents": "agents/",
-  "skills": "skills/",
-  "chains": "chains/",
-  "hooks": "hooks/hooks.json"
+    "review"
+  ]
 }
