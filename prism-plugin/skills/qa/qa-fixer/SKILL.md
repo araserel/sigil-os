@@ -275,13 +275,7 @@ Escalating to human review.
 
 ## Escalation Triggers
 
-Escalate to human when:
-- Iteration count reaches max (5)
-- Security-related issue detected
-- Fix would change behavior (not just style)
-- Test changes required
-- Multiple interrelated issues
-- Fix causes new issues
+See [`qa-escalation-policy/SKILL.md`](../qa-escalation-policy/SKILL.md) for the canonical escalation policy shared across all QA skills and the QA Engineer agent.
 
 ## Safety Guardrails
 

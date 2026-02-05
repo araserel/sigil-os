@@ -46,79 +46,45 @@ Follow the prompts to connect your Anthropic account. You'll need a Claude Pro, 
 
 ### For Prism OS
 
-#### Python 3
-
-Required for the workflow linter tool.
-
-**Check if installed:**
-```bash
-python3 --version
-```
-
-If not installed:
-- **macOS:** `brew install python3` or download from [python.org](https://www.python.org/downloads/)
-- **Linux:** `sudo apt install python3` (Ubuntu/Debian) or equivalent
-- **Windows:** Download from [python.org](https://www.python.org/downloads/)
-
-#### Git (Optional)
-
-Only needed if cloning from a repository.
-
-```bash
-git --version
-```
+No additional dependencies required. Prism OS is distributed as a Claude Code plugin and includes all necessary components.
 
 ---
 
 ## Installation
 
-### Option A: Clone from Repository
+Prism OS is distributed as a Claude Code plugin.
 
-If Prism is in a Git repository:
+### Step 1: Add the Marketplace
 
 ```bash
-# Clone the repository
-git clone <repository-url> my-project
-cd my-project
-
-# Verify structure
-ls -la
-# Should see: CLAUDE.md, .claude/, docs/, templates/, etc.
+# Add the Prism OS marketplace
+claude plugin marketplace add araserel/prism-os
 ```
 
-### Option B: Copy to Existing Project
-
-If adding Prism to an existing project:
-
-1. Copy these directories/files to your project root:
-   ```
-   CLAUDE.md
-   .claude/
-   templates/
-   memory/
-   docs/
-   tools/
-   ```
-
-2. Create empty directories for your work:
-   ```bash
-   mkdir -p specs
-   ```
-
-### Option C: Start Fresh
-
-If starting a new project:
+### Step 2: Install the Plugin
 
 ```bash
-# Create project directory
-mkdir my-project
-cd my-project
+# Install the prism plugin
+claude plugin install prism@prism-os
+```
 
-# Copy Prism OS files (adjust source path as needed)
-cp -r /path/to/prism-os/{CLAUDE.md,.claude,templates,memory,docs,tools} .
+### Step 3: Verify Installation
 
-# Create working directories
-mkdir -p specs
+```bash
+# List installed plugins
+claude plugin list
+```
+
+You should see `prism` in the list.
+
+### Alternative: Local Development Installation
+
+If you're developing or testing Prism locally:
+
+```bash
+# From the prism-os repository root
+claude plugin marketplace add ./
+claude plugin install prism@prism-os
 ```
 
 ---
@@ -155,37 +121,19 @@ cat memory/project-context.md
 
 The context will be populated automatically as you work. No manual setup needed.
 
-### Step 3: Verify Installation
+### Step 3: Verify Plugin Integration
 
-Run the workflow linter to check everything is connected properly:
-
-```bash
-python3 tools/workflow-linter.py --verbose
-```
-
-**Expected output:**
-```
-Linting Prism OS project at: /path/to/your/project
-------------------------------------------------------------
-✓ All checks passed!
-  Files checked: XX
-```
-
-If you see errors, check the [Troubleshooting](#troubleshooting) section below.
-
-### Step 4: Test Claude Code Integration
-
-Start Claude Code and verify it recognizes Prism:
+Start Claude Code and verify Prism is working:
 
 ```bash
 # Start Claude Code in your project directory
 claude
 
-# Ask it about the system
-> What commands are available in this project?
+# Check Prism status
+> /prism status
 ```
 
-Claude should respond with the Prism commands defined in CLAUDE.md.
+You should see the Prism status dashboard showing the installed version and available commands.
 
 ---
 
@@ -194,26 +142,23 @@ Claude should respond with the Prism commands defined in CLAUDE.md.
 Run through this checklist to confirm setup is complete:
 
 - [ ] Claude Code installed and authenticated (`claude --version`)
-- [ ] Python 3 available (`python3 --version`)
-- [ ] CLAUDE.md exists in project root
-- [ ] `.claude/` directory contains `agents/` and `skills/`
-- [ ] `templates/` directory exists with template files
-- [ ] `memory/constitution.md` exists and is customized
-- [ ] Workflow linter passes (`python3 tools/workflow-linter.py`)
-- [ ] Claude Code recognizes the project (`claude` then ask about commands)
+- [ ] Prism plugin installed (`claude plugin list` shows `prism`)
+- [ ] `/prism status` shows the Prism dashboard
+- [ ] `memory/constitution.md` exists and is customized (after first `/prism` run)
+- [ ] `PRISM.md` exists in project root (auto-created by plugin)
 
 ---
 
 ## Troubleshooting
 
-### "CLAUDE.md not found"
+### "Plugin not found" error
 
-The linter or Claude Code can't find the main configuration file.
+The plugin isn't installed or the marketplace isn't added.
 
-**Fix:** Make sure you're in the project root directory:
+**Fix:** Add the marketplace and reinstall:
 ```bash
-pwd
-ls CLAUDE.md
+claude plugin marketplace add araserel/prism-os
+claude plugin install prism@prism-os
 ```
 
 ### "claude: command not found"
@@ -227,45 +172,32 @@ curl -fsSL https://claude.ai/install.sh | sh
 
 Or add to PATH manually if installed in a non-standard location.
 
-### "python3: command not found"
+### `/prism` command not recognized
 
-Python 3 isn't installed.
-
-**Fix:** Install Python 3 for your platform (see Prerequisites above).
-
-### Linter shows many errors
-
-Common causes:
-- Missing directories (`.claude/agents/`, `.claude/skills/`, etc.)
-- Files not copied completely
-
-**Fix:** Verify all required directories exist:
-```bash
-ls -la .claude/
-ls -la .claude/agents/
-ls -la .claude/skills/
-ls -la templates/
-ls -la memory/
-```
-
-### Claude Code doesn't recognize commands
-
-CLAUDE.md might not be properly formatted or Claude Code isn't reading it.
+The plugin may not be properly installed.
 
 **Fix:**
-1. Verify CLAUDE.md exists and has content
-2. Restart Claude Code: exit and run `claude` again
-3. Check that you're in the correct directory
+1. Check plugin is installed: `claude plugin list`
+2. Reinstall if needed: `claude plugin install prism@prism-os`
+3. Restart Claude Code session
 
-### Permission errors
+### PRISM.md not created automatically
 
-Can't execute the linter or access files.
+The SessionStart hook may not have run.
 
 **Fix:**
-```bash
-chmod +x tools/workflow-linter.py
-chmod -R u+rw .
-```
+1. Start a new Claude Code session
+2. Run `/prism` to trigger preflight check
+3. Verify `PRISM.md` was created in project root
+
+### Claude Code doesn't follow enforcement rules
+
+PRISM.md may be missing or outdated.
+
+**Fix:**
+1. Delete `PRISM.md` and restart session
+2. Run `/prism` to regenerate with current enforcement rules
+3. Verify CLAUDE.md has the pointer line: `<!-- Project: Check for ./PRISM.md and follow all rules if present -->`
 
 ---
 
@@ -293,21 +225,40 @@ If you're stuck:
 
 To update to a newer version:
 
-1. **Backup your work:**
-   ```bash
-   cp -r specs/ specs-backup/
-   cp memory/constitution.md constitution-backup.md
-   ```
+```bash
+# Update the plugin
+claude plugin update prism@prism-os
+```
 
-2. **Update system files** (keep your specs and constitution):
-   ```bash
-   # Update from source (adjust path)
-   cp -r /path/to/new-prism-os/{CLAUDE.md,.claude,templates,docs,tools} .
-   ```
+Or use the Prism command:
 
-3. **Run the linter** to check for any breaking changes:
-   ```bash
-   python3 tools/workflow-linter.py --verbose
-   ```
+```
+/prism-update
+```
 
-4. **Review the changelog** for any migration steps needed.
+Your project-specific files (`memory/`, `specs/`) are not affected by updates. Only the plugin components are updated.
+
+**After updating:**
+1. Start a new Claude Code session
+2. Run `/prism` to verify the update and refresh enforcement rules
+3. Check the changelog for any migration steps
+
+---
+
+## Team Installation (Coming Soon)
+
+Team-wide Prism installation will use Claude Code's plugin scoping:
+
+```json
+// .claude/settings.json (project root, committed)
+{
+  "plugins": {
+    "prism-os": {
+      "enabled": true,
+      "version": "2.0.0"
+    }
+  }
+}
+```
+
+This feature requires Prism's team sync capabilities (Stage 2 roadmap).

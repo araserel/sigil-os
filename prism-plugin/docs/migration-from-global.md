@@ -141,19 +141,6 @@ Should show `prism-os` in the installed plugins.
 
 Check that hooks are enabled in your Claude Code settings and that the hook scripts are executable.
 
-## Rolling Back
-
-If you need to revert to the global installation:
-
-```bash
-# Uninstall plugin
-claude plugin uninstall prism-os
-
-# Reinstall global (deprecated, but available)
-git clone https://github.com/araserel/prism-os.git ~/.prism-os
-~/.prism-os/install-global.sh
-```
-
 ## Getting Help
 
 - **Documentation:** `/prism help`

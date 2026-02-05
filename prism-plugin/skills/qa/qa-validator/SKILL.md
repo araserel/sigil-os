@@ -283,12 +283,7 @@ C) Investigate performance issue
 
 ## Escalation Triggers
 
-Escalate to human when:
-- Any check fails after 5 qa-fixer attempts
-- Security-related failure detected
-- Test coverage drops below threshold
-- Constitution violation that can't be auto-fixed
-- Test environment issues blocking validation
+See [`qa-escalation-policy/SKILL.md`](../qa-escalation-policy/SKILL.md) for the canonical escalation policy shared across all QA skills and the QA Engineer agent.
 
 ## Loop Behavior
 

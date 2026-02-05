@@ -70,7 +70,7 @@ Quick Flow is a streamlined workflow for simple, well-understood changes. It ski
 
 ### quick-spec (Inline Behavior)
 
-Quick spec is not a separate skill file—it's a mode of spec-writer:
+quick-spec is a constraint wrapper skill that invokes spec-writer in lightweight mode. See `skills/specification/quick-spec/SKILL.md` for the constraints applied.
 
 ```markdown
 # Quick Spec: [Change Description]

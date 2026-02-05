@@ -95,20 +95,9 @@ Confirm completion:
 
 ### Step 6: Capture Learnings
 
-Before marking task complete, invoke the `learning-capture` skill:
+Before marking task complete, invoke the `learning-capture` skill. Follows the workflow defined in `skills/learning/learning-capture/SKILL.md`.
 
-1. **Invoke `learning-capture`** — Records what was learned
-   - Task notes go to feature file
-   - Gotchas go to gotchas.md
-   - Decisions go to decisions.md
-   - Mark reusable rules with `[PATTERN?]`
-
-2. **Skip capture if:**
-   - Task is trivial (docs-only, config, formatting)
-   - Task has `[no-learn]` tag
-   - Same learning already captured
-
-This step is silent — don't mention it to the user unless there's an error.
+Skip capture if the task is trivial (docs-only, config, formatting), has a `[no-learn]` tag, or the same learning was already captured. This step is silent — don't mention it to the user unless there's an error.
 
 ### Step 7: Complete
 

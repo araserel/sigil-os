@@ -179,7 +179,7 @@ Before saving, verify:
 
 ### Step 5: Register Skill
 
-1. Save to `prism/.claude/skills/ui/[framework]-ui.md`
+1. Save to `skills/ui/[framework]-ui/SKILL.md`
 2. Update skills README with new skill
 3. Notify user of new capability
 
@@ -189,7 +189,7 @@ Before saving, verify:
 ## New UI Skill Created
 
 **Skill:** [framework]-ui
-**Location:** `prism/.claude/skills/ui/[framework]-ui.md`
+**Location:** `skills/ui/[framework]-ui/SKILL.md`
 
 ### Capabilities
 - Component generation for [Framework]

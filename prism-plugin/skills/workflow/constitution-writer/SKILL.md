@@ -4,7 +4,7 @@ description: Creates project constitution through guided conversation accessible
 version: 2.0.0
 category: workflow
 chainable: true
-invokes: [codebase-assessment]
+invokes: []
 invoked_by: [foundation-writer, orchestrator, codebase-assessment]
 tools: Read, Write, Edit, Glob
 ---

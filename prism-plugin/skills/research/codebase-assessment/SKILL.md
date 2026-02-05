@@ -4,7 +4,7 @@ description: Analyzes codebase state to determine appropriate Discovery track. I
 version: 1.1.0
 category: research
 chainable: true
-invokes: [constitution-writer]
+invokes: [constitution-writer (conditional)]
 invoked_by: [orchestrator]
 tools: Read, Glob, Grep, Bash
 ---
@@ -465,7 +465,7 @@ Just describe what you'd like to build."
 ## Integration Points
 
 - **Invoked by:** `orchestrator` at project start
-- **Invokes:** `constitution-writer` (when scaffolded/mature without constitution)
+- **Invokes:** `constitution-writer` — ONLY when classification is SCAFFOLDED or MATURE and no existing constitution is detected. This is a conditional invocation, not a guaranteed step.
 - **Hands off to:**
   - `problem-framing` — greenfield projects
   - `constitution-writer` — scaffolded/mature without constitution (assessment-constitution track)

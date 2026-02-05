@@ -143,95 +143,65 @@ You don't need to know what framework or database to use — Prism recommends op
 
 ## Installation
 
-Installing Prism adds the AI-powered workflow system to your project.
+Prism OS is a Claude Code plugin. Installation takes about 30 seconds.
 
-### Step 1: Get Prism
+### Step 1: Add the Marketplace
 
-Clone the Prism repository to a permanent location on your computer:
-
-```bash
-cd ~
-git clone <REPOSITORY_URL>
-```
-
-> **What this does:** Downloads Prism to your home folder (`~/prism-os`). You only do this once, and it works for all your projects.
->
-> Replace `<REPOSITORY_URL>` with the URL you received. If you're in a private beta, use the URL provided by your organization.
-
-### Step 2: Navigate to Your Project
-
-Open a terminal and go to your project folder:
+In your terminal, run:
 
 ```bash
-cd ~/Projects/my-app
+claude plugin marketplace add araserel/prism-os
 ```
 
-Replace `~/Projects/my-app` with your actual project path.
+Or from within Claude Code:
+```
+/plugin marketplace add araserel/prism-os
+```
 
-> **Finding Your Project Path:**
-> - **Mac:** Right-click your project folder in Finder → "Get Info" → copy the path after "Where:"
-> - **Windows:** Right-click folder → "Copy as path"
-> - **VS Code:** Right-click folder in sidebar → "Copy Path"
-
-### Step 3: Run the Installer
+### Step 2: Install the Plugin
 
 ```bash
-~/prism-os/install.sh --local ~/prism-os
+claude plugin install prism@prism-os
 ```
 
-> **Note:** If you cloned Prism somewhere other than `~/prism-os`, replace both paths above with your actual location.
-
-You'll see output like this:
+Or from within Claude Code:
 ```
-Prism OS Installer v1.0.0
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Checking prerequisites...
-✓ Git repository detected
-✓ Claude Code CLI found (1.0.0)
-
-Creating directory structure...
-✓ Created .claude/ directory structure
-✓ Created templates/ directory
-✓ Created memory/ directory
-✓ Created specs/ directory
-✓ Created docs/ directory
-
-Installing Prism OS files...
-✓ Installed CLAUDE.md
-✓ Installed templates/
-✓ Installed .claude/ (commands, agents, skills)
-✓ Created .prism-os-version
-✓ Created memory/constitution.md (template)
-✓ Created memory/project-context.md
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Prism OS installed successfully!
+/plugin install prism@prism-os
 ```
 
-### Step 4: Verify Installation
+### Step 3: Verify Installation
 
-```bash
-/path/to/prism-os/install.sh --verify
+Start Claude Code and run:
+
+```
+/prism status
 ```
 
-You should see checkmarks next to all required files.
+You should see the Prism OS status dashboard:
 
-### What Did Installation Create?
+```
+📋 Project: [Unnamed Project]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The installer added these folders to your project:
+⬚ Foundation    - Not configured
+⬚ Constitution  - Not set up
+
+Next: Set up your project constitution
+
+Run /prism to get started!
+```
+
+> **That's it!** Prism is now available in all your projects.
+
+### What Does Prism Add to Your Project?
+
+When you run `/prism` for the first time, it creates project-specific files:
 
 ```mermaid
 graph TD
-    A[your-project/] --> B[.claude/]
-    A --> C[templates/]
-    A --> D[memory/]
+    A[your-project/] --> D[memory/]
     A --> E[specs/]
-    A --> F[CLAUDE.md]
-
-    B --> B1[commands/ - Slash commands]
-    B --> B2[agents/ - AI agent definitions]
-    B --> B3[skills/ - Reusable workflows]
+    A --> F[PRISM.md]
 
     D --> D1[constitution.md - Project rules]
     D --> D2[project-context.md - Current state]
@@ -240,18 +210,17 @@ graph TD
     E --> E1[Your features go here]
 
     style A fill:#f0f9ff,stroke:#0ea5e9
-    style B fill:#fef3c7,stroke:#f59e0b
     style D fill:#d1fae5,stroke:#10b981
     style E fill:#e0e7ff,stroke:#6366f1
 ```
 
 | Folder | What It Contains |
 |--------|------------------|
-| `.claude/` | The AI's instructions for each command |
-| `templates/` | Document templates for specs, plans, etc. |
 | `memory/` | Project rules, state, and learnings |
 | `specs/` | Feature specifications you create |
-| `CLAUDE.md` | The main configuration file |
+| `PRISM.md` | Enforcement rules (auto-generated) |
+
+> **Note:** The plugin itself (commands, agents, skills) is managed by Claude Code. Only your project-specific files live in your repository.
 
 ---
 

@@ -1,140 +1,135 @@
-# Prism OS Repository
+# Prism OS
 
-**Specification-driven development for non-technical users.**
+**Specification-driven development for Claude Code.**
 
----
-
-## For Users
-
-**Want to use Prism OS?** Choose your installation method:
-
-### Option A: Global Install (Recommended)
-
-Install once, use in all projects. Includes automatic updates.
-
-**Using Claude Desktop (Non-Technical):**
-1. Download [`prism-install-instructions.md`](prism-install-instructions.md)
-2. Give it to Claude: "Please help me install Prism OS following these instructions"
-3. Claude will guide you through the process
-
-**Using Terminal (Technical):**
-```bash
-# Clone the repository
-git clone https://github.com/araserel/prism-os.git ~/.prism-os
-
-# Install globally
-~/.prism-os/install-global.sh
-
-# Verify installation
-~/.prism-os/install-global.sh --verify
-```
-
-**What Gets Installed:**
-| Location | Contents |
-|----------|----------|
-| `~/.prism-os/` | Source code (for updates) |
-| `~/.claude/commands/` | Slash commands (`/prism`, `/spec`, etc.) |
-| `~/.claude/agents/` | Agent definitions |
-| `~/.claude/skills/` | Skill implementations |
-
-**Per-Project Files** (created when you run `/prism`):
-| Location | Contents |
-|----------|----------|
-| `memory/constitution.md` | Project principles |
-| `memory/project-context.md` | Current state |
-| `specs/` | Feature specifications |
-
-### Option B: Per-Project Install (Legacy)
-
-Copy Prism OS directly into a single project.
-
-```bash
-# Copy product files to your project
-cp -r prism/. /path/to/your/project/
-```
-
-**Note:** This method doesn't support automatic updates.
+Transform natural language descriptions into implemented, tested features through structured workflows.
 
 ---
 
-### Updating Prism OS
+## Installation
 
-**Using the command (recommended):**
+Prism OS is a Claude Code plugin. Install it in seconds:
+
+```bash
+# Add the marketplace
+claude plugin marketplace add araserel/prism-os
+
+# Install the plugin
+claude plugin install prism@prism-os
+```
+
+Or from within Claude Code:
+```
+/plugin marketplace add araserel/prism-os
+/plugin install prism@prism-os
+```
+
+### Verify Installation
+
+```
+/prism status
+```
+
+You should see the Prism OS status dashboard.
+
+---
+
+## Quick Start
+
+Once installed, describe what you want to build:
+
+```
+/prism "Add a user login page with email and password"
+```
+
+Prism guides you through:
+1. **Specification** — Captures requirements
+2. **Clarification** — Resolves ambiguities
+3. **Planning** — Creates implementation plan
+4. **Tasks** — Breaks plan into actionable items
+5. **Implementation** — Writes and validates code
+6. **Review** — Security and code review
+
+### Key Commands
+
+| Command | Purpose |
+|---------|---------|
+| `/prism` | Show status and next steps |
+| `/prism "description"` | Start building a new feature |
+| `/prism continue` | Resume where you left off |
+| `/prism-update` | Check for plugin updates |
+
+---
+
+## Updating
+
+```
+/plugin update prism@prism-os
+```
+
+Or use the familiar command:
 ```
 /prism-update
 ```
 
-**Manually:**
-```bash
-cd ~/.prism-os && git pull && ./install-global.sh
-```
+---
 
-### Uninstalling
+## Documentation
 
-```bash
-~/.prism-os/install-global.sh --uninstall
-rm -rf ~/.prism-os  # Optional: remove source code
-```
+- [Quick Start Guide](prism-plugin/docs/quick-start.md)
+- [User Guide](prism-plugin/docs/user-guide.md)
+- [Command Reference](prism-plugin/docs/command-reference.md)
 
-### Troubleshooting
+### Migrating from Global Install?
 
-| Issue | Solution |
-|-------|----------|
-| `git: command not found` | Install Git first. macOS: `xcode-select --install`. Linux: `sudo apt install git` |
-| `Permission denied` | Run `chmod +x ~/.prism-os/install-global.sh` |
-| Commands not working | Re-run `~/.prism-os/install-global.sh` |
-| WSL issues | Ensure you're in WSL terminal, not PowerShell |
-
-See [`prism-install-instructions.md`](prism-install-instructions.md) for detailed troubleshooting.
+If you previously used `install-global.sh`, see the [Migration Guide](prism-plugin/docs/migration-from-global.md).
 
 ---
 
 ## For Contributors
 
-### Getting Started
-
-1. Clone this repository
-2. Read `CLAUDE.md` (root) for development instructions
-3. Read `STATUS.md` for implementation status
-4. Product code lives in `prism/`
-
 ### Repository Structure
 
 | Path | Purpose |
 |------|---------|
-| `prism/` | **Distributable product** — what users install |
-| `CLAUDE.md` | Development instructions (this repo) |
-| `PROJECT_PLAN.md` | Development roadmap |
+| `prism-plugin/` | **The plugin** — distributable product |
+| `CLAUDE.md` | Development instructions |
 | `STATUS.md` | Implementation status |
 | `tools/` | Development utilities (linter, etc.) |
 | `tests/` | Test files |
-| `specs/` | Spec development workspace |
 
-### Development Workflow
+### Development Setup
 
 ```bash
+# Clone the repository
+git clone https://github.com/araserel/prism-os.git
+cd prism-os
+
+# Install locally for testing
+claude plugin marketplace add ./
+claude plugin install prism@prism-os
+
 # Run the linter
 python3 tools/workflow-linter.py --verbose
-
-# Test product in isolation
-cp -r prism/ /tmp/test-project/
-cd /tmp/test-project/
-claude  # Verify it works
 ```
 
-### Key Principle
+### Key Files
 
-**Product code lives in `prism/`.**
-When editing Prism functionality, work inside `prism/`. Paths in product files are relative to `prism/` as the root.
+| File | Purpose |
+|------|---------|
+| `prism-plugin/.claude-plugin/plugin.json` | Plugin manifest |
+| `prism-plugin/commands/` | Slash commands |
+| `prism-plugin/agents/` | Agent definitions |
+| `prism-plugin/skills/` | Skill implementations |
+| `prism-plugin/hooks/` | Lifecycle hooks |
 
 ---
 
 ## Links
 
-- [Product README](prism/README.md) — User documentation
-- [Quick Start](prism/docs/quick-start.md) — Get running in 5 minutes
-- [Status](STATUS.md) — What's implemented
-- [Roadmap](PROJECT_PLAN.md) — Development plan
+- [Plugin Documentation](prism-plugin/docs/README.md)
+- [Development Status](STATUS.md)
+- [Project Roadmap](PROJECT_PLAN.md)
 
 ---
 

@@ -160,120 +160,18 @@ Fix attempt: [N]/5
 
 ## Validation Checks
 
-### Test Suite
-```bash
-# Run full test suite
-npm test        # or equivalent
-
-# Check coverage (if configured)
-npm run coverage
-```
-
-**Pass criteria:**
-- All tests pass
-- No skipped tests (without reason)
-- Coverage meets threshold (per constitution)
-
-### Lint/Format
-```bash
-# Run linter
-npm run lint    # or equivalent
-
-# Check formatting
-npm run format:check
-```
-
-**Pass criteria:**
-- No errors
-- No warnings (or warnings documented)
-
-### Type Check (if applicable)
-```bash
-# TypeScript check
-npm run typecheck   # or equivalent
-```
-
-**Pass criteria:**
-- No type errors
-- No implicit any (per constitution)
-
-### Requirements Coverage
-
-For each acceptance criterion in the spec:
-- [ ] Implemented (code exists)
-- [ ] Tested (test covers it)
-- [ ] Working (test passes)
-
-### Regression Check
-
-- [ ] Existing tests still pass
-- [ ] No new console errors/warnings
-- [ ] Related features still work
+Follows the validation workflow defined in `skills/qa/qa-validator/SKILL.md`. Key checks: unit tests, lint/format, type check, requirements coverage, regression check, accessibility (if UI changes), and constitution compliance.
 
 ## Issue Categories
 
-### Critical
-- Application crashes
-- Security vulnerability
-- Data loss potential
-- Core functionality broken
-
-### Major
-- Feature doesn't work as specified
-- Significant UI/UX issue
-- Test failure
-- Performance degradation
-
-### Minor
-- Style/formatting issue
-- Non-blocking warning
-- Minor UI polish
-- Documentation mismatch
+Issues are categorized as Critical (crashes, security, data loss), Major (feature broken, test failure, performance), or Minor (style, warnings, polish). See `skills/qa/qa-validator/SKILL.md` for detailed categorization.
 
 ## Fix Loop Protocol
 
-```
-┌─────────────────┐
-│   Validate      │
-└────────┬────────┘
-         │
-    ┌────┴────┐
-    │ Issues? │
-    └────┬────┘
-         │
-    Yes  │  No
-    ┌────┴────┐──────────────────┐
-    │         │                  │
-    ▼         │                  ▼
-┌─────────────┴──┐      ┌──────────────┐
-│ Report Issues  │      │    Pass      │
-└────────┬───────┘      └──────────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Developer Fixes │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Iteration < 5? │
-└────────┬────────┘
-         │
-    Yes  │  No
-    ┌────┴────┐────────────────┐
-    │         │                │
-    ▼         │                ▼
-  [Loop]      │          ┌───────────┐
-              │          │ Escalate  │
-              │          └───────────┘
-```
-
-### Fix Attempt Tracking
-- Attempt 1: Normal fix
-- Attempt 2: Developer reviews approach
-- Attempt 3: Consider alternative solutions
-- Attempt 4: QA and Developer sync
-- Attempt 5: Final attempt before escalation
+Max 5 iterations. Follows the fix loop defined in `skills/qa/qa-fixer/SKILL.md`:
+- Iterations 1-2: Aggressive auto-fix
+- Iterations 3-4: Conservative, flag more for review
+- Iteration 5: Final attempt, prepare escalation report
 
 ## Interaction Patterns
 
@@ -363,12 +261,7 @@ Validation runs automatically:
 
 ## Escalation Triggers
 
-Escalate to Orchestrator when:
-- 5 fix attempts exhausted
-- Environment blocking validation
-- Requirement unclear
-- Test infrastructure issues
-- Discovered security concern
+See [`skills/qa/qa-escalation-policy/SKILL.md`](../skills/qa/qa-escalation-policy/SKILL.md) for the canonical escalation policy shared across all QA skills and the QA Engineer agent.
 
 ## Working with Developer
 
