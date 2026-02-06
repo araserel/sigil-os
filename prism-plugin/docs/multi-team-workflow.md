@@ -11,14 +11,14 @@ Prism connects three things that are usually disconnected: product decisions, en
 ```mermaid
 flowchart TD
     subgraph Stage2["Stage 2: Team Sync"]
-        DB[("Supabase\n(Shared Memory)")]
-        HOOK["Git Hooks\n(Auto-push)"]
-        PRIME["/prime\n(Auto-pull)"]
+        DB[("Supabase")]
+        HOOK["Git Hooks"]
+        PRIME["`**/prime**`"]
     end
 
-    subgraph Stage3["Stage 3: Multi-Repo Context"]
-        CENTRAL["Central Repo\n(Shared Standards)"]
-        SYNC["prism-sync\n(Pull / Push)"]
+    subgraph Stage3["Stage 3: Multi-Repo"]
+        CENTRAL["Central Standards Repo"]
+        SYNC["`**prism-sync**`"]
     end
 
     subgraph RepoA["Repo A: Web App"]
@@ -31,108 +31,117 @@ flowchart TD
         MEM_B["Local Memory"]
     end
 
-    MEM_A <-->|"push/pull"| DB
-    MEM_B <-->|"push/pull"| DB
-    HOOK --> DB
-    DB --> PRIME
+    MEM_A <-->|"push / pull"| DB
+    MEM_B <-->|"push / pull"| DB
+    HOOK -->|"auto-push"| DB
+    DB -->|"auto-pull"| PRIME
 
     CENTRAL <-->|"sync"| CONST_A
     CENTRAL <-->|"sync"| CONST_B
     SYNC --> CENTRAL
 ```
 
-<!-- Alt text: A diagram showing two infrastructure layers. Stage 2 (Team Sync) has a Supabase database in the center connected to local memory in Repo A and Repo B via push/pull arrows, with git hooks pushing and /prime pulling. Stage 3 (Multi-Repo Context) has a central repo connected to constitutions in both repos via prism-sync tooling. -->
+<!-- Alt text: A diagram showing two infrastructure layers. Stage 2 (Team Sync) has a Supabase database connected to local memory in Repo A and Repo B via push/pull arrows, with git hooks auto-pushing and /prime auto-pulling. Stage 3 (Multi-Repo) has a central standards repo connected to constitutions in both repos via prism-sync tooling. -->
 
 ## How Product People and Engineers Collaborate
 
-The workflow splits into two clear swim lanes. Product people own the "what" and engineers own the "how." The handoff package bridges the gap.
+Product people use Prism to build a working prototype -- spec through implementation. Engineers then take over to finish the project: connecting to real services, cleaning up code, and fixing what a prototype can't get right.
 
 ```mermaid
 flowchart TD
-    subgraph Product["Product Person"]
-        P1["Describe feature"] --> P2["Answer questions"]
-        P2 --> P3["Review spec"]
-        P3 --> P4["Request engineer handoff"]
+    subgraph Product["Product Person builds prototype"]
+        P1["`**1.** Describe feature`"]
+        P2["`**2.** Answer questions`"]
+        P3["`**3.** Review spec`"]
+        P4["`**4.** Build prototype`"]
+        P5["`**5.** Validate & review`"]
+        P6["`**6.** Create handoff`"]
+        P1 --> P2 --> P3 --> P4 --> P5 --> P6
     end
 
-    P4 --> HP["Handoff Package\n(spec + decisions + context)"]
+    P6 --> HP["Handoff Package"]
 
-    subgraph Engineering["Engineer"]
-        E1["Review handoff"] --> E2["Create plan"]
-        E2 --> E3["Implement tasks"]
-        E3 --> E4["Validate & review"]
+    subgraph Engineering["Engineers finish the project"]
+        E1["`**7.** Review handoff`"]
+        E2["`**8.** Connect services`"]
+        E3["`**9.** Fix UI/UX gaps`"]
+        E4["`**10.** Final validation`"]
+        E1 --> E2 --> E3 --> E4
     end
 
     HP --> E1
 
     E4 -->|"learnings captured"| DB2[("Shared Memory")]
-    DB2 -->|"available to all"| E5["Next engineer\n(any repo)"]
+    DB2 -->|"available to all"| E5["Next engineer, any repo"]
 ```
 
-<!-- Alt text: A top-down flow with two swim lanes. The product person describes a feature, answers questions, reviews the spec, and requests an engineer handoff. This creates a Handoff Package containing spec, decisions, and context. The engineer reviews the handoff, creates a plan, implements tasks, and validates. Learnings from validation flow into shared memory, which is then available to any engineer in any repo. -->
+<!-- Alt text: A top-down flow with two swim lanes. The product person describes a feature, answers questions, reviews the spec, builds a prototype, validates, and creates a handoff package. The engineer reviews the handoff, connects backend services, fixes UI/UX gaps, and does final validation. Learnings flow into shared memory, available to any engineer in any repo. -->
 
 ### What the product person does
 
-The product person drives three steps without writing code:
+The product person drives the feature from idea through working prototype:
 
 1. Describe the feature in plain language.
 2. Answer Prism's clarifying questions.
-3. Review the spec and request an engineer handoff.
+3. Review and approve the spec.
+4. Use Prism to build a functional prototype.
+5. Validate and review the prototype.
+6. Create a handoff package for engineering.
 
-Prism generates a Technical Review Package. This package bundles the spec, all decisions made, and relevant context into one document. The product person shares this with engineering.
+The handoff package bundles the spec, all decisions made, the prototype code, and relevant context into one document. The product person shares this with engineering.
 
 ### What the engineer does
 
-The engineer receives the handoff and picks up from there:
+The engineer receives the handoff and finishes the project:
 
-1. Review the handoff package.
-2. Approve or adjust the technical plan.
-3. Implement task by task (Prism validates each one).
-4. Complete the code and security review.
+1. Review the handoff package and prototype.
+2. Connect the prototype to real backend services.
+3. Fix UI/UX issues that Prism couldn't resolve.
+4. Implement remaining features and run final validation.
 
-Every learning discovered during implementation is captured and pushed to shared memory.
+Engineers might also refactor prototype code, add edge case handling, or optimize performance. Every learning discovered during this work is captured and pushed to shared memory.
 
-**You should now see:** how the handoff package creates a clean boundary between product and engineering work.
+**You should now see:** how the product person builds something real before handing off, and how engineers finish what the prototype started.
 
 ## How Shared Memory Works (Stage 2)
 
-Today, each engineer's learnings stay on their machine. Stage 2 changes this by syncing memory through a Supabase database (a cloud-hosted data store your team sets up once).
+Today, each person's learnings stay on their machine. Stage 2 changes this by syncing memory through a Supabase database (a cloud-hosted data store your team sets up once).
 
 ### What gets shared
 
 | Category | Example | Who benefits |
 |----------|---------|-------------|
 | Patterns | "Use React Query's onMutate for optimistic updates" | Engineers starting similar work |
-| Gotchas | "MapView crashes with more than 500 markers" | Engineers about to hit the same wall |
-| Decisions | "Using CSS Grid for the filter panel layout" | Engineers who need to understand past choices |
-| Components | "StationList lives at /components/ev/StationList.tsx" | Engineers navigating the codebase |
-| Constraints | "API rate limit: 100 requests per minute" | Anyone building features that call the API |
+| Gotchas | "DataGrid slows with more than 10,000 rows" | Anyone about to hit the same wall |
+| Decisions | "Using Flexbox for the sidebar layout" | Anyone who needs to understand past choices |
+| Components | "ProductList at /components/catalog/ProductList.tsx" | Anyone navigating the codebase |
+| Constraints | "Weather API rate limit: 100 requests per minute" | Anyone building features that call the API |
 
 ### How syncing happens
 
 ```mermaid
 flowchart LR
-    subgraph Engineer_A["Engineer A's Session"]
-        CAPTURE["Captures a learning"]
+    subgraph SessionA["Engineer A's session"]
+        CAPTURE["`Runs **/learn**`"]
     end
 
     CAPTURE -->|"real-time push"| DB3[("Supabase")]
-    CAPTURE -->|"also writes"| LOCAL["Local files"]
+    CAPTURE -->|"writes locally"| LOCAL["Local files"]
 
-    COMMIT["Git commit"] -->|"hook: catch-all push"| DB3
+    COMMIT["`Runs **git commit**`"] -->|"hook: catch-all"| DB3
 
-    DB3 -->|"pull on /prime"| Engineer_B["Engineer B's\nnext session"]
+    DB3 -->|"auto-pull"| SessionB["`Engineer B runs **/prime**`"]
 
-    Engineer_B -->|"sees 'what changed'\nsummary"| READY["Ready to work\nwith full context"]
+    SessionB --> READY["Sees 'what changed' summary"]
 ```
 
-<!-- Alt text: A left-to-right flow showing Engineer A captures a learning, which pushes to Supabase in real-time and writes to local files. A git commit triggers a catch-all push via hook. Supabase delivers the learning to Engineer B on their next /prime session start, where they see a what changed summary and are ready to work with full context. -->
+<!-- Alt text: A left-to-right flow showing Engineer A runs /learn, which pushes to Supabase in real-time and writes to local files. Running git commit triggers a catch-all hook push. Supabase delivers the learning when Engineer B runs /prime, where they see a what changed summary. -->
 
 Key details:
 
-- Learnings push to the database the moment they are captured. No waiting for session end.
-- A git hook acts as a safety net, pushing anything that was missed.
-- When an engineer starts a session with `/prime`, new team memory loads automatically.
+- Learnings push to the database the moment they are captured via `/learn`. No waiting for session end.
+- A git hook on `git commit` acts as a safety net, pushing anything that was missed.
+- When anyone starts a session with `/prime`, new team memory loads automatically.
 - A "what changed" summary shows what teammates added since your last session.
 - If the database is unreachable, Prism works normally with local memory. It syncs when the connection returns.
 
@@ -140,9 +149,9 @@ Key details:
 
 When you describe your next task, Prism searches shared memory for relevant warnings. If a teammate already hit a problem related to your work, Prism tells you before you start.
 
-> **Tip:** This means one engineer hitting a bug can save every future engineer from the same mistake, across all project folders connected to the same database.
+> **Tip:** This means one person hitting a bug can save every future teammate from the same mistake, across all project folders connected to the same database.
 
-**You should now see:** how learnings flow from one engineer's session into every teammate's future sessions.
+**You should now see:** how learnings flow from one person's session into every teammate's future sessions.
 
 ## How Constitution Syncing Works (Stage 3)
 
@@ -153,35 +162,37 @@ Your project's constitution (the set of rules and preferences that guide how Pri
 ```mermaid
 flowchart TD
     subgraph Central["Central Standards Repo"]
-        SHARED["Shared Standards\n(security, accessibility)"]
-        REPO_COPIES["Per-Repo Constitutions\n(web, mobile, API)"]
+        SHARED["Shared standards"]
+        REPO_COPIES["Per-repo copies"]
     end
 
     subgraph Web["Web App Repo"]
-        C_WEB["Constitution\n(@inherit: security)\n+ repo-specific rules"]
+        C_WEB["`Constitution with
+        **@inherit** markers`"]
     end
 
     subgraph Mobile["Mobile App Repo"]
-        C_MOB["Constitution\n(@inherit: security)\n(@inherit: accessibility)\n+ repo-specific rules"]
+        C_MOB["`Constitution with
+        **@inherit** markers`"]
     end
 
-    SHARED -->|"prism-sync pull"| C_WEB
-    SHARED -->|"prism-sync pull"| C_MOB
-    C_WEB -->|"prism-sync push"| REPO_COPIES
-    C_MOB -->|"prism-sync push"| REPO_COPIES
+    SHARED -->|"`**prism-sync pull**`"| C_WEB
+    SHARED -->|"`**prism-sync pull**`"| C_MOB
+    C_WEB -->|"`**prism-sync push**`"| REPO_COPIES
+    C_MOB -->|"`**prism-sync push**`"| REPO_COPIES
 ```
 
-<!-- Alt text: A diagram showing a central standards repo at the top with shared standards and per-repo constitution copies. Arrows show prism-sync pull flowing down to the web app and mobile app constitutions, and prism-sync push flowing back up from each repo to the central copies. Each repo constitution inherits shared standards and adds its own rules. -->
+<!-- Alt text: A diagram showing a central standards repo at the top with shared standards and per-repo copies. Arrows show prism-sync pull flowing down to web app and mobile app constitutions that use @inherit markers, and prism-sync push flowing back up from each repo to the central copies. -->
 
 ### How it works
 
 - Shared standards (security rules, accessibility requirements) live in the central repo.
 - Each project folder's constitution references shared standards with `@inherit` markers.
-- When you pull, inherited sections expand into your local constitution.
-- When you push, local changes flow back to the central repo as a pull request.
-- A status command shows which project folders are in sync, ahead, or behind.
+- Running `prism-sync pull` expands inherited sections into your local constitution.
+- Running `prism-sync push` sends local changes back to the central repo as a pull request.
+- Running `prism-sync status` shows which project folders are in sync, ahead, or behind.
 
-### What this means for engineers
+### What this means for your team
 
 - A new project folder starts with your organization's standards already in place.
 - When a security rule changes, one update reaches every project folder.
@@ -218,7 +229,7 @@ Claude Code recently added automatic Session Memory. This is worth understanding
 | Team knowledge sharing | Not supported | Supabase-synced shared memory |
 | Cross-repo standards | Manual CLAUDE.md copying | Central repo with auto-sync |
 | Gotcha prevention | Not supported | Automatic relevance matching |
-| Onboarding a new engineer | They start from zero | They get all team learnings on first `/prime` |
+| Onboarding a new team member | They start from zero | They get all team learnings on first `/prime` |
 
 ### Open question
 
@@ -232,15 +243,15 @@ Claude Code's Session Memory is still evolving. As it matures, there may be ways
 
 Here is how a typical week looks for a team using Prism with Stages 2 and 3:
 
-**Monday:** Sara (PM) describes a new feature in the web app repo. Prism writes the spec, asks questions, and Sara answers them. She requests an engineer handoff.
+**Monday:** Sara (PM) describes a new feature in the web app repo. Prism writes the spec, asks questions, and Sara answers them. Sara then uses Prism to build a working prototype with a product catalog page and filtering.
 
-**Tuesday:** Alex (engineer) opens the web app repo. `/prime` loads the latest team memory and shows Sara's handoff package. Alex plans and starts implementing. During implementation, Prism captures three learnings.
+**Tuesday:** Sara validates the prototype and creates a handoff package. Alex (engineer) opens the same repo. `/prime` loads the latest team memory. Alex reviews the handoff, sees the prototype, and starts connecting it to the real Weather API and product database.
 
-**Wednesday:** Jordan (engineer) opens the mobile app repo to build a similar feature. `/prime` loads Alex's learnings from yesterday. Prism warns: "Alex discovered that the map component crashes above 500 markers. Consider clustering." Jordan avoids the bug entirely.
+**Wednesday:** Jordan (engineer) opens the mobile app repo to build a similar feature. `/prime` loads Alex's learnings from yesterday. Prism warns: "Alex discovered that the DataGrid component slows above 10,000 rows. Consider virtualization." Jordan avoids the performance issue entirely.
 
 **Thursday:** The platform team updates the shared security standards in the central repo. They run `prism-sync push --all`. Every repo's constitution gets a pull request with the new rules.
 
-**Friday:** A new engineer joins the team. They clone the web app repo, run `prism setup --team`, and `/prime`. They immediately have access to every learning, decision, and gotcha the team has captured. No onboarding doc needed.
+**Friday:** A new engineer joins the team. They clone the web app repo, run `prism setup --team`, and then `/prime`. They immediately have access to every learning, decision, and gotcha the team has captured. No onboarding doc needed.
 
 ## What's Next
 

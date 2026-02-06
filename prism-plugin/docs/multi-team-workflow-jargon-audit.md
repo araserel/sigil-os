@@ -6,7 +6,7 @@
 |------|----------|-----------------|---------------|
 | Repository / Repo | Title area, multiple sections | "project folder" with inline definition: "(git repositories where your code lives)" | Yes |
 | Constitution | Multiple sections | Defined on first use: "constitution (the set of rules and preferences that guide how Prism works in your project)" | Yes |
-| Hook | Sync diagram, key details | "git hook" used in technical context, described as "a safety net, pushing anything that was missed" | Yes |
+| Hook | Sync diagram, key details | "git hook" described as "a safety net, pushing anything that was missed" | Yes |
 | Config | Not used | Avoided entirely | Yes |
 | Deploy | Not used | Avoided entirely | Yes |
 | Init | Not used | Avoided entirely | Yes |
@@ -18,10 +18,11 @@
 | Pull request | Stage 3 section | Used without definition; assumed known by engineering audience | No |
 | Spec | Multiple sections | Established Prism term; context makes meaning clear | No |
 | Onboarding | Putting it all together | Common business term, no definition needed | No |
+| Prototype | Product person section | Common term, self-explanatory in context | No |
 
 ## Reading Level
 
-- **Flesch-Kincaid Grade Level:** ~7.5
+- **Flesch-Kincaid Grade Level:** ~7.4
 - **Average sentence length:** 14 words
 - **Pass/Fail:** Pass
 
@@ -39,3 +40,9 @@
 - [x] No color-only indicators (diagrams use labels and text, not colors, to convey meaning)
 - [x] All link text is descriptive (no "click here" patterns)
 - [x] Navigable by headings alone (each heading is self-explanatory)
+
+## Diagram Rendering Notes
+
+- All labels use Mermaid markdown syntax (backtick strings) instead of `\n` for line breaks
+- Commands are bolded in diagram labels to distinguish them from descriptions
+- Node labels kept short to avoid truncation in narrow viewports
