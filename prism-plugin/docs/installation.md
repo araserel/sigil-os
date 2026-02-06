@@ -78,7 +78,7 @@ flowchart TD
 1. Add the Prism catalog to Claude Code:
 
 ```bash
-claude plugin marketplace add araserel/prism-os
+claude plugin marketplace add howardtech/prism-os
 ```
 
 2. Install the Prism add-on:
@@ -178,7 +178,7 @@ This means the catalog is missing or the add-on did not install.
 Run both commands again:
 
 ```bash
-claude plugin marketplace add araserel/prism-os
+claude plugin marketplace add howardtech/prism-os
 claude plugin install prism@prism-os
 ```
 

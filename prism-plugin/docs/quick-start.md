@@ -43,7 +43,7 @@ For full details and troubleshooting, see the [Installation Guide](installation.
 ### Step 1: Add the Marketplace
 
 ```bash
-claude plugin marketplace add araserel/prism-os
+claude plugin marketplace add howardtech/prism-os
 ```
 
 ### Step 2: Install the Plugin
