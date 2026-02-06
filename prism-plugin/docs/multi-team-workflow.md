@@ -139,11 +139,30 @@ flowchart LR
 
 Key details:
 
+- Learnings sync through an external database, not through git. This keeps your project folder clean -- no repo bloat from hundreds of memory files committed over time.
 - Learnings push to the database the moment they are captured via `/learn`. No waiting for session end.
 - A git hook on `git commit` acts as a safety net, pushing anything that was missed.
 - When anyone starts a session with `/prime`, new team memory loads automatically.
 - A "what changed" summary shows what teammates added since your last session.
 - If the database is unreachable, Prism works normally with local memory. It syncs when the connection returns.
+
+### Why Supabase (and what else works)
+
+The Stage 2 spec uses Supabase as the default because it bundles several things teams need in one service: a Postgres database, GitHub OAuth for sign-in, row-level security so each repo's memory stays isolated, and an optional vector extension for similarity search.
+
+That said, Supabase is not the only option. Any Postgres database with the right extensions works. Here is what you actually need:
+
+| Capability | Supabase provides | Postgres alternative |
+|-----------|-------------------|---------------------|
+| Data storage | Managed Postgres | Any Postgres instance (self-hosted, RDS, Neon, etc.) |
+| Authentication | Built-in GitHub OAuth | Add your own OAuth or API key layer |
+| Row-level security | Built-in RLS policies | Standard Postgres RLS (same SQL) |
+| Similarity search | pgvector extension included | Install pgvector on any Postgres 12+ |
+| API layer | Auto-generated REST API | Add PostgREST, Hasura, or a custom API |
+
+You could also connect Prism to a non-Postgres backend through an MCP server or custom API, as long as it supports the same read/write operations. The sync protocol is straightforward: push memory items on capture, pull new items on session start, and queue operations when the connection is down.
+
+> **Tip:** If your organization already runs Postgres, you can skip Supabase entirely. Install pgvector, set up the schema from the TMS-001 spec, and point Prism at your existing database. You only lose the managed OAuth flow, which you can replace with API keys or your existing identity provider.
 
 ### Automatic gotcha surfacing
 
