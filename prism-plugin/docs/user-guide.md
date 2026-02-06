@@ -1,18 +1,18 @@
 # Prism User Guide
 
-> Complete guide for Product Managers, Product Owners, and business stakeholders.
+> Your complete guide to building features with Prism. Written for Product Managers, Product Owners, and business stakeholders.
 
-This guide covers everything you need to know to use Prism effectively. Whether you're creating your first feature specification or managing a complex project, you'll find the information here.
+This guide walks you through every part of Prism. Start here if you are new. Come back later when you need a refresher.
 
 ---
 
 ## How to Use This Guide
 
-**New to Prism?** Start with Part 1: Getting Started, then work through the [Quick-Start Tutorial](quick-start.md).
+**New to Prism?** Start with Part 1, then try the [Quick-Start Tutorial](quick-start.md).
 
-**Looking for something specific?** Use the table of contents below to jump to any section.
+**Looking for something specific?** Jump to any section using the table of contents below.
 
-**Need quick syntax?** See the [Command Reference](command-reference.md).
+**Need a quick command lookup?** See the [Command Reference](command-reference.md).
 
 ---
 
@@ -30,160 +30,195 @@ This guide covers everything you need to know to use Prism effectively. Whether 
 
 ## Part 1: Getting Started
 
-### What is Prism?
+### What Is Prism?
 
-Prism is a tool that helps you create clear, complete feature specifications. You describe what you want in plain language, and Prism:
+Prism helps you write clear, complete feature descriptions. You describe what you want in plain words. Prism turns that into structured documents engineers can act on.
 
-1. Structures your requirements into a formal specification
-2. Asks clarifying questions to resolve ambiguities
-3. Creates an implementation plan for engineers
-4. Breaks the plan into actionable tasks
+Here is what Prism does for you:
 
-The result is documentation that engineers can implement without confusion or back-and-forth questions.
+1. Organizes your requirements into a formal document
+2. Asks follow-up questions to fill in gaps
+3. Creates a build plan for engineers
+4. Breaks the plan into small, trackable tasks
+
+The result: engineers can start building with no confusion and fewer follow-up questions.
 
 ### Design Principles
 
-Prism is built on 7 core principles that guide every decision:
+Prism follows 7 core ideas that shape how it works.
 
-**1. Spec-First Development**
-Specifications are the source of truth. Before any code is written, there is a written spec describing what will be built, why it matters, and what success looks like. If the spec is wrong, the code will be wrong — so we invest in getting the spec right.
+**1. Write the description first**
 
-**2. Guided Decision-Making**
-You should never face a technical choice without context. When a technical decision is needed (framework, architecture, security), the system presents options in plain language with trade-offs. You choose based on business needs; the system handles the technical details.
+A written feature description (called a "specification" or "spec") is the single source of truth. Before any code is written, Prism creates a document that says what will be built, why it matters, and what success looks like. Good descriptions lead to good code.
 
-**3. Scale-Adaptive Tracks**
-The right amount of process for the right size of work. A bug fix doesn't need a 30-page PRD. A new product doesn't ship with a 5-minute spec. Prism automatically selects the appropriate workflow depth:
+**2. Guided choices**
 
-| Track | For | Workflow Depth |
-|-------|-----|----------------|
-| **Quick Flow** | Bug fixes, small tweaks | Lightweight spec → Tasks → Implement |
-| **Standard** | Features, enhancements | Full spec → Clarify → Plan → Tasks → Implement → Validate |
-| **Enterprise** | New systems, architectural changes | Extended spec → Research → Architecture → Plan → Tasks → Implement → Validate → Review |
-| **Discovery** | Greenfield projects, new tech decisions | Problem → Constraints → Options → Decision → Foundation Doc |
+You should never face a technical choice without context. When a decision is needed, Prism shows your options in plain words with trade-offs. You pick based on business needs. The system handles the rest.
 
-**4. Constitutional Boundaries**
-Each project has a constitution — immutable principles that guide all decisions. "We use TypeScript." "All APIs require authentication." The AI agents respect these boundaries without being reminded.
+**3. Right-sized workflows**
 
-**5. Human-in-the-Loop**
-Automate the routine. Pause for the consequential. Not every action needs approval. Prism uses a three-tier model: Auto (safe, reversible actions), Review (scope or design changes), and Approve (production deployments, security changes).
+A small bug fix does not need a 30-page document. A brand-new product needs more than a 5-minute sketch. Prism picks the right level of detail for each job. This level of detail is called a "track" (a workflow path based on feature size).
 
-**6. Visible Progress**
-If you can't see it, you can't manage it. You can see exactly where work stands — which phase, which task, what's blocking — at any time.
+| Track | Best For | Depth |
+|-------|----------|-------|
+| **Quick Flow** | Bug fixes, small tweaks | Short description, then tasks, then build |
+| **Standard** | Features, improvements | Full description, clarify, plan, tasks, build, check |
+| **Enterprise** | New systems, big changes | Extended description, research, architecture, plan, tasks, build, check, review |
+| **Discovery** | Brand-new projects | Problem, limits, options, decision, foundation document |
 
-**7. Accessibility by Default**
-Build for everyone from the start, not as an afterthought. All generated code, interfaces, and documentation meet WCAG 2.1 AA standards as a minimum, validated during the QA phase.
+**4. Project rulebook**
+
+Each project has a set of fixed rules called a "constitution" (your project's rulebook of standards and required technologies). For example: "We use TypeScript." or "All data connections require login." The system follows these rules without being reminded.
+
+**5. Human oversight**
+
+Routine work runs on its own. Big decisions pause for you. Prism uses three levels of control:
+
+- **Auto** -- Safe, reversible actions happen right away.
+- **Review** -- Scope or design changes are flagged for you to check.
+- **Approve** -- Production releases and security changes wait for your sign-off.
+
+**6. Visible progress**
+
+If you cannot see it, you cannot manage it. You can check exactly where work stands at any time. You see which stage, which task, and what is stuck.
+
+**7. Built for everyone**
+
+All generated code, screens, and documents meet accessibility standards (WCAG 2.1 AA, a set of rules that make software usable by people with disabilities). This is checked during the quality-check stage (called "QA," meaning quality assurance -- the step where output is tested against requirements).
 
 ### Key Concepts
 
-Before diving in, familiarize yourself with these terms:
+Get familiar with these terms before you begin.
 
-| Term | Definition |
-|------|------------|
-| **Specification (Spec)** | A written document describing what a feature should do, who it's for, and how to verify it's working |
-| **Constitution** | Your project's rulebook - the standards and technologies all features must follow |
+| Term | What It Means |
+|------|---------------|
+| **Specification** | A written document that says what a feature should do, who uses it, and how to tell it works. Often shortened to "spec" (short for specification). |
+| **Constitution** | Your project's rulebook of standards and required technologies that every feature must follow |
 | **Track** | The workflow path based on feature size: Quick (small), Standard (medium), Enterprise (large) |
-| **Phase** | A stage in the workflow: Assess, Specify, Clarify, Plan, Tasks, Implement, Validate, Review |
+| **Phase** | A stage in the workflow, such as Assess, Specify, Clarify, Plan, Tasks, Implement, Validate, Review (each stage in the step-by-step process) |
 | **Priority** | How important a requirement is: P1 (must have), P2 (should have), P3 (nice to have) |
 
 ### What Happens Behind the Scenes
 
-When you run `/prism`, several things happen automatically to keep your project healthy:
+When you run `/prism`, several things happen in the background to keep your project healthy.
 
-- **Preflight check** — Every `/prism` run verifies that Prism is installed correctly in your project. If any files are missing or out of date, it reports what needs attention.
-- **Enforcement rules** — Prism automatically adds operational rules to your project's `CLAUDE.md` file. These ensure agents follow the correct workflow, respect your constitution, and use the right skills. You don't need to manage this.
-- **Context staleness detection** — Prism checks whether `project-context.md` matches the actual state of your spec artifacts. If your project says you're in the "Specify" phase but a `plan.md` already exists, Prism auto-corrects the recorded phase to match reality.
-- **Pre-execution context hooks** — Before skills run, they automatically update `project-context.md` so your project state is always current.
+- **Preflight check** -- Each `/prism` run checks that Prism is set up correctly. If anything is missing or outdated, it tells you what needs attention.
+- **Enforcement rules** -- Prism adds operating rules to your project's `CLAUDE.md` file. These keep agents on the right workflow and respect your rulebook. You do not need to manage this.
+- **Context freshness check** -- Prism confirms that the recorded project state matches your actual files. If your project says "Specify" but a plan already exists, Prism corrects the recorded stage to match reality.
+- **Pre-run updates** -- Before each skill runs, it updates your project state file so records stay current.
 
 ### Your First Session
 
-When you start Prism for the first time:
+Follow these steps when you start Prism for the first time.
 
-1. **Set up your constitution** (if not already done)
+```mermaid
+flowchart LR
+    A["1. /constitution"] --> B["2. /prism-status"]
+    B --> C["3. /spec"]
+```
+
+1. **Set up your project rulebook.**
    ```
    /constitution
    ```
    Answer questions about your project's technology and standards.
 
-2. **Check the status**
+2. **Check the current status.**
    ```
    /prism-status
    ```
-   See what's in progress and what phase you're in.
+   See what is in progress and which stage you are in.
 
-3. **Create your first feature**
+3. **Create your first feature.**
    ```
    /spec [your feature description]
    ```
-   Describe what you want to build.
+   Describe what you want to build in plain words.
+
+You should now see a structured feature document ready for review.
 
 ---
 
 ## Part 2: Creating Features
 
-### Workflow Phases
+### Workflow Stages
 
-Prism OS operates through 8 phases:
+Prism moves through up to 8 stages. Each stage is called a "phase" (one step in the process).
 
-| Phase | Name | Purpose |
+| Stage | Name | Purpose |
 |-------|------|---------|
-| 0 | Assessment | Evaluate request complexity, select track |
-| 1 | Specify | Capture requirements in structured format |
-| 2 | Clarify | Surface ambiguities, resolve unknowns |
-| 3 | Plan | Create implementation approach |
-| 4 | Tasks | Break plan into implementable units |
-| 5 | Implement | Execute tasks (handoff point for external teams) |
-| 6 | Validate | Verify implementation meets requirements |
-| 7 | Review | Final quality gate, capture learnings |
+| 0 | Assessment | Look at the request and pick a track |
+| 1 | Specify | Capture requirements in a structured format |
+| 2 | Clarify | Surface gaps and resolve unknowns |
+| 3 | Plan | Create a build approach |
+| 4 | Tasks | Break the plan into small work items |
+| 5 | Implement | Build the feature (handoff point for teams) |
+| 6 | Validate | Check that the build meets requirements |
+| 7 | Review | Final quality gate and capture lessons |
 
-Not all requests traverse all phases. Quick Flow may skip directly from Assessment to Tasks for simple work.
+Not every request goes through every stage. Quick Flow may jump from Assessment straight to Tasks for simple work.
 
-**Assessment:** Prism evaluates your description and selects the appropriate track.
+```mermaid
+flowchart LR
+    A[Assess] --> B[Specify]
+    B --> C[Clarify]
+    C --> D[Plan]
+    D --> E[Tasks]
+    E --> F[Implement]
+    F --> G[Validate]
+    G --> H[Review]
+```
 
-**Specify:** Your description becomes a structured specification with user scenarios, requirements, and success criteria.
+**Assessment:** Prism reads your description and picks the right track.
 
-**Clarify:** Any ambiguities are resolved through targeted questions (maximum 3 rounds).
+**Specify:** Your description becomes a structured document with user stories, requirements, and success criteria.
 
-**Plan:** A technical implementation plan is generated.
+**Clarify:** Gaps are resolved through focused questions (3 rounds maximum).
 
-**Tasks:** The plan is broken into discrete, assignable tasks.
+**Plan:** A technical build plan is created.
+
+**Tasks:** The plan is broken into small, assignable work items.
 
 **Implement:** Code is written by developers (human or AI).
 
-**Validate:** Automated checks verify quality before review.
+**Validate:** Automated checks confirm quality before review.
 
-**Review:** Final approval before deployment.
+**Review:** Final approval before the feature ships.
 
-### Discovery Track — Starting a New Project
+### Discovery Track -- Starting a New Project
 
-If you're starting from scratch with no existing codebase or tech stack, Prism enters the **Discovery Track**. This is a guided conversation that helps you make foundational decisions before building anything.
+If you are starting from scratch with no existing code, Prism enters the **Discovery Track**. This is a guided conversation that helps you make big decisions before building anything.
 
-**When Discovery activates:**
-- You say "new project," "new idea," or "starting from scratch"
-- No existing tech stack context is found
+**When Discovery starts:**
+
+- You say "new project," "new idea," or "starting from scratch."
+- No existing technology context is found.
 - You ask "what tech should I use?"
 
 **How it works:**
 
-| Phase | What Happens |
-|-------|-------------|
-| Problem Clarity | Define what you're solving and for whom |
-| Constraints Gathering | Discuss budget, timeline, team skills, compliance, and scale |
-| Tech Stack Options | Prism presents 2-3 viable options as a decision matrix |
-| Decision Capture | Your chosen stack is documented in a Project Foundation |
+| Step | What Happens |
+|------|-------------|
+| Problem Clarity | Define what you are solving and for whom |
+| Limits Gathering | Discuss budget, timeline, team skills, compliance, and scale |
+| Technology Options | Prism shows 2-3 viable options in a comparison table |
+| Decision Capture | Your choices are saved in a Project Foundation document |
 | Transition | The Standard track begins with your foundation as context |
 
-The output is a `project-foundation.md` file that serves as context for all subsequent features. You don't need to know what framework or database to use — Prism recommends options based on what you're building.
+The output is a `project-foundation.md` file. It gives context for every feature that follows. You do not need to know which framework or database to use. Prism recommends options based on what you are building.
+
+You should now see a `project-foundation.md` file in your project folder.
 
 ### Writing Good Feature Descriptions
 
-The quality of your specification depends on your initial description. Here's how to write effective ones:
+The quality of your feature document depends on your first description. Here is how to write a good one.
 
-**Do Include:**
+**Do include:**
 
 - Who will use this feature (visitors, logged-in users, admins)
-- What they want to accomplish
-- Why this matters (business context)
-- Any constraints you already know
+- What they want to do
+- Why this matters to the business
+- Any limits you already know
 
 **Example (Good):**
 
@@ -193,145 +228,155 @@ The quality of your specification depends on your initial description. Here's ho
 
 > "Add a dashboard."
 
-The vague example will require many clarification rounds. The detailed example might proceed directly to planning.
+The vague example will need many rounds of follow-up questions. The detailed example might move straight to planning.
 
-### Understanding the Specification
+### Understanding the Feature Document
 
-When you run `/spec`, Prism produces a document with these sections:
+When you run `/spec`, Prism creates a document with these sections.
 
-**Summary:** One-paragraph description of the feature and its purpose.
+**Summary:** One paragraph that describes the feature and its purpose.
 
-**User Scenarios:** Stories in the format "As a [user], I want to [action] so that [benefit]." Each has a priority (P1, P2, P3) and unique ID.
+**User Scenarios:** Stories in the format "As a [user], I want to [action] so that [benefit]." Each has a priority (P1, P2, P3) and a unique ID.
 
-**Functional Requirements:** Specific things the system must do. Each has:
-- Unique ID (FR-001, FR-002, etc.)
-- Description of the requirement
-- Priority level
+**Functional Requirements:** Specific things the system must do. Each one has:
+
+- A unique ID (FR-001, FR-002, etc.)
+- A plain description
+- A priority level
 - Acceptance criteria (how to verify it works)
 
-**Non-Functional Requirements:** How well the system must perform. Examples:
-- Performance: "Page loads in under 2 seconds"
-- Security: "Data encrypted in transit"
-- Accessibility: "Meets WCAG 2.1 AA"
+**Non-Functional Requirements:** Rules about how well the system must perform. Examples:
+
+- Speed: "Page loads in under 2 seconds"
+- Security: "Data encrypted while being sent"
+- Accessibility: "Meets WCAG 2.1 AA" (usability rules for people with disabilities)
 
 **Key Entities:** The data involved. For a user profile feature, entities might include User (id, name, email, avatar) and Profile (bio, location, website).
 
-**Success Criteria:** Checkboxes showing what must be true for the feature to be considered complete.
+**Success Criteria:** A checklist of what must be true for the feature to be done.
 
-**Out of Scope:** Explicitly states what this feature does NOT include, preventing scope creep.
+**Out of Scope:** States what this feature does NOT include. This prevents the work from growing beyond plan.
 
-### Answering Clarification Questions
+### Answering Follow-Up Questions
 
-After creating a spec, you may need to clarify ambiguities.
+After creating a feature document, you may need to clear up gaps.
 
 **Command:**
 ```
 /clarify
 ```
 
-**What to Expect:**
+**What to expect:**
 
-Prism asks targeted questions with multiple-choice options. Questions might cover:
+Prism asks focused questions with multiple-choice options. Questions might cover:
 
-- Technical approaches (how should X be implemented?)
-- Business rules (what happens when Y?)
+- Technical approaches (how should X be built?)
+- Business rules (what happens when Y occurs?)
 - Edge cases (what if Z fails?)
-- Priorities (which is more important, A or B?)
+- Priorities (which matters more, A or B?)
 
-**Tips for Answering:**
+**Tips for answering:**
 
-1. **Consider your users.** Which option provides the best experience?
-2. **Think about maintenance.** Simpler solutions are easier to maintain.
-3. **Ask your tech lead.** If unsure about technical trade-offs, consult before answering.
-4. **Document your reasoning.** Prism records your answers - future team members will understand why decisions were made.
+1. **Think about your users.** Which option gives the best experience?
+2. **Keep it simple.** Simpler choices are easier to maintain.
+3. **Ask your tech lead.** Get help with technical trade-offs before answering.
 
-**Clarification Limits:**
+> **Tip:** Prism records your answers. Future team members will see why each decision was made.
 
-Prism allows a maximum of 3 clarification rounds. If issues remain after 3 rounds, you'll need to:
-- Simplify the feature scope
-- Provide more detail in your answers
+**Follow-up limits:**
+
+Prism allows a maximum of 3 rounds of follow-up questions. If gaps remain after 3 rounds, you will need to:
+
+- Shrink the feature scope
+- Add more detail to your answers
 - Meet with stakeholders to resolve conflicts
+
+You should now see your updated feature document with all gaps resolved.
 
 ---
 
 ## Part 3: Understanding Technical Output
 
-### Reading an Implementation Plan
+### Reading a Build Plan
 
-After clarification, `/prism-plan` generates a technical plan. Here's how to interpret it:
+After follow-up questions, `/prism-plan` creates a technical plan. Here is how to read it.
 
-**Constitution Gate Checks:** Verifies the plan follows your project rules. All boxes should be checked. If not, discuss with your tech lead.
+**Rulebook Gate Checks:** Confirms the plan follows your project rules. All boxes should be checked. If not, talk to your tech lead.
 
-**Project Structure:** Shows what files will be created or modified. You don't need to understand the file paths, but you can verify:
-- New files are being created (not just modifying everything)
-- The scope looks reasonable (10 files, not 100)
+**Project Structure:** Shows which files will be created or changed. You do not need to understand file paths. You can check:
 
-**API Contracts:** Defines how different parts of the system communicate. Look for:
+- New files are being created (not just changing everything)
+- The scope looks right (10 files, not 100)
+
+**Data Contracts:** Defines how parts of the system talk to each other. Look for:
+
 - Request/Response pairs that match your requirements
-- Error handling for expected failure cases
+- Error handling for expected failures
 
-**Dependencies:** Lists new software packages needed. Fewer is generally better. Three or fewer new packages is typical.
+**New Packages:** Lists new software packages needed. Fewer is better. Three or fewer new packages is typical.
 
-**Risk Assessment:** Identifies potential problems and mitigations. Review this with your tech lead if anything seems concerning.
+**Risk Review:** Points out potential problems and how to handle them. Share this with your tech lead if anything looks concerning.
 
 ### Understanding Task Breakdowns
 
-The `/prism-tasks` command produces an actionable task list. Here's how to read it:
+The `/prism-tasks` command creates a list of work items. Here is how to read it.
 
-**Task Structure:**
+**Task structure:**
 
 ```
 T001: [Task description] [Symbols]
-├── Files: [What will be created/changed]
-├── Acceptance Criteria: [How to verify completion]
-├── Depends On: [What must be done first]
-└── Test First: [Yes/No]
+  Files: [What will be created or changed]
+  Acceptance Criteria: [How to verify it is done]
+  Depends On: [What must be done first]
+  Test First: [Yes/No]
 ```
 
-**Task Symbols:**
+**Task symbols:**
 
 | Symbol | Meaning |
 |--------|---------|
 | `[ ]` | Not started |
 | `[~]` | In progress |
 | `[x]` | Complete |
-| `[B]` | Blocking - other tasks depend on this |
-| `[P]` | Parallel - can run alongside other `[P]` tasks |
+| `[B]` | Blocking -- other tasks depend on this |
+| `[P]` | Parallel -- can run at the same time as other `[P]` tasks |
 
-**Using Tasks for Sprint Planning:**
+**Using tasks for sprint planning:**
 
-1. **Identify blocking tasks** - These must be done first
-2. **Find parallel opportunities** - Tasks marked `[P]` can be assigned to multiple engineers
-3. **Note dependencies** - Ensure dependent tasks are scheduled after their prerequisites
-4. **Check test requirements** - "Test First: Yes" means tests should be written before the code
+1. Find blocking tasks -- these must be done first.
+2. Spot parallel chances -- tasks marked `[P]` can go to different engineers.
+3. Note chains -- schedule dependent tasks after their requirements finish.
+4. Check test needs -- "Test First: Yes" means tests come before code.
 
-### Approval Tiers — When Prism Pauses vs Proceeds
+You should now see a numbered task list with clear dependencies.
 
-Prism uses a three-tier model to balance speed with control. Here's when it will pause and ask you versus when it proceeds automatically:
+### Approval Levels -- When Prism Pauses vs. Proceeds
 
-| Tier | Behavior | Your Experience |
-|------|----------|-----------------|
-| **Auto** | Agent acts immediately and logs the action | You see the result in a status update |
-| **Review** | Agent acts, then flags for your review | You review when convenient; work continues |
-| **Approve** | Agent pauses and waits for your explicit approval | Work stops until you approve |
+Prism balances speed with control using three levels. Here is when it pauses for you and when it moves on its own.
 
-**What falls into each tier:**
+| Level | Behavior | What You See |
+|-------|----------|--------------|
+| **Auto** | Acts right away and logs the action | You see results in a status update |
+| **Review** | Acts, then flags for your review | You check when it is convenient; work goes on |
+| **Approve** | Pauses and waits for your sign-off | Work stops until you approve |
 
-| Action | Tier | Notes |
-|--------|------|-------|
-| Status queries | Auto | — |
-| Research tasks | Auto | — |
-| Spec drafts | Review | You review before proceeding |
-| Clarification questions | Auto | Questions are generated; you provide answers |
-| Plan creation | Review | Escalates to Approve if architectural |
-| Task breakdown | Auto (≤20 tasks) | Review if >20 tasks |
-| Code implementation | Auto | Review if scope changes detected |
-| QA validation | Auto | Review if escalated after failures |
-| Code review | Review | — |
-| Security review | Approve | — |
-| Production deployment | Approve | — |
-| Database migrations | Approve | — |
-| New dependencies | Review | Approve if security-sensitive |
+**What falls into each level:**
+
+| Action | Level | Notes |
+|--------|-------|-------|
+| Status queries | Auto | -- |
+| Research tasks | Auto | -- |
+| Feature document drafts | Review | You review before moving on |
+| Follow-up questions | Auto | Questions appear; you answer them |
+| Plan creation | Review | Moves to Approve if architectural |
+| Task breakdown | Auto (20 or fewer tasks) | Review if more than 20 tasks |
+| Code writing | Auto | Review if scope changes detected |
+| Quality checks | Auto | Review if failures escalate |
+| Code review | Review | -- |
+| Security review | Approve | -- |
+| Production release | Approve | -- |
+| Database changes | Approve | -- |
+| New packages | Review | Approve if security-sensitive |
 
 ---
 
@@ -339,39 +384,52 @@ Prism uses a three-tier model to balance speed with control. Here's when it will
 
 ### The Handoff Process
 
-When specifications are complete, use `/handoff` to create an engineering package.
+When your feature documents are complete, use `/handoff` to create an engineering package.
 
-**What Engineers Receive:**
+**What engineers get:**
 
 | Document | Purpose |
 |----------|---------|
-| Specification | What to build and why |
-| Clarifications | Decisions already made |
-| Implementation Plan | How to build it |
-| Task Breakdown | What to do in what order |
+| Feature Document | What to build and why |
+| Follow-Up Answers | Decisions already made |
+| Build Plan | How to build it |
+| Task Breakdown | What to do and in what order |
 
-**After Handoff:**
+```mermaid
+flowchart LR
+    A["/handoff"] --> B["Feature Doc"]
+    A --> C["Follow-Up Answers"]
+    A --> D["Build Plan"]
+    A --> E["Task Breakdown"]
+```
 
-Engineers may still have questions. If they ask something covered in the clarifications document, point them there. If it's a new question, consider whether it should have been caught during clarification - this improves future specifications.
+**After handoff:**
+
+Engineers may still have questions. If they ask about something in the follow-up answers, point them there. If it is a new question, think about whether it should have been caught earlier. This helps improve future feature documents.
+
+You should now see a complete engineering package ready for your development team.
 
 ### Making Decisions
 
-Throughout the workflow, you'll make decisions that affect implementation. Here's a framework:
+You will make decisions throughout the workflow. Here is a simple framework.
 
-**User Impact Questions** - You should decide:
+**User impact questions -- you decide:**
+
 - Which users is this for?
-- What's the priority of conflicting requirements?
-- What's acceptable for error messages and edge cases?
+- What is the priority when requirements conflict?
+- What should happen in error or edge cases?
 
-**Technical Questions** - Consult your tech lead:
+**Technical questions -- ask your tech lead:**
+
 - Which technology approach is better?
-- What are the performance implications?
-- How does this affect existing systems?
+- What are the speed effects?
+- How does this change existing systems?
 
-**Business Questions** - Escalate if needed:
-- Does this align with company strategy?
-- Are there legal or compliance implications?
-- What's the budget/timeline trade-off?
+**Business questions -- escalate if needed:**
+
+- Does this fit the company strategy?
+- Are there legal or compliance concerns?
+- What is the budget vs. timeline trade-off?
 
 ---
 
@@ -379,88 +437,96 @@ Throughout the workflow, you'll make decisions that affect implementation. Here'
 
 ### Checking Progress
 
-Use `/prism-status` anytime to see current state.
+Run `/prism-status` at any time to see where things stand.
 
-**Example Output:**
+**Example output:**
 
 ```
-┌─────────────────────────────────────────────────────┐
-│ Feature: User Dashboard                             │
-│ Track: Standard                                     │
-│ Phase: Implementation                               │
-├─────────────────────────────────────────────────────┤
-│ Progress: ████████████░░░░ 75%                      │
-│                                                     │
-│ Phases:                                             │
-│ [x] Assess                                          │
-│ [x] Specify                                         │
-│ [x] Clarify                                         │
-│ [x] Plan                                            │
-│ [x] Tasks                                           │
-│ [~] Implement (6/8 tasks complete)                  │
-│ [ ] Validate                                        │
-│ [ ] Review                                          │
-├─────────────────────────────────────────────────────┤
-│ Blockers: None                                      │
-│ Decisions Pending: None                             │
-└─────────────────────────────────────────────────────┘
++-------------------------------------------------+
+| Feature: User Dashboard                         |
+| Track: Standard                                 |
+| Phase: Implementation                           |
++-------------------------------------------------+
+| Progress: 75%                                   |
+|                                                 |
+| Stages:                                         |
+| [x] Assess                                      |
+| [x] Specify                                     |
+| [x] Clarify                                     |
+| [x] Plan                                        |
+| [x] Tasks                                       |
+| [~] Implement (6/8 tasks complete)              |
+| [ ] Validate                                    |
+| [ ] Review                                      |
++-------------------------------------------------+
+| Blockers: None                                  |
+| Decisions Pending: None                         |
++-------------------------------------------------+
 ```
 
-### Understanding Status Information
+You should now see a status summary for every active feature.
 
-**Track:** The workflow path (Quick/Standard/Enterprise) determines how much documentation is generated.
+### Understanding Status Fields
 
-**Phase:** Where the feature is in the workflow.
+**Track:** The workflow path (Quick, Standard, or Enterprise). It controls how much detail is generated.
 
-**Progress:** Overall completion percentage.
+**Phase:** Which stage the feature is in right now.
 
-**Blockers:** Things preventing progress. These need your attention.
+**Progress:** Overall completion as a percentage.
+
+**Blockers:** Issues stopping progress. These need your attention.
 
 **Decisions Pending:** Questions waiting for your answer.
 
 ### Managing Blockers
 
-When blockers appear, they require action:
+When blockers appear, they need action.
 
-**Common Blockers:**
-
-| Blocker | Action |
-|---------|--------|
-| Clarification needed | Answer the pending question via `/clarify` |
-| Constitution conflict | Review with tech lead, update constitution if needed |
-| External dependency | Coordinate with the team that owns that dependency |
-| Resource unavailable | Escalate to project leadership |
+| Blocker | What to Do |
+|---------|------------|
+| Follow-up question needed | Answer via `/clarify` |
+| Rulebook conflict | Review with tech lead; update the rulebook if needed |
+| Outside dependency | Talk to the team that owns that piece |
+| Resource not available | Escalate to project leadership |
 
 ### Learning Loop
 
-Prism captures learnings automatically as you work. This builds institutional memory that helps avoid repeating mistakes and surfaces validated patterns over time.
+Prism captures lessons as you work. This builds a shared memory that helps avoid repeat mistakes. It also surfaces proven patterns over time.
 
-**The 4 learning categories:**
+**The 4 learning types:**
 
-| Category | What It Contains | When Loaded |
-|----------|------------------|-------------|
-| **Patterns** | Validated rules to follow (e.g., "always use server actions for forms") | Every task |
-| **Gotchas** | Project-specific traps to avoid (e.g., "API rate limit is 100/min") | Every task |
-| **Decisions** | Architectural choices and their rationale | On demand |
+| Type | What It Holds | When Loaded |
+|------|---------------|-------------|
+| **Patterns** | Proven rules to follow (e.g., "always use server actions for forms") | Every task |
+| **Gotchas** | Project-specific traps (e.g., "API rate limit is 100/min") | Every task |
+| **Decisions** | Big choices and why they were made | On demand |
 | **Feature Notes** | Per-feature task details and context | Current feature only |
 
-**Lifecycle:**
+**How the cycle works:**
 
-1. **Capture** — Learnings are recorded automatically after each task
-2. **Reference** — Relevant learnings are loaded before each task begins
-3. **Review** — Periodic pruning and promotion via `/learn --review`
-4. **Promote** — Validated patterns move to the permanent patterns file
-5. **Archive** — Completed feature notes move to the archive
+```mermaid
+flowchart LR
+    A[Capture] --> B[Reference]
+    B --> C[Review]
+    C --> D[Promote]
+    D --> E[Archive]
+```
+
+1. **Capture** -- Lessons are recorded after each task.
+2. **Reference** -- Relevant lessons load before each task starts.
+3. **Review** -- Run `/learn --review` to clean up.
+4. **Promote** -- Proven patterns move to the permanent file.
+5. **Archive** -- Finished feature notes move to storage.
 
 **Using `/learn --review`:**
 
-Run this periodically to clean up learnings. You'll be prompted to:
-- Promote candidates that have proven reliable into permanent patterns
-- Archive completed feature notes
-- Remove duplicates
-- Prune stale entries
+Run this from time to time to tidy up lessons. You will be asked to:
 
-Learnings are stored in `/memory/learnings/` and are kept lightweight — typically using only ~3% of context.
+- Promote reliable candidates into permanent patterns
+- Archive finished feature notes
+- Remove duplicates and stale entries
+
+> **Note:** Lessons are stored in `/memory/learnings/` and stay small -- about 3% of context.
 
 ---
 
@@ -468,15 +534,15 @@ Learnings are stored in `/memory/learnings/` and are kept lightweight — typica
 
 ### Quick Diagnosis
 
-| Symptom | Likely Cause | Quick Fix |
-|---------|--------------|-----------|
-| "Maximum clarification rounds reached" | Requirements too vague or conflicting | Simplify scope, provide direct answers |
-| "QA validation failed" | Fundamental design issues | Review with tech lead |
-| Unexpected output | Context confusion | Start fresh with `/spec` |
+| What You See | Likely Cause | Quick Fix |
+|--------------|--------------|-----------|
+| "Maximum clarification rounds reached" | Requirements too vague or conflicting | Shrink scope and give direct answers |
+| "QA validation failed" | A deep design issue | Review with your tech lead |
+| Unexpected output | Context mix-up | Start fresh with `/spec` |
 
 ### Getting Help
 
-If you encounter issues not covered here, see the full [Troubleshooting Guide](troubleshooting.md).
+If you run into something not covered here, see the full [Troubleshooting Guide](troubleshooting.md).
 
 ---
 
@@ -484,71 +550,31 @@ If you encounter issues not covered here, see the full [Troubleshooting Guide](t
 
 ### Appendix A: Glossary
 
-| Term | Definition |
-|------|------------|
-| **Acceptance Criteria** | Conditions that must be true for a requirement to be considered complete |
-| **Blocker** | Something preventing progress until resolved |
-| **Constitution** | Project rulebook containing standards all work must follow |
-| **Clarification** | Process of asking questions to remove ambiguity from requirements |
-| **Entity** | A type of data the system stores (User, Product, Order, etc.) |
-| **Functional Requirement** | What the system must do (specific behavior) |
-| **Handoff** | Package of information transferred to engineering for implementation |
-| **Non-Functional Requirement** | How well the system must perform (speed, security, accessibility) |
-| **P1/P2/P3** | Priority levels: Must have / Should have / Nice to have |
-| **Phase** | Stage in workflow (Assess, Specify, Clarify, Plan, Tasks, Implement, Validate, Review) |
-| **Specification (Spec)** | Written description of what a feature should do |
-| **Track** | Workflow path based on feature complexity: Quick, Standard, or Enterprise |
-| **User Scenario** | Story describing who does what and why (As a [user], I want [action], so that [benefit]) |
-
-> For additional terms including Prism-specific concepts like Agent, Skill, Chain, and Orchestrator, see the [full Glossary](glossary.md).
+See the [Glossary](glossary.md) for plain-English definitions of all terms used in Prism documentation.
 
 ### Appendix B: Quick Reference Card
 
-**Commands:**
-
-| Command | Purpose |
-|---------|---------|
-| `/constitution` | View or edit project rules |
-| `/spec [description]` | Create feature specification |
-| `/clarify` | Answer clarification questions |
-| `/prism-plan` | Generate implementation plan |
-| `/prism-tasks` | Create task breakdown |
-| `/prism-status` | Check current progress |
-| `/handoff` | Create engineering package |
-
-**Workflow:**
-
-```
-/constitution (once) → /spec → /clarify → /prism-plan → /prism-tasks → /handoff
-```
-
-**Priorities:**
-
-| Level | Meaning | Action |
-|-------|---------|--------|
-| P1 | Must have | Include in release |
-| P2 | Should have | Include if possible |
-| P3 | Nice to have | Consider for future |
+See the [Command Reference](command-reference.md) for the full list of commands with examples and expected output.
 
 ### Appendix C: Template Reference
 
-Prism uses templates to structure output. The templates are located in `/templates/` and include:
+Prism uses templates to shape its output. The templates live in `/templates/` and include:
 
-- `spec-template.md` - Structure for specifications
-- `plan-template.md` - Structure for implementation plans
-- `tasks-template.md` - Structure for task breakdowns
+- `spec-template.md` -- Structure for feature documents
+- `plan-template.md` -- Structure for build plans
+- `tasks-template.md` -- Structure for task breakdowns
 
-You generally don't need to modify these, but knowing they exist helps you understand where the output structure comes from.
+You do not need to change these. Knowing they exist helps you understand where the output format comes from.
 
 ---
 
 ## Further Resources
 
-- [Quick-Start Tutorial](quick-start.md) - Hands-on 30-minute guide
-- [Command Reference](command-reference.md) - Complete syntax for all commands
-- [Example Walkthrough](examples/user-auth-feature/README.md) - Complete feature example
-- [Troubleshooting Guide](troubleshooting.md) - Common issues and solutions
+- [Quick-Start Tutorial](quick-start.md) -- Hands-on 30-minute guide
+- [Command Reference](command-reference.md) -- Full syntax for all commands
+- [Example Walkthrough](examples/user-auth-feature/README.md) -- A complete feature example
+- [Troubleshooting Guide](troubleshooting.md) -- Common issues and solutions
 
 ---
 
-*This guide covers Prism usage for PMs, POs, and business stakeholders. For technical documentation, see the developer guides in the `/docs/` directory.*
+*This guide covers Prism for PMs, POs, and business stakeholders. For technical details, see the developer guides in the `/docs/` directory.*

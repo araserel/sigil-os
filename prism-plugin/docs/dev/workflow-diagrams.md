@@ -1542,4 +1542,4 @@ Specify → Clarify → Plan → Tasks → Implement → Validate → Review
 
 ---
 
-*Prism OS Version: 1.5.1*
+*Prism OS Version: 2.0.0*

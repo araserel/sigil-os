@@ -13,6 +13,8 @@ This document defines how errors are classified, communicated, and resolved thro
 - **Minimal disruption** to workflow progress
 - **Actionable context** for resolution
 
+> **For users:** See the [Troubleshooting Guide](../troubleshooting.md) for plain-language error guidance.
+
 ---
 
 ## Error Categories
@@ -24,93 +26,6 @@ This document defines how errors are classified, communicated, and resolved thro
 | **Soft** | Auto-recoverable issues | Retry up to 3x | No |
 | **Hard** | Requires decision/input | Escalate with context | Yes |
 | **Blocking** | Prevents all progress | Halt and report | Yes |
-
----
-
-### Soft Errors
-
-**Definition:** Transient or fixable issues that agents can resolve automatically.
-
-**Recovery:** Retry operation (max 3 attempts), apply auto-fix, or skip with documentation.
-
-**Examples:**
-
-| Error | Agent/Skill | Auto-Recovery |
-|-------|-------------|---------------|
-| Lint errors | qa-validator | Run auto-formatter |
-| Type warnings | qa-validator | Attempt type inference fix |
-| Minor test failure | qa-fixer | Apply targeted fix |
-| Network timeout | researcher | Retry with backoff |
-| File format issue | spec-writer | Regenerate section |
-| Missing optional dependency | developer | Install and retry |
-
-**Behavior:**
-```
-On soft error:
-1. Log error context
-2. Attempt recovery (max 3x)
-3. If recovered → Continue workflow
-4. If not recovered → Escalate to Hard error
-```
-
----
-
-### Hard Errors
-
-**Definition:** Issues requiring human decision, clarification, or approval to proceed.
-
-**Recovery:** Escalate to human with full context, options, and recommendation.
-
-**Examples:**
-
-| Error | Agent/Skill | Requires |
-|-------|-------------|----------|
-| Ambiguous requirement | clarifier | User clarification |
-| Constitution conflict | architect | Human override decision |
-| Security finding | security-reviewer | Risk acceptance |
-| Test logic unclear | qa-engineer | Direction on expected behavior |
-| Multiple valid approaches | architect | Selection decision |
-| Scope exceeds track | task-planner | Re-track approval |
-
-**Behavior:**
-```
-On hard error:
-1. Pause current workflow
-2. Document full context (see Error Context JSON)
-3. Present options to human
-4. Await decision
-5. Resume with decision applied
-```
-
----
-
-### Blocking Errors
-
-**Definition:** Fundamental issues that prevent any forward progress until resolved.
-
-**Recovery:** Full stop. Cannot proceed until root cause addressed.
-
-**Examples:**
-
-| Error | Agent/Skill | Resolution Required |
-|-------|-------------|---------------------|
-| Missing spec file | All | Create or locate spec |
-| Invalid workflow state | orchestrator | State correction |
-| Critical security vulnerability | security | Must fix before continue |
-| Missing required approval | Any approve-tier | Obtain approval |
-| Constitution violation | gate-checker | Compliance resolution |
-| Circular dependency | task-planner | Architecture revision |
-| Artifact corruption | Any | Restore or regenerate |
-
-**Behavior:**
-```
-On blocking error:
-1. HALT all workflow operations
-2. Document error with full context
-3. Notify human immediately
-4. Do NOT attempt workarounds
-5. Resume only when blocker resolved
-```
 
 ---
 
@@ -222,8 +137,6 @@ When escalating errors, include structured context for resolution:
 ---
 
 ## Iteration Limits
-
-Different operations have defined retry limits:
 
 | Operation | Limit | On Exceed |
 |-----------|-------|-----------|
@@ -385,8 +298,8 @@ Error state must be included in handoff State Transfer JSON:
   "chain_id": "...",
   "spec_path": "...",
   "track": "...",
-  "iteration_counts": {...},
-  "approvals": {...},
+  "iteration_counts": {},
+  "approvals": {},
   "error_state": {
     "has_error": false,
     "errors_resolved": [
@@ -418,6 +331,5 @@ Error state must be included in handoff State Transfer JSON:
 
 ## Related Documents
 
-- [Context Management Protocol](/docs/context-management.md) — State tracking
-- [Handoff Template](/templates/handoff-template.md) — Error state in transitions
-- [Constitution](/specs/000-constitution/spec.md) — Quality gates that trigger errors
+- [Context Management Protocol](context-management.md) — State tracking
+- [Handoff Template](../../templates/handoff-template.md) — Error state in transitions

@@ -1,30 +1,26 @@
 # Troubleshooting Guide
 
-> Solutions for common issues encountered when using Prism.
-
-This guide helps you diagnose and resolve problems you may encounter during your Prism workflow. Each section covers a specific issue with symptoms, causes, and solutions.
+> Take a breath. Most problems have a quick fix. This page walks you through the common ones step by step.
 
 ---
 
 ## Quick Diagnosis
 
-Use this table to quickly identify your issue and find the relevant section:
+Find your symptom in the table below and jump to the matching section.
 
 | Symptom | Likely Cause | Quick Fix | Section |
 |---------|--------------|-----------|---------|
 | "Maximum clarification rounds reached" | Vague requirements | Simplify scope | [Clarification Limits](#clarification-limits) |
-| "QA validation failed after 5 attempts" | Fundamental design issue | Review with tech lead | [QA Loop Issues](#qa-loop-issues) |
-| Unexpected output format | Context confusion | Start fresh | [Unexpected Output](#unexpected-output) |
-| Missing context from previous session | Session state issue | Check context files | [Session Recovery](#session-recovery) |
-| Feature takes wrong direction | Unclear initial description | Restart with better spec | [Wrong Direction](#wrong-direction) |
+| "QA (quality check) validation failed after 5 attempts" | Design conflict | Review with tech lead | [Quality-Check Loop Issues](#quality-check-loop-issues) |
+| Unexpected output format | Context mix-up | Start fresh | [Unexpected Output](#unexpected-output) |
+| Missing context from a previous session | Session state issue | Check context files | [Session Recovery](#session-recovery) |
+| Feature takes wrong direction | Unclear first description | Rewrite your description | [Wrong Direction](#wrong-direction) |
 
 ---
 
 ## Clarification Limits
 
-### Problem: "Maximum clarification rounds reached"
-
-**What You See:**
+### What You See
 
 ```
 Clarification round 3 of 3 complete.
@@ -32,63 +28,54 @@ Maximum clarification cycles reached.
 Some ambiguities may remain unresolved.
 ```
 
-**What's Happening:**
+### Why This Happens
 
-Prism allows a maximum of 3 clarification rounds. If ambiguities still exist after 3 rounds, the system cannot proceed automatically.
+Prism allows up to 3 rounds of back-and-forth questions. After that, it stops asking. This usually means one of four things:
 
-**Why This Happens:**
+- The first description was too short or vague.
+- Two requirements conflict with each other.
+- The feature scope is too large for one pass.
+- Answers to questions were unclear or partial.
 
-1. **Initial description too vague** — Not enough detail to build a complete specification
-2. **Conflicting requirements** — Two requirements that can't both be satisfied
-3. **Scope too large** — Trying to do too much in one feature
-4. **Unclear answers** — Clarification responses that don't fully resolve the question
+### Fix 1 -- Shrink the Scope
 
-**How to Fix:**
+Break the feature into smaller pieces.
 
-**Option 1: Simplify the Scope**
-
-Break your feature into smaller pieces. Instead of:
+Instead of:
 > "Build a complete user management system"
 
 Try:
-> "Add user registration with email and password"
+> "Add user sign-up with email and password"
 
-Then create separate features for login, profile management, and admin controls.
+You can create separate features for login, profiles, and admin controls later.
 
-**Option 2: Provide Direct Answers**
+### Fix 2 -- Give Direct Answers
 
-When answering clarification questions, be as specific as possible:
+When Prism asks a question, pick one clear option.
 
 Instead of:
 > "Maybe option B, but it depends"
 
 Try:
-> "Option B. We need password reset via email because our users frequently forget passwords."
+> "Option B. We need password reset via email because our users often forget passwords."
 
-**Option 3: Start Fresh with More Detail**
+### Fix 3 -- Start Over with More Detail
 
-Re-run `/spec` with a more detailed description that anticipates common questions:
+Run `/spec` again with a richer description. Try to answer common questions before they come up.
 
 Instead of:
 > "Add a contact form"
 
 Try:
-> "Add a contact form with name, email, and message fields. Show confirmation on submit. Send email copy to user. Use honeypot spam protection. Form must work on mobile and meet accessibility standards."
+> "Add a contact form with name, email, and message fields. Show a success notice on submit. Send an email copy to the user. Use honeypot spam protection. The form must work on mobile and meet accessibility standards."
 
-**How to Prevent:**
-
-- Write detailed initial descriptions
-- Include context about your users and business goals
-- Specify constraints you already know
-- Answer clarification questions with specific choices, not "it depends"
+> **Tip:** Before you type `/spec`, write down three things: who uses the feature, what they do, and what they see when it works. That alone prevents most clarification loops.
 
 ---
 
-## QA Loop Issues
+## Quality-Check Loop Issues
 
-### Problem: "QA validation failed after 5 attempts"
-
-**What You See:**
+### What You See
 
 ```
 QA fix cycle 5 of 5 complete.
@@ -96,96 +83,75 @@ Maximum fix attempts exceeded.
 Escalating to human review.
 ```
 
-**What's Happening:**
+QA (quality assurance -- the step where Prism checks its own work) tried to fix an issue five times and could not.
 
-When implementing a feature, the QA validation found issues that couldn't be automatically fixed after 5 attempts. This usually indicates a fundamental problem rather than a simple bug.
+### Why This Happens
 
-**Why This Happens:**
+This usually points to a deeper problem, not a simple bug.
 
-1. **Contradictory requirements** — The spec asks for things that can't both be true
-2. **Constitution conflict** — The implementation violates project rules
-3. **Technical impossibility** — What's requested can't be done with current technology/constraints
-4. **Incomplete specification** — Missing information needed for implementation
+- The requirements may ask for two things that contradict each other.
+- The implementation may break a rule in your constitution (the file that holds your project's principles and standards).
+- What was requested may not be possible with the current setup.
+- The specification (your written feature description) may be missing key details.
 
-**How to Fix:**
+### How to Fix
 
-**Step 1: Review the Error Details**
+1. Run `/prism-status` and look at which check keeps failing.
+2. Share the output with your tech lead.
+3. Pick the right action from the table below.
 
-Run `/prism-status` to see what's failing:
-
-```
-/prism-status
-```
-
-Look for the specific validation that's failing repeatedly.
-
-**Step 2: Consult Your Tech Lead**
-
-Share the error details with your technical team. Common resolutions:
-
-| Problem Type | Resolution |
+| Problem Type | What to Do |
 |--------------|------------|
-| Contradictory requirements | Prioritize one, remove the other |
-| Constitution conflict | Update constitution or change approach |
-| Technical limitation | Adjust requirements to what's possible |
-| Missing information | Add details to specification |
+| Contradicting requirements | Keep one, remove the other |
+| Constitution rule conflict | Update the constitution or change approach |
+| Technical limit | Adjust the feature to fit what is possible |
+| Missing information | Add the missing details to your specification |
 
-**Step 3: Update and Retry**
+4. Run `/prism-plan` and then `/prism-tasks` with the corrected information.
 
-After identifying the issue:
-1. Update the specification if requirements need to change
-2. Update the constitution if project rules need adjustment
-3. Re-run `/prism-plan` and `/prism-tasks` with corrected information
+You should now see the quality check pass on the next run.
 
-**How to Prevent:**
-
-- Review specifications with tech lead before planning
-- Check constitution alignment during planning phase
-- Keep individual features small and focused
+> **Note:** If you are unsure which problem type applies, share the full `/prism-status` output with your tech lead. They can pinpoint the root cause.
 
 ---
 
 ## Unexpected Output
 
-### Problem: Output doesn't match expectations
+### What You See
 
-**What You See:**
+- Specifications that miss key requirements you asked for.
+- Plans that seem unrelated to your feature.
+- Tasks that do not match the plan.
 
-- Specifications that miss key requirements you mentioned
-- Plans that seem unrelated to your feature
-- Tasks that don't align with the plan
+### Why This Happens
 
-**Why This Happens:**
+- Context from an earlier conversation may be leaking in.
+- Your description may have been read differently than you meant.
+- Your project may not have a constitution (project-principles file) yet.
 
-1. **Context confusion** — Previous conversations affecting current output
-2. **Ambiguous phrasing** — Your description interpreted differently than intended
-3. **Missing constitution** — No project rules to guide output
+### Fix 1 -- Start a Fresh Session
 
-**How to Fix:**
-
-**Option 1: Start Fresh**
-
-Begin a new session with a clean state:
+Run the command below and type out your full feature description. Do not assume Prism remembers anything from before.
 
 ```
 /spec [your complete feature description]
 ```
 
-Provide the full description without assuming context from previous sessions.
+You should now see a new specification that matches your description.
 
-**Option 2: Check Your Constitution**
+### Fix 2 -- Check Your Constitution
 
-Ensure your constitution exists and is correct:
+Run `/constitution` and review the technology choices and standards listed. If they do not match your project, update them.
 
 ```
 /constitution
 ```
 
-Review the technology choices and standards. If they don't match your project, update them.
+You should now see a constitution that reflects your real project rules.
 
-**Option 3: Be More Explicit**
+### Fix 3 -- Be More Specific
 
-Rephrase your description to leave no room for interpretation:
+Leave no room for guesswork.
 
 Instead of:
 > "Make the dashboard better"
@@ -193,125 +159,115 @@ Instead of:
 Try:
 > "Add a filter to the dashboard that lets users show only items from the last 7 days. The filter should be a dropdown with options: Today, Last 7 Days, Last 30 Days, All Time."
 
-**How to Prevent:**
-
-- Always provide complete descriptions without assuming context
-- Review specification output before proceeding to clarification
-- Use concrete examples in your descriptions
+> **Tip:** Use concrete examples with real names, real numbers, and real labels. The more specific you are, the closer the output will be to what you want.
 
 ---
 
 ## Session Recovery
 
-### Problem: Context lost between sessions
+### What You See
 
-**What You See:**
+- Prism does not remember your previous work.
+- `/prism-status` shows no active features.
+- You are asked to set up a constitution again.
 
-- Prism doesn't remember your previous work
-- `/prism-status` shows no active features
-- Asked to set up constitution again
+### Why This Happens
 
-**Why This Happens:**
+Prism stores its memory in a `/memory` folder inside your project. If that folder is missing, moved, or damaged, Prism starts with a blank slate. Starting from a different folder can also cause this.
 
-1. **Context files missing** — The `/memory` directory files were deleted or moved
-2. **File corruption** — Context files became corrupted
-3. **Different working directory** — Started session from a different location
+### How to Fix
 
-**How to Fix:**
+1. Make sure you opened your terminal in the same project folder you used before.
+2. Check that a `/memory` folder exists inside your project.
+3. Open the `/memory` folder and confirm it contains files.
+4. If the files are gone, run `/constitution` to recreate your project principles.
+5. Run `/spec` to restart your feature.
 
-**Step 1: Check Context Directory**
+```
+$ ls memory/
+project-context.md   decisions.md   ...
+```
 
-Your project should have a `/memory` directory containing context files. Verify it exists and contains files.
+You should now see your project state restored or a clean starting point ready to go.
 
-**Step 2: Check Working Directory**
-
-Ensure you're running Prism from the same directory as before. The context is tied to the project location.
-
-**Step 3: Manual Recovery**
-
-If files are missing, you may need to:
-1. Recreate your constitution with `/constitution`
-2. Restart your feature with `/spec`
-
-Previous specifications may exist in `/specs/` directory if they were completed.
-
-**How to Prevent:**
-
-- Don't delete the `/memory` directory
-- Always start Prism from the same project directory
-- Keep backups of important specifications
+> **Warning:** Do not delete the `/memory` folder. It holds all of Prism's saved context for your project. Losing it means starting over.
 
 ---
 
 ## Wrong Direction
 
-### Problem: Feature implementation going in wrong direction
+### What You See
 
-**What You See:**
+- The plan includes approaches you did not want.
+- Tasks cover features you did not ask for.
+- Technical choices do not match your expectations.
 
-- Plan includes approaches you didn't want
-- Tasks are for features you didn't request
-- Technical choices don't match your expectations
+### Why This Happens
 
-**Why This Happens:**
+Prism fills in gaps when your description leaves room for guesses. Rushed answers to clarification questions and unexpected constitution rules can also steer things off course.
 
-1. **Unclear initial description** — Prism filled in gaps with assumptions
-2. **Missed clarification questions** — Important questions answered too quickly
-3. **Constitution defaults** — Project rules guided decisions you didn't expect
+### Caught Early (Before Tasks Start)
 
-**How to Fix:**
+1. Run `/prism-status` and read the specification carefully.
+2. Run `/clarify` to correct the parts that are wrong.
+3. Run `/prism-plan` to generate a new plan.
 
-**If Caught Early (Before Tasks):**
+```
+$ /prism-plan
+Plan generated: 4 tasks across 2 phases.
+Ready for review.
+```
 
-1. Review the specification carefully with `/prism-status`
-2. Run `/clarify` again to address specific concerns
-3. Re-run `/prism-plan` after changes
+You should now see a plan that matches your intent.
 
-**If Caught Late (During Implementation):**
+### Caught Late (During Building)
 
-1. Stop current implementation
-2. Review what went wrong in the specification
-3. Update the specification with corrected requirements
-4. Re-generate plan and tasks
+1. Stop the current implementation.
+2. Open the specification and find what went wrong.
+3. Update the specification with corrected requirements.
+4. Run `/prism-plan` and then `/prism-tasks` to regenerate work items.
 
-**How to Prevent:**
+```
+$ /prism-tasks
+Tasks regenerated: 3 tasks.
+Ready for implementation.
+```
 
-- Read specifications thoroughly before approving
-- Take time with clarification questions — don't rush
-- Review plans with your tech lead before creating tasks
-- Ask questions if anything in the output is unclear
+You should now see new tasks that reflect your corrected requirements.
+
+> **Tip:** Before you approve any specification, read it all the way through. A few minutes of review here can save hours of rework later.
 
 ---
 
 ## Override Options
 
-Sometimes you need to override Prism's decisions. Use these carefully.
+Sometimes you need to override a Prism decision. Use overrides with care.
 
-### When Overrides Are Appropriate
+### When Overrides Make Sense
 
-| Situation | Override Action |
-|-----------|-----------------|
-| Constitution rule doesn't apply to this feature | Document exception in spec |
-| Technical recommendation differs from team preference | Update requirements explicitly |
-| Iteration limit reached but progress was made | Review and manually proceed |
+| Situation | What to Do |
+|-----------|------------|
+| A constitution rule does not apply to this feature | Document the exception in your specification |
+| Your team prefers a different technical choice | State the preference in the requirements |
+| An iteration limit was hit but progress was being made | Review the output and continue by hand |
 
 ### When NOT to Override
 
 | Situation | Better Approach |
 |-----------|-----------------|
-| Security validation failing | Fix the security issue |
-| Tests won't pass | Investigate root cause |
-| Constitution conflict | Update constitution properly |
+| A security check is failing | Fix the security issue |
+| Tests will not pass | Find and fix the root cause |
+| A constitution rule conflicts | Update the constitution the right way |
 
-### How to Document Overrides
+### How to Record an Override
 
-If you override a decision, document it in the specification:
+Add a section to your specification like the example below.
 
 ```markdown
 ## Exceptions
 
-**Exception:** Using JWT-only sessions instead of database sessions.
-**Reason:** This feature is read-only and doesn't need session revocation.
+**Exception:** Using token-only sessions instead of database sessions.
+**Reason:** This feature is read-only and does not need session revocation.
 **Approved by:** [Name, Date]
 ```
 
@@ -319,85 +275,90 @@ If you override a decision, document it in the specification:
 
 ## Error Categories
 
-Understanding error types helps you respond appropriately:
+Prism groups errors into three types. Knowing which type you are facing helps you respond the right way.
 
-### Soft Errors (Auto-Recoverable)
+### Soft Errors (Fix Themselves)
 
-**Examples:** Formatting issues, minor validation failures, network timeouts
+These are small problems like formatting issues, minor validation failures, or brief network timeouts. Prism retries up to 3 times on its own.
 
-**What Happens:** Prism automatically retries up to 3 times
-
-**Your Action:** Usually none — these resolve automatically
+**Your action:** Usually nothing. These resolve without your help.
 
 ### Hard Errors (Need Your Input)
 
-**Examples:** Ambiguous requirements, multiple valid approaches, scope decisions
+These happen when Prism finds unclear requirements, multiple valid paths, or a scope decision only you can make. Prism pauses and asks you to choose.
 
-**What Happens:** Prism pauses and asks for your decision
-
-**Your Action:** Review options and make a choice
+**Your action:** Review the options Prism presents and pick one.
 
 ### Blocking Errors (Full Stop)
 
-**Examples:** Missing required files, critical security issues, circular dependencies
+These are serious issues like missing required files, critical security problems, or circular task chains (where task A depends on B and B depends on A). All progress stops until the root cause is fixed.
 
-**What Happens:** All progress stops until resolved
-
-**Your Action:** Address the root cause before proceeding
+**Your action:** Address the underlying problem before moving on.
 
 ---
 
 ## Getting More Help
 
-### Check Existing Documentation
+### Check Existing Docs First
 
-- [User Guide](user-guide.md) — Comprehensive usage guide
-- [Command Reference](command-reference.md) — Full command syntax
-- [Example Walkthrough](examples/user-auth-feature/README.md) — Complete example
+- [User Guide](user-guide.md) -- Full usage guide
+- [Command Reference](command-reference.md) -- Every command explained
+- [Example Walkthrough](examples/user-auth-feature/README.md) -- A start-to-finish example
 
-### Information to Gather Before Asking for Help
+### Before You Ask for Help, Gather This
 
-If you need to escalate an issue, gather:
+1. What command did you run? Copy the full input.
+2. What output did you get? Copy the full response.
+3. What did you expect to happen?
+4. Run `/constitution` and copy the output.
+5. Run `/prism-status` and copy the output.
 
-1. **What command did you run?** Include the full input
-2. **What output did you get?** Copy the complete response
-3. **What did you expect?** Describe the expected behavior
-4. **What's in your constitution?** Run `/constitution` and share the output
-5. **What phase are you in?** Run `/prism-status` and share the output
+```
+$ /prism-status
+Phase: planning
+Track: standard
+Active Feature: user-auth
+Status: blocked — QA fix cycle exceeded
+```
+
+Having all five items ready makes it much easier for someone to help you.
 
 ### Common Questions
 
 **Q: Can I undo a clarification answer?**
-A: Not directly. Start fresh with `/spec` if you need to change fundamental decisions.
+A: Not directly. Run `/spec` again to start fresh if you need to change a key decision.
 
-**Q: How do I change the track (Quick/Standard/Enterprise)?**
-A: The track is selected based on feature complexity. Simplify your feature description for a simpler track.
+**Q: How do I change the track (the complexity level -- Quick, Standard, or Enterprise)?**
+A: The track is chosen based on feature size. Describe a smaller feature to get a simpler track.
 
 **Q: Why does my feature keep getting split into multiple features?**
-A: Your scope may be too large. This is often a sign to break it into separate, focused features.
+A: Your scope is likely too large. This is Prism's way of saying "break it up." Try describing one focused piece at a time.
 
 **Q: Can I skip phases?**
-A: No. The phases ensure completeness. Skipping phases leads to gaps that cause problems later.
+A: No. Each phase builds on the last. Skipping one creates gaps that cause problems later.
 
 ---
 
 ## Summary
 
-Most issues fall into these categories:
+Most issues fall into one of four buckets.
 
 | Category | Common Cause | Solution |
 |----------|--------------|----------|
-| Clarification loops | Vague requirements | Be more specific upfront |
-| QA failures | Design conflicts | Review with tech lead |
-| Context issues | Session state | Check files, start fresh if needed |
-| Wrong direction | Rushed review | Take time to review each phase output |
+| Clarification loops | Vague requirements | Be more specific up front |
+| Quality-check failures | Design conflicts | Review with tech lead |
+| Context issues | Session state | Check files or start fresh |
+| Wrong direction | Rushed review | Read each phase output carefully |
 
-When in doubt:
-1. Check `/prism-status` for current state
-2. Review the specification for accuracy
-3. Consult your tech lead for technical issues
-4. Start fresh if context is corrupted
+When in doubt, start here:
+
+1. Run `/prism-status` to see where things stand.
+2. Review the specification for accuracy.
+3. Ask your tech lead if the issue is technical.
+4. Start fresh if context seems corrupted.
+
+You should now have a clear next step for any problem you run into.
 
 ---
 
-*For technical error handling details, developers can reference [Error Handling Protocol](error-handling.md).*
+*For technical error handling details, developers can reference [Error Handling Protocol](dev/error-handling.md).*

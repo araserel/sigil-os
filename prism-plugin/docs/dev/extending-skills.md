@@ -60,7 +60,7 @@ When creating a new skill, determine which chain(s) it fits into and update your
 
 ## Skill Anatomy
 
-Every skill file consists of two parts:
+Every skill uses the **directory/SKILL.md** format. Each skill lives in its own directory (e.g., `prism-plugin/skills/workflow/spec-writer/SKILL.md`). The SKILL.md file consists of two parts:
 
 ### 1. Frontmatter (YAML)
 
@@ -204,7 +204,7 @@ Before creating a skill, answer:
 
 1. **What problem does this solve?**
 2. **Is this reusable?** (If one-time, don't create a skill)
-3. **Does a similar skill exist?** (Check `.claude/skills/`)
+3. **Does a similar skill exist?** (Check `prism-plugin/skills/`)
 4. **Where does it fit in the workflow?**
 
 ### Step 2: Choose the Category
@@ -230,7 +230,7 @@ Determine:
 
 ### Step 4: Write the Skill
 
-1. Copy the template from `/templates/skill-template.md`
+1. Copy the template from `prism-plugin/templates/skill-template.md`
 2. Fill in all required sections
 3. Add examples and edge cases
 4. Include version history
@@ -238,7 +238,7 @@ Determine:
 ### Step 5: Register the Skill
 
 1. Place file in appropriate category directory
-2. Update `.claude/skills/README.md`
+2. Update `prism-plugin/skills/README.md` with the new skill entry
 3. Add to any agent that invokes it
 
 ### Step 6: Test the Skill
@@ -537,7 +537,7 @@ Changelog entry shown to user for review before writing to file.
 
 ## Related Documents
 
-- [Skill Template](/templates/skill-template.md) — Blank template
-- [Versioning Guide](/docs/versioning.md) — Version management
-- [Error Handling](/docs/error-handling.md) — Error taxonomy
-- [Skills README](/.claude/skills/README.md) — Skill catalog
+- [Skill Template](../../templates/skill-template.md) — Blank template
+- [Versioning Guide](versioning.md) — Version management
+- [Error Handling](error-handling.md) — Error taxonomy
+- [Skills README](../../skills/README.md) — Skill catalog

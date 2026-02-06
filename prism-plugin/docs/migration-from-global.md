@@ -1,5 +1,7 @@
 # Migration Guide: Global Installation to Plugin
 
+> **Sunset Notice:** The global `install-global.sh` installation method is no longer supported as of v2.0.0. All users should migrate to the plugin architecture described below.
+
 This guide helps existing Prism OS users migrate from the global `install-global.sh` installation to the new Claude Code plugin architecture.
 
 ## Overview
@@ -8,7 +10,7 @@ Prism OS v2.0 transitions from a shell-script-based installation to a Claude Cod
 
 - **Automatic enforcement** via lifecycle hooks (no more relying on Claude following instructions)
 - **Standard distribution** via Claude Code's plugin marketplace
-- **Easy updates** via `claude plugin update prism-os`
+- **Easy updates** via `claude plugin update prism@prism-os`
 - **Team distribution** via project-scoped plugin configuration
 
 ## Prerequisites
@@ -40,11 +42,9 @@ rm -rf ~/.prism-os/
 ### Step 2: Install the Plugin
 
 ```bash
-# Install from marketplace (when available)
-claude plugin install prism-os
-
-# Or install from local directory during development
-claude plugin install ./prism-plugin
+# Add marketplace and install
+claude plugin marketplace add araserel/prism-os
+claude plugin install prism@prism-os
 ```
 
 ### Step 3: Verify Installation

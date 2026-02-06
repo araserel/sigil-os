@@ -1,16 +1,16 @@
 # MCP Integration Guide
 
-> Optional external tool integrations for Prism using Model Context Protocol.
+> Connect Prism to external tools like Jira, Slack, and Confluence.
+
+> **Audience:** This guide is for advanced users and developers who want to connect Prism to external services.
 
 ---
 
 ## Overview
 
-Prism can integrate with external tools through **Model Context Protocol (MCP)** to enhance workflow capabilities. These integrations are **optional** — Prism functions fully without them.
+Prism can connect to external tools through **MCP** (Model Context Protocol — a standard way to link AI assistants to outside services). These connections are **optional**. Prism works fully without them.
 
-**What is MCP?**
-
-MCP (Model Context Protocol) is a standard for connecting AI assistants to external data sources and tools. It allows Claude to access project management systems, documentation platforms, and other services.
+MCP lets Claude access project trackers, wikis, chat tools, and more. You add a connection once, and Prism uses it automatically during your workflow.
 
 ---
 
@@ -301,21 +301,21 @@ Access application error data during QA and debugging.
 
 ## Setting Up MCP
 
-### Prerequisites
+### What You Need
 
-1. Claude Code with MCP support enabled
-2. MCP server for your target integration
-3. API credentials for the external service
+1. Claude Code with MCP support turned on
+2. An MCP server for the service you want to connect (e.g., Jira, Slack)
+3. Login credentials for that service (API key or token)
 
-### General Setup Steps
+### How to Connect a Service
 
-1. **Install MCP Server**
+1. **Install the MCP server** for your service.
    ```bash
-   # Example for Context7
+   # Example: install the Context7 documentation server
    npm install -g @anthropic/mcp-server-context7
    ```
 
-2. **Configure MCP in Claude Code**
+2. **Tell Claude Code about the server.** Add it to your settings file.
    ```json
    // .claude/mcp-config.json
    {
@@ -328,11 +328,11 @@ Access application error data during QA and debugging.
    }
    ```
 
-3. **Add Credentials**
-   Set environment variables or use secure credential storage.
+3. **Add your credentials.** Use environment variables — never put passwords in files.
 
-4. **Test Connection**
-   Verify the MCP server responds correctly.
+4. **Test the connection.** Start Claude Code and verify the server responds.
+
+You should now see the service listed when you check your MCP connections.
 
 ### Prism-Specific Configuration
 
@@ -368,9 +368,9 @@ Prism is designed to work fully without MCP integrations:
 
 ---
 
-## Security Considerations
+## Security
 
-### Data Flow
+### How Data Flows
 
 ```
 Prism → MCP Server → External Service
@@ -378,21 +378,16 @@ Prism → MCP Server → External Service
      Credentials required
 ```
 
+Data only flows outward when an MCP server is set up. Without MCP, nothing leaves your machine.
+
 ### Best Practices
 
-1. **Least Privilege** — Grant only necessary permissions
-2. **Audit Logging** — Track what data flows to external services
-3. **Credential Security** — Use environment variables, not hardcoded
-4. **Review Before Send** — Human approval for sensitive data
-5. **Local First** — Always maintain local copies
+1. **Give least access** — Only grant the permissions each service needs
+2. **Use environment variables** — Never put credentials in files
+3. **Review before sending** — Require human approval for sensitive data
+4. **Keep local copies** — MCP adds to your local files, never replaces them
 
-### Sensitive Data
-
-**Never send to external services:**
-- API keys or secrets
-- Personal data without consent
-- Security vulnerability details (until fixed)
-- Proprietary business logic
+> **Warning:** Never send API keys, personal data, security findings, or business secrets to external services.
 
 ---
 
@@ -422,6 +417,6 @@ Prism → MCP Server → External Service
 
 ## Related Documents
 
-- [Context Management](/docs/context-management.md) — Project state
-- [Error Handling](/docs/error-handling.md) — Integration errors
-- [Skills README](/.claude/skills/README.md) — Skill catalog
+- [Context Management](dev/context-management.md) — Project state
+- [Error Handling](dev/error-handling.md) — Integration errors
+- [Skills README](../skills/README.md) — Skill catalog

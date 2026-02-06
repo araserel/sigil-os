@@ -1,41 +1,58 @@
-# Documentation Directory
+# Prism Documentation
 
-Contains user documentation, tutorials, and examples for Prism.
+Complete documentation for Prism OS, the specification-driven development system.
 
-## Documentation
+---
 
-| Document | Audience | Purpose |
-|----------|----------|---------|
-| `user-guide.md` | PMs, POs, Project Managers | Complete usage guide |
-| `quick-start.md` | New users | 30-minute hands-on tutorial |
-| `command-reference.md` | All users | Slash command documentation |
-| `troubleshooting.md` | All users | Common issues and solutions |
-| `extending-skills.md` | Developers | How to add new skills |
-| `mcp-integration.md` | Developers | External tool integration |
+## For Users
+
+Start here if you use Prism to build features, manage projects, or work with specifications.
+
+| Document | What It Covers | Start Here If... |
+|----------|---------------|------------------|
+| [Quick Start](quick-start.md) | 30-minute hands-on tutorial | You're new to Prism |
+| [Installation](installation.md) | Prerequisites, setup, and verification | You need to install Prism |
+| [User Guide](user-guide.md) | Complete reference for daily use | You want the full picture |
+| [Command Reference](command-reference.md) | Every slash command with examples | You need command syntax |
+| [Troubleshooting](troubleshooting.md) | Common issues and solutions | Something went wrong |
+| [Glossary](glossary.md) | Plain-English term definitions | You see an unfamiliar term |
+| [Migration from Global](migration-from-global.md) | Migrating from v1.x global install | You used Prism before v2.0 |
+
+### Reading Order (New Users)
+
+1. [Installation](installation.md) — Get Prism running
+2. [Quick Start](quick-start.md) — Build your first feature
+3. [User Guide](user-guide.md) — Learn the full workflow
+4. [Command Reference](command-reference.md) — Look up commands as needed
+
+---
+
+## For Developers and Contributors
+
+These documents cover Prism's internals, architecture, and extension points.
+
+| Document | What It Covers |
+|----------|---------------|
+| [Developer Docs Index](dev/README.md) | Index of all developer documentation |
+| [Extending Skills](dev/extending-skills.md) | Creating and registering new skills |
+| [Versioning](dev/versioning.md) | Semantic versioning strategy for skills |
+| [Workflow Diagrams](dev/workflow-diagrams.md) | Command flows, agent routing, and track selection |
+| [Context Management](dev/context-management.md) | Project state persistence protocol |
+| [Error Handling](dev/error-handling.md) | Error taxonomy, codes, and recovery |
+| [MCP Integration](mcp-integration.md) | Optional external tool integrations |
+
+### Reading Order (Contributors)
+
+1. [Workflow Diagrams](dev/workflow-diagrams.md) — Understand the system architecture
+2. [Extending Skills](dev/extending-skills.md) — Learn how to add capabilities
+3. [Development Workflows](../../docs/Prism_OS_Development_Workflows.md) — Day-to-day development patterns
+
+---
 
 ## Examples
 
-The `examples/` subdirectory contains complete worked examples:
+The `examples/` directory contains complete worked examples:
 
-```
-examples/
-└── user-auth-feature/
-    ├── README.md           # Walkthrough narrative
-    ├── constitution.md     # Example constitution
-    ├── spec.md             # Example specification
-    ├── clarifications.md   # Example Q&A
-    ├── plan.md             # Example plan
-    └── tasks.md            # Example task breakdown
-```
-
-## Reading Order
-
-For new users:
-1. Start with `quick-start.md` for a hands-on introduction
-2. Read `user-guide.md` for comprehensive coverage
-3. Reference `command-reference.md` as needed
-4. Check `troubleshooting.md` if you encounter issues
-
-For developers extending the system:
-1. Read `extending-skills.md` first
-2. Reference `mcp-integration.md` for external tools
+| Example | Description |
+|---------|-------------|
+| [User Auth Feature](examples/user-auth-feature/README.md) | Full walkthrough: spec, clarifications, plan, and tasks |

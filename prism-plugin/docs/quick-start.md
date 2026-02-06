@@ -24,138 +24,26 @@ flowchart LR
 
 ## Prerequisites
 
-Before you start, you'll need a few things installed. Don't worry — we'll show you how to check.
+You need **Node.js 18+**, **Claude Code**, and **Git** installed. If you're not sure, the [Installation Guide](installation.md) walks you through each one.
 
-**Dependency chain:** Node.js → Claude Code → Prism OS
+Already have them? Skip to Installation below.
 
-### For Claude Code (required)
+### Starting from Zero?
 
-#### Node.js 18+
-
-Claude Code requires Node.js to run.
-
-**Check if you have it:**
-```bash
-node --version
-```
-
-You should see `v18.x.x` or higher. If not, [download Node.js here](https://nodejs.org/).
-
-#### Claude Code CLI
-
-Claude Code is the AI that powers Prism. You'll need an Anthropic subscription.
-
-| Plan | Best For |
-|------|----------|
-| **Claude Pro** | Personal projects, learning |
-| **Claude Max** | Heavy usage, multiple projects |
-| **API** | Developers, production apps |
-
-> **Recommendation:** Start with Claude Pro. You can upgrade later if needed.
-> See [anthropic.com/pricing](https://www.anthropic.com/pricing) for pricing.
-
-**Check if installed:**
-```bash
-claude --version
-```
-
-If not installed:
-```bash
-npm install -g @anthropic-ai/claude-code
-```
-
-Then authenticate:
-```bash
-claude auth login
-```
-
-> **Don't have an account?** Sign up at [anthropic.com](https://anthropic.com) and subscribe to a plan.
-
-### For Prism OS
-
-#### Git
-
-Git tracks changes to your code. Most developers already have it.
-
-**Check if you have it:**
-```bash
-git --version
-```
-
-If you see "command not found":
-- **Mac:** Install Xcode Command Line Tools: `xcode-select --install`
-- **Windows:** [Download Git here](https://git-scm.com/download/win)
-- **Linux:** `sudo apt install git` (Ubuntu/Debian)
-
-#### A Project Directory
-
-You need a directory for your project. If you don't have one yet:
-```bash
-mkdir my-project
-cd my-project
-git init
-```
-
-### Starting from Zero? (No Project Yet)
-
-If you have an idea but no code yet — that's perfect. Prism is designed for exactly this.
-
-```bash
-mkdir my-new-app
-cd my-new-app
-git init
-```
-
-After installing Prism, run `/prism`. It will detect you're starting fresh and guide you through **Discovery** — a conversation that helps you choose a tech stack:
-
-```
-> /prism
-
-I notice this is a new project. Let's set things up!
-I'll ask a few questions to recommend a tech stack.
-
-What are you building?
-> A website where users can track their habits
-
-Will users need to create accounts?
-> Yes
-
-Based on your answers, here are my recommendations:
-
-Option A: Next.js Fullstack (Recommended)
-├── TypeScript + Next.js + PostgreSQL
-├── Free hosting on Vercel
-└── Great for web apps with user accounts
-
-Option B: Django Fullstack
-├── Python + Django + PostgreSQL
-└── Excellent for rapid development
-
-Which option? (A/B)
-> A
-
-Great choice! Now let's complete your project constitution...
-```
-
-You don't need to know what framework or database to use — Prism recommends options based on what you're building.
+If you have an idea but no code yet — that's perfect. Prism is designed for exactly this. After installing Prism, run `/prism`. It will detect you're starting fresh and guide you through **Discovery** — a conversation that helps you choose a tech stack. You don't need to know what framework or database to use.
 
 ---
 
 ## Installation
 
-Prism OS is a Claude Code plugin. Installation takes about 30 seconds.
+Prism is a Claude Code plugin (a set of tools that run inside Claude Code, the AI coding assistant). Installation takes about 30 seconds.
+
+For full details and troubleshooting, see the [Installation Guide](installation.md).
 
 ### Step 1: Add the Marketplace
 
-In your terminal, run:
-
 ```bash
 claude plugin marketplace add araserel/prism-os
-```
-
-Or from within Claude Code:
-```
-/plugin marketplace add araserel/prism-os
 ```
 
 ### Step 2: Install the Plugin
@@ -164,12 +52,7 @@ Or from within Claude Code:
 claude plugin install prism@prism-os
 ```
 
-Or from within Claude Code:
-```
-/plugin install prism@prism-os
-```
-
-### Step 3: Verify Installation
+### Step 3: Verify
 
 Start Claude Code and run:
 
@@ -177,42 +60,11 @@ Start Claude Code and run:
 /prism status
 ```
 
-You should see the Prism OS status dashboard:
+You should see the Prism status dashboard. That's it — Prism is ready.
 
-```
-📋 Project: [Unnamed Project]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+### What Prism Adds to Your Project
 
-⬚ Foundation    - Not configured
-⬚ Constitution  - Not set up
-
-Next: Set up your project constitution
-
-Run /prism to get started!
-```
-
-> **That's it!** Prism is now available in all your projects.
-
-### What Does Prism Add to Your Project?
-
-When you run `/prism` for the first time, it creates project-specific files:
-
-```mermaid
-graph TD
-    A[your-project/] --> D[memory/]
-    A --> E[specs/]
-    A --> F[PRISM.md]
-
-    D --> D1[constitution.md - Project rules]
-    D --> D2[project-context.md - Current state]
-    D --> D3[learnings/ - Patterns and gotchas]
-
-    E --> E1[Your features go here]
-
-    style A fill:#f0f9ff,stroke:#0ea5e9
-    style D fill:#d1fae5,stroke:#10b981
-    style E fill:#e0e7ff,stroke:#6366f1
-```
+When you run `/prism` for the first time, it creates these project files:
 
 | Folder | What It Contains |
 |--------|------------------|
@@ -220,7 +72,7 @@ graph TD
 | `specs/` | Feature specifications you create |
 | `PRISM.md` | Enforcement rules (auto-generated) |
 
-> **Note:** The plugin itself (commands, agents, skills) is managed by Claude Code. Only your project-specific files live in your repository.
+> **Note:** The plugin itself is managed by Claude Code. Only your project-specific files live in your repository.
 
 ---
 
@@ -296,7 +148,7 @@ Now the fun part — building something!
 
 ### What `/prism` Does Automatically
 
-The first time you run `/prism` (and every time after), Prism runs a quick preflight check. It verifies your installation is correct, sets up enforcement rules in your project's `CLAUDE.md`, and detects any stale context that needs correcting. You don't need to do anything — this happens in the background. If something needs attention, Prism tells you.
+Every time you run `/prism`, Prism runs a quick health check in the background. It makes sure your setup is correct and your project files are up to date. You don't need to do anything. If something needs your attention, Prism tells you.
 
 ### Step 1: Describe What You Want
 
@@ -608,70 +460,38 @@ This creates a new specification from scratch.
 
 ## Updating Prism
 
-When new versions of Prism are released, update your installation:
+When new versions are released, update with a single command.
 
-### Step 1: Update the Prism Source
-
-```bash
-cd ~/prism-os
-git pull
+From within Claude Code:
+```
+/prism-update
 ```
 
-### Step 2: Re-run the Installer
-
-From your project directory:
+Or from your terminal:
 ```bash
-~/prism-os/install.sh --local ~/prism-os
+claude plugin update prism@prism-os
 ```
 
-The installer won't overwrite your existing specifications or constitution.
+Your project files (`memory/`, `specs/`) are not affected by updates. Only the plugin components are updated.
 
-### Step 3: Verify
-
-```bash
-~/prism-os/install.sh --verify
-```
+After updating, start a new Claude Code session and run `/prism` to verify.
 
 ---
 
 ## Command Cheat Sheet
 
-Here's everything you need, in one place:
+These four commands cover most use cases:
 
 | Command | What It Does |
 |---------|--------------|
 | `/prism` | Show status and what to do next |
 | `/prism "..."` | Start building a feature from your description |
 | `/prism continue` | Resume work on an in-progress feature |
-| `/prism status` | See detailed progress |
-| `/prism help` | Show all available commands |
 | `/constitution` | Set up or update project rules |
-| `/learn` | View patterns and lessons Prism has learned |
 
-### Natural Language Alternatives
+You don't have to remember commands. Just say what you mean — "I want to add user login" works as well as `/prism "Add login"`.
 
-You don't have to remember commands. Just say what you mean:
-
-| Instead of... | You can say... |
-|---------------|----------------|
-| `/prism "Add login"` | "I want to add user login" |
-| `/prism status` | "What's the progress?" |
-| `/prism continue` | "Keep going" or "Next step" |
-| `/prism help` | "What can you do?" |
-
-### All Commands
-
-The commands above cover most use cases. For direct access to individual workflow phases, see the [Command Reference](command-reference.md):
-
-| Command | Purpose |
-|---------|---------|
-| `/spec` | Create specification directly |
-| `/clarify` | Resolve ambiguities |
-| `/prism-plan` | Generate implementation plan |
-| `/prism-tasks` | Break plan into tasks |
-| `/validate` | Run QA checks |
-| `/learn --review` | Clean up and promote learnings |
-| `/prime` | Load project context |
+For the full list of commands, see the [Command Reference](command-reference.md).
 
 ---
 

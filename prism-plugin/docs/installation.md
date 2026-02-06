@@ -1,151 +1,171 @@
 # Installation Guide
 
-Step-by-step instructions to set up Prism for your project.
+Get Prism running on your computer in about ten minutes.
 
 ---
 
-## Prerequisites
+## What You Need First
 
-**Dependency chain:** Node.js → Claude Code → Prism OS
+Prism needs two things already on your computer before you start. Think of it like stacking blocks: each piece sits on top of the last.
 
-### For Claude Code (required)
+```mermaid
+flowchart LR
+    A[Node.js] --> B[Claude Code] --> C[Prism]
 
-#### Node.js 18+
+    style A fill:#e0f2fe,stroke:#0ea5e9
+    style B fill:#a5b4fc,stroke:#6366f1
+    style C fill:#d1fae5,stroke:#10b981
+```
 
-Claude Code requires Node.js to run.
+### Check for Node.js
 
-**Check if installed:**
+Node.js (a free tool that runs programs on your computer) powers Claude Code. You need version 18 or newer.
+
+Open your terminal (the app where you type commands) and type:
+
 ```bash
 node --version
 ```
 
-You should see `v18.x.x` or higher. If not, [download Node.js here](https://nodejs.org/).
+You should now see a number like `v18.x.x` or higher. If you get an error, [download Node.js here](https://nodejs.org/).
 
-#### Claude Code CLI
+### Install Claude Code
 
-Prism runs on Claude Code, Anthropic's AI coding assistant.
+Claude Code is Anthropic's AI coding assistant. Prism runs inside it. Install it with NPM (Node Package Manager -- a tool that comes with Node.js for downloading programs):
 
-**Install Claude Code:**
 ```bash
 npm install -g @anthropic-ai/claude-code
 ```
 
-**Verify installation:**
+Next, check that it worked:
+
 ```bash
 claude --version
 ```
 
-**Authenticate:**
+You should now see a version number printed on screen.
+
+### Sign In to Claude Code
+
+Authentication (signing in to prove who you are) connects Claude Code to your account. You need a Claude Pro, Max, or API plan.
+
 ```bash
 claude auth login
 ```
 
-Follow the prompts to connect your Anthropic account. You'll need a Claude Pro, Max, or API subscription.
+Follow the prompts on screen to finish signing in.
 
-> **Note:** See [Anthropic's documentation](https://docs.anthropic.com/en/docs/claude-code) for detailed setup instructions.
-
-### For Prism OS
-
-No additional dependencies required. Prism OS is distributed as a Claude Code plugin and includes all necessary components.
+> **Note:** See [Anthropic's docs](https://docs.anthropic.com/en/docs/claude-code) for more help with setup.
 
 ---
 
-## Installation
+## Install Prism
 
-Prism OS is distributed as a Claude Code plugin.
+A plugin (an add-on that gives a program new powers) is how Prism connects to Claude Code. A marketplace (an online catalog of plugins) is where Claude Code finds it.
 
-### Step 1: Add the Marketplace
+```mermaid
+flowchart TD
+    A[Add the marketplace] --> B[Install the plugin]
+    B --> C[Check the install]
+
+    style A fill:#e0f2fe,stroke:#0ea5e9
+    style B fill:#a5b4fc,stroke:#6366f1
+    style C fill:#d1fae5,stroke:#10b981
+```
+
+### From the Online Catalog
+
+1. Add the Prism catalog to Claude Code:
 
 ```bash
-# Add the Prism OS marketplace
 claude plugin marketplace add araserel/prism-os
 ```
 
-### Step 2: Install the Plugin
+2. Install the Prism add-on:
 
 ```bash
-# Install the prism plugin
 claude plugin install prism@prism-os
 ```
 
-### Step 3: Verify Installation
+3. Check that it worked:
 
 ```bash
-# List installed plugins
 claude plugin list
 ```
 
-You should see `prism` in the list.
+You should now see `prism` in the list that prints out.
 
-### Alternative: Local Development Installation
+### From a Local Copy
 
-If you're developing or testing Prism locally:
+Use this if you are working on Prism itself. Run these commands from the root folder of the prism-os code (a repository -- a folder that tracks every change with Git):
 
 ```bash
-# From the prism-os repository root
 claude plugin marketplace add ./
 claude plugin install prism@prism-os
 ```
 
+You should now see `prism` when you run `claude plugin list`.
+
 ---
 
-## Initial Setup
+## First-Time Setup
 
-### Step 1: Set Up the Constitution
+After the install, you set up Prism for your project. This takes about five minutes.
 
-The constitution defines rules that apply to all work in your project. Run the guided setup:
+```mermaid
+flowchart TD
+    A[Create your constitution] --> B[Check that Prism is running]
+
+    style A fill:#e0f2fe,stroke:#0ea5e9
+    style B fill:#d1fae5,stroke:#10b981
+```
+
+### Create Your Constitution
+
+A constitution is a short file of rules that guide all work in your project. Prism walks you through making one.
+
+1. Start Claude Code:
 
 ```bash
-# Start Claude Code
 claude
+```
 
-# Run the constitution setup
+2. Run the setup command:
+
+```
 > /constitution
 ```
 
-Prism walks you through 3 quick rounds:
-1. **Confirm your tech stack** (auto-detected from your project)
-2. **Choose project type** (MVP, Production, or Enterprise)
-3. **Optional preferences** (external services, offline support, accessibility)
+3. Answer three quick rounds of questions:
+   - **Your tech stack** (auto-detected from your project)
+   - **Project type** (MVP, Production, or Enterprise)
+   - **Extra preferences** (optional)
 
-All technical details (code style, testing levels, security rules) are configured automatically based on your choices.
+Prism fills in all the details for you based on your answers.
 
-### Step 2: Initialize Project Context
+You should now see a new `memory/constitution.md` file in your project.
 
-The project context file tracks your session state. Reset it for a fresh start:
+### Check That Prism Is Running
 
-```bash
-# View the template
-cat memory/project-context.md
+Still inside Claude Code, run:
+
 ```
-
-The context will be populated automatically as you work. No manual setup needed.
-
-### Step 3: Verify Plugin Integration
-
-Start Claude Code and verify Prism is working:
-
-```bash
-# Start Claude Code in your project directory
-claude
-
-# Check Prism status
 > /prism status
 ```
 
-You should see the Prism status dashboard showing the installed version and available commands.
+You should now see the Prism dashboard. It shows the version and all commands you can use.
 
 ---
 
-## Verification Checklist
+## Quick Check
 
-Run through this checklist to confirm setup is complete:
+Use this list to make sure everything is ready:
 
-- [ ] Claude Code installed and authenticated (`claude --version`)
-- [ ] Prism plugin installed (`claude plugin list` shows `prism`)
+- [ ] `claude --version` prints a version number
+- [ ] `claude plugin list` shows `prism`
 - [ ] `/prism status` shows the Prism dashboard
-- [ ] `memory/constitution.md` exists and is customized (after first `/prism` run)
-- [ ] `PRISM.md` exists in project root (auto-created by plugin)
+- [ ] `memory/constitution.md` exists (after running `/constitution`)
+- [ ] `PRISM.md` exists at your project root (created on first run)
 
 ---
 
@@ -153,104 +173,91 @@ Run through this checklist to confirm setup is complete:
 
 ### "Plugin not found" error
 
-The plugin isn't installed or the marketplace isn't added.
+This means the catalog is missing or the add-on did not install.
 
-**Fix:** Add the marketplace and reinstall:
+Run both commands again:
+
 ```bash
 claude plugin marketplace add araserel/prism-os
 claude plugin install prism@prism-os
 ```
 
+You should now see `prism` in the output of `claude plugin list`.
+
 ### "claude: command not found"
 
-Claude Code isn't installed or not in your PATH.
+This means Claude Code is not installed. It might also mean your PATH (the list of folders your computer searches for programs) does not include it.
 
-**Fix:** Reinstall Claude Code:
+Run this to install it fresh:
+
 ```bash
 curl -fsSL https://claude.ai/install.sh | sh
 ```
 
-Or add to PATH manually if installed in a non-standard location.
+You should now be able to run `claude --version` without an error.
 
-### `/prism` command not recognized
+### "/prism" command not recognized
 
-The plugin may not be properly installed.
+The add-on may not be set up right.
 
-**Fix:**
-1. Check plugin is installed: `claude plugin list`
-2. Reinstall if needed: `claude plugin install prism@prism-os`
-3. Restart Claude Code session
+1. Check what is installed: `claude plugin list`
+2. If `prism` is missing, reinstall: `claude plugin install prism@prism-os`
+3. Close Claude Code and open it again.
 
-### PRISM.md not created automatically
+You should now see `/prism` work when you type it.
 
-The SessionStart hook may not have run.
+### PRISM.md not created
 
-**Fix:**
-1. Start a new Claude Code session
-2. Run `/prism` to trigger preflight check
-3. Verify `PRISM.md` was created in project root
+The startup hook (a small script that runs each time you open Claude Code) may not have fired.
 
-### Claude Code doesn't follow enforcement rules
+1. Start a new Claude Code session.
+2. Run `/prism` to trigger the startup check.
 
-PRISM.md may be missing or outdated.
+You should now see `PRISM.md` in your project root folder.
 
-**Fix:**
-1. Delete `PRISM.md` and restart session
-2. Run `/prism` to regenerate with current enforcement rules
-3. Verify CLAUDE.md has the pointer line: `<!-- Project: Check for ./PRISM.md and follow all rules if present -->`
+### Claude Code ignores your rules
 
----
+Your PRISM.md file may be missing or out of date.
 
-## Next Steps
+1. Delete `PRISM.md` from your project root.
+2. Start a new Claude Code session.
+3. Run `/prism` to create a fresh copy.
 
-Installation complete! Continue with:
-
-1. **[Quick Start Guide](quick-start.md)** — 30-minute hands-on tutorial
-2. **[User Guide](user-guide.md)** — Complete reference for daily use
-3. **[Command Reference](command-reference.md)** — All available commands
-
----
-
-## Getting Help
-
-If you're stuck:
-
-1. Check the [Troubleshooting Guide](troubleshooting.md) for common issues
-2. Run the linter with full diagnostics: `python3 tools/workflow-linter.py --verbose --fix-suggestions`
-3. Review CLAUDE.md for system configuration details
+You should now see updated rules in the new `PRISM.md` file.
 
 ---
 
 ## Updating Prism
 
-To update to a newer version:
+When a new version comes out, update with one command:
 
 ```bash
-# Update the plugin
 claude plugin update prism@prism-os
 ```
 
-Or use the Prism command:
+Or use the built-in command inside Claude Code:
 
 ```
 /prism-update
 ```
 
-Your project-specific files (`memory/`, `specs/`) are not affected by updates. Only the plugin components are updated.
+Your project files (`memory/`, `specs/`) stay the same. Only the add-on parts change.
 
-**After updating:**
-1. Start a new Claude Code session
-2. Run `/prism` to verify the update and refresh enforcement rules
-3. Check the changelog for any migration steps
+After updating:
+
+1. Close Claude Code and open it again.
+2. Run `/prism` to refresh your rules.
+3. Check the changelog for any extra steps.
+
+You should now see the new version in `/prism status`.
 
 ---
 
-## Team Installation (Coming Soon)
+## Team Setup (Coming Soon)
 
-Team-wide Prism installation will use Claude Code's plugin scoping:
+In the future, teams will share one Prism setup through a config (configuration -- a settings file that controls how a program behaves):
 
 ```json
-// .claude/settings.json (project root, committed)
 {
   "plugins": {
     "prism-os": {
@@ -261,4 +268,29 @@ Team-wide Prism installation will use Claude Code's plugin scoping:
 }
 ```
 
-This feature requires Prism's team sync capabilities (Stage 2 roadmap).
+This file goes in `.claude/settings.json` at your project root. Team sync is planned for a later release.
+
+---
+
+## Next Steps
+
+You are all set. Here is where to go from here:
+
+1. **[Quick Start Guide](quick-start.md)** -- Build something in 30 minutes
+2. **[User Guide](user-guide.md)** -- Full reference for daily use
+3. **[Command Reference](command-reference.md)** -- Every command in one place
+
+---
+
+## Getting Help
+
+If something is not working:
+
+1. Read the [Troubleshooting Guide](troubleshooting.md) for common fixes.
+2. Run the linter (a tool that checks your setup for problems):
+
+```bash
+python3 tools/workflow-linter.py --verbose --fix-suggestions
+```
+
+You should now see a report of any issues and how to fix them.

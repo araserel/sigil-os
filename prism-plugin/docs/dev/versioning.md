@@ -315,6 +315,6 @@ All Prism skills are currently at **v1.0.0** (initial release).
 
 ## Related Documents
 
-- [Extending Skills](/docs/extending-skills.md) — Creating new skills
-- [Skills README](/.claude/skills/README.md) — Skill catalog
-- [Error Handling](/docs/error-handling.md) — Handling version mismatches
+- [Extending Skills](extending-skills.md) — Creating new skills
+- [Skills README](../../skills/README.md) — Skill catalog
+- [Error Handling](error-handling.md) — Handling version mismatches
