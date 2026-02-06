@@ -1,218 +1,259 @@
-# How to Use Prism Across Teams and Projects
+# How Prism Works Across Teams and Projects
 
-This guide shows how Prism's workflow and agent system helps multiple engineers and product people work together across different project folders.
+This guide shows the future vision for Prism Stages 2 and 3: how product people and engineers collaborate through shared memory, synced standards, and structured handoffs across multiple project folders (git repositories where your code lives).
 
-## What You'll Need
+> **Note:** This describes the target state after Stage 2 (Team Sync) and Stage 3 (Multi-Repo Context) are implemented. Some features shown here are not yet built.
 
-- Prism installed in each project folder (the command line tool that powers your development workflow)
-- At least one project with a constitution (the set of rules and preferences that guide how Prism works in your project)
-- Team members who will collaborate on features
+## The Big Picture
 
-## How the Core Workflow Moves a Feature Forward
-
-Every feature in Prism follows the same nine-step chain. This keeps work consistent no matter who starts the request or which project folder it lives in.
-
-The chain works the same way whether one person drives it or five people hand off between steps.
+Prism connects three things that are usually disconnected: product decisions, engineering knowledge, and project standards. Stages 2 and 3 add the infrastructure to share all three across your team.
 
 ```mermaid
----
-config:
-  theme: neutral
----
-flowchart LR
-    A["Assess"] --> B["Specify"]
-    B --> C["Clarify"]
-    C --> D["Design"]
-    D --> E["Plan"]
-    E --> F["Tasks"]
-    F --> G["Implement"]
-    G --> H["Validate"]
-    H --> I["Review"]
-```
-
-<!-- Alt text: A left-to-right flowchart showing nine workflow phases in order: Assess, Specify, Clarify, Design, Plan, Tasks, Implement, Validate, and Review. Each phase connects to the next with an arrow. -->
-
-Here is what happens at each step:
-
-| Step | What Happens | Who Typically Leads |
-|------|-------------|-------------------|
-| Assess | Prism scores the request and picks a workflow track | Automatic |
-| Specify | A spec is written from the feature description | Product person or engineer |
-| Clarify | Open questions are asked and answered | Product person |
-| Design | Components and user flows are designed | Designer or engineer |
-| Plan | A technical plan is created from the spec | Engineer |
-| Tasks | The plan is broken into small, ordered tasks | Engineer |
-| Implement | Code is written task by task | Engineer |
-| Validate | Tests and quality checks run automatically | Automatic |
-| Review | Code and security reviews happen before merging | Engineer or lead |
-
-> **Tip:** A product manager can drive the first three steps (Assess, Specify, Clarify) without writing any code. The engineer picks up at Plan.
-
-**You should now see:** how the workflow creates a clean handoff point between product and engineering at step four (Design) or step five (Plan).
-
-## How Agents Route and Hand Off Work
-
-Prism uses nine specialized agents. Each agent owns a specific part of the workflow. When you type a request, the Orchestrator agent reads it and sends it to the right specialist.
-
-```mermaid
----
-config:
-  theme: neutral
----
 flowchart TD
-    User["You type a request"] --> Orch["Orchestrator"]
-    Orch -->|"feature, spec, requirement"| BA["Business Analyst"]
-    Orch -->|"design, component, UI"| UX["UI/UX Designer"]
-    Orch -->|"architecture, approach"| AR["Architect"]
-    Orch -->|"tasks, sprint, backlog"| TP["Task Planner"]
-    Orch -->|"build, code, fix"| DEV["Developer"]
-    Orch -->|"test, validate, QA"| QA["QA Engineer"]
-    Orch -->|"security, vulnerability"| SEC["Security"]
-    Orch -->|"publish, pipeline"| OPS["DevOps"]
+    subgraph Stage2["Stage 2: Team Sync"]
+        DB[("Supabase\n(Shared Memory)")]
+        HOOK["Git Hooks\n(Auto-push)"]
+        PRIME["/prime\n(Auto-pull)"]
+    end
+
+    subgraph Stage3["Stage 3: Multi-Repo Context"]
+        CENTRAL["Central Repo\n(Shared Standards)"]
+        SYNC["prism-sync\n(Pull / Push)"]
+    end
+
+    subgraph RepoA["Repo A: Web App"]
+        CONST_A["Constitution"]
+        MEM_A["Local Memory"]
+    end
+
+    subgraph RepoB["Repo B: Mobile App"]
+        CONST_B["Constitution"]
+        MEM_B["Local Memory"]
+    end
+
+    MEM_A <-->|"push/pull"| DB
+    MEM_B <-->|"push/pull"| DB
+    HOOK --> DB
+    DB --> PRIME
+
+    CENTRAL <-->|"sync"| CONST_A
+    CENTRAL <-->|"sync"| CONST_B
+    SYNC --> CENTRAL
 ```
 
-<!-- Alt text: A top-down flowchart showing the user's request going to the Orchestrator, which routes to eight specialist agents based on trigger words. Business Analyst handles feature and spec requests. UI/UX Designer handles design requests. Architect handles architecture requests. Task Planner handles task and sprint requests. Developer handles build and code requests. QA Engineer handles test and validation requests. Security handles vulnerability requests. DevOps handles publishing requests. -->
+<!-- Alt text: A diagram showing two infrastructure layers. Stage 2 (Team Sync) has a Supabase database in the center connected to local memory in Repo A and Repo B via push/pull arrows, with git hooks pushing and /prime pulling. Stage 3 (Multi-Repo Context) has a central repo connected to constitutions in both repos via prism-sync tooling. -->
 
-When one agent finishes its work, it creates a structured handoff. The handoff includes four sections:
+## How Product People and Engineers Collaborate
 
-- **Completed** -- what was done
-- **Artifacts** -- which files were created or changed
-- **For Your Action** -- what the next agent needs to do
-- **Context** -- decisions, constraints, and open questions
-
-This handoff format is the same every time. It does not matter which agent sends it or which agent receives it.
-
-> **Note:** Every handoff also carries a machine-readable state block. This means Prism can resume the workflow even if you close your session and come back later.
-
-**You should now see:** how agents form a relay team, each passing a structured baton to the next.
-
-## How Human Oversight Keeps You in Control
-
-Not every step needs your approval. Prism uses three tiers to decide when to pause and ask.
-
-| Tier | What Happens | Example |
-|------|-------------|---------|
-| Auto | Prism acts without asking | Running tests, fixing lint errors |
-| Review | Prism shows you the result and waits for your OK | Spec review, plan approval |
-| Approve | Prism stops and requires your sign-off | Security findings, making a project live |
+The workflow splits into two clear swim lanes. Product people own the "what" and engineers own the "how." The handoff package bridges the gap.
 
 ```mermaid
----
-config:
-  theme: neutral
----
-flowchart LR
-    Auto["Auto Tier\n(Acts freely)"] --> Review["Review Tier\n(Shows & waits)"]
-    Review --> Approve["Approve Tier\n(Must sign off)"]
-
-    Auto -.- A1["Run tests"]
-    Auto -.- A2["Fix lint errors"]
-    Review -.- R1["Spec draft"]
-    Review -.- R2["Plan draft"]
-    Approve -.- AP1["Security findings"]
-    Approve -.- AP2["Make live"]
-```
-
-<!-- Alt text: A flowchart showing three oversight tiers from left to right: Auto (acts freely, examples: run tests, fix lint errors), Review (shows and waits, examples: spec draft, plan draft), and Approve (must sign off, examples: security findings, make live). Each tier connects to its example actions with dotted lines. -->
-
-The tier can escalate during a workflow. If the QA loop fails five times, it moves from Auto to Review and asks you what to do.
-
-**You should now see:** how Prism balances speed with safety by only asking for input when it matters.
-
-## How Multiple Engineers Share One Workflow
-
-Here is where Prism's value grows. A product manager and an engineer in the same project folder already benefit from the workflow chain. But the same system works across teams and project folders too.
-
-### The Single-Project Team
-
-In one project folder, the workflow looks like this:
-
-1. The product manager types a feature description.
-2. Prism creates a spec and asks clarifying questions.
-3. The product manager answers the questions.
-4. The engineer picks up at the Plan step.
-5. Prism breaks the plan into tasks for the engineer.
-6. The engineer implements each task.
-7. Prism validates and reviews the code automatically.
-
-**You should now see:** a clean split between product work (steps 1-3) and engineering work (steps 4-7).
-
-### The Multi-Project Team
-
-When your team works across multiple project folders, Prism's constitution and learning system tie everything together.
-
-```mermaid
----
-config:
-  theme: neutral
----
 flowchart TD
-    subgraph TeamPatterns["Shared Team Patterns"]
-        CONST["Constitution\n(Rules & standards)"]
-        LEARN["Learnings\n(Captured patterns)"]
+    subgraph Product["Product Person"]
+        P1["Describe feature"] --> P2["Answer questions"]
+        P2 --> P3["Review spec"]
+        P3 --> P4["Request engineer handoff"]
     end
 
-    subgraph RepoA["Project A: Web App"]
-        PM_A["PM writes spec"] --> ENG_A["Engineer builds"]
+    P4 --> HP["Handoff Package\n(spec + decisions + context)"]
+
+    subgraph Engineering["Engineer"]
+        E1["Review handoff"] --> E2["Create plan"]
+        E2 --> E3["Implement tasks"]
+        E3 --> E4["Validate & review"]
     end
 
-    subgraph RepoB["Project B: Mobile App"]
-        PM_B["PM writes spec"] --> ENG_B["Engineer builds"]
-    end
+    HP --> E1
 
-    subgraph RepoC["Project C: API Service"]
-        ENG_C["Engineer specs & builds"]
-    end
-
-    CONST --> RepoA
-    CONST --> RepoB
-    CONST --> RepoC
-    LEARN --> RepoA
-    LEARN --> RepoB
-    LEARN --> RepoC
+    E4 -->|"learnings captured"| DB2[("Shared Memory")]
+    DB2 -->|"available to all"| E5["Next engineer\n(any repo)"]
 ```
 
-<!-- Alt text: A flowchart showing shared team patterns (constitution and learnings) at the top connecting to three projects below. Project A (Web App) has a PM who writes specs and an engineer who builds. Project B (Mobile App) has a PM and engineer. Project C (API Service) has an engineer who both specs and builds. The constitution and learnings flow down into all three projects. -->
+<!-- Alt text: A top-down flow with two swim lanes. The product person describes a feature, answers questions, reviews the spec, and requests an engineer handoff. This creates a Handoff Package containing spec, decisions, and context. The engineer reviews the handoff, creates a plan, implements tasks, and validates. Learnings from validation flow into shared memory, which is then available to any engineer in any repo. -->
 
-Here is what stays consistent across all project folders:
+### What the product person does
 
-- **Constitution** -- Your coding standards, testing rules, and architecture choices travel with the team. Copy the constitution file to a new project and Prism enforces the same rules.
-- **Learnings** -- When Prism catches a bug pattern or a fix that worked, it saves that learning. Your team can carry those learnings to other projects so the same mistakes are not repeated.
-- **Workflow chain** -- The nine-step process is identical everywhere. A product manager who learned to write specs in Project A already knows how to do it in Project B.
-- **Agent behavior** -- The agents respond the same way in every project. The Business Analyst always asks clarifying questions. The Architect always checks the constitution.
+The product person drives three steps without writing code:
 
-> **Tip:** To share a constitution across project folders, copy the `memory/constitution.md` file from one project to another. Prism will use it right away.
+1. Describe the feature in plain language.
+2. Answer Prism's clarifying questions.
+3. Review the spec and request an engineer handoff.
 
-**You should now see:** how the constitution and learnings create a shared standard that travels between project folders.
+Prism generates a Technical Review Package. This package bundles the spec, all decisions made, and relevant context into one document. The product person shares this with engineering.
 
-### How a Feature Flows Across Team Members
+### What the engineer does
 
-Here is a realistic example of how three people work on one feature:
+The engineer receives the handoff and picks up from there:
 
-1. **Sara (Product Manager)** types: "I want to add dark mode to the app."
-2. Prism creates a spec and flags two questions about toggle behavior.
-3. Sara answers the questions. The spec is now complete.
-4. **Alex (Frontend Engineer)** opens the same project folder and types: "Continue."
-5. Prism shows Alex the finished spec and starts the Plan step.
-6. Alex approves the plan. Prism creates six tasks.
-7. Alex implements the first four tasks. Prism validates each one.
-8. **Jordan (Senior Engineer)** reviews the code using Prism's review step.
-9. Jordan approves. The feature is complete.
+1. Review the handoff package.
+2. Approve or adjust the technical plan.
+3. Implement task by task (Prism validates each one).
+4. Complete the code and security review.
 
-Each person saw only the parts of the workflow that mattered to them. Sara never saw task breakdowns. Alex never had to write the spec from scratch. Jordan only reviewed finished, validated code.
+Every learning discovered during implementation is captured and pushed to shared memory.
+
+**You should now see:** how the handoff package creates a clean boundary between product and engineering work.
+
+## How Shared Memory Works (Stage 2)
+
+Today, each engineer's learnings stay on their machine. Stage 2 changes this by syncing memory through a Supabase database (a cloud-hosted data store your team sets up once).
+
+### What gets shared
+
+| Category | Example | Who benefits |
+|----------|---------|-------------|
+| Patterns | "Use React Query's onMutate for optimistic updates" | Engineers starting similar work |
+| Gotchas | "MapView crashes with more than 500 markers" | Engineers about to hit the same wall |
+| Decisions | "Using CSS Grid for the filter panel layout" | Engineers who need to understand past choices |
+| Components | "StationList lives at /components/ev/StationList.tsx" | Engineers navigating the codebase |
+| Constraints | "API rate limit: 100 requests per minute" | Anyone building features that call the API |
+
+### How syncing happens
+
+```mermaid
+flowchart LR
+    subgraph Engineer_A["Engineer A's Session"]
+        CAPTURE["Captures a learning"]
+    end
+
+    CAPTURE -->|"real-time push"| DB3[("Supabase")]
+    CAPTURE -->|"also writes"| LOCAL["Local files"]
+
+    COMMIT["Git commit"] -->|"hook: catch-all push"| DB3
+
+    DB3 -->|"pull on /prime"| Engineer_B["Engineer B's\nnext session"]
+
+    Engineer_B -->|"sees 'what changed'\nsummary"| READY["Ready to work\nwith full context"]
+```
+
+<!-- Alt text: A left-to-right flow showing Engineer A captures a learning, which pushes to Supabase in real-time and writes to local files. A git commit triggers a catch-all push via hook. Supabase delivers the learning to Engineer B on their next /prime session start, where they see a what changed summary and are ready to work with full context. -->
+
+Key details:
+
+- Learnings push to the database the moment they are captured. No waiting for session end.
+- A git hook acts as a safety net, pushing anything that was missed.
+- When an engineer starts a session with `/prime`, new team memory loads automatically.
+- A "what changed" summary shows what teammates added since your last session.
+- If the database is unreachable, Prism works normally with local memory. It syncs when the connection returns.
+
+### Automatic gotcha surfacing
+
+When you describe your next task, Prism searches shared memory for relevant warnings. If a teammate already hit a problem related to your work, Prism tells you before you start.
+
+> **Tip:** This means one engineer hitting a bug can save every future engineer from the same mistake, across all project folders connected to the same database.
+
+**You should now see:** how learnings flow from one engineer's session into every teammate's future sessions.
+
+## How Constitution Syncing Works (Stage 3)
+
+Your project's constitution (the set of rules and preferences that guide how Prism works) currently lives in each project folder independently. Stage 3 adds a central standards repository (a shared project folder that holds your organization's rules).
+
+### The central repo pattern
+
+```mermaid
+flowchart TD
+    subgraph Central["Central Standards Repo"]
+        SHARED["Shared Standards\n(security, accessibility)"]
+        REPO_COPIES["Per-Repo Constitutions\n(web, mobile, API)"]
+    end
+
+    subgraph Web["Web App Repo"]
+        C_WEB["Constitution\n(@inherit: security)\n+ repo-specific rules"]
+    end
+
+    subgraph Mobile["Mobile App Repo"]
+        C_MOB["Constitution\n(@inherit: security)\n(@inherit: accessibility)\n+ repo-specific rules"]
+    end
+
+    SHARED -->|"prism-sync pull"| C_WEB
+    SHARED -->|"prism-sync pull"| C_MOB
+    C_WEB -->|"prism-sync push"| REPO_COPIES
+    C_MOB -->|"prism-sync push"| REPO_COPIES
+```
+
+<!-- Alt text: A diagram showing a central standards repo at the top with shared standards and per-repo constitution copies. Arrows show prism-sync pull flowing down to the web app and mobile app constitutions, and prism-sync push flowing back up from each repo to the central copies. Each repo constitution inherits shared standards and adds its own rules. -->
+
+### How it works
+
+- Shared standards (security rules, accessibility requirements) live in the central repo.
+- Each project folder's constitution references shared standards with `@inherit` markers.
+- When you pull, inherited sections expand into your local constitution.
+- When you push, local changes flow back to the central repo as a pull request.
+- A status command shows which project folders are in sync, ahead, or behind.
+
+### What this means for engineers
+
+- A new project folder starts with your organization's standards already in place.
+- When a security rule changes, one update reaches every project folder.
+- Each team can still add repo-specific rules on top of shared ones.
+- No more copy-pasting standards between projects. No more drift.
+
+**You should now see:** how the central repo keeps standards consistent while letting each project folder customize its own rules.
+
+## How Claude Code's Built-In Memory Fits In
+
+Claude Code recently added automatic Session Memory. This is worth understanding because it overlaps with some of what Prism provides.
+
+### What Claude Code's memory does
+
+| Feature | How it works | Shared with team? |
+|---------|-------------|-------------------|
+| CLAUDE.md files | You write project rules manually. Checked into git. | Yes, via git |
+| .claude/rules/ | Modular rule files, can use symlinks to share. | Yes, via git |
+| Session Memory | Automatic background summaries of your sessions. | No, local only |
+| User memory | Personal preferences at ~/.claude/CLAUDE.md. | No, local only |
+
+### What Claude Code's memory does NOT do
+
+- It does not sync learnings between team members.
+- It does not share gotchas, patterns, or architectural decisions.
+- It does not connect memory across different project folders.
+- It does not surface relevant warnings from teammate experience.
+
+### Where Prism adds value
+
+| Need | Claude Code alone | With Prism Stage 2/3 |
+|------|------------------|---------------------|
+| Personal session recall | Session Memory handles this | Same, plus structured context |
+| Team knowledge sharing | Not supported | Supabase-synced shared memory |
+| Cross-repo standards | Manual CLAUDE.md copying | Central repo with auto-sync |
+| Gotcha prevention | Not supported | Automatic relevance matching |
+| Onboarding a new engineer | They start from zero | They get all team learnings on first `/prime` |
+
+### Open question
+
+Claude Code's Session Memory is still evolving. As it matures, there may be ways to use it alongside Prism's shared memory -- for example, letting Session Memory handle personal recall while Prism handles team-level knowledge. This is an area to watch.
+
+> **Note:** Claude Code's `.claude/rules/` directory supports symlinks. This could complement Stage 3's constitution syncing by linking shared rule files across project folders.
+
+**You should now see:** how Claude Code's memory solves the personal recall problem, while Prism's Stages 2 and 3 solve the team sharing problem.
+
+## Putting It All Together
+
+Here is how a typical week looks for a team using Prism with Stages 2 and 3:
+
+**Monday:** Sara (PM) describes a new feature in the web app repo. Prism writes the spec, asks questions, and Sara answers them. She requests an engineer handoff.
+
+**Tuesday:** Alex (engineer) opens the web app repo. `/prime` loads the latest team memory and shows Sara's handoff package. Alex plans and starts implementing. During implementation, Prism captures three learnings.
+
+**Wednesday:** Jordan (engineer) opens the mobile app repo to build a similar feature. `/prime` loads Alex's learnings from yesterday. Prism warns: "Alex discovered that the map component crashes above 500 markers. Consider clustering." Jordan avoids the bug entirely.
+
+**Thursday:** The platform team updates the shared security standards in the central repo. They run `prism-sync push --all`. Every repo's constitution gets a pull request with the new rules.
+
+**Friday:** A new engineer joins the team. They clone the web app repo, run `prism setup --team`, and `/prime`. They immediately have access to every learning, decision, and gotcha the team has captured. No onboarding doc needed.
 
 ## What's Next
 
-- Share this guide with your team as an overview of the Prism workflow
-- Try running a feature through the full chain in a test project folder
-- Copy your constitution to a second project folder to see how standards carry over
-- Read the command reference for all available Prism commands
+- Review the Stage 2 spec (TMS-001) for team memory sync details
+- Review the Stage 3 spec (PRISM-002) for multi-repo constitution details
+- Watch Claude Code's Session Memory evolution for integration opportunities
+- Try the current single-repo workflow to build familiarity before Stages 2 and 3
 
 ## Troubleshooting
 
 | Problem | Likely Cause | Fix |
 |---------|-------------|-----|
-| Agent responds but seems confused | Trigger words matched the wrong agent | Rephrase your request with clearer keywords |
-| Workflow does not resume after a break | Session context file is missing | Type "continue" or check that `memory/project-context.md` exists |
-| Constitution rules not enforced in new project | Constitution file not copied | Copy `memory/constitution.md` from your source project |
-| QA loop keeps failing | A persistent test or lint issue | After 5 attempts, Prism will ask you to intervene manually |
+| Team memory not loading | Setup not complete | Run `prism setup --team` to activate team sync |
+| Constitution out of sync | Manual edits without pushing | Run `prism-sync status` to check, then `prism-sync push` |
+| Learnings not appearing for teammates | Database unreachable during capture | Check connection, then run `prism sync` to drain the offline queue |
+| New repo missing standards | Constitution not pulled from central | Run `prism-sync pull` or set up inheritance with `@inherit` markers |
