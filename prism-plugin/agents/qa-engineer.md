@@ -72,10 +72,11 @@ If issues found:
 ### Step 4: Fix Loop
 If fixes needed:
 1. Report issues clearly
-2. **Invoke qa-fixer skill** (or return to Developer)
-3. Re-validate after fix
-4. Repeat (max 5 times)
-5. Escalate if still failing
+2. Attempt automated fixes via **qa-fixer skill** (lint, format, imports)
+3. For code-level issues qa-fixer can't resolve, return to Developer for manual fix
+4. Re-validate after each fix
+5. Repeat (max 5 total iterations across auto and manual fixes)
+6. Escalate to human if still failing after 5 iterations
 
 ## Skills Invoked
 

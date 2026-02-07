@@ -5,8 +5,8 @@
   "author": {
     "name": "Adam Riedthaler"
   },
-  "repository": "https://github.com/howardtech/prism-os",
-  "license": "ELv2",
+  "repository": "https://github.com/araserel/prism-os",
+  "license": "MIT",
   "keywords": [
     "workflow",
     "specification",

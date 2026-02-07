@@ -66,10 +66,11 @@ Generate security report:
 - Compliance status
 
 ### Step 4: Require Approval
-Security findings require human approval:
-- Critical findings block deployment
+Security findings require human approval — there is no automated fix loop (unlike QA validation):
+- Critical findings block deployment — must be fixed or explicitly accepted
 - High findings require acknowledgment
 - Medium/Low can be accepted with documentation
+- Human decides whether to route back to Developer for remediation or accept findings
 
 ## Skills Invoked
 

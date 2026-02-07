@@ -43,7 +43,7 @@ For full details and troubleshooting, see the [Installation Guide](installation.
 ### Step 1: Add the Marketplace
 
 ```bash
-claude plugin marketplace add howardtech/prism-os
+claude plugin marketplace add araserel/prism-os
 ```
 
 ### Step 2: Install the Plugin
@@ -251,23 +251,31 @@ After you approve the specification, Prism automatically:
 2. Breaks it into tasks
 3. Starts building
 
-```mermaid
-flowchart TD
-    A[You Approve Spec] --> B[Create Plan]
-    B --> C[Break into Tasks]
-    C --> D[Build Task 1]
-    D --> E[Build Task 2]
-    E --> F[Build Task 3]
-    F --> G[...]
-    G --> H[Run Quality Checks]
-    H --> I{All Tests Pass?}
-    I -->|Yes| J[Done!]
-    I -->|No| K[Fix Issues]
-    K --> H
-
-    style A fill:#d1fae5,stroke:#10b981
-    style J fill:#d1fae5,stroke:#10b981
-    style I fill:#fef3c7,stroke:#f59e0b
+```
+You Approve Spec
+      │
+      ▼
+  Create Plan
+      │
+      ▼
+  Break into Tasks
+      │
+      ▼
+  ┌─── Per-Task Loop ───────────────────────┐
+  │                                          │
+  │   Build Task ──▶ Quality Check           │
+  │                     │                    │
+  │               Pass? ├──Yes──▶ Next Task  │
+  │                     │                    │
+  │                    No                    │
+  │                     │                    │
+  │               Fix & Recheck              │
+  │               (up to 5 times)            │
+  │                                          │
+  └──────────────────────────────────────────┘
+      │
+      ▼
+  Code Review ──▶ Done!
 ```
 
 ### What You'll See in the Terminal
@@ -426,7 +434,7 @@ Prism will update the specification and show it again for approval.
 
 ### Tests Are Failing
 
-Prism automatically tries to fix test failures. If it can't after several attempts, you'll see:
+After each task is built, Prism runs quality checks and automatically tries to fix any failures (up to 5 attempts per task). If it can't fix an issue, you'll see:
 
 ```
 ⚠️ Escalation: Test failures require attention
@@ -548,7 +556,7 @@ flowchart TD
 - **Business Analyst** — Turns your description into a specification
 - **Architect** — Designs how the code should be structured
 - **Developer** — Writes the actual code
-- **QA Engineer** — Tests everything works correctly
+- **QA Engineer** — Checks each task right after the Developer finishes it (not at the end)
 
 **Claude Code** powers these agents with advanced language understanding.
 

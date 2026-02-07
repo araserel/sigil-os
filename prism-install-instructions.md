@@ -49,7 +49,7 @@ claude auth login
 ### Step 1: Add the Prism OS Marketplace
 
 ```bash
-claude plugin marketplace add howardtech/prism-os
+claude plugin marketplace add araserel/prism-os
 ```
 
 **What this does:** Registers the Prism OS plugin marketplace with Claude Code.
@@ -134,7 +134,7 @@ claude plugin marketplace remove prism-os
 
 The marketplace may not be added:
 ```bash
-claude plugin marketplace add howardtech/prism-os
+claude plugin marketplace add araserel/prism-os
 ```
 
 ### "claude: command not found"
@@ -159,7 +159,7 @@ Run `/prism` in your project to trigger the preflight check and create `PRISM.md
 ## Getting Help
 
 - **In Claude:** Type `/prism help`
-- **GitHub Issues:** https://github.com/howardtech/prism-os/issues
+- **GitHub Issues:** https://github.com/araserel/prism-os/issues
 - **Documentation:** See `prism-plugin/docs/` in the repository
 
 ---

@@ -128,8 +128,9 @@ The full pipeline is the standard workflow for features that need proper specifi
 
 ## Implementation Note
 
-The per-task loop (Developer -> qa-validator -> qa-fixer -> review) is
-orchestrated by the `/prism` command's Step 4b (Implementation Loop). This chain
+The per-task loop (Developer -> QA Engineer [qa-validator -> qa-fixer] -> next task) is
+orchestrated by the `/prism` command's Step 4b (Implementation Loop). Code review
+runs once after all tasks complete, not per-task. This chain
 file documents the sequence and state transitions; the `/prism` command executes them.
 
 When `/prism continue` is invoked with `Current Phase: implement`, the prism command
@@ -192,9 +193,9 @@ reads the task list and resumes the implementation loop at the current task.
 **Condition:** Task list generated
 **Data Passed:** `{ first_task, tasks_path }`
 
-### Developer → qa-validator
+### Developer → QA Engineer (qa-validator)
 **Trigger:** Task implementation complete
-**Condition:** Developer marks task done
+**Condition:** Developer marks task done (per-task handoff, not after all tasks)
 **Data Passed:** `{ task_id, files_changed }`
 
 ### qa-validator → qa-fixer
@@ -217,9 +218,9 @@ reads the task list and resumes the implementation loop at the current task.
 **Condition:** `any finding severity in [Medium, High, Critical]`
 **Data Passed:** `{ mode: "review-findings", source: "security-review", feature_id, task_id, findings: [resolved findings with OWASP categories] }`
 
-### qa-validator → review
-**Trigger:** All tasks validated
-**Condition:** All tasks pass validation
+### qa-validator (final task) → code-reviewer
+**Trigger:** Last task passes validation
+**Condition:** All tasks individually validated and complete
 **Data Passed:** `{ spec_path, changed_files }`
 
 ## Human Checkpoints

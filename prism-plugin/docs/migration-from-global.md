@@ -43,7 +43,7 @@ rm -rf ~/.prism-os/
 
 ```bash
 # Add marketplace and install
-claude plugin marketplace add howardtech/prism-os
+claude plugin marketplace add araserel/prism-os
 claude plugin install prism@prism-os
 ```
 
@@ -144,5 +144,5 @@ Check that hooks are enabled in your Claude Code settings and that the hook scri
 ## Getting Help
 
 - **Documentation:** `/prism help`
-- **Issues:** https://github.com/howardtech/prism-os/issues
+- **Issues:** https://github.com/araserel/prism-os/issues
 - **Updates:** `/prism-update`

@@ -83,7 +83,7 @@ Maximum fix attempts exceeded.
 Escalating to human review.
 ```
 
-QA (quality assurance -- the step where Prism checks its own work) tried to fix an issue five times and could not.
+QA (quality assurance -- the step where Prism checks each task right after it is built) tried to fix an issue five times on a single task and could not.
 
 ### Why This Happens
 

@@ -143,7 +143,7 @@ You should now see a structured feature document ready for review.
 
 ### Workflow Stages
 
-Prism moves through up to 8 stages. Each stage is called a "phase" (one step in the process).
+Prism moves through up to 7 stages. Each stage is called a "phase" (one step in the process).
 
 | Stage | Name | Purpose |
 |-------|------|---------|
@@ -152,21 +152,13 @@ Prism moves through up to 8 stages. Each stage is called a "phase" (one step in 
 | 2 | Clarify | Surface gaps and resolve unknowns |
 | 3 | Plan | Create a build approach |
 | 4 | Tasks | Break the plan into small work items |
-| 5 | Implement | Build the feature (handoff point for teams) |
-| 6 | Validate | Check that the build meets requirements |
-| 7 | Review | Final quality gate and capture lessons |
+| 5 | Implement | Build the feature, with quality checks after each task |
+| 6 | Review | Final code review, security review, and capture lessons |
 
 Not every request goes through every stage. Quick Flow may jump from Assessment straight to Tasks for simple work.
 
-```mermaid
-flowchart LR
-    A[Assess] --> B[Specify]
-    B --> C[Clarify]
-    C --> D[Plan]
-    D --> E[Tasks]
-    E --> F[Implement]
-    F --> G[Validate]
-    G --> H[Review]
+```
+Assess → Specify → Clarify → Plan → Tasks → Implement (with per-task QA) → Review
 ```
 
 **Assessment:** Prism reads your description and picks the right track.

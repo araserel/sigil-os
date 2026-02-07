@@ -5,7 +5,7 @@ version: 1.0.0
 category: review
 chainable: true
 invokes: []
-invoked_by: [security, qa-engineer, orchestrator]
+invoked_by: [orchestrator]
 tools: Read, Glob, Grep
 ---
 

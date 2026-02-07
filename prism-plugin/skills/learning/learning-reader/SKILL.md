@@ -5,7 +5,7 @@ version: 1.0.0
 category: learning
 chainable: false
 invokes: []
-invoked_by: [orchestrator, developer]
+invoked_by: [developer]
 tools: Read
 model: haiku
 ---

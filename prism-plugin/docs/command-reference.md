@@ -13,8 +13,8 @@
 | `/clarify` | Resolve ambiguities | Spec has open questions |
 | `/prism-plan` | Generate implementation plan | Spec is approved |
 | `/prism-tasks` | Break plan into tasks | Plan is approved |
-| `/validate` | Run QA validation checks | After implementation |
-| `/review` | Run structured code review | After QA validation passes |
+| `/validate` | Run QA validation checks | After each task (automatic), or manually anytime |
+| `/review` | Run structured code review | After all tasks pass validation |
 | `/prism-status` | Show workflow progress | Anytime |
 | `/constitution` | View or edit project rules | First-time setup or updates |
 | `/learn` | View, search, or review learnings | Reviewing institutional memory |

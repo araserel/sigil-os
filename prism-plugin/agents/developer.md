@@ -101,10 +101,10 @@ Skip capture if the task is trivial (docs-only, config, formatting), has a `[no-
 
 ### Step 7: Complete
 
-Mark task done and proceed:
+Mark task done and hand off to QA Engineer:
 1. Update task status in tasks.md
 2. Note any concerns
-3. Move to next task (or handoff to QA)
+3. Hand off to QA Engineer for validation (qa-validator runs per-task, not at the end)
 
 ## Test-First Pattern
 

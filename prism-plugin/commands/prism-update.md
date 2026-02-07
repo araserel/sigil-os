@@ -85,7 +85,7 @@ Prism OS Update Check
 To install Prism OS:
 
 1. Add the marketplace:
-   /plugin marketplace add howardtech/prism-os
+   /plugin marketplace add araserel/prism-os
 
 2. Install the plugin:
    /plugin install prism@prism-os
@@ -115,7 +115,7 @@ To migrate:
    rm -rf ~/.prism-os/
 
 2. Install the new plugin:
-   /plugin marketplace add howardtech/prism-os
+   /plugin marketplace add araserel/prism-os
    /plugin install prism@prism-os
 
 See: prism-plugin/docs/migration-from-global.md

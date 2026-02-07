@@ -5,7 +5,7 @@ version: 1.0.0
 category: qa
 chainable: true
 invokes: []
-invoked_by: [qa-validator, qa-engineer]
+invoked_by: [qa-engineer]
 tools: Read, Write, Edit, Bash, Glob
 ---
 

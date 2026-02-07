@@ -12,7 +12,7 @@ Prism OS is a Claude Code plugin. Install it in seconds:
 
 ```bash
 # Add the marketplace
-claude plugin marketplace add howardtech/prism-os
+claude plugin marketplace add araserel/prism-os
 
 # Install the plugin
 claude plugin install prism@prism-os
@@ -20,7 +20,7 @@ claude plugin install prism@prism-os
 
 Or from within Claude Code:
 ```
-/plugin marketplace add howardtech/prism-os
+/plugin marketplace add araserel/prism-os
 /plugin install prism@prism-os
 ```
 
@@ -102,7 +102,7 @@ If you previously used `install-global.sh`, see the [Migration Guide](prism-plug
 
 ```bash
 # Clone the repository
-git clone https://github.com/howardtech/prism-os.git
+git clone https://github.com/araserel/prism-os.git
 cd prism-os
 
 # Install locally for testing
