@@ -1,7 +1,7 @@
 ---
 name: qa-fixer
 description: Attempt automated remediation of validation failures. Invoke when qa-validator finds fixable issues, before escalating to human.
-version: 1.0.0
+version: 1.2.0
 category: qa
 chainable: true
 invokes: []
@@ -46,7 +46,8 @@ Attempt automated remediation of validation failures before escalating to human 
 {
   "max_iterations": 5,
   "fix_categories": ["lint", "format", "imports"],
-  "dry_run": false
+  "dry_run": false,
+  "issue_history": {}
 }
 ```
 
@@ -73,6 +74,25 @@ Attempt automated remediation of validation failures before escalating to human 
       "reason": "Requires logic change, not auto-fixable"
     }
   ],
+  "spec_inferences": [
+    {
+      "ambiguity": "Whether empty input returns null or throws",
+      "inferred_behavior": "Return null for consistency with existing handlers",
+      "confidence": "high",
+      "source": "[auto]"
+    }
+  ],
+  "files_changed_classified": {
+    "test": ["src/auth.test.ts"],
+    "implementation": ["src/auth.ts"],
+    "config": [],
+    "other": []
+  },
+  "implementation_modified": true,
+  "issue_history": {
+    "lint:src/auth.ts:semi": {"first_seen": 1, "fixed_in": 1, "status": "resolved"},
+    "test:src/auth.test.ts:missing-edge-case": {"first_seen": 1, "status": "open"}
+  },
   "next_action": "revalidate | escalate | human_review"
 }
 ```
@@ -181,6 +201,10 @@ If `memory/project-context.md` does not exist, create it using the State Trackin
    - Auto-fixable → Apply immediately
    - Semi-auto → Attempt with flagging
    - Manual-only → Add to unfixable list
+2b. Check for [REGRESSION]-flagged issues:
+    - Do NOT attempt auto-fix on regressions
+    - Update issue_history: status → "regression", add regressed_in
+    - Escalate immediately per qa-escalation-policy
 3. For each auto-fixable issue:
    a. Apply fix
    b. Verify fix resolved issue
@@ -189,6 +213,12 @@ If `memory/project-context.md` does not exist, create it using the State Trackin
    a. Attempt fix
    b. Flag for human review
 5. Generate fix report
+5b. Classify all changed files:
+    - **Test:** matches `*test*`, `*spec*`, `*_test*`, `*.test.*`, or in `test/`/`tests/`/`__tests__/` directories
+    - **Implementation:** source files not matching test patterns
+    - **Config:** matches `*.config.*`, `*.json`, `*.yaml`, `*.yml`, `*.toml`
+    - **Other:** everything else
+    - Set `implementation_modified: true` if any implementation files were changed
 6. Determine next action:
    - All fixed → Return for re-validation
    - Some remaining → Escalate if iteration >= 5
@@ -223,11 +253,28 @@ If `memory/project-context.md` does not exist, create it using the State Trackin
 + const x = 5;
 ```
 
+## Regressions
+
+| Fingerprint | Fixed In | Reappeared In | Status |
+|-------------|----------|---------------|--------|
+| lint:auth.ts:semi | Iteration 1 | Iteration 3 | ESCALATE |
+
+> This section only appears when regressions are detected.
+
 ## Remaining Issues
 
 | Issue | File | Reason Not Fixed |
 |-------|------|------------------|
 | Type error | service.ts:88 | Requires logic change |
+
+## File Classification
+
+| File | Category |
+|------|----------|
+| auth.ts | Implementation |
+| auth.test.ts | Test |
+
+**Implementation Modified:** Yes
 
 ## Flagged for Review
 
@@ -297,6 +344,35 @@ See [`qa-escalation-policy/SKILL.md`](../qa-escalation-policy/SKILL.md) for the 
 - Before/after state
 - Verification result
 
+## Spec Clarification Tagging
+
+When qa-fixer infers spec behavior to resolve an ambiguity (e.g., deciding how to handle an edge case not explicitly covered in the spec), it must:
+
+1. **Tag the inference as `[auto]`** — All inferred behaviors are tagged with `**Source:** [auto]` to distinguish them from human-confirmed clarifications (`[human]`).
+
+2. **Include a Spec Inferences table in the fix report:**
+
+```markdown
+## Spec Inferences
+
+| Ambiguity | Inferred Behavior | Confidence | Source |
+|-----------|-------------------|------------|--------|
+| [What was unclear] | [What was assumed] | [high/medium/low] | [auto] |
+```
+
+3. **Append to clarifications.md** with `**Source:** [auto]`:
+
+```markdown
+### Auto-Resolved: [Category] — [Ambiguity]
+**Context:** Encountered during QA fix loop (iteration N)
+**Answer:** [Inferred behavior]
+**Source:** [auto]
+**Confidence:** [high/medium/low]
+**Spec Update:** [How spec was interpreted]
+```
+
+Low-confidence inferences should be flagged for human review rather than applied silently.
+
 ## Integration with Validation Loop
 
 ```
@@ -338,6 +414,25 @@ See [`qa-escalation-policy/SKILL.md`](../qa-escalation-policy/SKILL.md) for the 
 - Prepare escalation report
 - Suggest manual fixes
 
+## Issue History Tracking
+
+The `issue_history` object is maintained across fix loop iterations, tracking each fingerprint's lifecycle.
+
+**Flow:**
+1. On first invocation, `issue_history` may be empty or absent — initialize from current issues (all `open`, `first_seen: 1`).
+2. On subsequent invocations, `issue_history` is passed in from qa-validator (which received it from the prior qa-fixer output).
+3. Each iteration, update the history:
+   - **New fingerprints** (not in history) → add with `status: "open"`, `first_seen: {current_iteration}`
+   - **Fixed fingerprints** (in history but not in current issues) → set `status: "resolved"`, `fixed_in: {current_iteration}`
+   - **Regression fingerprints** (flagged `[REGRESSION]` by qa-validator) → set `status: "regression"`, `regressed_in: {current_iteration}`
+
+**Status values:**
+- `open` — Issue exists and has not been fixed yet
+- `resolved` — Issue was fixed in a previous iteration and has not reappeared
+- `regression` — Issue was fixed but reappeared in a later iteration
+
+The complete `issue_history` is included in the output JSON and passed to qa-validator on re-entry for regression comparison.
+
 ## Notes
 
 - Preserve git history readability (combine related fixes)
@@ -350,3 +445,5 @@ See [`qa-escalation-policy/SKILL.md`](../qa-escalation-policy/SKILL.md) for the 
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2026-01-20 | Initial release |
+| 1.1.0 | 2026-02-09 | SX-003: Added `[auto]` source tags for spec inferences. S2-003: Added `implementation_modified` flag and file classification in fix reports. |
+| 1.2.0 | 2026-02-09 | SX-005: Added `issue_history` to input/output (FR-002), regression escalation rule (FR-004), Regressions section in fix report (FR-005), Issue History Tracking section |

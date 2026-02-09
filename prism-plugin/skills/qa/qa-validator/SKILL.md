@@ -1,7 +1,7 @@
 ---
 name: qa-validator
 description: Run automated quality checks against completed tasks. Invoke after Developer marks task complete to verify quality standards are met.
-version: 1.0.1
+version: 1.1.0
 category: qa
 chainable: true
 invokes: [qa-fixer]
@@ -39,7 +39,8 @@ Automatically verify that completed work meets quality standards before human re
   "constitution_path": "/memory/constitution.md",
   "validation_level": "standard | strict",
   "skip_checks": ["lint"],
-  "focus_checks": ["tests", "requirements"]
+  "focus_checks": ["tests", "requirements"],
+  "issue_history": {}
 }
 ```
 
@@ -68,7 +69,7 @@ Automatically verify that completed work meets quality standards before human re
       "status": "fail",
       "details": "3 errors in auth.ts",
       "issues": [
-        {"file": "auth.ts", "line": 42, "message": "..."}
+        {"file": "auth.ts", "line": 42, "message": "...", "fingerprint": "lint:auth.ts:semi"}
       ]
     },
     {
@@ -185,6 +186,23 @@ Check against relevant constitution articles:
 - Article 5: Anti-abstraction (no unnecessary complexity)
 - Article 7: Accessibility
 
+## Issue Fingerprinting
+
+Each issue in `checks[].issues[]` receives a stable `fingerprint` for cross-iteration identity.
+
+**Format:** `{check}:{file}:{rule}`
+
+**Examples:**
+- `lint:src/auth.ts:semi`
+- `test:src/auth.test.ts:missing-edge-case`
+- `type:src/api/handler.ts:TS2345`
+
+**Rule resolution:**
+- If the check tool provides a rule ID (e.g., ESLint rule `semi`, TypeScript error `TS2345`), use it directly.
+- If no rule ID exists, use a normalized short form of the message: lowercase, spaces replaced with hyphens, truncated to 40 characters.
+
+**Line numbers are excluded** — they shift after fixes, so fingerprints use only check, file, and rule to remain stable across iterations.
+
 ## Pre-Execution Check
 
 Before starting, update `memory/project-context.md`:
@@ -207,6 +225,9 @@ If `memory/project-context.md` does not exist, create it using the State Trackin
    - Types (blocking)
    - Requirements coverage (informational)
 5. Compile results
+5b. If iteration > 1 and issue_history provided:
+    - Compare current fingerprints against issue_history
+    - Flag issues with status "resolved" that reappear as [REGRESSION]
 6. Determine next action:
    - All pass → proceed to code review
    - Fixable failures → invoke qa-fixer
@@ -233,6 +254,11 @@ If `memory/project-context.md` does not exist, create it using the State Trackin
 | Types | PASS | No errors |
 | Requirements | PASS | 5/5 covered |
 | Regression | PASS | No regressions |
+
+## Regressions
+
+| Fingerprint | Fixed In | Reappeared In |
+|-------------|----------|---------------|
 
 ## Issues
 
@@ -330,7 +356,8 @@ See [`qa-escalation-policy/SKILL.md`](../qa-escalation-policy/SKILL.md) for the 
   "validation_report_path": "/specs/.../qa/task-T001-validation.md",
   "issues": [...],
   "iteration": 1,
-  "fixable_issues": [...]
+  "fixable_issues": [...],
+  "issue_history": {}
 }
 ```
 
@@ -356,3 +383,4 @@ See [`qa-escalation-policy/SKILL.md`](../qa-escalation-policy/SKILL.md) for the 
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2026-01-20 | Initial release |
+| 1.1.0 | 2026-02-09 | SX-005: Added issue fingerprints (FR-001), regression comparison step (FR-003), issue_history in inputs and qa-fixer handoff, Regressions section in validation report |
