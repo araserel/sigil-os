@@ -64,6 +64,7 @@ resume, and help.
 | `/constitution` | Create/view constitution | constitution-writer |
 | `/prime` | Load project context for session | Context Primer |
 | `/learn` | View/search project learnings | Learning Reader |
+| `/connect` | Connect project to shared context repo | Connect Wizard |
 | `/prism-status` | Show workflow status | Status Reporter |
 | `/prism-update` | Check for & install updates | Global update script |
 
@@ -938,6 +939,10 @@ BEFORE TASK EXECUTION
            │
            ▼
     ┌──────────────────────────────────────────────────────────────────────┐
+    │ Step 0: Load shared learnings (if connected)                         │
+    │ • Read from ~/.prism/cache/shared/ (last successful pull)            │
+    │ • Shared learnings load first; local layer on top                    │
+    │                                                                      │
     │ Always loads (if they exist):                                        │
     │ • memory/learnings/active/patterns.md                                │
     │ • memory/learnings/active/gotchas.md                                 │
@@ -962,7 +967,7 @@ BEFORE TASK EXECUTION
     │ │ • Session refresh happens automatically, don't add manual      │   │
     │ └────────────────────────────────────────────────────────────────┘   │
     │                                                                      │
-    │ Token budget: ~2,400 typical / ~3,200 max (~4% of context)          │
+    │ Token budget: ~5,500 total (shared + local combined)                 │
     │                                                                      │
     └──────────────────────────────────────────────────────────────────────┘
            │
@@ -1000,6 +1005,11 @@ AFTER TASK COMPLETION
     │ • Tasks marked [no-learn] in tasks.md                                │
     │ • Duplicate learnings already captured this session                  │
     │                                                                      │
+    │ Step 5b: Push to shared repo (if connected)                          │
+    │ • Gotchas, decisions, pattern candidates → shared-context-sync push  │
+    │ • Routine task notes stay local only                                  │
+    │ • On failure: silent queue, never blocks task completion              │
+    │                                                                      │
     └──────────────────────────────────────────────────────────────────────┘
            │
            ▼
@@ -1011,9 +1021,11 @@ AFTER TASK COMPLETION
 
 | Skill | Purpose | Invoked By |
 |-------|---------|------------|
-| `learning-reader` | Load relevant learnings before tasks | Orchestrator, Developer |
-| `learning-capture` | Record learnings after task completion (silent, non-blocking) | Developer |
+| `learning-reader` | Load shared + local learnings before tasks | Orchestrator, Developer |
+| `learning-capture` | Record learnings after task completion + shared push (silent, non-blocking) | Developer |
 | `learning-review` | Prune, promote, archive learnings | Manual via `/learn` |
+| `shared-context-sync` | Push/pull learnings to/from shared GitHub repo via MCP | learning-capture, `/prime` |
+| `connect-wizard` | Interactive setup for shared context connection | `/connect` |
 
 ---
 
@@ -1455,6 +1467,7 @@ Specify → Clarify → Plan → Tasks → Implement → Validate → Review
 | `/constitution` | Project principles |
 | `/prime` | Load context |
 | `/learn` | View learnings |
+| `/connect` | Shared context setup |
 | `/prism-status` | Workflow status |
 | `/prism-update` | Check for updates |
 
@@ -1469,7 +1482,9 @@ Specify → Clarify → Plan → Tasks → Implement → Validate → Review
 | Enterprise track | researcher + adr-writer (required) |
 | Task creation | task-decomposer |
 | Before any implementation task | learning-reader |
-| After any implementation task | learning-capture |
+| After any implementation task | learning-capture (→ shared-context-sync push if connected) |
+| `/connect` invoked | connect-wizard |
+| `/prime` with shared context | shared-context-sync pull + @inherit expansion |
 | Quality check | qa-validator (→ qa-fixer if issues) |
 | After all tasks complete | code-reviewer |
 

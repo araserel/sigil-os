@@ -135,6 +135,7 @@ Prism guides you through:
 | `/prism` | Show status and next steps |
 | `/prism "description"` | Start building a new feature |
 | `/prism continue` | Resume where you left off |
+| `/connect` | Share learnings across projects |
 | `/prism-update` | Check for plugin updates |
 
 ---
@@ -157,6 +158,7 @@ Or use the familiar command:
 - [Quick Start Guide](prism-plugin/docs/quick-start.md)
 - [User Guide](prism-plugin/docs/user-guide.md)
 - [Command Reference](prism-plugin/docs/command-reference.md)
+- [Shared Context Setup](prism-plugin/docs/shared-context-setup.md)
 
 ### Migrating from Global Install?
 

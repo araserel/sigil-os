@@ -286,6 +286,21 @@ All Prism skills are currently at **v1.0.0** (initial release).
 | gate-checker | 1.0.0 | Stable |
 | deploy-checker | 1.0.0 | Stable |
 
+### Learning Skills
+
+| Skill | Version | Status |
+|-------|---------|--------|
+| learning-capture | 1.2.0 | Stable |
+| learning-reader | 1.2.0 | Stable |
+| learning-review | 1.0.0 | Stable |
+
+### Shared Context Skills
+
+| Skill | Version | Status |
+|-------|---------|--------|
+| shared-context-sync | 1.1.0 | Stable |
+| connect-wizard | 1.1.0 | Stable |
+
 ### Research Skills
 
 | Skill | Version | Status |

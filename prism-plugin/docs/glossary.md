@@ -56,4 +56,17 @@ Plain-English definitions for terms used in Prism. If a word sounds technical, y
 
 ---
 
+## Shared Context Terms
+
+| Term | What It Means |
+|------|---------------|
+| **Shared Context** | A system that syncs learnings and standards across multiple code projects through a shared GitHub repository |
+| **Shared Repo** | A GitHub repository that stores learnings and standards shared between projects (e.g., `my-org/platform-context`) |
+| **Sentinel File** | The local connection file (`~/.prism/registry.json`) that maps your projects to their shared repo |
+| **Shared Standards** | Organizational rules stored in `shared-standards/` in the shared repo, referenced by projects via `@inherit` markers |
+| **@inherit** | A marker in your constitution (e.g., `<!-- @inherit: shared-standards/security.md -->`) that pulls in standards from the shared repo |
+| **Offline Queue** | When the shared repo is unreachable, learnings save locally and sync automatically on your next `/prime` |
+
+---
+
 *Don't see a term? Check the [User Guide](user-guide.md) or [Command Reference](command-reference.md).*
