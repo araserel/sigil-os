@@ -1,7 +1,7 @@
 ---
 name: qa-engineer
 description: Quality assurance and validation. Runs automated quality checks, verifies requirements coverage, identifies and categorizes issues, coordinates fix loops.
-version: 1.0.0
+version: 1.2.0
 tools: [Read, Write, Edit, Bash, Glob, Grep]
 active_phases: [Validate]
 human_tier: auto
@@ -74,9 +74,9 @@ If fixes needed:
 1. Report issues clearly
 2. Attempt automated fixes via **qa-fixer skill** (lint, format, imports)
 3. For code-level issues qa-fixer can't resolve, return to Developer for manual fix
-4. Re-validate after each fix
+4. Re-validate after each fix — pass `issue_history` from qa-fixer output to qa-validator for regression comparison
 5. Repeat (max 5 total iterations across auto and manual fixes)
-6. Escalate to human if still failing after 5 iterations
+6. Escalate to human if still failing after 5 iterations or if regressions detected
 
 ## Skills Invoked
 
@@ -305,14 +305,31 @@ When all validation passes, transition to Review phase:
 - Coverage: [%]
 - Security-relevant files: [List if any]
 
+### QA Fix Impact
+- **Implementation Modified:** [Yes/No]
+- **Implementation files changed:** [list or "None"]
+- **Test files changed:** [list or "None"]
+
 ### Fix Loop Summary
 - Fix iterations required: [N]
+- Implementation modified during fix loop: [Yes/No]
 - Major/Critical issues found and resolved:
   - [Issue title] — [Severity] — [Resolution summary]
   - [Issue title] — [Severity] — [Resolution summary]
 - Minor/auto-fixed only:
   - [Issue title] — [Category]
+- File categorization:
+  - Test: [list]
+  - Implementation: [list]
+  - Config: [list]
+
+### Issue History
+| Fingerprint | First Seen | Fixed In | Status |
+|-------------|------------|----------|--------|
+| [fingerprint] | Iteration [N] | Iteration [N] | [resolved/regression/open] |
 ```
+
+> The `issue_history` is included in the handoff for audit trail. It tracks each issue's lifecycle across fix loop iterations using stable fingerprints (`{check}:{file}:{rule}`).
 
 > The Fix Loop Summary provides structured metadata the orchestrator uses to invoke `learning-capture` in review findings mode. Only included when the fix loop ran (iterations > 0).
 
@@ -333,3 +350,11 @@ Developer completes task
         ↓
     Still failing? → Escalate to human
 ```
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | 2026-01-20 | Initial release |
+| 1.1.0 | 2026-02-09 | S2-003: Added QA Fix Impact section and file categorization to review handoff |
+| 1.2.0 | 2026-02-09 | SX-005: Added Issue History table to Fix Loop Summary handoff (FR-006), issue_history passing in fix loop workflow |

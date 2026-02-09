@@ -1,12 +1,12 @@
 ---
 name: code-reviewer
 description: Perform structured code review against project standards and best practices. Invoke after qa-validator passes to review code quality before deployment.
-version: 1.0.0
+version: 1.1.0
 category: review
 chainable: true
 invokes: []
 invoked_by: [orchestrator]
-tools: Read, Glob, Grep
+tools: Read, Write, Glob, Grep
 ---
 
 # Skill: Code Reviewer
@@ -39,7 +39,12 @@ Perform structured code review against project standards, constitution principle
   "constitution_path": "/memory/constitution.md",
   "review_depth": "standard | thorough",
   "focus_areas": ["error_handling", "architecture"],
-  "previous_review": "/specs/001-feature/reviews/code-review-v1.md"
+  "previous_review": "/specs/001-feature/reviews/code-review-v1.md",
+  "qa_fix_metadata": {
+    "implementation_modified": false,
+    "files_changed_classified": {},
+    "fix_loop_summary": ""
+  }
 }
 ```
 
@@ -77,7 +82,9 @@ Perform structured code review against project standards, constitution principle
     "suggestions": 3
   },
   "approval_conditions": [],
-  "commendations": ["Good error handling in auth service"]
+  "commendations": ["Good error handling in auth service"],
+  "tech_debt_captured": 2,
+  "tech_debt_path": "/memory/tech-debt.md"
 }
 ```
 
@@ -210,6 +217,15 @@ SUGGESTION: Similar code in 3 locations
 | Complexity | 0 | 0 | 1 |
 | **Total** | **0** | **2** | **4** |
 
+<!-- Only include QA Fix Impact Notice when implementation_modified is true -->
+## QA Fix Impact Notice
+
+> **Implementation was modified during the QA fix loop.** The following implementation files were changed by qa-fixer, not the original developer. Review these with extra scrutiny.
+
+| File | Category |
+|------|----------|
+| [file] | Implementation |
+
 ## Findings
 
 ### Warnings
@@ -275,6 +291,9 @@ If `memory/project-context.md` does not exist, create it using the State Trackin
 
 ```
 1. Receive files and spec for review
+1b. If qa_fix_metadata provided and implementation_modified is true:
+    - Flag implementation files from files_changed_classified for priority review
+    - These files were modified during the QA fix loop, not the original implementation
 2. Load constitution and project standards
 3. For each file:
    a. Parse and analyze structure
@@ -291,6 +310,38 @@ If `memory/project-context.md` does not exist, create it using the State Trackin
    - Has blockers → Changes Requested
 7. Generate review report
 8. Return results
+```
+
+## Tech Debt Persistence
+
+After completing the review, if any findings have `severity: "suggestion"`, persist them to `/memory/tech-debt.md`:
+
+1. **Read** `/memory/tech-debt.md` (create if it doesn't exist)
+2. **Duplicate check** — Skip if an entry with the same file and concept already exists
+3. **Append** each new suggestion using the entry format below
+4. **Cap at 50 items** — If the file exceeds 50 entries, add a warning comment: `<!-- Tech debt backlog at capacity. Review and triage before adding more. -->`
+5. **Silent operation** — Do not mention tech-debt persistence to the user unless asked
+
+**Entry format:**
+
+```markdown
+- **[Short description]**
+  - Feature: [feature-id]
+  - Review: [CR-###]
+  - File: [file:line]
+  - Category: [style | architecture | error_handling | performance | complexity | DRY]
+  - Suggested Fix: [Brief suggestion]
+  - Added: [YYYY-MM-DD]
+```
+
+**File header** (created once):
+
+```markdown
+# Tech Debt Backlog
+
+> Non-blocking suggestions from code reviews. Review periodically.
+
+---
 ```
 
 ## Severity Guidelines
@@ -374,3 +425,4 @@ Proceeding with focused review on changed sections only.
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2026-01-20 | Initial release |
+| 1.1.0 | 2026-02-09 | S2-003: Added QA Fix Impact Notice and `qa_fix_metadata` input. SX-002: Added tech-debt persistence for non-blocking suggestions. Added Write tool. |

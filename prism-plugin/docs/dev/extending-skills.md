@@ -24,6 +24,7 @@ Prism organizes skills into 8 categories. Before creating a new skill, review ex
 | **Review** | Code, security, deploy checks | `code-reviewer`, `security-reviewer`, `deploy-checker` |
 | **Research** | Information gathering | `researcher`, `knowledge-search`, `codebase-assessment`, `problem-framing`, `constraint-discovery`, `stack-recommendation` |
 | **Learning** | Institutional memory | `learning-capture`, `learning-reader`, `learning-review` |
+| **Shared Context** | Cross-project sync | `shared-context-sync`, `connect-wizard` |
 
 ---
 
@@ -218,6 +219,7 @@ Before creating a skill, answer:
 | `review` | Code, security, or deployment review |
 | `research` | Information gathering and analysis |
 | `learning` | Institutional memory and knowledge management |
+| `shared-context` | Cross-project sync via shared GitHub repo |
 | `engineering` | Architecture and code patterns (ADRs, etc.) |
 
 ### Step 3: Define the Contract

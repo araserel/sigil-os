@@ -221,7 +221,7 @@ reads the task list and resumes the implementation loop at the current task.
 ### qa-validator (final task) → code-reviewer
 **Trigger:** Last task passes validation
 **Condition:** All tasks individually validated and complete
-**Data Passed:** `{ spec_path, changed_files }`
+**Data Passed:** `{ spec_path, changed_files, implementation_modified, files_changed_classified, fix_loop_summary }`
 
 ## Human Checkpoints
 
@@ -274,6 +274,9 @@ Between skills, preserve:
 - `has_ui`: Whether feature has UI components
 - `framework`: UI framework (if selected by uiux-designer)
 - `design_path`: Path to design artifacts (if UI feature)
+- `implementation_modified`: Whether QA fixes touched implementation files (S2-003)
+- `files_changed_classified`: File categorization from qa-fixer (test/implementation/config/other)
+- `fix_loop_summary`: Structured summary of QA fix loop activity
 
 ## Example Execution
 

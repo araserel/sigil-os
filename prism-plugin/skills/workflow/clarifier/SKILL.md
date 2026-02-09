@@ -1,7 +1,7 @@
 ---
 name: clarifier
 description: Reduces specification ambiguity through structured Q&A. Invoke when spec has ambiguity flags or user requests clarification.
-version: 1.0.0
+version: 1.1.0
 category: workflow
 chainable: true
 invokes: []
@@ -114,6 +114,7 @@ When user provides answers:
 3. Mark Open Questions as resolved
 4. Check if new ambiguities surfaced
 5. Update clarifications.md with Q&A log
+6. Tag each answer with **Source:** [human]
 ```
 
 ### Step 6: Resolution Check
@@ -150,7 +151,8 @@ If iteration >= max AND ambiguities remain:
   "iteration": 2,
   "max_iterations_reached": false,
   "questions_asked": 7,
-  "questions_answered": 7
+  "questions_answered": 7,
+  "source_tags": "all-human"
 }
 ```
 
@@ -170,11 +172,13 @@ If iteration >= max AND ambiguities remain:
 ### Q1: [Category] — [Question]
 **Context:** [Why we asked]
 **Answer:** [User's response]
+**Source:** [human]
 **Spec Update:** [How spec was modified]
 
 ### Q2: [Category] — [Question]
 **Context:** [Why we asked]
 **Answer:** [User's response]
+**Source:** [human]
 **Spec Update:** [How spec was modified]
 
 ---
@@ -268,3 +272,4 @@ Clarifier: All questions resolved. Updating spec and proceeding to planning.
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2026-01-20 | Initial release |
+| 1.1.0 | 2026-02-09 | SX-003: Added `[human]` source tags to clarifications for provenance tracking |

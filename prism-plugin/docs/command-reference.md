@@ -19,6 +19,7 @@
 | `/constitution` | View or edit project rules | First-time setup or updates |
 | `/learn` | View, search, or review learnings | Reviewing institutional memory |
 | `/prime` | Load project context for a session | Starting a new session |
+| `/connect` | Connect project to shared context repo | Multi-project sharing setup |
 | `/handoff` | Generate engineer review package | Ready for technical review |
 | `/prism-update` | Check for and install Prism updates | Keeping Prism current |
 
@@ -795,6 +796,55 @@ Loads all context relevant to authentication work: constitution rules, auth-rela
 
 ---
 
+## /connect
+
+Connect your project to a shared context repository for cross-project learnings.
+
+### Syntax
+
+```
+/connect
+/connect org/repo
+```
+
+### Variants
+
+| Usage | What It Does |
+|-------|-------------|
+| `/connect` | Start the guided setup wizard (3 steps) |
+| `/connect org/repo` | Connect directly to a specific shared repo |
+
+### What It Does
+
+1. Checks that GitHub MCP is available
+2. Validates access to the shared repository
+3. Scaffolds the repo structure if empty (learnings, profiles, shared-standards)
+4. Creates a local connection file at `~/.prism/registry.json`
+5. Discovers shared standards if available
+
+### After Connecting
+
+- Learnings sync automatically when you use `/learn`
+- Latest shared context loads when you use `/prime`
+- A "what's new" summary shows entries added since your last session
+
+### When to Use
+
+- Setting up cross-project sharing for the first time
+- Connecting an additional project to an existing shared repo
+- When you work on more than one code project
+
+### Disconnecting
+
+Remove the project's entry from `~/.prism/registry.json` or delete the file. No separate disconnect command is needed.
+
+### Related
+
+- [Shared Context Setup Guide](shared-context-setup.md) — Full setup walkthrough
+- [Multi-Team Workflow](multi-team-workflow.md) — How shared context works across teams
+
+---
+
 ## /prism-update
 
 Check for and install Prism OS updates.
@@ -849,6 +899,7 @@ Run the update? (Y/n)
 | `/constitution` | Set project rules | `/constitution` |
 | `/learn` | View/review learnings | `/learn --review` |
 | `/prime` | Load session context | `/prime authentication` |
+| `/connect` | Shared context setup | `/connect org/repo` |
 | `/handoff` | Engineer review | `/handoff` |
 | `/prism-update` | Check for updates | `/prism-update` |
 

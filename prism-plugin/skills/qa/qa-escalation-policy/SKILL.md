@@ -1,7 +1,7 @@
 ---
 name: qa-escalation-policy
 description: Canonical escalation policy shared across all QA skills and the QA Engineer agent
-version: 1.0.0
+version: 1.1.0
 category: qa
 type: reference
 chainable: false
@@ -30,6 +30,7 @@ Escalate to human review when ANY of these conditions are met:
 8. **Multiple interrelated issues** — Issues are coupled and can't be fixed independently
 9. **Environment blocking** — Test infrastructure issues preventing validation
 10. **Requirement ambiguity** — Cannot verify a requirement due to unclear acceptance criteria
+11. **Regression detected** — A previously-fixed issue reappears in a later iteration (fingerprint match with resolved status)
 
 ## Escalation Report Format
 
@@ -45,3 +46,4 @@ When escalating, always include:
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2026-02-05 | Extracted from qa-validator, qa-fixer, and qa-engineer |
+| 1.1.0 | 2026-02-09 | SX-005: Added trigger #11 (regression detected) |

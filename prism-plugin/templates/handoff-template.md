@@ -82,6 +82,11 @@ Relevant information for the receiving agent:
     "plan": false
   },
   "blocking_issues": [],
+  "qa_fix_metadata": {
+    "implementation_modified": false,
+    "files_changed_classified": {},
+    "fix_loop_summary": ""
+  },
   "error_state": {
     "has_error": false,
     "current_error": null,
@@ -252,6 +257,7 @@ See [Error Handling Protocol](/docs/error-handling.md) for full error taxonomy.
 - Track: [Track]
 - Risk level: [Level]
 - Sensitive: [Yes/No]
+- Implementation modified by QA: [Yes/No]
 ```
 
 ---
