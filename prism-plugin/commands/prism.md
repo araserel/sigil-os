@@ -47,6 +47,19 @@ Read the following files to understand current project state:
    - Scan for existing feature directories
    - Check for incomplete specs (missing plan.md or tasks.md)
 
+5. **Shared Context:** `~/.prism/registry.json`
+   - Exists and current project has entry? → Shared context active
+   - Exists but no entry for current project? → Check `default_repo`
+   - Missing? → Solo mode (no shared context UI)
+
+   If shared context is active, include in status dashboard:
+   ```
+   Shared Context: Connected
+     Repo: my-org/platform-context
+     Queued: 0 pending syncs
+   ```
+   If not active, do NOT show any shared context information.
+
 #### 1b. Context Staleness Check
 
 If `project-context.md` exists and reports an Active Workflow with a Spec Path, cross-reference the recorded phase against artifacts on disk:

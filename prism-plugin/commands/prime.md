@@ -22,6 +22,60 @@ Always load:
 2. `/memory/project-context.md` - Current state
 3. `CLAUDE.md` - Prism OS instructions (if exists)
 
+### Step 1b: Pull Shared Context (if connected)
+
+Check if shared context is active:
+1. Read `~/.prism/registry.json` — look up current project
+2. If not active → skip to Step 1c (no shared context UI)
+
+If active, invoke the `shared-context-sync` pull protocol:
+1. Pull latest shared learnings from shared repo via MCP
+2. Cache updated locally at `~/.prism/cache/shared/`
+3. Drain offline queue (retry any pending writes)
+4. Compute "what's new" since last session
+
+**Display "What's New" (FR-017):**
+
+If new shared learnings exist since last sync:
+```
+Shared Context: 3 new learnings since last session
+  - [patterns/api-server] Use connection pooling for database queries
+  - [gotchas/web-app] Next.js middleware can't access Node crypto
+  - [decisions/api-server] Chose Redis for session storage
+
+Queued syncs: 0 pending
+```
+
+If nothing new:
+```
+Shared Context: Up to date (araserel/platform-context)
+```
+
+If MCP unavailable (graceful fallback):
+```
+Shared Context: Offline — using cached data
+  Last sync: 2026-02-09 14:30
+  Queued: 1 learning pending sync
+```
+
+### Step 1c: Expand @inherit Markers
+
+If `/memory/constitution.md` contains `<!-- @inherit: ... -->` markers and shared context is active:
+
+1. For each `@inherit` marker, extract the referenced path (e.g., `shared-standards/security-standards.md`)
+2. Fetch the referenced file from shared repo via MCP:
+   ```
+   mcp__github__get_file_contents(owner, repo, path=referenced_path)
+   ```
+3. Replace the `<!-- @inherit: ... -->` marker with the fetched content (inline expansion)
+4. If fetch fails, check cache at `~/.prism/cache/shared/{referenced_path}`
+5. If cache also unavailable, leave marker in place with warning comment:
+   ```
+   <!-- @inherit: shared-standards/security-standards.md — UNAVAILABLE, using local constitution only -->
+   ```
+
+**Important:** Expansion is in-memory only for agent consumption. Do NOT modify the actual constitution file on disk.
+
 ### Step 2: Determine Focus
 
 Based on arguments:
@@ -137,9 +191,12 @@ Context loaded:
 - Constitution: [X] articles
 - Active features: [Count]
 - Current focus: [Feature/Area]
+- Shared context: [Connected / Not configured]
 
 What would you like to work on?
 ```
+
+If shared context is active, include the "What's New" summary from Step 1b between the Session Brief and the "Context loaded" summary. If shared context is not active, omit all shared context lines.
 
 ## Focus Area Patterns
 

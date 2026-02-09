@@ -19,7 +19,7 @@ Create a standalone `PRISM.md` file with mandatory enforcement rules and ensure 
 ## Constants
 
 ```
-ENFORCEMENT_VERSION: 2.0.0
+ENFORCEMENT_VERSION: 2.1.0
 ```
 
 **Versioning:** `ENFORCEMENT_VERSION` tracks independently from the Prism OS plugin version in `plugin.json`. Bump it only when the enforcement section content changes (new rules, modified instructions). Plugin releases that don't change enforcement content leave this version unchanged.
@@ -44,8 +44,8 @@ The hook outputs JSON with instructions. Follow these steps based on the hook ou
 1. Read `./CLAUDE.md` from the project root.
 2. **Dev repo guard:** If the file contains the string `Prism OS Development Environment`, skip entirely. This is the Prism development repository — enforcement rules are not appropriate here. Report nothing.
 3. **Check/create PRISM.md:**
-   - If hook indicates `prism_md_action: "create"` → create PRISM.md with content below. Report: `Created PRISM.md with Prism enforcement rules (v2.0.0).`
-   - If hook indicates `prism_md_action: "update"` → overwrite PRISM.md with content below. Report: `Updated PRISM.md enforcement rules to v2.0.0.`
+   - If hook indicates `prism_md_action: "create"` → create PRISM.md with content below. Report: `Created PRISM.md with Prism enforcement rules (v2.1.0).`
+   - If hook indicates `prism_md_action: "update"` → overwrite PRISM.md with content below. Report: `Updated PRISM.md enforcement rules to v2.1.0.`
    - If hook indicates `prism_md_action: "none"` → skip (already current).
 4. **Check CLAUDE.md for pointer:**
    - If hook indicates `needs_pointer: true`:
@@ -64,8 +64,8 @@ Use this exact content as the pointer:
 #### Report
 
 Only print a message if something changed:
-- Created PRISM.md: `Created PRISM.md with Prism enforcement rules (v2.0.0).`
-- Updated PRISM.md version: `Updated PRISM.md enforcement rules to v2.0.0.`
+- Created PRISM.md: `Created PRISM.md with Prism enforcement rules (v2.1.0).`
+- Updated PRISM.md version: `Updated PRISM.md enforcement rules to v2.1.0.`
 - Created CLAUDE.md: `Created ./CLAUDE.md with PRISM.md pointer.`
 - Added pointer to existing CLAUDE.md: `Added PRISM.md pointer to ./CLAUDE.md.`
 - Migrated legacy block: `Migrated legacy enforcement block to PRISM.md.`
@@ -76,7 +76,7 @@ Only print a message if something changed:
 The following is the canonical PRISM.md content. Use this exact content (substituting the current `ENFORCEMENT_VERSION` into the version marker) when creating or updating the file.
 
 ```markdown
-<!-- PRISM-OS v2.0.0 -->
+<!-- PRISM-OS v2.1.0 -->
 # Prism OS — Enforcement Rules
 
 These rules are MANDATORY. They override default Claude Code behavior for all workflow actions.
@@ -132,6 +132,8 @@ At the start of any workflow, you MUST read these files (if they exist):
 2. `memory/project-context.md` — Current workflow state
 3. `memory/learnings/active/patterns.md` — Validated patterns to follow
 4. `memory/learnings/active/gotchas.md` — Known traps to avoid
+5. `memory/waivers.md` — Constitution waivers (load before constitution checks)
+6. `memory/tech-debt.md` — Non-blocking review suggestions (load during review phase)
 
 ## Mandatory State Updates
 

@@ -54,6 +54,22 @@ Run '/learn --review' to prune and promote.
 Run '/learn --search <query>' to search.
 ```
 
+**Shared context section** (only when `~/.prism/registry.json` exists and current project is connected):
+
+After the local learnings summary, also read from `~/.prism/cache/shared/learnings/` and `~/.prism/cache/shared/queue/`, then append:
+
+```
+Shared Context
+--------------
+  Repo: my-org/platform-context
+  Shared patterns: X (from N projects)
+  Shared gotchas:  Y (from N projects)
+  Pending syncs:   Z queued
+  Last sync: 2026-02-09 14:30
+```
+
+If shared context is not active (no sentinel or project not in registry), do NOT show this section.
+
 ### `--review`: `/learn --review`
 
 Invoke the `learning-review` skill for interactive review.
@@ -65,12 +81,13 @@ Invoke the `learning-review` skill for interactive review.
 
 ### `--search <query>`: `/learn --search auth`
 
-Search across all learnings.
+Search across all learnings (local and shared).
 
 **Process:**
 1. Read all files in `/memory/learnings/active/`
-2. Search for query term (case-insensitive)
-3. Return matching entries with source
+2. If shared context is active, also read files in `~/.prism/cache/shared/learnings/`
+3. Search for query term (case-insensitive)
+4. Return matching entries with source (label shared results with repo name)
 
 **Output format:**
 ```

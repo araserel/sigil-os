@@ -1,10 +1,10 @@
 ---
 name: learning-capture
 description: Captures learnings after task completion. Records gotchas, decisions, patterns, and task notes for future reference.
-version: 1.1.0
+version: 1.2.0
 category: learning
 chainable: false
-invokes: []
+invokes: [shared-context-sync]
 invoked_by: [developer, orchestrator]
 tools: Read, Write, Edit
 model: haiku
@@ -131,6 +131,32 @@ If duplicate exists, skip capture.
 ### Step 5: Confirm Capture (Silent)
 
 Do NOT tell the user about the capture unless there's an error. Learning capture should be invisible during normal operation.
+
+### Step 5b: Push to Shared Repo (if connected)
+
+After local write, check if shared context is active:
+
+1. Read `~/.prism/registry.json` — look up current project
+2. If not active (missing file, or project not in registry) → skip silently
+3. If active, format the learning entry in shared format:
+   ```markdown
+   ## [YYYY-MM-DD] Short title
+   - **Contributor:** {git config user.email}
+   - **Context:** When/why this applies
+   - **Solution:** The learning content
+   - **Tags:** tag1, tag2 (derived from category)
+   ```
+4. Map the local category to shared category:
+   - Gotcha entry → `gotchas.md`
+   - Decision entry → `decisions.md`
+   - Pattern candidate (`[PATTERN?]`) → `patterns.md`
+   - Task note (with substantive content) → `gotchas.md` (if gotcha noted) or skip (routine task notes don't sync)
+5. Invoke `shared-context-sync` push protocol with category, content, and repo name
+6. **On failure:** Silent. The push protocol handles queueing internally. Never surface sync errors to the user during task completion.
+
+**What syncs vs what doesn't:**
+- Gotchas, decisions, and pattern candidates → sync to shared repo
+- Routine task notes (no gotcha, no pattern flag) → local only (too noisy for shared)
 
 ---
 
@@ -266,5 +292,6 @@ Run `/learn --review` to prune and promote learnings.
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2.0 | 2026-02-09 | S2-101: Added Step 5b — push to shared repo via shared-context-sync after local write |
 | 1.1.0 | 2026-01-30 | Added review findings mode for QA/security handback learning capture |
 | 1.0.0 | 2026-01-23 | Initial release |

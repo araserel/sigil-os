@@ -8,29 +8,107 @@ Transform natural language descriptions into implemented, tested features throug
 
 ## Installation
 
-Prism OS is a Claude Code plugin. Install it in seconds:
+Prism is an add-on for Claude Code, Anthropic's AI coding tool. Three building blocks stack on top of each other to make it work:
+
+```mermaid
+flowchart LR
+    A[Node.js] --> B[Claude Code] --> C[Prism]
+
+    style A fill:#e0f2fe,stroke:#0ea5e9
+    style B fill:#a5b4fc,stroke:#6366f1
+    style C fill:#d1fae5,stroke:#10b981
+```
+
+### What You Need First
+
+Open your **terminal** (the app where you type commands). On Mac, search for "Terminal." On Windows, search for "PowerShell."
+
+**Step 1 — Check for Node.js**
+
+Node.js is a free tool that runs programs on your computer. Type this and press Enter:
 
 ```bash
-# Add the marketplace
-claude plugin marketplace add araserel/prism-os
+node --version
+```
 
-# Install the plugin
+You should now see a number like `v18.x.x` or higher. If you get an error, [download Node.js here](https://nodejs.org/) and install it first.
+
+**Step 2 — Install Claude Code**
+
+This command downloads Claude Code. Copy and paste it into your terminal:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+Then check that it worked:
+
+```bash
+claude --version
+```
+
+You should now see a version number on screen. You also need a Claude Pro, Max, or API plan — [sign up here](https://www.anthropic.com/pricing) if you don't have one.
+
+> **Note:** See [Anthropic's setup guide](https://docs.anthropic.com/en/docs/claude-code) if you run into trouble with Claude Code.
+
+### Install Prism
+
+Now you are ready to add Prism. Run these two commands one at a time:
+
+```bash
+claude plugin marketplace add araserel/prism-os
+```
+
+```bash
 claude plugin install prism@prism-os
 ```
 
-Or from within Claude Code:
-```
-/plugin marketplace add araserel/prism-os
-/plugin install prism@prism-os
+Then check that it worked:
+
+```bash
+claude plugin list
 ```
 
-### Verify Installation
+You should now see `prism` in the list that prints out.
+
+> **Tip:** You can also run these from inside Claude Code by typing `/plugin marketplace add araserel/prism-os` and `/plugin install prism@prism-os`.
+
+### Set Up Your First Project
+
+After installing, open your project folder in Claude Code:
+
+```bash
+claude
+```
+
+Then type this command to create your project's **constitution** (a short file of rules that guide how Prism works in your project):
+
+```
+/constitution
+```
+
+Answer three quick rounds of questions about your project. Prism fills in the details for you.
+
+You should now see a new `memory/constitution.md` file in your project folder.
+
+### Check That Everything Works
+
+Type this inside Claude Code:
 
 ```
 /prism status
 ```
 
-You should see the Prism OS status dashboard.
+You should now see the Prism dashboard. It shows the version number and every command you can use.
+
+**Quick checklist:**
+
+- [ ] `node --version` shows v18 or higher
+- [ ] `claude --version` shows a version number
+- [ ] `claude plugin list` shows `prism`
+- [ ] `/prism status` shows the Prism dashboard
+
+> **Note:** Something not working? See the [full Installation Guide](prism-plugin/docs/installation.md) for step-by-step fixes.
 
 ---
 
