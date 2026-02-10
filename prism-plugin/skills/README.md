@@ -63,6 +63,12 @@ Institutional memory and learning loop skills:
 - `learning-reader.md` — Load relevant learnings before tasks
 - `learning-review.md` — Prune, promote, and archive learnings
 
+### shared-context/
+Cross-project sync skills:
+- `shared-context-sync/` — Push/pull learnings and profiles via GitHub MCP
+- `connect-wizard/` — Interactive setup for shared context connection
+- `profile-generator/` — Auto-detect tech stack and generate project profile
+
 ## Skill Definition Format
 
 Each skill file follows this structure:
@@ -115,9 +121,9 @@ All skills use semantic versioning (MAJOR.MINOR.PATCH):
 | New capability (backward compatible) | MINOR |
 | Bug fix, documentation | PATCH |
 
-Current versions: Most skills at **v1.0.0** (initial release). See `/docs/versioning.md` for exceptions (e.g., constitution-writer v2.0.0).
+Current versions: Most skills at **v1.0.0** (initial release). Several have been bumped by cross-cutting specs and Stage 2 features. See `/docs/dev/versioning.md` for the full version table.
 
-See `/docs/versioning.md` for detailed versioning strategy.
+See `/docs/dev/versioning.md` for detailed versioning strategy.
 
 ## Creating New Skills
 

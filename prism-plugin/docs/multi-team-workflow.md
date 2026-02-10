@@ -95,6 +95,7 @@ Each person's learnings sync through a shared GitHub repository accessed via Git
 | Patterns | "Use React Query's onMutate for optimistic updates" | Anyone starting similar work |
 | Gotchas | "DataGrid slows with more than 10,000 rows" | Anyone about to hit the same wall |
 | Decisions | "Using Flexbox for the sidebar layout" | Anyone who needs to understand past choices |
+| Project Profiles | "API Server exposes /users and /auth endpoints" | Anyone whose project depends on another |
 
 ### How syncing happens
 
@@ -121,6 +122,16 @@ Key details:
 - A "what's new" summary shows what was added since your last session.
 - If GitHub MCP is unreachable, Prism works normally with local memory and a cached copy of shared learnings. It syncs when the connection returns.
 - Failed pushes queue locally and replay automatically on the next `/prime`.
+
+### Project profiles
+
+Each project can publish a profile describing its tech stack, exposed APIs, and consumed dependencies. Run `/profile` to create one.
+
+- Profiles publish to the shared repo's `profiles/` directory automatically.
+- When you run `/prime`, sibling profiles load so Prism knows what other projects expose.
+- If your plan changes an API that another project consumes, Prism warns you during planning.
+
+This is especially useful for teams where one project (like an API server) exposes endpoints that other projects (like a web app or mobile app) consume.
 
 ### Automatic gotcha surfacing
 

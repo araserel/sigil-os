@@ -481,6 +481,28 @@ When blockers appear, they need action.
 | Outside dependency | Talk to the team that owns that piece |
 | Resource not available | Escalate to project leadership |
 
+### Project Profiles
+
+If you work on more than one project, Prism can create a **project profile** for each one. A profile is a short file that describes what the project does, what technologies it uses, and what it shares with other projects.
+
+**Creating a profile:**
+
+```
+/profile
+```
+
+Prism scans your project files and detects your tech stack automatically. It then asks a few questions about what your project does and what it shares.
+
+You should now see a `memory/project-profile.yaml` file in your project folder.
+
+**Why profiles matter:**
+
+- When you start a session with `/prime`, Prism loads your profile and profiles from connected projects.
+- If your project changes something that another project depends on, Prism warns you during planning.
+- Profiles help new team members understand each project at a glance.
+
+> **Note:** Profiles work in solo mode too. Even without shared context, a profile gives Prism better understanding of your project's tech stack.
+
 ### Learning Loop
 
 Prism captures lessons as you work. This builds a shared memory that helps avoid repeat mistakes. It also surfaces proven patterns over time.

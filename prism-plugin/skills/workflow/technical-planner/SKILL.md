@@ -1,7 +1,7 @@
 ---
 name: technical-planner
 description: Creates implementation plans from clarified specifications. Invoke when spec is clarified and user requests planning, says "plan", or "how should we build".
-version: 1.0.0
+version: 1.1.0
 category: workflow
 chainable: true
 invokes: [researcher, adr-writer]
@@ -34,6 +34,8 @@ Transform clarified specifications into actionable implementation plans. Identif
 **Auto-loaded:**
 - `constitution_path`: string — `/memory/constitution.md`
 - `project_context`: string — `/memory/project-context.md`
+- `current_profile`: object — From `/memory/project-profile.yaml` (if exists)
+- `sibling_profiles`: array — From `~/.prism/cache/shared/profiles/` (if connected)
 
 ## Pre-Execution Check
 
@@ -101,6 +103,44 @@ Validate approach against constitution gates:
 - [ ] WCAG requirements identified
 - [ ] Keyboard navigation planned
 - [ ] Screen reader behavior specified
+
+**Cross-Repo Impact Gate (if profiles available):**
+
+Run this gate when `current_profile` and `sibling_profiles` are loaded in context.
+
+1. Load current project profile and sibling profiles from auto-loaded context
+2. Parse plan changes for API, event, or package modifications:
+   - New/modified/deleted API endpoints
+   - Changed event names or payloads
+   - Package interface changes
+3. For each change that affects an `exposes` entry in the current profile:
+   a. Search sibling profiles' `consumes` entries where `source` matches the current project name
+   b. If matches found → this change has cross-repo impact
+4. If cross-repo impacts detected, add a warning section to the plan:
+
+```markdown
+## Cross-Repo Impact Warning
+
+The following changes may affect sibling projects:
+
+| Change | Affected Project | What They Consume |
+|--------|-----------------|-------------------|
+| Modified `GET /api/products` | web-app | Product catalog API |
+| Removed `order.completed` event | mobile-app | Order status updates |
+
+**Action required:** Coordinate with affected project owners before proceeding.
+```
+
+5. Prompt user with options:
+   - **Proceed** — Acknowledge impact, continue with plan
+   - **Modify** — Adjust plan to avoid breaking changes
+   - **Continue anyway** — Skip warning (not recommended)
+
+If no profiles are available (solo mode or no profile configured), skip this gate silently.
+
+- [ ] Cross-repo impact checked (if profiles loaded)
+- [ ] Affected sibling projects identified
+- [ ] Impact warning included in plan (if applicable)
 
 ### Step 5: Plan Generation
 
@@ -248,4 +288,5 @@ Technical Planner: Creating implementation plan for user authentication...
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1.0 | 2026-02-09 | S2-102: Added Cross-Repo Impact Gate, auto-loaded current_profile and sibling_profiles inputs |
 | 1.0.0 | 2026-01-20 | Initial release |

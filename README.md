@@ -136,6 +136,7 @@ Prism guides you through:
 | `/prism "description"` | Start building a new feature |
 | `/prism continue` | Resume where you left off |
 | `/connect` | Share learnings across projects |
+| `/profile` | Generate or view your project profile |
 | `/prism-update` | Check for plugin updates |
 
 ---

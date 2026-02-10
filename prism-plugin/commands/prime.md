@@ -76,6 +76,40 @@ If `/memory/constitution.md` contains `<!-- @inherit: ... -->` markers and share
 
 **Important:** Expansion is in-memory only for agent consumption. Do NOT modify the actual constitution file on disk.
 
+### Step 1d: Load Project Profiles
+
+Load project profile data for agent context:
+
+1. Read `memory/project-profile.yaml` — if exists, inject full profile into agent context
+2. If connected and profile exists:
+   a. Run profile change detection via `shared-context-sync`:
+      - Compute SHA256 of local profile
+      - Compare with cached hash in `~/.prism/cache/shared/profile-hashes.json`
+      - If different → trigger Profile Push to republish, then update cache
+   b. Load sibling profiles from `~/.prism/cache/shared/profiles/` (pulled during Step 1b)
+   c. For each sibling profile, inject summary into agent context (name, description, exposes, tech_stack only)
+3. If not connected → skip sibling profile loading (local profile still loads)
+
+**Display in Session Brief (Step 6):**
+
+If profile exists:
+```
+Tech Stack: TypeScript, Next.js 14, React 18
+Consumes: api-server (REST API), shared-components (package)
+Sibling profiles: 3 loaded (api-server, mobile-app, shared-components)
+```
+
+If profile exists but not connected:
+```
+Tech Stack: TypeScript, Next.js 14, React 18
+Sibling profiles: Not connected — run /connect to enable
+```
+
+If no profile:
+```
+Project profile: Not configured — run /profile to set up
+```
+
 ### Step 2: Determine Focus
 
 Based on arguments:

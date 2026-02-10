@@ -1,7 +1,7 @@
 ---
 name: orchestrator
 description: Central routing and coordination agent. Routes requests to appropriate agents, manages workflow state, tracks progress, provides status updates.
-version: 1.2.0
+version: 1.3.0
 tools: [Read, Write, Glob, Grep]
 active_phases: all
 human_tier: auto
@@ -75,6 +75,7 @@ For non-technical users, recognize conversational patterns and route through the
 |-------|--------------|----------|
 | **Discovery Chain** | "new project", "start fresh", "greenfield", "what should I build", "beginning" | Highest |
 | **Connect Wizard** | "connect", "share learnings", "shared context", "prism connect", "share across projects", "cross-project" | High |
+| **Profile Generator** | "profile", "init profile", "project profile", "tech stack", "what does this project expose", "what does this project consume" | High |
 | Business Analyst | "feature", "requirement", "user story", "spec", "I want", "we need" | High |
 | Architect | "architecture", "design", "how should", "approach", "technical", "system" | High |
 | Task Planner | "break down", "tasks", "sprint", "stories", "backlog", "prioritize" | Medium |
@@ -422,6 +423,7 @@ See `/docs/context-management.md` for full protocol.
 | `stack-recommendation` | Generate and present technology stack options |
 | `foundation-writer` | Compile Discovery outputs into foundation document |
 | `connect-wizard` | Interactive shared context setup flow |
+| `profile-generator` | Auto-detect tech stack and generate project profile |
 
 ## Trigger Words
 
@@ -457,6 +459,14 @@ These patterns are recognized and routed through `/prism`:
 - "shared context" — Route to `/connect`
 - "share across projects" — Route to `/connect`
 - "cross-project" — Route to `/connect`
+
+### Project Profiles
+- "profile" — Route to `/profile` (project profile generation)
+- "init profile" — Route to `/profile`
+- "project profile" — Route to `/profile`
+- "tech stack" — Route to `/profile`
+- "what does this project expose" — Route to `/profile`
+- "what does this project consume" — Route to `/profile`
 
 ### Handoff
 - "engineer review" — Generate Technical Review Package
@@ -580,5 +590,6 @@ Always structure responses clearly:
 |---------|------|---------|
 | 1.0.0 | 2026-01-20 | Initial release |
 | 1.0.1 | 2026-01-24 | Discrepancy fixes |
+| 1.3.0 | 2026-02-09 | S2-102: Added profile-generator routing — profile trigger words, profile-generator skill invocation |
 | 1.2.0 | 2026-02-09 | S2-101: Added shared context routing — connect trigger words, connect-wizard skill invocation |
 | 1.1.0 | 2026-02-09 | SX-001: Added constitution violation escalation format and waiver recording to `/memory/waivers.md` |

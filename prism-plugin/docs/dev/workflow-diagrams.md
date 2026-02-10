@@ -65,6 +65,7 @@ resume, and help.
 | `/prime` | Load project context for session | Context Primer |
 | `/learn` | View/search project learnings | Learning Reader |
 | `/connect` | Connect project to shared context repo | Connect Wizard |
+| `/profile` | Generate or view project profile | Profile Generator |
 | `/prism-status` | Show workflow status | Status Reporter |
 | `/prism-update` | Check for & install updates | Global update script |
 
@@ -1024,8 +1025,9 @@ AFTER TASK COMPLETION
 | `learning-reader` | Load shared + local learnings before tasks | Orchestrator, Developer |
 | `learning-capture` | Record learnings after task completion + shared push (silent, non-blocking) | Developer |
 | `learning-review` | Prune, promote, archive learnings | Manual via `/learn` |
-| `shared-context-sync` | Push/pull learnings to/from shared GitHub repo via MCP | learning-capture, `/prime` |
+| `shared-context-sync` | Push/pull learnings and profiles to/from shared GitHub repo via MCP | learning-capture, profile-generator, `/prime` |
 | `connect-wizard` | Interactive setup for shared context connection | `/connect` |
+| `profile-generator` | Auto-detect tech stack and generate project profile | `/profile` |
 
 ---
 
@@ -1380,6 +1382,7 @@ PERSISTENT FILES
 📄 memory/constitution.md               ─── Project guardrails (7 articles)
 📄 memory/project-foundation.md         ─── Discovery outcomes (if applicable)
 📄 memory/project-context.md            ─── Workflow state (auto-updated)
+📄 memory/project-profile.yaml          ─── Tech stack, APIs, dependencies (S2-102)
 📄 memory/learnings/                    ─── Growing knowledge base
 📄 CLAUDE.md                            ─── Prism pointer
 📄 PRISM.md                             ─── Enforcement rules
@@ -1397,6 +1400,7 @@ project-root/
 │   ├── constitution.md                  ─── Project guardrails (7 articles)
 │   ├── project-context.md               ─── Current workflow state (ephemeral)
 │   ├── project-foundation.md            ─── Discovery outcomes (if applicable)
+│   ├── project-profile.yaml             ─── Tech stack, APIs, dependencies
 │   ├── README.md                        ─── Memory system docs
 │   └── learnings/
 │       ├── active/
@@ -1468,6 +1472,7 @@ Specify → Clarify → Plan → Tasks → Implement → Validate → Review
 | `/prime` | Load context |
 | `/learn` | View learnings |
 | `/connect` | Shared context setup |
+| `/profile` | Project profile |
 | `/prism-status` | Workflow status |
 | `/prism-update` | Check for updates |
 
@@ -1484,10 +1489,11 @@ Specify → Clarify → Plan → Tasks → Implement → Validate → Review
 | Before any implementation task | learning-reader |
 | After any implementation task | learning-capture (→ shared-context-sync push if connected) |
 | `/connect` invoked | connect-wizard |
-| `/prime` with shared context | shared-context-sync pull + @inherit expansion |
+| `/profile` invoked | profile-generator (→ shared-context-sync profile push if connected) |
+| `/prime` with shared context | shared-context-sync pull (learnings + profiles) + @inherit expansion |
 | Quality check | qa-validator (→ qa-fixer if issues) |
 | After all tasks complete | code-reviewer |
 
 ---
 
-*Prism OS Version: 2.0.0*
+*Prism OS Version: 2.1.0*

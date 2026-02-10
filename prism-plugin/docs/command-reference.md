@@ -20,6 +20,7 @@
 | `/learn` | View, search, or review learnings | Reviewing institutional memory |
 | `/prime` | Load project context for a session | Starting a new session |
 | `/connect` | Connect project to shared context repo | Multi-project sharing setup |
+| `/profile` | Generate or view project profile | Describing your tech stack and APIs |
 | `/handoff` | Generate engineer review package | Ready for technical review |
 | `/prism-update` | Check for and install Prism updates | Keeping Prism current |
 
@@ -845,6 +846,79 @@ Remove the project's entry from `~/.prism/registry.json` or delete the file. No 
 
 ---
 
+## /profile
+
+Generate or view your project's profile — a description of your tech stack, exposed APIs, and consumed dependencies.
+
+### Syntax
+
+```
+/profile
+/profile --view
+```
+
+### Variants
+
+| Usage | What It Does |
+|-------|-------------|
+| `/profile` | Interactive profile generation (or update if one exists) |
+| `/profile --view` | Display the current project profile |
+
+### What It Does
+
+1. Scans your codebase for tech stack signals (package.json, Cargo.toml, go.mod, etc.)
+2. Shows detected languages, frameworks, and tools for confirmation
+3. Asks for a short project description
+4. Optionally asks what APIs or events your project exposes and consumes
+5. Generates `memory/project-profile.yaml`
+6. If connected to shared context, publishes the profile for sibling projects to see
+
+### When to Use
+
+- When setting up a new project
+- After major tech stack changes
+- When you want sibling projects to know about your APIs or events
+
+### Example
+
+```
+/profile
+```
+
+**Prism responds:**
+```
+Project Profile Setup
+==============================
+
+I scanned your project and found:
+
+  Languages: TypeScript, CSS
+  Frameworks: Next.js 14, React 18, Tailwind CSS
+  Testing: Jest, Playwright
+  Infrastructure: (none detected)
+
+Look right? [Y/n]: y
+
+What does this project do? (1-2 sentences)
+> Customer-facing web application for product catalog and checkout
+
+Profile saved: memory/project-profile.yaml
+Published to shared repo: profiles/web-app.yaml
+```
+
+### After Creating a Profile
+
+- `/prime` loads your profile into every session
+- Sibling projects see your profile on their next `/prime`
+- The architect agent warns you if your changes might affect projects that consume your APIs
+
+### Related
+
+- `/connect` — Connect to a shared repo to share profiles across projects
+- `/prime` — Loads profiles into session context
+
+---
+
 ## /prism-update
 
 Check for and install Prism OS updates.
@@ -900,6 +974,7 @@ Run the update? (Y/n)
 | `/learn` | View/review learnings | `/learn --review` |
 | `/prime` | Load session context | `/prime authentication` |
 | `/connect` | Shared context setup | `/connect org/repo` |
+| `/profile` | Project profile | `/profile --view` |
 | `/handoff` | Engineer review | `/handoff` |
 | `/prism-update` | Check for updates | `/prism-update` |
 
