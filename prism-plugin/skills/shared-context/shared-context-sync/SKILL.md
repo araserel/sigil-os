@@ -1,11 +1,11 @@
 ---
 name: shared-context-sync
 description: Orchestrates shared context operations — sentinel detection, repo identity, push/pull sync, cache management, and offline queue via GitHub MCP.
-version: 1.1.0
+version: 1.2.0
 category: shared-context
 chainable: false
 invokes: []
-invoked_by: [learning-capture, learning-reader, prime, prism, connect-wizard]
+invoked_by: [learning-capture, learning-reader, prime, prism, connect-wizard, profile-generator]
 tools: Read, Write, Edit, Bash, ToolSearch, mcp__github__get_file_contents, mcp__github__create_or_update_file, mcp__github__push_files
 model: haiku
 ---
@@ -380,6 +380,102 @@ Before appending a learning to the shared repo (step 7 of Push Protocol), check 
 
 ---
 
+## Profile Protocol
+
+### Profile Push
+
+Called by `profile-generator` after writing or updating `memory/project-profile.yaml`.
+
+**Inputs:**
+- `repo_name`: Current project's repo name (from identity detection)
+
+**Procedure:**
+
+1. Check sentinel → if not active, return silently
+2. Determine shared repo from sentinel lookup (e.g., `araserel/platform-context`)
+3. Split shared repo into `owner` and `repo` parts
+4. Determine target file path: `profiles/{repo_name}.yaml`
+5. Read local `memory/project-profile.yaml`
+6. **Read existing file via MCP:**
+   ```
+   mcp__github__get_file_contents(owner, repo, path="profiles/{repo_name}.yaml")
+   ```
+   - If file exists: extract SHA from response
+   - If file doesn't exist (404): SHA is null (new file)
+7. **Write profile via MCP:**
+   ```
+   mcp__github__create_or_update_file(
+     owner, repo,
+     path="profiles/{repo_name}.yaml",
+     content=local_profile_content,
+     message="profile: update {repo_name} project profile",
+     branch="main",
+     sha=existing_file_sha  # Required for updates, omit for new files
+   )
+   ```
+   - **SHA safety:** Always pass the SHA from step 6 when updating. If SHA mismatch occurs (concurrent write), re-read the file and retry once.
+8. On success: update local hash cache at `~/.prism/cache/shared/profile-hashes.json`
+9. On failure: enqueue to offline queue with `operation: "overwrite"` and `target: "profiles/{repo_name}.yaml"`
+
+**Graceful failure:** If any MCP call fails, log a warning ("Profile sync unavailable, profile saved locally") and enqueue to the offline queue. Never block the user's workflow on sync failure.
+
+### Profile Pull
+
+Called by `prime` at session start (as part of pull protocol).
+
+**Procedure:**
+
+1. Check sentinel → if not active, return silently
+2. Determine shared repo from sentinel lookup
+3. Split shared repo into `owner` and `repo` parts
+4. **Read profiles directory via MCP:**
+   ```
+   mcp__github__get_file_contents(owner, repo, path="profiles/")
+   ```
+   This returns an array of directory entries. For each `.yaml` file:
+   ```
+   mcp__github__get_file_contents(owner, repo, path="profiles/{filename}")
+   ```
+5. For each profile file found:
+   a. Compare SHA from response with cached SHA in `~/.prism/cache/shared/profile-hashes.json`
+   b. If changed: decode content (base64) and update local cache at `~/.prism/cache/shared/profiles/{filename}`
+   c. If unchanged: skip (cache is current)
+6. Update `~/.prism/cache/shared/profile-hashes.json` with new SHAs
+7. Return sibling profile list (excluding current project's profile)
+
+**On MCP failure during pull:**
+
+1. Log warning: "Profile sync unavailable, using cached profiles."
+2. Return cached profiles from `~/.prism/cache/shared/profiles/`
+3. Continue session normally — MCP failure must never block `/prime`
+
+### Profile Change Detection
+
+Called by `prime` to determine if the local profile needs republishing.
+
+**Procedure:**
+
+1. Read `memory/project-profile.yaml` — if missing, return (no profile to sync)
+2. Compute SHA256 hash of file contents
+3. Read `~/.prism/cache/shared/profile-hashes.json`
+4. Compare local hash with cached `local_hash` entry
+5. If different → trigger Profile Push, then update `local_hash` in cache
+6. If same → skip (no changes since last sync)
+
+**Cache schema (`~/.prism/cache/shared/profile-hashes.json`):**
+
+```json
+{
+  "local_hash": "sha256:abc123...",
+  "remote_profiles": {
+    "api-server.yaml": "github_sha_from_api",
+    "web-app.yaml": "github_sha_from_api"
+  }
+}
+```
+
+---
+
 ## Scaffolding Protocol
 
 Called by `connect-wizard` when a shared repo is empty or missing the expected structure.
@@ -427,6 +523,10 @@ Called by `connect-wizard` when a shared repo is empty or missing the expected s
 | Cache directory missing | Create it (first-time initialization). |
 | Queue item exceeds 3 retries | Move to `failed/` directory. Log. |
 | Registry exists but repo unreachable | Use cache. Warn user. Do not delete sentinel. |
+| Profile file missing locally | Skip profile push/change detection. No error. |
+| Profile push fails (MCP) | Queue locally. Warn: "Profile sync unavailable, saved locally." |
+| Profile pull fails (MCP) | Use cached profiles. Log warning. |
+| Profile hash cache missing | Create it (first-time initialization). |
 
 ---
 
@@ -440,6 +540,8 @@ Called by `connect-wizard` when a shared repo is empty or missing the expected s
 | `prism` | Sentinel check | During state detection |
 | `connect-wizard` | Write sentinel, scaffold repo | During `prism connect` |
 | `learn` | Queue status | When displaying learning summary |
+| `profile-generator` | Profile Push | After writing/updating `memory/project-profile.yaml` |
+| `prime` | Profile Pull + change detection | At session start (alongside learning pull) |
 
 ---
 
@@ -448,4 +550,5 @@ Called by `connect-wizard` when a shared repo is empty or missing the expected s
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2026-02-09 | Initial release — sentinel detection, repo identity, cache structure, queue management, push/pull protocols |
+| 1.2.0 | 2026-02-09 | S2-102: Added Profile Protocol — profile push, pull, change detection, profile hash cache |
 | 1.1.0 | 2026-02-09 | Added specific MCP tool references, scaffolding protocol, duplicate detection V1, expanded error paths, graceful fallback details |

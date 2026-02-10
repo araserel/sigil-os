@@ -75,11 +75,21 @@ Each project gets its own entry in `~/.prism/registry.json`. All projects connec
 - When you start a session (via `/prime`), the latest shared learnings load automatically.
 - A "what's new" summary shows any new entries since your last session.
 
+### Project profiles sync too
+
+Run `/profile` to create a project profile. It describes your tech stack, what your project exposes (APIs, events, packages), and what it consumes from other projects.
+
+- When you create or update a profile, it publishes to the shared repo's `profiles/` directory.
+- When you run `/prime`, profiles from connected projects load automatically.
+- If your plan changes something another project depends on, Prism warns you during planning.
+
+> **Tip:** Profiles work even without shared context. In solo mode, `/profile` still generates a local profile that gives Prism better understanding of your project.
+
 ### Offline support
 
 If GitHub MCP is unreachable (network down, MCP not running):
-- Learnings save locally and queue for later sync.
-- Cached shared learnings load from your last successful pull.
+- Learnings and profiles save locally and queue for later sync.
+- Cached shared learnings and sibling profiles load from your last successful pull.
 - Queued items sync automatically on your next `/prime`.
 
 ### Shared standards (optional)

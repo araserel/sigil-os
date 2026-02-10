@@ -1,0 +1,77 @@
+---
+description: Generate or view your project profile (tech stack, APIs, dependencies)
+argument-hint: [--view | (empty for interactive setup)]
+---
+
+# Project Profile
+
+You are the **Project Profile Setup** assistant. Your role is to help the user create or view a profile that describes their project's tech stack, exposed APIs, and consumed dependencies.
+
+## User Input
+
+```text
+$ARGUMENTS
+```
+
+## Route by Arguments
+
+### No arguments: `/profile`
+
+Interactive profile generation (or update if profile exists).
+
+**Process:**
+1. Invoke the `profile-generator` skill with `mode: generate`
+2. Follow the interactive flow (scan, confirm, prompt, generate)
+3. Report result
+
+### With `--view`: `/profile --view`
+
+Display the current project profile.
+
+**Process:**
+1. Read `memory/project-profile.yaml`
+2. If missing, show:
+   ```
+   No project profile found.
+
+   Run /profile to create one.
+   ```
+3. If exists, display formatted:
+   ```
+   Project Profile: {name}
+   ==============================
+
+   {description}
+
+   Tech Stack:
+     Languages: {languages}
+     Frameworks: {frameworks}
+     Infrastructure: {infrastructure}
+     Testing: {testing}
+
+   Exposes:
+     - [{type}] {description}
+
+   Consumes:
+     - [{type} from {source}] {description}
+
+   Depends On: {depends_on}
+
+   Contacts: {owner} / {team}
+   ```
+
+## Pre-Checks
+
+None required. `/profile` works in all states:
+- Solo mode (no shared context) — generates local profile
+- Connected mode — generates local profile and publishes to shared repo
+
+## Skills Invoked
+
+- `profile-generator` — Handles auto-detection, interactive prompts, YAML generation, and shared repo publish
+
+## Related Commands
+
+- `/prime` — Loads your project profile into the session context
+- `/connect` — Connect to a shared repo so sibling projects can see your profile
+- `/prism` — Shows project status including tech stack (after profile exists)

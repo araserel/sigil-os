@@ -238,7 +238,7 @@ Before releasing a new skill version:
 
 ## Current Skill Versions
 
-All Prism skills are currently at **v1.0.0** (initial release).
+Most skills are at v1.0.0 (initial release). Skills modified by cross-cutting specs (SX-series), Stage 2 features (S2-series), or earlier releases are noted below.
 
 ### Workflow Skills
 
@@ -246,12 +246,23 @@ All Prism skills are currently at **v1.0.0** (initial release).
 |-------|---------|--------|
 | complexity-assessor | 1.0.0 | Stable |
 | spec-writer | 1.0.0 | Stable |
-| clarifier | 1.0.0 | Stable |
-| technical-planner | 1.0.0 | Stable |
+| clarifier | 1.1.0 | Stable |
+| technical-planner | 1.1.0 | Stable |
 | task-decomposer | 1.0.0 | Stable |
 | constitution-writer | 2.0.0 | Stable |
+| preflight-check | 2.0.0 | Stable |
 | handoff-packager | 1.0.0 | Stable |
 | status-reporter | 1.0.0 | Stable |
+| foundation-writer | 1.0.0 | Stable |
+| visual-analyzer | 1.0.0 | Stable |
+| sprint-planner | 1.0.0 | Stable |
+| story-preparer | 1.0.0 | Stable |
+
+### Specification Skills
+
+| Skill | Version | Status |
+|-------|---------|--------|
+| quick-spec | 1.1.0 | Stable |
 
 ### Design Skills
 
@@ -279,11 +290,11 @@ All Prism skills are currently at **v1.0.0** (initial release).
 
 | Skill | Version | Status |
 |-------|---------|--------|
-| qa-validator | 1.0.0 | Stable |
-| qa-fixer | 1.0.0 | Stable |
-| code-reviewer | 1.0.0 | Stable |
+| qa-validator | 1.1.0 | Stable |
+| qa-fixer | 1.2.0 | Stable |
+| qa-escalation-policy | 1.1.0 | Stable |
+| code-reviewer | 1.1.0 | Stable |
 | security-reviewer | 1.0.0 | Stable |
-| gate-checker | 1.0.0 | Stable |
 | deploy-checker | 1.0.0 | Stable |
 
 ### Learning Skills
@@ -298,14 +309,20 @@ All Prism skills are currently at **v1.0.0** (initial release).
 
 | Skill | Version | Status |
 |-------|---------|--------|
-| shared-context-sync | 1.1.0 | Stable |
+| shared-context-sync | 1.2.0 | Stable |
 | connect-wizard | 1.1.0 | Stable |
+| profile-generator | 1.0.0 | Stable |
 
 ### Research Skills
 
 | Skill | Version | Status |
 |-------|---------|--------|
 | researcher | 1.0.0 | Stable |
+| codebase-assessment | 1.1.0 | Stable |
+| knowledge-search | 1.0.0 | Stable |
+| problem-framing | 1.0.0 | Stable |
+| constraint-discovery | 1.0.0 | Stable |
+| stack-recommendation | 1.0.0 | Stable |
 
 ---
 
