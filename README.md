@@ -1,4 +1,8 @@
-# Prism OS
+# Sigil OS
+
+**Inscribe it. Ship it.**
+
+A sigil is a symbol charged with intent — a mark that transforms thought into action. Sigil OS works the same way: you describe what you want, and it inscribes the specs, plans, and code to ship it. No guesswork, no ceremony, just structured intent made real.
 
 **Specification-driven development for non-technical users of Claude Code.**
 
@@ -8,11 +12,11 @@ Transform natural language descriptions into implemented, tested features throug
 
 ## Installation
 
-Prism is an add-on for Claude Code, Anthropic's AI coding tool. Three building blocks stack on top of each other to make it work:
+Sigil is an add-on for Claude Code, Anthropic's AI coding tool. Three building blocks stack on top of each other to make it work:
 
 ```mermaid
 flowchart LR
-    A[Node.js] --> B[Claude Code] --> C[Prism]
+    A[Node.js] --> B[Claude Code] --> C[Sigil]
 
     style A fill:#e0f2fe,stroke:#0ea5e9
     style B fill:#a5b4fc,stroke:#6366f1
@@ -51,16 +55,16 @@ You should now see a version number on screen. You also need a Claude Pro, Max, 
 
 > **Note:** See [Anthropic's setup guide](https://docs.anthropic.com/en/docs/claude-code) if you run into trouble with Claude Code.
 
-### Install Prism
+### Install Sigil
 
-Now you are ready to add Prism. Run these two commands one at a time:
+Now you are ready to add Sigil. Run these two commands one at a time:
 
 ```bash
-claude plugin marketplace add araserel/prism-os
+claude plugin marketplace add araserel/sigil-os
 ```
 
 ```bash
-claude plugin install prism@prism-os
+claude plugin install sigil@sigil-os
 ```
 
 Then check that it worked:
@@ -69,9 +73,9 @@ Then check that it worked:
 claude plugin list
 ```
 
-You should now see `prism` in the list that prints out.
+You should now see `sigil` in the list that prints out.
 
-> **Tip:** You can also run these from inside Claude Code by typing `/plugin marketplace add araserel/prism-os` and `/plugin install prism@prism-os`.
+> **Tip:** You can also run these from inside Claude Code by typing `/plugin marketplace add araserel/sigil-os` and `/plugin install sigil@sigil-os`.
 
 ### Set Up Your First Project
 
@@ -81,13 +85,13 @@ After installing, open your project folder in Claude Code:
 claude
 ```
 
-Then type this command to create your project's **constitution** (a short file of rules that guide how Prism works in your project):
+Then type this command to create your project's **constitution** (a short file of rules that guide how Sigil works in your project):
 
 ```
 /constitution
 ```
 
-Answer three quick rounds of questions about your project. Prism fills in the details for you.
+Answer three quick rounds of questions about your project. Sigil fills in the details for you.
 
 You should now see a new `memory/constitution.md` file in your project folder.
 
@@ -96,19 +100,19 @@ You should now see a new `memory/constitution.md` file in your project folder.
 Type this inside Claude Code:
 
 ```
-/prism status
+/sigil status
 ```
 
-You should now see the Prism dashboard. It shows the version number and every command you can use.
+You should now see the Sigil dashboard. It shows the version number and every command you can use.
 
 **Quick checklist:**
 
 - [ ] `node --version` shows v18 or higher
 - [ ] `claude --version` shows a version number
-- [ ] `claude plugin list` shows `prism`
-- [ ] `/prism status` shows the Prism dashboard
+- [ ] `claude plugin list` shows `sigil`
+- [ ] `/sigil status` shows the Sigil dashboard
 
-> **Note:** Something not working? See the [full Installation Guide](prism-plugin/docs/installation.md) for step-by-step fixes.
+> **Note:** Something not working? See the [full Installation Guide](sigil-plugin/docs/installation.md) for step-by-step fixes.
 
 ---
 
@@ -117,10 +121,10 @@ You should now see the Prism dashboard. It shows the version number and every co
 Once installed, describe what you want to build:
 
 ```
-/prism "Add a user login page with email and password"
+/sigil "Add a user login page with email and password"
 ```
 
-Prism guides you through:
+Sigil guides you through:
 1. **Specification** — Captures requirements
 2. **Clarification** — Resolves ambiguities
 3. **Planning** — Creates implementation plan
@@ -132,38 +136,38 @@ Prism guides you through:
 
 | Command | Purpose |
 |---------|---------|
-| `/prism` | Show status and next steps |
-| `/prism "description"` | Start building a new feature |
-| `/prism continue` | Resume where you left off |
+| `/sigil` | Show status and next steps |
+| `/sigil "description"` | Start building a new feature |
+| `/sigil continue` | Resume where you left off |
 | `/connect` | Share learnings across projects |
 | `/profile` | Generate or view your project profile |
-| `/prism-update` | Check for plugin updates |
+| `/sigil-update` | Check for plugin updates |
 
 ---
 
 ## Updating
 
 ```
-/plugin update prism@prism-os
+/plugin update sigil@sigil-os
 ```
 
 Or use the familiar command:
 ```
-/prism-update
+/sigil-update
 ```
 
 ---
 
 ## Documentation
 
-- [Quick Start Guide](prism-plugin/docs/quick-start.md)
-- [User Guide](prism-plugin/docs/user-guide.md)
-- [Command Reference](prism-plugin/docs/command-reference.md)
-- [Shared Context Setup](prism-plugin/docs/shared-context-setup.md)
+- [Quick Start Guide](sigil-plugin/docs/quick-start.md)
+- [User Guide](sigil-plugin/docs/user-guide.md)
+- [Command Reference](sigil-plugin/docs/command-reference.md)
+- [Shared Context Setup](sigil-plugin/docs/shared-context-setup.md)
 
 ### Migrating from Global Install?
 
-If you previously used `install-global.sh`, see the [Migration Guide](prism-plugin/docs/migration-from-global.md).
+If you previously used `install-global.sh`, see the [Migration Guide](sigil-plugin/docs/migration-from-global.md).
 
 ---
 
@@ -173,7 +177,7 @@ If you previously used `install-global.sh`, see the [Migration Guide](prism-plug
 
 | Path | Purpose |
 |------|---------|
-| `prism-plugin/` | **The plugin** — distributable product |
+| `sigil-plugin/` | **The plugin** — distributable product |
 | `CLAUDE.md` | Development instructions |
 | `STATUS.md` | Implementation status |
 | `tools/` | Development utilities (linter, etc.) |
@@ -183,12 +187,12 @@ If you previously used `install-global.sh`, see the [Migration Guide](prism-plug
 
 ```bash
 # Clone the repository
-git clone https://github.com/araserel/prism-os.git
-cd prism-os
+git clone https://github.com/araserel/sigil-os.git
+cd sigil-os
 
 # Install locally for testing
 claude plugin marketplace add ./
-claude plugin install prism@prism-os
+claude plugin install sigil@sigil-os
 
 # Run the linter
 python3 tools/workflow-linter.py --verbose
@@ -198,17 +202,17 @@ python3 tools/workflow-linter.py --verbose
 
 | File | Purpose |
 |------|---------|
-| `prism-plugin/.claude-plugin/plugin.json` | Plugin manifest |
-| `prism-plugin/commands/` | Slash commands |
-| `prism-plugin/agents/` | Agent definitions |
-| `prism-plugin/skills/` | Skill implementations |
-| `prism-plugin/hooks/` | Lifecycle hooks |
+| `sigil-plugin/.claude-plugin/plugin.json` | Plugin manifest |
+| `sigil-plugin/commands/` | Slash commands |
+| `sigil-plugin/agents/` | Agent definitions |
+| `sigil-plugin/skills/` | Skill implementations |
+| `sigil-plugin/hooks/` | Lifecycle hooks |
 
 ---
 
 ## Links
 
-- [Plugin Documentation](prism-plugin/docs/README.md)
+- [Plugin Documentation](sigil-plugin/docs/README.md)
 - [Development Status](STATUS.md)
 - [Project Roadmap](PROJECT_PLAN.md)
 

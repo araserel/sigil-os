@@ -1,6 +1,6 @@
 # .claude Directory
 
-This directory contains Claude Code configuration for the Prism operating system.
+This directory contains Claude Code configuration for the Sigil operating system.
 
 ## Structure
 

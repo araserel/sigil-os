@@ -1,12 +1,12 @@
 {
-  "name": "prism-os",
+  "name": "sigil-os",
   "owner": {
     "name": "Adam Riedthaler"
   },
   "plugins": [
     {
-      "name": "prism",
-      "source": "./prism-plugin",
+      "name": "sigil",
+      "source": "./sigil-plugin",
       "description": "Spec-driven development framework for Claude Code",
       "version": "2.1.0"
     }
