@@ -1,7 +1,7 @@
 ---
 name: full-pipeline
 description: Complete spec-to-implementation workflow for Standard and Enterprise tracks.
-version: 1.0.0
+version: 1.1.0
 track: standard, enterprise
 entry_skill: complexity-assessor
 ---
@@ -18,6 +18,10 @@ The full pipeline is the standard workflow for features that need proper specifi
 - New features with moderate to high complexity
 - Work involving multiple files, dependencies, or data changes
 - User explicitly requests full workflow
+
+## Pre-Chain: Preflight Check
+
+The `preflight-check` skill runs via the SessionStart hook **before** this chain begins. It validates environment, constitution existence, and project context. This is not part of the chain sequence itself — it is a hook-triggered prerequisite.
 
 ## Chain Sequence
 
@@ -46,18 +50,18 @@ The full pipeline is the standard workflow for features that need proper specifi
          │ [If feature has UI components]
          ▼
 ┌─────────────────────┐
-│   uiux-designer     │ ← Component design, framework selection, accessibility
-└─────────────────────┘
-         │
-         │ [If Enterprise track]
-         ▼
-┌─────────────────────┐
-│     researcher      │ ← Parallel research tasks
+│   uiux-designer     │ ← Agent: Component design, framework selection, accessibility
 └─────────────────────┘
          │
          ▼
 ┌─────────────────────┐
 │ technical-planner   │ ← Receives UI framework as constraint
+└─────────────────────┘
+         │
+         │ [If Enterprise track OR research needed]
+         ▼
+┌─────────────────────┐
+│     researcher      │ ← Research tasks (after plan identifies unknowns)
 └─────────────────────┘
          │
          │ [If ADRs needed]
@@ -75,6 +79,12 @@ The full pipeline is the standard workflow for features that need proper specifi
 ┌──────────────────────────────────────┐
 │          Per-Task Loop               │
 │                                      │
+│  ┌─────────────────────────────┐    │
+│  │    learning-reader          │    │
+│  │    (load past learnings)    │    │
+│  └─────────────────────────────┘    │
+│              │                       │
+│              ▼                       │
 │  ┌─────────────────────────────┐    │
 │  │    Developer Agent          │    │
 │  │    (Implementation)         │    │
@@ -122,6 +132,17 @@ The full pipeline is the standard workflow for features that need proper specifi
 │ (silent, non-blocking)   │
 └──────────────────────────┘
          │
+         │ [Optional: If deployment needed]
+         ▼
+┌─────────────────────┐
+│   deploy-checker    │ ← Verify deployment readiness
+└─────────────────────┘
+         │
+         ▼
+┌─────────────────────┐
+│    DevOps Agent     │ ← Execute deployment
+└─────────────────────┘
+         │
          ▼
       Complete
 ```
@@ -132,6 +153,13 @@ The per-task loop (Developer -> QA Engineer [qa-validator -> qa-fixer] -> next t
 orchestrated by the `/sigil` command's Step 4b (Implementation Loop). Code review
 runs once after all tasks complete, not per-task. This chain
 file documents the sequence and state transitions; the `/sigil` command executes them.
+
+### Agents vs Skills in This Chain
+
+Most boxes in the diagram are **skills** (invoked by agents). The key exceptions are:
+- **uiux-designer** — This is the **UI/UX Designer agent** (defined in `agents/uiux-designer.md`), not a skill. It has its own routing, tools, and human checkpoint.
+- **Developer Agent** — This is the **Developer agent** (defined in `agents/developer.md`), which invokes skills like `learning-reader` and `learning-capture`.
+- All other boxes (complexity-assessor, spec-writer, clarifier, technical-planner, etc.) are **skills** invoked by the Orchestrator or their parent agent.
 
 When `/sigil continue` is invoked with `Current Phase: implement`, the sigil command
 reads the task list and resumes the implementation loop at the current task.
@@ -188,10 +216,15 @@ reads the task list and resumes the implementation loop at the current task.
 **Condition:** Human approval received
 **Data Passed:** `{ plan_path, spec_path }`
 
-### task-decomposer → Developer
-**Trigger:** Tasks ready
-**Condition:** Task list generated
-**Data Passed:** `{ first_task, tasks_path }`
+### task-decomposer → learning-reader (per-task)
+**Trigger:** Task about to start
+**Condition:** Always, before each Developer task
+**Data Passed:** `{ task_context, feature_id }`
+
+### learning-reader → Developer
+**Trigger:** Learnings loaded
+**Condition:** Always (proceeds even if no learnings found)
+**Data Passed:** `{ relevant_highlights, patterns_loaded, gotchas_loaded }`
 
 ### Developer → QA Engineer (qa-validator)
 **Trigger:** Task implementation complete
@@ -217,6 +250,16 @@ reads the task list and resumes the implementation loop at the current task.
 **Trigger:** Security review completes with remediated findings
 **Condition:** `any finding severity in [Medium, High, Critical]`
 **Data Passed:** `{ mode: "review-findings", source: "security-review", feature_id, task_id, findings: [resolved findings with OWASP categories] }`
+
+### security-reviewer → deploy-checker (optional)
+**Trigger:** Deployment is next step after security review
+**Condition:** User or Orchestrator indicates deployment needed
+**Data Passed:** `{ security_report, deployment_config }`
+
+### deploy-checker → DevOps Agent
+**Trigger:** Deployment readiness confirmed
+**Condition:** All deployment prerequisites met
+**Data Passed:** `{ deployment_plan, security_clearance }`
 
 ### qa-validator (final task) → code-reviewer
 **Trigger:** Last task passes validation
@@ -329,6 +372,15 @@ User: "Add user authentication with email and password"
 9. Complete
 ```
 
+## Optional Extensions
+
+These steps are not part of the core pipeline but can be invoked on demand:
+
+| Extension | When | Description |
+|-----------|------|-------------|
+| `deploy-checker` → DevOps Agent | After security review, when deployment is requested | Verifies deployment readiness and hands off to DevOps for execution |
+| `handoff-packager` | On demand via Orchestrator | Generates a Technical Review Package for engineer handoff. Not part of the automated pipeline — invoked when user requests engineer review. |
+
 ## Variants
 
 ### Enterprise Extension
@@ -342,3 +394,10 @@ If user requests "quick planning":
 - Combine clarifier rounds (all questions at once)
 - Simplified plan (no research phase)
 - Still maintains spec → plan → tasks → implement flow
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.1.0 | 2026-02-10 | Audit: Fixed researcher ordering (after technical-planner), added agent annotations, learning-reader in per-task loop, preflight-check note, optional deploy-checker/handoff-packager extensions |
+| 1.0.0 | 2026-01-20 | Initial release |

@@ -1,7 +1,7 @@
 ---
 name: quick-flow
 description: Streamlined workflow for simple changes—bug fixes, small features, well-understood work.
-version: 1.0.0
+version: 1.1.0
 track: quick
 entry_skill: complexity-assessor
 ---
@@ -29,6 +29,14 @@ Quick Flow is a streamlined workflow for simple, well-understood changes. It ski
 └─────────────────────┘
          │
          │ [If Simple/Quick Flow]
+         ▼
+┌──────────────────────────┐
+│  constitution-check      │ ← File existence check (not a skill invocation)
+│  /memory/constitution.md │
+└──────────────────────────┘
+         │
+         │ [If exists: inject constraints + tech-stack into quick-spec context]
+         │ [If missing: warn user, continue without blocking]
          ▼
 ┌─────────────────────┐
 │    quick-spec       │ ← Lightweight spec (inline)
@@ -65,6 +73,21 @@ Quick Flow is a streamlined workflow for simple, well-understood changes. It ski
          ▼
       Complete
 ```
+
+## Constitution Check
+
+Between complexity assessment and quick-spec, check for the project constitution:
+
+1. **Check** if `/memory/constitution.md` exists (file-existence check, NOT a constitution-writer invocation)
+2. **If YES:**
+   - Extract ONLY the `constraints` and `tech-stack` sections from the constitution
+   - Inject as context into quick-spec (keep injected context under 500 tokens)
+   - Do NOT run schema validation or full parse — this is a lightweight extraction
+3. **If NO:**
+   - Emit user-facing warning: *"No project constitution found. Quick spec will proceed without project constraints. Run `/constitution` to create one."*
+   - Continue without blocking
+
+This ensures Quick Flow specs respect project rules when available, without adding ceremony when they're not.
 
 ## Skill Descriptions
 
@@ -120,10 +143,15 @@ Abbreviated validation:
 
 ## State Transitions
 
-### complexity-assessor → quick-spec
+### complexity-assessor → constitution-check
 **Trigger:** Simple complexity confirmed
 **Condition:** Score 7-10 AND user confirms Quick Flow
 **Data Passed:** `{ request_description, affected_files_estimate }`
+
+### constitution-check → quick-spec
+**Trigger:** Constitution check complete (exists or not)
+**Condition:** Always (non-blocking)
+**Data Passed:** `{ request_description, affected_files_estimate, constitution_context?: { constraints, tech_stack } }`
 
 ### quick-spec → task-decomposer
 **Trigger:** Quick spec complete
@@ -164,6 +192,25 @@ Abbreviated validation:
 | Quick spec | Auto | Presented but not blocking |
 | Completion | Auto | Unless escalated |
 | Escalation | Review | If fix fails |
+
+## Task Count Escalation
+
+Quick Flow enforces a maximum of 5 tasks. When task-decomposer generates more than 5 tasks:
+
+1. **Pause** — Do not proceed with implementation
+2. **Present options to user:**
+   - **A) Escalate to Standard track** — Convert to full pipeline with proper spec and planning. The quick-spec is preserved as a starting point.
+   - **B) Scope down** — User selects which tasks to keep (max 5). Remaining tasks are deferred or dropped.
+   - **C) Override** — User explicitly accepts >5 tasks in Quick Flow (not recommended). Add warning: *"Quick Flow with >5 tasks loses most of its speed advantage. Consider Standard track."*
+3. **Route based on choice:**
+   - Option A → Enter full-pipeline at spec-writer
+   - Option B → Continue Quick Flow with reduced task list
+   - Option C → Continue Quick Flow with full task list (capped at 8 absolute maximum)
+
+### task-decomposer → Escalation (>5 tasks)
+**Trigger:** Task count exceeds 5
+**Condition:** `task_count > 5`
+**Data Passed:** `{ tasks, task_count, quick_spec }`
 
 ## Error Handling
 
@@ -286,3 +333,10 @@ Even in Quick Flow:
 - Accessibility not ignored
 
 Quick Flow is "less ceremony," not "less quality."
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.1.0 | 2026-02-10 | Audit: Added constitution existence check, task count escalation (>5 tasks) |
+| 1.0.0 | 2026-01-20 | Initial release |

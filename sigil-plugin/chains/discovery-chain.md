@@ -1,7 +1,7 @@
 ---
 name: discovery-chain
 description: Project initialization workflow for greenfield and scaffolded codebases. Captures problem, constraints, and stack decisions before constitution creation.
-version: 1.0.0
+version: 1.1.0
 track: discovery
 entry_skill: codebase-assessment
 ---
@@ -74,6 +74,19 @@ Greenfield  Scaffolded    Mature → Exit to standard workflow
       Complete → Ready for feature development
 ```
 
+## Agent Assignment
+
+All skills in the Discovery chain are driven by the **Orchestrator** agent. There is no dedicated Discovery agent — the Orchestrator manages the chain flow and invokes each skill in sequence.
+
+| Skill | Driven By | Rationale |
+|-------|-----------|-----------|
+| `codebase-assessment` | Orchestrator | Entry point — Orchestrator detects Discovery trigger and invokes |
+| `problem-framing` | Orchestrator | Conversational skill — Orchestrator manages user interaction |
+| `constraint-discovery` | Orchestrator | Progressive questions — Orchestrator coordinates rounds |
+| `stack-recommendation` | Orchestrator | Presents options — Orchestrator manages user selection |
+| `foundation-writer` | Orchestrator | Compilation skill — Orchestrator passes accumulated state |
+| `constitution-writer` | Orchestrator | Final step — Orchestrator invokes with foundation data |
+
 ## State Transitions
 
 ### codebase-assessment → problem-framing
@@ -91,7 +104,12 @@ Greenfield  Scaffolded    Mature → Exit to standard workflow
 ### codebase-assessment → Standard Workflow (Exit)
 **Trigger:** Classification is "mature"
 **Condition:** Codebase has established infrastructure
-**Behavior:** Skip Discovery, route to full-pipeline or quick-flow
+**Behavior:**
+1. Check if `/memory/constitution.md` exists
+2. **If constitution exists:** Route to `complexity-assessor` → `quick-flow` OR `full-pipeline` based on the user's request complexity
+3. **If constitution missing:** Invoke `constitution-writer` first (mature codebases need a constitution too), then route to `complexity-assessor`
+
+This ensures mature codebases aren't blocked from feature work but still get a constitution if they lack one.
 
 ### problem-framing → constraint-discovery
 **Trigger:** Problem statement captured
@@ -320,4 +338,5 @@ After Discovery completes:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1.0 | 2026-02-10 | Audit: Added agent assignment table, clarified mature codebase exit with constitution check |
 | 1.0.0 | 2026-01-20 | Initial release |

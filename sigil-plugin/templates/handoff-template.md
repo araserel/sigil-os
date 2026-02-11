@@ -121,7 +121,7 @@ When errors occur, populate the error state:
 }
 ```
 
-See [Error Handling Protocol](/docs/error-handling.md) for full error taxonomy.
+See [Error Handling Protocol](/docs/dev/error-handling.md) for full error taxonomy.
 
 ---
 
@@ -237,7 +237,7 @@ See [Error Handling Protocol](/docs/error-handling.md) for full error taxonomy.
 
 ### Validate → Review
 ```markdown
-## Handoff: QA Engineer → Security / Code Reviewer
+## Handoff: QA Engineer → Review Phase
 
 ### Completed
 - All tasks validated
@@ -249,9 +249,9 @@ See [Error Handling Protocol](/docs/error-handling.md) for full error taxonomy.
 - All implementation files
 
 ### For Your Action
-- Complete code review
-- Security scan (if applicable)
-- Final approval
+- Invoke `code-reviewer` skill for code quality review
+- If security-relevant → Route to Security agent
+- If no security concerns → Return to Orchestrator for completion
 
 ### Context
 - Track: [Track]
@@ -259,6 +259,8 @@ See [Error Handling Protocol](/docs/error-handling.md) for full error taxonomy.
 - Sensitive: [Yes/No]
 - Implementation modified by QA: [Yes/No]
 ```
+
+> **Note:** `code-reviewer` is a skill invocation, not an agent handoff. The Security agent is a real agent routed by the Orchestrator when security-relevant files are involved.
 
 ---
 

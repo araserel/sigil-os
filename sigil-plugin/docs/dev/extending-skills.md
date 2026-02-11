@@ -268,7 +268,7 @@ Determine:
 - `max_items?`: number — Maximum items to process (default: 10)
 
 **Auto-loaded:**
-- `constitution`: string — Loaded from `/specs/000-constitution/spec.md`
+- `constitution`: string — Loaded from `/memory/constitution.md`
 ```
 
 ### Output Contract

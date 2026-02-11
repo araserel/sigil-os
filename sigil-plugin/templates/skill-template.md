@@ -63,7 +63,7 @@ outputs: [output_artifact]
 - `optional_field?`: boolean — [Description] (default: false)
 
 **Auto-loaded:**
-- `constitution`: Loaded from `/specs/000-constitution/spec.md`
+- `constitution`: Loaded from `/memory/constitution.md`
 
 ## Output Schema
 

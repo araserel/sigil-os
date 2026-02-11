@@ -1,7 +1,7 @@
 ---
 name: orchestrator
 description: Central routing and coordination agent. Routes requests to appropriate agents, manages workflow state, tracks progress, provides status updates.
-version: 1.3.0
+version: 1.4.0
 tools: [Read, Write, Glob, Grep]
 active_phases: all
 human_tier: auto
@@ -76,6 +76,7 @@ For non-technical users, recognize conversational patterns and route through the
 | **Discovery Chain** | "new project", "start fresh", "greenfield", "what should I build", "beginning" | Highest |
 | **Connect Wizard** | "connect", "share learnings", "shared context", "sigil connect", "share across projects", "cross-project" | High |
 | **Profile Generator** | "profile", "init profile", "project profile", "tech stack", "what does this project expose", "what does this project consume" | High |
+| **UI/UX Designer** | "UI", "UX", "component", "layout", "screen", "mockup", "wireframe", "accessible", "Figma" | High |
 | Business Analyst | "feature", "requirement", "user story", "spec", "I want", "we need" | High |
 | Architect | "architecture", "design", "how should", "approach", "technical", "system" | High |
 | Task Planner | "break down", "tasks", "sprint", "stories", "backlog", "prioritize" | Medium |
@@ -96,6 +97,14 @@ Phase context can override keyword matching:
 - If in **Implement phase** and no strong trigger → Route to Developer
 - If in **Validate phase** and no strong trigger → Route to QA Engineer
 - If in **Review phase** and no strong trigger → Route to Security or DevOps
+
+### Post-Architect UI Routing
+
+When the Architect completes and hands off:
+- If `requires_ui_design: true` → Route to **UI/UX Designer** before Task Planner
+- If `requires_ui_design: false` → Route directly to **Task Planner**
+
+This check is centralized here in the Orchestrator. The Architect sets the flag; the Orchestrator reads it and routes accordingly.
 
 ### Ambiguity Handling
 
@@ -422,6 +431,7 @@ See `/docs/context-management.md` for full protocol.
 | `constraint-discovery` | Progressive constraint gathering |
 | `stack-recommendation` | Generate and present technology stack options |
 | `foundation-writer` | Compile Discovery outputs into foundation document |
+| `constitution-writer` | Create project constitution from foundation or scratch |
 | `connect-wizard` | Interactive shared context setup flow |
 | `profile-generator` | Auto-detect tech stack and generate project profile |
 
@@ -590,6 +600,7 @@ Always structure responses clearly:
 |---------|------|---------|
 | 1.0.0 | 2026-01-20 | Initial release |
 | 1.0.1 | 2026-01-24 | Discrepancy fixes |
+| 1.4.0 | 2026-02-10 | Audit: Added UI/UX Designer routing, constitution-writer skill, post-Architect UI routing check |
 | 1.3.0 | 2026-02-09 | S2-102: Added profile-generator routing — profile trigger words, profile-generator skill invocation |
 | 1.2.0 | 2026-02-09 | S2-101: Added shared context routing — connect trigger words, connect-wizard skill invocation |
 | 1.1.0 | 2026-02-09 | SX-001: Added constitution violation escalation format and waiver recording to `/memory/waivers.md` |

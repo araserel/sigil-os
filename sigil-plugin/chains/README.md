@@ -30,7 +30,7 @@ The UI/UX Design phase is automatically inserted when the feature has UI compone
 ---
 name: chain-name
 description: When to use this chain
-track: quick|standard|enterprise|all
+track: quick|standard|enterprise|discovery|all
 ---
 
 # Chain: [Name]

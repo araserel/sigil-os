@@ -1,8 +1,8 @@
 ---
 name: security
 description: Security review and vulnerability assessment. Reviews code for security issues, checks for OWASP vulnerabilities, validates authentication/authorization, assesses dependency security.
-version: 1.0.0
-tools: [Read, Grep, Glob, Bash]
+version: 1.1.0
+tools: [Read, Write, Grep, Glob, Bash]
 active_phases: [Review]
 human_tier: approve
 ---
@@ -78,6 +78,7 @@ Security findings require human approval — there is no automated fix loop (unl
 |-------|---------|------|
 | `security-reviewer` | Comprehensive security scan | All security reviews |
 | `code-reviewer` | General code quality review | Before security review |
+| `learning-capture` | Record security learnings (via Orchestrator) | After Medium+ findings are remediated |
 
 ## Trigger Words
 
@@ -387,6 +388,48 @@ Escalate immediately when:
 - Compliance violation (GDPR, HIPAA, etc.)
 - Third-party breach affecting dependencies
 
+## Handoff Protocol
+
+### Security → DevOps (deployment is next step)
+```markdown
+## Handoff: Security → DevOps
+
+### Completed
+- Security review passed (or accepted with documented waivers)
+- All critical/high findings resolved or acknowledged
+
+### Artifacts
+- Security report with findings and resolutions
+- Updated dependency audit
+
+### For Your Action
+- Configure deployment security (headers, TLS, CSP)
+- Apply infrastructure security recommendations
+- Proceed with deployment pipeline
+
+### Context
+- Risk level: [Low | Medium | High]
+- Accepted risks: [List any waived findings]
+- Deployment-specific recommendations: [List]
+```
+
+### Security → Orchestrator (no deployment needed)
+```markdown
+## Handoff: Security → Orchestrator
+
+### Completed
+- Security review complete
+- Findings documented and resolved/accepted
+
+### For Your Action
+- Mark feature workflow as complete
+- No deployment step required
+
+### Context
+- Risk level: [Low | Medium | High]
+- Resolved findings: [N]
+```
+
 ## Working with Other Agents
 
 ### With Developer
@@ -405,3 +448,10 @@ Escalate immediately when:
 - Highlight security concerns for review
 - Provide security context
 - Flag patterns to watch for
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.1.0 | 2026-02-10 | Audit: Added Write tool, handoff protocol (DevOps/Orchestrator), learning-capture reference |
+| 1.0.0 | 2026-01-20 | Initial release |

@@ -1,11 +1,11 @@
 ---
 name: learning-capture
 description: Captures learnings after task completion. Records gotchas, decisions, patterns, and task notes for future reference.
-version: 1.2.0
+version: 1.3.0
 category: learning
 chainable: false
 invokes: [shared-context-sync]
-invoked_by: [developer, orchestrator]
+invoked_by: [developer, orchestrator, qa-engineer]
 tools: Read, Write, Edit
 model: haiku
 ---
@@ -292,6 +292,7 @@ Run `/learn --review` to prune and promote learnings.
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.3.0 | 2026-02-10 | Audit: Expanded invoked_by to include qa-engineer |
 | 1.2.0 | 2026-02-09 | S2-101: Added Step 5b — push to shared repo via shared-context-sync after local write |
 | 1.1.0 | 2026-01-30 | Added review findings mode for QA/security handback learning capture |
 | 1.0.0 | 2026-01-23 | Initial release |

@@ -1,11 +1,11 @@
 ---
 name: learning-reader
 description: Loads relevant learnings before task execution. Provides patterns to follow and gotchas to avoid. Loads shared learnings first (if connected), then local learnings on top.
-version: 1.2.0
+version: 1.3.0
 category: learning
 chainable: false
 invokes: [shared-context-sync]
-invoked_by: [developer]
+invoked_by: [developer, business-analyst, architect, qa-engineer]
 tools: Read
 model: haiku
 ---
@@ -222,4 +222,5 @@ When the Developer agent receives a task, learning-reader runs first:
 |---------|------|---------|
 | 1.0.0 | 2026-01-23 | Initial release |
 | 1.1.0 | 2026-02-09 | SX-001/SX-002: Added waivers.md and tech-debt.md to loading pipeline with contextual rules |
+| 1.3.0 | 2026-02-10 | Audit: Expanded invoked_by to include business-analyst, architect, qa-engineer |
 | 1.2.0 | 2026-02-09 | S2-101: Added Step 0 — load shared learnings from cache before local. Shared budget combined with local (~5,500 total). |

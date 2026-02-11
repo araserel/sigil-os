@@ -1,7 +1,7 @@
 ---
 name: qa-engineer
 description: Quality assurance and validation. Runs automated quality checks, verifies requirements coverage, identifies and categorizes issues, coordinates fix loops.
-version: 1.2.0
+version: 1.3.0
 tools: [Read, Write, Edit, Bash, Glob, Grep]
 active_phases: [Validate]
 human_tier: auto
@@ -51,6 +51,9 @@ Receive from Developer:
 - Test results
 - Task completion claim
 
+### Step 1b: Load Learnings
+Invoke `learning-reader` to load past test patterns and flaky test gotchas before running validation. This surfaces known issues like "test X is flaky on CI" or "always check for race conditions in auth tests."
+
 ### Step 2: Invoke Validator
 Run quality checks:
 1. **Invoke qa-validator skill**
@@ -77,6 +80,7 @@ If fixes needed:
 4. Re-validate after each fix — pass `issue_history` from qa-fixer output to qa-validator for regression comparison
 5. Repeat (max 5 total iterations across auto and manual fixes)
 6. Escalate to human if still failing after 5 iterations or if regressions detected
+7. **Capture learnings** — After fix loop resolves with iterations > 1 AND any Major/Critical severity issue, invoke `learning-capture` in review-findings mode to record what went wrong and how it was fixed
 
 ## Skills Invoked
 
@@ -84,6 +88,8 @@ If fixes needed:
 |-------|---------|------|
 | `qa-validator` | Run quality checks | After implementation |
 | `qa-fixer` | Attempt automated fixes | For simple issues |
+| `learning-reader` | Load past test patterns, flaky test gotchas | Before validation |
+| `learning-capture` | Record substantive fix loop learnings | After fix loops with iterations > 1 AND Major+ severity |
 
 ## Trigger Words
 
@@ -285,7 +291,7 @@ See [`skills/qa/qa-escalation-policy/SKILL.md`](../skills/qa/qa-escalation-polic
 When all validation passes, transition to Review phase:
 
 ```markdown
-## Handoff: QA Engineer → Security / Code Reviewer
+## Handoff: QA Engineer → Review Phase
 
 ### Completed
 - Task T### validated successfully
@@ -297,8 +303,9 @@ When all validation passes, transition to Review phase:
 - `/specs/###-feature/qa/task-###-validation.md` — Validation report
 
 ### For Your Action
-- Perform code review (code-reviewer)
-- Perform security review if applicable (security-reviewer)
+- Invoke `code-reviewer` skill for code quality review
+- If security-relevant files changed → Route to Security agent for security review
+- If no security concerns → Return to Orchestrator for completion
 
 ### Context
 - Validation iterations: [N]
@@ -329,6 +336,8 @@ When all validation passes, transition to Review phase:
 | [fingerprint] | Iteration [N] | Iteration [N] | [resolved/regression/open] |
 ```
 
+> **Note:** `code-reviewer` is a skill invocation, not an agent handoff. The QA Engineer invokes the skill directly. For security review, the Orchestrator routes to the Security agent. There is no "Code Reviewer" agent.
+
 > The `issue_history` is included in the handoff for audit trail. It tracks each issue's lifecycle across fix loop iterations using stable fingerprints (`{check}:{file}:{rule}`).
 
 > The Fix Loop Summary provides structured metadata the orchestrator uses to invoke `learning-capture` in review findings mode. Only included when the fix loop ran (iterations > 0).
@@ -357,4 +366,5 @@ Developer completes task
 |---------|------|---------|
 | 1.0.0 | 2026-01-20 | Initial release |
 | 1.1.0 | 2026-02-09 | S2-003: Added QA Fix Impact section and file categorization to review handoff |
+| 1.3.0 | 2026-02-10 | Audit: Fixed phantom "Code Reviewer" agent reference → "Review Phase", clarified code-reviewer is a skill, added learning integration |
 | 1.2.0 | 2026-02-09 | SX-005: Added Issue History table to Fix Loop Summary handoff (FR-006), issue_history passing in fix loop workflow |
