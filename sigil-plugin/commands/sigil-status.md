@@ -10,8 +10,8 @@ You are the **Status Reporter** for Sigil OS. Your role is to provide clear visi
 
 ### Step 1: Scan for Active Work
 
-1. Read `/memory/project-context.md` for current state
-2. Scan `/specs/` for all feature directories
+1. Read `/.sigil/project-context.md` for current state
+2. Scan `/.sigil/specs/` for all feature directories
 3. Check for in-progress work
 
 ### Step 2: Determine Status for Each Feature
@@ -34,72 +34,61 @@ For features with tasks:
 
 ### Step 4: Generate Status Report
 
+Before displaying, verify format matches `templates/output-formats.md`.
+
 ```markdown
-## Sigil OS Status
+📋 Project: {ProjectName}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Last Updated:** [Timestamp]
-**Active Features:** [Count]
+✅ Foundation    - {Stack summary}
+✅ Constitution  - {N} articles defined
 
----
+Active Feature: "{Feature Name}" | Track: {Track}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Specification - Complete ({N} requirements)
+✅ Clarification - {N} questions resolved
+🔄 Planning      - In progress
+⬚ Tasks         - Waiting
+⬚ Implementation
+⬚ Validation
+⬚ Review
 
-### [Feature Name] (ID: NNN)
+**Overall:** [██████░░░░] 60%
 
-**Track:** [Quick/Standard/Enterprise]
-**Phase:** [Current Phase]
+### Current Activity
+{What's happening right now}
 
-#### Progress
-- [x] Specify — Complete
-- [x] Clarify — Complete (3 questions resolved)
-- [ ] Plan — In Progress (70%)
-- [ ] Tasks — Pending
-- [ ] Implement — Pending
-- [ ] Validate — Pending
-- [ ] Review — Pending
-
-#### Current Activity
-[What's happening right now]
-
-#### Task Progress (if applicable)
+### Task Progress (if applicable)
 Completed: 3/10 tasks (30%)
-- [x] TASK-001: Setup project structure
-- [x] TASK-002: Create data models
-- [x] TASK-003: Add validation
-- [ ] TASK-004: Implement API endpoint (IN PROGRESS)
-- [ ] TASK-005: Create UI component
+✅ TASK-001: Setup project structure
+✅ TASK-002: Create data models
+✅ TASK-003: Add validation
+🔄 TASK-004: Implement API endpoint
+⬚ TASK-005: Create UI component
 ...
 
-#### Blockers
-[Any issues requiring attention, or "None"]
+### Blockers
+{Any issues requiring attention, or "None — all clear"}
 
-#### Next Human Touchpoint
-[What the user will need to review/approve next]
+### Next Step
+{What the user should do next}
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-### [Another Feature]
-...
-
----
-
-## Quick Actions
-
-Based on current status:
-- `/clarify` - [If clarification needed]
-- `/sigil-plan` - [If ready for planning]
-- `/sigil-tasks` - [If ready for task breakdown]
-- `/validate` - [If implementation complete]
-
-## Recent Activity
-
-- [Timestamp]: [Action taken]
-- [Timestamp]: [Action taken]
+Quick Actions:
+- `/sigil-clarify` — {If clarification needed}
+- `/sigil-plan` — {If ready for planning}
+- `/sigil-tasks` — {If ready for task breakdown}
+- `/sigil-validate` — {If implementation complete}
 ```
 
 ### Step 5: Update Project Context
 
-Write current status to `/memory/project-context.md`
+Write current status to `/.sigil/project-context.md`
 
 ## Output
+
+Before displaying, verify format matches `templates/output-formats.md`.
 
 Display the formatted status report.
 
@@ -110,8 +99,8 @@ If no active features:
 No active features.
 
 Get started:
-- Run /spec "your feature description" to create a new feature
-- Run /constitution to set up project principles first
+- Run /sigil-spec "your feature description" to create a new feature
+- Run /sigil-constitution to set up project principles first
 
 Recent Activity:
 - [Timestamp]: Sigil OS initialized
@@ -131,11 +120,13 @@ Recent Activity:
 
 ## Progress Indicators
 
+Use canonical icons from `templates/output-formats.md`:
+
 ```
-[ ] Pending     - Not started
-[~] In Progress - Currently active
-[x] Complete    - Finished
-[!] Blocked     - Needs attention
+⬚  Not Started
+🔄 In Progress
+✅ Complete
+⚠️  Blocked / Needs Attention
 ```
 
 ## Quick Status (Compact Mode)

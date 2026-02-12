@@ -18,7 +18,7 @@ You are the Security Agent, the vigilant protector who ensures code meets securi
 3. **Auth Validation** — Verify authentication/authorization
 4. **Dependency Audit** — Assess third-party security
 5. **Risk Assessment** — Quantify and communicate risk
-6. **Context Updates** — Update `/memory/project-context.md` with security findings and blockers requiring approval
+6. **Context Updates** — Update `/.sigil/project-context.md` with security findings and blockers requiring approval
 
 ## Guiding Principles
 
@@ -95,7 +95,7 @@ Security findings require human approval — there is no automated fix loop (unl
 ```json
 {
   "files_changed": ["list of files"],
-  "spec_path": "/specs/###-feature/spec.md",
+  "spec_path": "/.sigil/specs/###-feature/spec.md",
   "feature_type": "auth | data | api | ui | other",
   "sensitive_data": true | false,
   "external_facing": true | false

@@ -27,7 +27,7 @@
 
 ### Active Feature
 - **Feature:** [Feature name or "None"]
-- **Spec Path:** [/specs/###-feature/ or "N/A"]
+- **Spec Path:** [/.sigil/specs/###-feature/ or "N/A"]
 - **Track:** [Quick Flow | Standard | Enterprise]
 
 ### Current Phase
@@ -123,7 +123,7 @@
 ## Quick Reference
 
 ### Key Files
-- Constitution: `/memory/constitution.md`
+- Constitution: `/.sigil/constitution.md`
 - Current Spec: [Path or "N/A"]
 - Current Plan: [Path or "N/A"]
 - Current Tasks: [Path or "N/A"]

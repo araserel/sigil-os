@@ -35,6 +35,12 @@ ENFORCEMENT_VERSION: 2.1.0
 
 The SessionStart hook (`hooks/preflight-check.sh`) handles installation verification. Since Sigil OS is now a Claude Code plugin, installation status is managed by the plugin system.
 
+### Part A2: Directory Check
+
+If `.sigil/` directory does not exist, this project has not been set up with Sigil OS yet. Recommend `/sigil-setup` to the user instead of attempting to create files inline:
+
+> Sigil OS is not set up in this project. Run `/sigil-setup` to get started.
+
 ### Part B: Create/Update SIGIL.md and Add Pointer to CLAUDE.md
 
 The hook outputs JSON with instructions. Follow these steps based on the hook output:
@@ -87,7 +93,7 @@ Sigil OS components are provided by the **sigil-os plugin**:
 - **Agents:** 9 specialist agents (orchestrator, architect, developer, qa-engineer, security, uiux-designer, business-analyst, task-planner, devops)
 - **Skills:** Organized by category (workflow, design, QA, review, research, learning, ui, engineering, specification)
 - **Chains:** Pipeline definitions (full-pipeline, quick-flow, discovery-chain)
-- **Commands:** Slash command definitions (sigil, spec, clarify, validate, review, etc.)
+- **Commands:** Slash command definitions (sigil, sigil-spec, sigil-clarify, sigil-validate, sigil-review, etc.)
 
 All components are automatically available when the sigil-os plugin is installed.
 
@@ -97,15 +103,15 @@ When performing workflow actions, you MUST use the Skill tool with the exact ski
 
 | Action | MUST call | NEVER do instead |
 |--------|-----------|------------------|
-| Write a specification | `Skill(skill: "spec")` | Write a spec.md file yourself |
-| Clarify ambiguities | `Skill(skill: "clarify")` | Ask clarification questions ad-hoc |
+| Write a specification | `Skill(skill: "sigil-spec")` | Write a spec.md file yourself |
+| Clarify ambiguities | `Skill(skill: "sigil-clarify")` | Ask clarification questions ad-hoc |
 | Create implementation plan | `Skill(skill: "sigil-plan")` | Write a plan.md file yourself |
 | Break plan into tasks | `Skill(skill: "sigil-tasks")` | Create tasks with TaskCreate directly |
-| Run QA validation | `Skill(skill: "validate")` | Review code yourself without the skill |
-| Run code review | `Skill(skill: "review")` | Review code yourself without the skill |
-| View/edit constitution | `Skill(skill: "constitution")` | Edit constitution.md directly |
-| Capture learnings | `Skill(skill: "learn")` | Write to learnings files directly |
-| Load project context | `Skill(skill: "prime")` | Read context files ad-hoc |
+| Run QA validation | `Skill(skill: "sigil-validate")` | Review code yourself without the skill |
+| Run code review | `Skill(skill: "sigil-review")` | Review code yourself without the skill |
+| View/edit constitution | `Skill(skill: "sigil-constitution")` | Edit constitution.md directly |
+| Capture learnings | `Skill(skill: "sigil-learn")` | Write to learnings files directly |
+| Load project context | `Skill(skill: "sigil-prime")` | Read context files ad-hoc |
 | Show workflow status | `Skill(skill: "sigil-status")` | Summarize status yourself |
 
 **Note:** Design skills (`ui-designer`, `accessibility`, `ux-patterns`, etc.) are invoked by the UI/UX Designer agent during the Plan phase, not listed here. They are called through agent delegation, not direct user commands.
@@ -128,16 +134,16 @@ When delegating to specialist agents via the Task tool, you MUST set `subagent_t
 ## Mandatory Context Loading
 
 At the start of any workflow, you MUST read these files (if they exist):
-1. `memory/constitution.md` — Project principles (NEVER violate these)
-2. `memory/project-context.md` — Current workflow state
-3. `memory/learnings/active/patterns.md` — Validated patterns to follow
-4. `memory/learnings/active/gotchas.md` — Known traps to avoid
-5. `memory/waivers.md` — Constitution waivers (load before constitution checks)
-6. `memory/tech-debt.md` — Non-blocking review suggestions (load during review phase)
+1. `.sigil/constitution.md` — Project principles (NEVER violate these)
+2. `.sigil/project-context.md` — Current workflow state
+3. `.sigil/learnings/active/patterns.md` — Validated patterns to follow
+4. `.sigil/learnings/active/gotchas.md` — Known traps to avoid
+5. `.sigil/waivers.md` — Constitution waivers (load before constitution checks)
+6. `.sigil/tech-debt.md` — Non-blocking review suggestions (load during review phase)
 
 ## Mandatory State Updates
 
-After each phase transition (e.g., spec complete -> planning), you MUST update `memory/project-context.md` with:
+After each phase transition (e.g., spec complete -> planning), you MUST update `.sigil/project-context.md` with:
 - Current phase name
 - Feature being worked on
 - Spec path
@@ -154,7 +160,7 @@ When these artifacts are created during a /sigil workflow, the next phase begins
 | `plan.md` | Task Breakdown | Auto-continue to task-decomposer |
 | `tasks.md` | Implementation | Auto-continue to Developer agent |
 | Task code changes | Validation | Invoke qa-validator |
-| All tasks validated | Code Review | Invoke `Skill(skill: "review")` |
+| All tasks validated | Code Review | Invoke `Skill(skill: "sigil-review")` |
 
 ## Implementation Loop Rule
 
@@ -164,13 +170,13 @@ After `tasks.md` is created, the develop/validate loop runs automatically:
 3. Validate it (following qa-engineer agent protocol)
 4. If validation fails, fix and re-validate (max 5 attempts)
 5. Move to the next task
-6. After all tasks pass validation, run `Skill(skill: "review")` on all changed files
+6. After all tasks pass validation, run `Skill(skill: "sigil-review")` on all changed files
 
 Do NOT wait for user input between tasks. The loop continues until all tasks are complete or a blocker requires human decision.
 
 ## Correct vs Incorrect Examples
 
-CORRECT: Call `Skill(skill: "spec")` to create a specification.
+CORRECT: Call `Skill(skill: "sigil-spec")` to create a specification.
 INCORRECT: Write a `spec.md` file directly without invoking the spec skill.
 
 CORRECT: Read the chain definition then follow each phase in order.
@@ -179,7 +185,7 @@ INCORRECT: Jump directly to implementation after the user describes a feature.
 CORRECT: Read the developer agent definition before writing code.
 INCORRECT: Start writing code using default Claude Code behavior.
 
-CORRECT: Use `Skill(skill: "validate")` to run QA checks.
+CORRECT: Use `Skill(skill: "sigil-validate")` to run QA checks.
 INCORRECT: Review the code yourself and declare it "looks good."
 ```
 

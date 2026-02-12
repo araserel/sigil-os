@@ -100,7 +100,7 @@ After reviewing individual files:
 
 ### Step 5: Generate Review Report
 
-Create `/specs/NNN-feature/reviews/code-review.md`:
+Create `/.sigil/specs/NNN-feature/reviews/code-review.md`:
 
 ```markdown
 # Code Review: [Feature Name]
@@ -203,18 +203,18 @@ Blockers Found:
 [If approved:]
 No blocking issues found. Ready for next step.
 
-Report saved: /specs/NNN-feature/reviews/code-review.md
+Report saved: /.sigil/specs/NNN-feature/reviews/code-review.md
 ```
 
 ## Pre-Execution Check
 
-Before starting, update `memory/project-context.md`:
+Before starting, update `.sigil/project-context.md`:
 - Set **Current Phase** to `review`
 - Set **Feature** to the feature being reviewed
 - Set **Spec Path** to the active spec directory
 - Set **Last Updated** to the current timestamp
 
-If `memory/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
+If `.sigil/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
 
 ## Guidelines
 

@@ -18,7 +18,7 @@ $ARGUMENTS
 ### Step 1: Identify What to Validate
 
 If task ID provided:
-- Find the task in `/specs/*/tasks.md`
+- Find the task in `/.sigil/specs/*/tasks.md`
 - Identify files changed for that task
 
 If path provided:
@@ -85,7 +85,7 @@ npm run build
 
 ### Step 5: Generate Validation Report
 
-Create `/specs/NNN-feature-name/qa/validation-TASK-NNN.md`:
+Create `/.sigil/specs/NNN-feature-name/qa/validation-TASK-NNN.md`:
 
 ```markdown
 # Validation Report: TASK-NNN
@@ -179,7 +179,7 @@ Issues Found: [Count]
 [If pass:]
 All checks passed. Ready for code review.
 
-Report saved: /specs/NNN-feature-name/qa/validation-TASK-NNN.md
+Report saved: /.sigil/specs/NNN-feature-name/qa/validation-TASK-NNN.md
 ```
 
 ## Guidelines

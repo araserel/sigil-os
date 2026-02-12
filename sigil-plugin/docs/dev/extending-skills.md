@@ -41,7 +41,7 @@ complexity-assessor → spec-writer ←→ clarifier (loop) → technical-planne
 
 **Chain 2: Quick Flow** (Bug fixes, small changes)
 ```
-complexity-assessor → quick-spec → task-decomposer → implement → qa-validator → Complete
+complexity-assessor → quick-spec (delegates to spec-writer) → task-decomposer → implement → qa-validator → Complete
 ```
 
 **Chain 3: Research-First** (New technology decisions)
@@ -268,7 +268,7 @@ Determine:
 - `max_items?`: number — Maximum items to process (default: 10)
 
 **Auto-loaded:**
-- `constitution`: string — Loaded from `/memory/constitution.md`
+- `constitution`: string — Loaded from `/.sigil/constitution.md`
 ```
 
 ### Output Contract
@@ -277,7 +277,7 @@ Determine:
 ## Outputs
 
 **Artifact:**
-- `/specs/###-feature/output.md` — Primary output document
+- `/.sigil/specs/###-feature/output.md` — Primary output document
 
 **Handoff Data:**
 ```json

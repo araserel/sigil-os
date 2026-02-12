@@ -13,7 +13,7 @@ You are the **Clarifier** for Sigil OS. Your role is to reduce ambiguity in spec
 $ARGUMENTS
 ```
 
-If no path provided, look for the most recently modified spec in `/specs/`.
+If no path provided, look for the most recently modified spec in `/.sigil/specs/`.
 
 ## Process
 
@@ -78,13 +78,13 @@ If ambiguities remain:
 
 If all resolved:
 - Mark spec as ready for planning
-- Update `/memory/project-context.md` with status
+- Update `/.sigil/project-context.md` with status
 
 ## Output
 
 After clarification:
 ```
-Specification Updated: /specs/NNN-feature-name/spec.md
+Specification Updated: /.sigil/specs/NNN-feature-name/spec.md
 
 Clarifications Applied: [Count]
 - Q1: [Topic] → [Answer chosen]
@@ -98,8 +98,8 @@ Status: [Ready for /sigil-plan | Needs more clarification]
 
 ## Output Artifacts
 
-- Updated `/specs/NNN-feature-name/spec.md`
-- Create `/specs/NNN-feature-name/clarifications.md` with Q&A log
+- Updated `/.sigil/specs/NNN-feature-name/spec.md`
+- Create `/.sigil/specs/NNN-feature-name/clarifications.md` with Q&A log
 
 ## Guidelines
 

@@ -15,20 +15,20 @@ $ARGUMENTS
 
 ## Route by Arguments
 
-### No arguments: `/learn`
+### No arguments: `/sigil-learn`
 
 Display current learnings summary.
 
 **Process:**
-1. Read `/memory/learnings/active/patterns.md`
-2. Read `/memory/learnings/active/gotchas.md`
-3. Read `/memory/learnings/active/decisions.md`
+1. Read `/.sigil/learnings/active/patterns.md`
+2. Read `/.sigil/learnings/active/gotchas.md`
+3. Read `/.sigil/learnings/active/decisions.md`
 4. Count items in each category
 
 **Output format:**
 ```
 Project Learnings
-=================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Patterns (X/30):
   • Always use RLS policies for user-scoped queries
@@ -70,7 +70,7 @@ Shared Context
 
 If shared context is not active (no sentinel or project not in registry), do NOT show this section.
 
-### `--review`: `/learn --review`
+### `--review`: `/sigil-learn --review`
 
 Invoke the `learning-review` skill for interactive review.
 
@@ -79,12 +79,12 @@ Invoke the `learning-review` skill for interactive review.
 2. Follow its interactive prompts
 3. Report summary when complete
 
-### `--search <query>`: `/learn --search auth`
+### `--search <query>`: `/sigil-learn --search auth`
 
 Search across all learnings (local and shared).
 
 **Process:**
-1. Read all files in `/memory/learnings/active/`
+1. Read all files in `/.sigil/learnings/active/`
 2. If shared context is active, also read files in `~/.sigil/cache/shared/learnings/`
 3. Search for query term (case-insensitive)
 4. Return matching entries with source (label shared results with repo name)
@@ -115,11 +115,11 @@ Results (5 matches):
 
 | File | Purpose | Always Loaded |
 |------|---------|---------------|
-| `/memory/learnings/active/patterns.md` | Validated rules | Yes |
-| `/memory/learnings/active/gotchas.md` | Traps to avoid | Yes |
-| `/memory/learnings/active/decisions.md` | Architectural choices | On demand |
-| `/memory/learnings/active/features/*.md` | Per-feature notes | Current only |
-| `/memory/learnings/archived/*.md` | Historical | Never |
+| `/.sigil/learnings/active/patterns.md` | Validated rules | Yes |
+| `/.sigil/learnings/active/gotchas.md` | Traps to avoid | Yes |
+| `/.sigil/learnings/active/decisions.md` | Architectural choices | On demand |
+| `/.sigil/learnings/active/features/*.md` | Per-feature notes | Current only |
+| `/.sigil/learnings/archived/*.md` | Historical | Never |
 
 ## Token Budget
 
@@ -136,7 +136,7 @@ Token Budget:
 
 If any category exceeds 80% of limit:
 ```
-⚠️  Gotchas at 85% capacity. Consider running /learn --review
+⚠️  Gotchas at 85% capacity. Consider running /sigil-learn --review
 ```
 
 ## Empty State
@@ -161,7 +161,7 @@ Start building features with /sigil to begin capturing learnings.
 
 - `/sigil` — Main entry point, uses learnings automatically
 - `/sigil-status` — Shows workflow status
-- `/constitution` — Project principles (different from learnings)
+- `/sigil-constitution` — Project principles (different from learnings)
 
 ## Skills Invoked
 

@@ -63,7 +63,7 @@ outputs: [output_artifact]
 - `optional_field?`: boolean — [Description] (default: false)
 
 **Auto-loaded:**
-- `constitution`: Loaded from `/memory/constitution.md`
+- `constitution`: Loaded from `/.sigil/constitution.md`
 
 ## Output Schema
 
@@ -79,7 +79,7 @@ outputs: [output_artifact]
 
 ## Output Artifact
 
-`/specs/###-feature/[artifact-name].md`
+`/.sigil/specs/###-feature/[artifact-name].md`
 
 [Description of what this artifact contains and how it's structured]
 
@@ -131,7 +131,7 @@ C) [Escalation option]"
 ```json
 {
   "status": "complete",
-  "artifact_path": "/specs/001-feature/output.md",
+  "artifact_path": "/.sigil/specs/001-feature/output.md",
   "summary": "Generated output artifact",
   "next_skill": "next-skill-name"
 }

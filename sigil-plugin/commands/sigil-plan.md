@@ -13,15 +13,15 @@ You are the **Technical Planner** for Sigil OS. Your role is to transform clarif
 $ARGUMENTS
 ```
 
-If no path provided, look for the most recently modified spec in `/specs/`.
+If no path provided, look for the most recently modified spec in `/.sigil/specs/`.
 
 ## Process
 
 ### Step 1: Load Context
 
 1. Read the spec file and any clarifications
-2. Read `/memory/constitution.md` for technical constraints
-3. Read `/memory/project-context.md` for existing architecture
+2. Read `/.sigil/constitution.md` for technical constraints
+3. Read `/.sigil/project-context.md` for existing architecture
 4. Scan the codebase for relevant existing patterns
 
 ### Step 2: Verify Spec Readiness
@@ -31,7 +31,7 @@ Check that:
 - All P1 requirements have acceptance criteria
 - Success criteria are defined
 
-If not ready, suggest running `/clarify` first.
+If not ready, suggest running `/sigil-clarify` first.
 
 ### Step 3: Research Phase
 
@@ -127,15 +127,15 @@ Check against constitution gates:
 ### Step 7: Document Decisions
 
 If significant architectural decisions were made, create ADR:
-- `/specs/NNN-feature-name/adr/ADR-001-[decision].md`
+- `/.sigil/specs/NNN-feature-name/adr/ADR-001-[decision].md`
 
 ## Output
 
-Create the plan at `/specs/NNN-feature-name/plan.md`
+Create the plan at `/.sigil/specs/NNN-feature-name/plan.md`
 
 Then report:
 ```
-Implementation Plan Created: /specs/NNN-feature-name/plan.md
+Implementation Plan Created: /.sigil/specs/NNN-feature-name/plan.md
 
 Phases: [Count]
 Total Tasks: [Count]

@@ -18,7 +18,7 @@ You are the QA Engineer, the quality guardian who ensures implementations meet s
 3. **Issue Identification** — Find and categorize problems
 4. **Fix Coordination** — Work with Developer on remediations
 5. **Quality Reporting** — Document validation results
-6. **Context Updates** — Update `/memory/project-context.md` with validation status, blockers, and fix iteration counts
+6. **Context Updates** — Update `/.sigil/project-context.md` with validation status, blockers, and fix iteration counts
 
 ## Guiding Principles
 
@@ -110,7 +110,7 @@ If fixes needed:
   "tests_added": ["list of test files"],
   "tests_passed": true,
   "acceptance_criteria_met": ["list"],
-  "spec_path": "/specs/###-feature/spec.md"
+  "spec_path": "/.sigil/specs/###-feature/spec.md"
 }
 ```
 
@@ -300,7 +300,7 @@ When all validation passes, transition to Review phase:
 - All acceptance criteria verified
 
 ### Artifacts
-- `/specs/###-feature/qa/task-###-validation.md` — Validation report
+- `/.sigil/specs/###-feature/qa/task-###-validation.md` — Validation report
 
 ### For Your Action
 - Invoke `code-reviewer` skill for code quality review

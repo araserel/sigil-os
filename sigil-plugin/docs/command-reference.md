@@ -9,18 +9,18 @@
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
 | `/sigil` | **Unified entry point** — status, start, resume | Starting any workflow |
-| `/spec` | Create a feature specification | Starting a new feature |
-| `/clarify` | Resolve ambiguities | Spec has open questions |
+| `/sigil-spec` | Create a feature specification | Starting a new feature |
+| `/sigil-clarify` | Resolve ambiguities | Spec has open questions |
 | `/sigil-plan` | Generate implementation plan | Spec is approved |
 | `/sigil-tasks` | Break plan into tasks | Plan is approved |
-| `/validate` | Run QA validation checks | After each task (automatic), or manually anytime |
-| `/review` | Run structured code review | After all tasks pass validation |
+| `/sigil-validate` | Run QA validation checks | After each task (automatic), or manually anytime |
+| `/sigil-review` | Run structured code review | After all tasks pass validation |
 | `/sigil-status` | Show workflow progress | Anytime |
-| `/constitution` | View or edit project rules | First-time setup or updates |
-| `/learn` | View, search, or review learnings | Reviewing institutional memory |
-| `/prime` | Load project context for a session | Starting a new session |
-| `/connect` | Connect project to shared context repo | Multi-project sharing setup |
-| `/profile` | Generate or view project profile | Describing your tech stack and APIs |
+| `/sigil-constitution` | View or edit project rules | First-time setup or updates |
+| `/sigil-learn` | View, search, or review learnings | Reviewing institutional memory |
+| `/sigil-prime` | Load project context for a session | Starting a new session |
+| `/sigil-connect` | Connect project to shared context repo | Multi-project sharing setup |
+| `/sigil-profile` | Generate or view project profile | Describing your tech stack and APIs |
 | `/handoff` | Generate engineer review package | Ready for technical review |
 | `/sigil-update` | Check for and install Sigil updates | Keeping Sigil current |
 
@@ -33,11 +33,11 @@
 ```
 /sigil (entry point — detects state, suggests next action)
         ↓
-/constitution (one-time setup)
+/sigil-constitution (one-time setup)
         ↓
-    /spec "description"
+    /sigil-spec "description"
         ↓
-    /clarify (if needed)
+    /sigil-clarify (if needed)
         ↓
       /sigil-plan
         ↓
@@ -45,9 +45,9 @@
         ↓
     [Implementation]
         ↓
-    /validate
+    /sigil-validate
         ↓
-    /review
+    /sigil-review
         ↓
      /handoff
 ```
@@ -109,14 +109,14 @@ You don't need to remember the exact syntax. These all work:
 
 ---
 
-## /spec
+## /sigil-spec
 
 Create a new feature specification from your description.
 
 ### Syntax
 
 ```
-/spec [your feature description]
+/sigil-spec [your feature description]
 ```
 
 ### What It Does
@@ -130,7 +130,7 @@ Create a new feature specification from your description.
 
 **You type:**
 ```
-/spec Add a contact form that lets visitors send messages to our support team
+/sigil-spec Add a contact form that lets visitors send messages to our support team
 ```
 
 **Sigil responds with:**
@@ -201,14 +201,14 @@ through a simple form interface.
 
 ---
 
-## /clarify
+## /sigil-clarify
 
 Start a question-and-answer session to resolve ambiguities in your specification.
 
 ### Syntax
 
 ```
-/clarify
+/sigil-clarify
 ```
 
 ### What It Does
@@ -222,7 +222,7 @@ Start a question-and-answer session to resolve ambiguities in your specification
 
 **You type:**
 ```
-/clarify
+/sigil-clarify
 ```
 
 **Sigil asks:**
@@ -257,7 +257,7 @@ After answering, Sigil:
 
 ### When to Use
 
-- After `/spec` if there are open questions
+- After `/sigil-spec` if there are open questions
 - When you realize something was unclear
 - When Sigil asks for clarification
 
@@ -512,14 +512,14 @@ Example: "I want to add a password reset feature"
 
 ---
 
-## /constitution
+## /sigil-constitution
 
 View or edit your project's rules and standards.
 
 ### Syntax
 
 ```
-/constitution
+/sigil-constitution
 ```
 
 ### What It Does
@@ -529,7 +529,7 @@ View or edit your project's rules and standards.
 
 ### First-Time Setup
 
-When you run `/constitution` for the first time, Sigil asks about:
+When you run `/sigil-constitution` for the first time, Sigil asks about:
 
 1. **Technology Stack** — What languages and frameworks to use
 2. **Code Standards** — Naming conventions and style rules
@@ -663,14 +663,14 @@ Sigil provides a summary you can copy:
 
 ---
 
-## /validate
+## /sigil-validate
 
 Run automated quality assurance checks on implemented code.
 
 ### Syntax
 
 ```
-/validate
+/sigil-validate
 ```
 
 ### What It Does
@@ -710,25 +710,25 @@ Run automated quality assurance checks on implemented code.
 
 ---
 
-## /learn
+## /sigil-learn
 
 View, search, or review project learnings.
 
 ### Syntax
 
 ```
-/learn
-/learn --review
-/learn --search "query"
+/sigil-learn
+/sigil-learn --review
+/sigil-learn --search "query"
 ```
 
 ### Variants
 
 | Usage | What It Does |
 |-------|-------------|
-| `/learn` | Show current learnings summary |
-| `/learn --review` | Start interactive review and cleanup session |
-| `/learn --search "query"` | Search learnings for specific topics |
+| `/sigil-learn` | Show current learnings summary |
+| `/sigil-learn --review` | Start interactive review and cleanup session |
+| `/sigil-learn --search "query"` | Search learnings for specific topics |
 
 ### What It Does
 
@@ -763,15 +763,15 @@ View, search, or review project learnings.
 
 ---
 
-## /prime
+## /sigil-prime
 
 Load project context to prepare for a development session.
 
 ### Syntax
 
 ```
-/prime
-/prime [focus area]
+/sigil-prime
+/sigil-prime [focus area]
 ```
 
 ### What It Does
@@ -790,30 +790,30 @@ Load project context to prepare for a development session.
 ### Example
 
 ```
-/prime authentication
+/sigil-prime authentication
 ```
 
 Loads all context relevant to authentication work: constitution rules, auth-related learnings, and any active auth specs.
 
 ---
 
-## /connect
+## /sigil-connect
 
 Connect your project to a shared context repository for cross-project learnings.
 
 ### Syntax
 
 ```
-/connect
-/connect org/repo
+/sigil-connect
+/sigil-connect org/repo
 ```
 
 ### Variants
 
 | Usage | What It Does |
 |-------|-------------|
-| `/connect` | Start the guided setup wizard (3 steps) |
-| `/connect org/repo` | Connect directly to a specific shared repo |
+| `/sigil-connect` | Start the guided setup wizard (3 steps) |
+| `/sigil-connect org/repo` | Connect directly to a specific shared repo |
 
 ### What It Does
 
@@ -825,8 +825,8 @@ Connect your project to a shared context repository for cross-project learnings.
 
 ### After Connecting
 
-- Learnings sync automatically when you use `/learn`
-- Latest shared context loads when you use `/prime`
+- Learnings sync automatically when you use `/sigil-learn`
+- Latest shared context loads when you use `/sigil-prime`
 - A "what's new" summary shows entries added since your last session
 
 ### When to Use
@@ -846,23 +846,23 @@ Remove the project's entry from `~/.sigil/registry.json` or delete the file. No 
 
 ---
 
-## /profile
+## /sigil-profile
 
 Generate or view your project's profile — a description of your tech stack, exposed APIs, and consumed dependencies.
 
 ### Syntax
 
 ```
-/profile
-/profile --view
+/sigil-profile
+/sigil-profile --view
 ```
 
 ### Variants
 
 | Usage | What It Does |
 |-------|-------------|
-| `/profile` | Interactive profile generation (or update if one exists) |
-| `/profile --view` | Display the current project profile |
+| `/sigil-profile` | Interactive profile generation (or update if one exists) |
+| `/sigil-profile --view` | Display the current project profile |
 
 ### What It Does
 
@@ -870,7 +870,7 @@ Generate or view your project's profile — a description of your tech stack, ex
 2. Shows detected languages, frameworks, and tools for confirmation
 3. Asks for a short project description
 4. Optionally asks what APIs or events your project exposes and consumes
-5. Generates `memory/project-profile.yaml`
+5. Generates `.sigil/project-profile.yaml`
 6. If connected to shared context, publishes the profile for sibling projects to see
 
 ### When to Use
@@ -882,7 +882,7 @@ Generate or view your project's profile — a description of your tech stack, ex
 ### Example
 
 ```
-/profile
+/sigil-profile
 ```
 
 **Sigil responds:**
@@ -902,20 +902,20 @@ Look right? [Y/n]: y
 What does this project do? (1-2 sentences)
 > Customer-facing web application for product catalog and checkout
 
-Profile saved: memory/project-profile.yaml
+Profile saved: .sigil/project-profile.yaml
 Published to shared repo: profiles/web-app.yaml
 ```
 
 ### After Creating a Profile
 
-- `/prime` loads your profile into every session
-- Sibling projects see your profile on their next `/prime`
+- `/sigil-prime` loads your profile into every session
+- Sibling projects see your profile on their next `/sigil-prime`
 - The architect agent warns you if your changes might affect projects that consume your APIs
 
 ### Related
 
-- `/connect` — Connect to a shared repo to share profiles across projects
-- `/prime` — Loads profiles into session context
+- `/sigil-connect` — Connect to a shared repo to share profiles across projects
+- `/sigil-prime` — Loads profiles into session context
 
 ---
 
@@ -964,17 +964,17 @@ Run the update? (Y/n)
 | Command | Purpose | Example |
 |---------|---------|---------|
 | `/sigil` | Entry point — status + routing | `/sigil "Add user login"` |
-| `/spec` | Start new feature | `/spec Add user login` |
-| `/clarify` | Answer questions | `/clarify` |
+| `/sigil-spec` | Start new feature | `/sigil-spec Add user login` |
+| `/sigil-clarify` | Answer questions | `/sigil-clarify` |
 | `/sigil-plan` | Create tech plan | `/sigil-plan` |
 | `/sigil-tasks` | Break into tasks | `/sigil-tasks` |
-| `/validate` | Run QA checks | `/validate` |
+| `/sigil-validate` | Run QA checks | `/sigil-validate` |
 | `/sigil-status` | Check progress | `/sigil-status` |
-| `/constitution` | Set project rules | `/constitution` |
-| `/learn` | View/review learnings | `/learn --review` |
-| `/prime` | Load session context | `/prime authentication` |
-| `/connect` | Shared context setup | `/connect org/repo` |
-| `/profile` | Project profile | `/profile --view` |
+| `/sigil-constitution` | Set project rules | `/sigil-constitution` |
+| `/sigil-learn` | View/review learnings | `/sigil-learn --review` |
+| `/sigil-prime` | Load session context | `/sigil-prime authentication` |
+| `/sigil-connect` | Shared context setup | `/sigil-connect org/repo` |
+| `/sigil-profile` | Project profile | `/sigil-profile --view` |
 | `/handoff` | Engineer review | `/handoff` |
 | `/sigil-update` | Check for updates | `/sigil-update` |
 
@@ -982,13 +982,13 @@ Run the update? (Y/n)
 
 ```
 1. /sigil (start here — detects state automatically)
-2. /constitution  (one-time setup)
-3. /spec "feature description"
-4. /clarify (if questions arise)
+2. /sigil-constitution  (one-time setup)
+3. /sigil-spec "feature description"
+4. /sigil-clarify (if questions arise)
 5. /sigil-plan
 6. /sigil-tasks
 7. /sigil-status (check progress)
-8. /validate (verify quality)
+8. /sigil-validate (verify quality)
 9. /handoff (before deployment)
 ```
 

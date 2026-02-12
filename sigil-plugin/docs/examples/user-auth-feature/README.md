@@ -18,7 +18,7 @@ This walkthrough shows how a Product Manager used Sigil to specify, plan, and ha
 
 Before creating any features, Sarah's team established a project constitution. This document captures the "rules of the road" that all features must follow.
 
-**Command:** `/constitution`
+**Command:** `/sigil-constitution`
 
 **What Sarah Did:** She worked with her tech lead to answer questions about the project's technology choices, coding standards, and requirements.
 
@@ -41,7 +41,7 @@ Before creating any features, Sarah's team established a project constitution. T
 
 With the constitution in place, Sarah was ready to describe the authentication feature.
 
-**Command:** `/spec Add user authentication to the application`
+**Command:** `/sigil-spec Add user authentication to the application`
 
 **What Sarah Provided:**
 
@@ -93,7 +93,7 @@ Session: id, userId, token, expiresAt, createdAt
 
 Some requirements were ambiguous. Sigil asked targeted questions to resolve them.
 
-**Command:** `/clarify`
+**Command:** `/sigil-clarify`
 
 **What Happened:** Over two rounds, Sigil asked 7 questions (see `clarifications.md`):
 
@@ -309,7 +309,7 @@ With everything documented, Sarah was ready to hand off to engineering.
 
 ### Tips for Your Projects
 
-1. **Be specific in your initial description** - The more detail you provide to `/spec`, the fewer clarification rounds needed.
+1. **Be specific in your initial description** - The more detail you provide to `/sigil-spec`, the fewer clarification rounds needed.
 
 2. **Answer clarification questions thoughtfully** - These decisions affect implementation. Take time to consider the options.
 

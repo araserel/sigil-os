@@ -32,8 +32,8 @@ Analyze incoming requests to determine the appropriate workflow track. Ensures m
 - `force_track`: string — User override for track selection
 
 **Auto-loaded:**
-- `project_context`: string — `/memory/project-context.md`
-- `specs_directory`: string — `/specs/` (scan for existing features)
+- `project_context`: string — `/.sigil/project-context.md`
+- `specs_directory`: string — `/.sigil/specs/` (scan for existing features)
 
 ## Process
 

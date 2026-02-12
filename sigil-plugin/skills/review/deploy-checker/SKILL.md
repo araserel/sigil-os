@@ -27,7 +27,7 @@ Validate that changes are ready for deployment to the target environment. This s
 **Required:**
 ```json
 {
-  "spec_path": "/specs/001-feature/spec.md",
+  "spec_path": "/.sigil/specs/001-feature/spec.md",
   "target_environment": "development | staging | production"
 }
 ```
@@ -35,15 +35,15 @@ Validate that changes are ready for deployment to the target environment. This s
 **Optional:**
 ```json
 {
-  "validation_report": "/specs/001-feature/qa/validation.md",
+  "validation_report": "/.sigil/specs/001-feature/qa/validation.md",
   "review_reports": [
-    "/specs/001-feature/reviews/code-review.md",
-    "/specs/001-feature/reviews/security-review.md"
+    "/.sigil/specs/001-feature/reviews/code-review.md",
+    "/.sigil/specs/001-feature/reviews/security-review.md"
   ],
   "has_migrations": true,
   "migration_files": ["migrations/001_add_users.sql"],
   "feature_flags": ["feature_new_auth"],
-  "rollback_plan": "/specs/001-feature/rollback.md"
+  "rollback_plan": "/.sigil/specs/001-feature/rollback.md"
 }
 ```
 
@@ -102,7 +102,7 @@ Validate that changes are ready for deployment to the target environment. This s
 }
 ```
 
-**Artifact Output:** `/specs/###-feature/reviews/deploy-readiness.md`
+**Artifact Output:** `/.sigil/specs/###-feature/reviews/deploy-readiness.md`
 
 ## Readiness Checklist
 
@@ -116,7 +116,7 @@ Validate that changes are ready for deployment to the target environment. This s
 - Type checks clean
 - Coverage meets threshold
 
-**Source:** `/specs/###-feature/qa/validation.md`
+**Source:** `/.sigil/specs/###-feature/qa/validation.md`
 
 ### 2. Code Review (Required)
 
@@ -127,7 +127,7 @@ Validate that changes are ready for deployment to the target environment. This s
 - Warnings acknowledged or addressed
 - Constitution compliance confirmed
 
-**Source:** `/specs/###-feature/reviews/code-review.md`
+**Source:** `/.sigil/specs/###-feature/reviews/code-review.md`
 
 ### 3. Security Review (Required for production)
 
@@ -138,7 +138,7 @@ Validate that changes are ready for deployment to the target environment. This s
 - Dependencies audited
 - Constitution Article 4 compliant
 
-**Source:** `/specs/###-feature/reviews/security-review.md`
+**Source:** `/.sigil/specs/###-feature/reviews/security-review.md`
 
 ### 4. Database Migrations (If applicable)
 
@@ -308,13 +308,13 @@ None
 
 ## Pre-Execution Check
 
-Before starting, update `memory/project-context.md`:
+Before starting, update `.sigil/project-context.md`:
 - Set **Current Phase** to `review`
 - Set **Feature** to the feature being checked for deployment
 - Set **Spec Path** to the active spec directory
 - Set **Last Updated** to the current timestamp
 
-If `memory/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
+If `.sigil/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
 
 ## Workflow
 
@@ -389,7 +389,7 @@ C) Escalate to DBA
 {
   "handoff_from": "security-reviewer",
   "security_status": "approved",
-  "security_report": "/specs/.../reviews/security-review.md"
+  "security_report": "/.sigil/specs/.../reviews/security-review.md"
 }
 ```
 
@@ -398,7 +398,7 @@ C) Escalate to DBA
 {
   "handoff_to": "devops-agent",
   "deploy_status": "ready",
-  "deploy_report": "/specs/.../reviews/deploy-readiness.md",
+  "deploy_report": "/.sigil/specs/.../reviews/deploy-readiness.md",
   "environment": "production",
   "approval_required": true,
   "deploy_steps": [...]

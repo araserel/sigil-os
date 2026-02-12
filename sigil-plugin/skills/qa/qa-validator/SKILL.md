@@ -18,7 +18,7 @@ Automatically verify that completed work meets quality standards before human re
 ## When to Invoke
 
 - Developer marks task as complete
-- User requests `/validate` or `/qa`
+- User requests `/sigil-validate` or `/qa`
 - Entering Validate phase from Implement phase
 - Re-validation after qa-fixer applies fixes
 
@@ -29,14 +29,14 @@ Automatically verify that completed work meets quality standards before human re
 {
   "task_id": "T001",
   "changed_files": ["src/services/auth.ts", "tests/auth.test.ts"],
-  "spec_path": "/specs/001-feature/spec.md"
+  "spec_path": "/.sigil/specs/001-feature/spec.md"
 }
 ```
 
 **Optional:**
 ```json
 {
-  "constitution_path": "/memory/constitution.md",
+  "constitution_path": "/.sigil/constitution.md",
   "validation_level": "standard | strict",
   "skip_checks": ["lint"],
   "focus_checks": ["tests", "requirements"],
@@ -45,7 +45,7 @@ Automatically verify that completed work meets quality standards before human re
 ```
 
 **Auto-loaded:**
-- Constitution from `/memory/constitution.md` (if exists)
+- Constitution from `/.sigil/constitution.md` (if exists)
 - Package manager config (package.json, requirements.txt, etc.)
 - Existing test configuration
 
@@ -97,7 +97,7 @@ Automatically verify that completed work meets quality standards before human re
 }
 ```
 
-**Artifact Output:** `/specs/###-feature/qa/task-{id}-validation.md`
+**Artifact Output:** `/.sigil/specs/###-feature/qa/task-{id}-validation.md`
 
 ## Validation Checks
 
@@ -205,13 +205,13 @@ Each issue in `checks[].issues[]` receives a stable `fingerprint` for cross-iter
 
 ## Pre-Execution Check
 
-Before starting, update `memory/project-context.md`:
+Before starting, update `.sigil/project-context.md`:
 - Set **Current Phase** to `validate`
 - Set **Feature** to the feature being validated
 - Set **Spec Path** to the active spec directory
 - Set **Last Updated** to the current timestamp
 
-If `memory/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
+If `.sigil/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
 
 ## Workflow
 
@@ -353,7 +353,7 @@ See [`qa-escalation-policy/SKILL.md`](../qa-escalation-policy/SKILL.md) for the 
 ### Passing to qa-fixer (on failure)
 ```json
 {
-  "validation_report_path": "/specs/.../qa/task-T001-validation.md",
+  "validation_report_path": "/.sigil/specs/.../qa/task-T001-validation.md",
   "issues": [...],
   "iteration": 1,
   "fixable_issues": [...],
@@ -365,7 +365,7 @@ See [`qa-escalation-policy/SKILL.md`](../qa-escalation-policy/SKILL.md) for the 
 ```json
 {
   "validation_status": "pass",
-  "validation_report_path": "/specs/.../qa/task-T001-validation.md",
+  "validation_report_path": "/.sigil/specs/.../qa/task-T001-validation.md",
   "files_reviewed": ["..."],
   "coverage_summary": {...}
 }

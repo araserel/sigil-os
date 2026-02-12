@@ -1,7 +1,7 @@
 # Tasks: [FEATURE NAME]
 
-> **Spec:** [/specs/###-feature/spec.md]
-> **Plan:** [/specs/###-feature/plan.md]
+> **Spec:** [/.sigil/specs/###-feature/spec.md]
+> **Plan:** [/.sigil/specs/###-feature/plan.md]
 > **Created:** [DATE]
 > **Status:** [Draft | Active | Complete]
 

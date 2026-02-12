@@ -24,26 +24,26 @@ Every error shown to users follows this format:
 
 ### File Not Found (ENOENT)
 
-**Technical:** `ENOENT: no such file or directory, open '/memory/constitution.md'`
+**Technical:** `ENOENT: no such file or directory, open '/.sigil/constitution.md'`
 
 **User sees:**
 ```
 I couldn't find the constitution file. Make sure you're in the right
 project folder.
 
-To create a new constitution, run /constitution.
+To create a new constitution, run /sigil-constitution.
 ```
 
 ### Permission Denied (EACCES)
 
-**Technical:** `EACCES: permission denied, open '/memory/constitution.md'`
+**Technical:** `EACCES: permission denied, open '/.sigil/constitution.md'`
 
 **User sees:**
 ```
 I don't have permission to save the constitution file. You may need
 to check your folder permissions.
 
-Try running the command again, or manually create the memory/ folder
+Try running the command again, or manually create the .sigil/ folder
 in your project.
 ```
 
@@ -59,14 +59,14 @@ space and try again.
 
 ### Directory Not Found
 
-**Technical:** `ENOENT: no such file or directory, mkdir '/memory/'`
+**Technical:** `ENOENT: no such file or directory, mkdir '/.sigil/'`
 
 **User sees:**
 ```
 The memory folder doesn't exist yet. Let me create it for you.
 ```
 
-**Action:** Auto-create `/memory/` directory and retry. Only show error if creation also fails.
+**Action:** Auto-create `/.sigil/` directory and retry. Only show error if creation also fails.
 
 ---
 
@@ -156,8 +156,8 @@ I couldn't update your .gitignore file. You may need to add these
 entries manually:
 
 # Sigil OS - Ephemeral artifacts
-memory/project-context.md
-specs/**/clarifications.md
+.sigil/project-context.md
+.sigil/specs/**/clarifications.md
 ```
 
 ### Git Not Initialized
@@ -167,7 +167,7 @@ specs/**/clarifications.md
 **User sees:**
 ```
 This project isn't using git yet, so I'll skip the git-related setup.
-If you set up git later, you can re-run /constitution to configure
+If you set up git later, you can re-run /sigil-constitution to configure
 file sharing.
 ```
 
@@ -185,7 +185,7 @@ file sharing.
 
 ### Constitution Already Exists
 
-**Technical:** `File exists at /memory/constitution.md`
+**Technical:** `File exists at /.sigil/constitution.md`
 
 **User sees:**
 ```
@@ -217,7 +217,7 @@ Your existing constitution file has some issues. I can:
 ```
 I generated your constitution but couldn't save it. Let me try again.
 
-If this keeps happening, check that the memory/ folder exists and you
+If this keeps happening, check that the .sigil/ folder exists and you
 have write permissions.
 ```
 

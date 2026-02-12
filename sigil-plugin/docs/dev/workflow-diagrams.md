@@ -55,17 +55,17 @@ resume, and help.
 | `/sigil continue` | Resume current workflow | Orchestrator → Phase resume |
 | `/sigil status` | Display progress | Orchestrator (delegates to /sigil-status) |
 | `/sigil help` | Show available commands | Orchestrator |
-| `/spec "description"` | Write/edit specification | Business Analyst / spec-writer |
-| `/clarify` | Resolve spec ambiguities | Business Analyst / clarifier |
+| `/sigil-spec "description"` | Write/edit specification | Business Analyst / spec-writer |
+| `/sigil-clarify` | Resolve spec ambiguities | Business Analyst / clarifier |
 | `/sigil-plan` | Generate implementation plan | Architect / technical-planner |
 | `/sigil-tasks` | Break plan into executable tasks | Task Planner / task-decomposer |
-| `/validate` | Run QA validation checks | QA Engineer / qa-validator |
-| `/review` | Run code review | Security / code-reviewer |
-| `/constitution` | Create/view constitution | constitution-writer |
-| `/prime` | Load project context for session | Context Primer |
-| `/learn` | View/search project learnings | Learning Reader |
-| `/connect` | Connect project to shared context repo | Connect Wizard |
-| `/profile` | Generate or view project profile | Profile Generator |
+| `/sigil-validate` | Run QA validation checks | QA Engineer / qa-validator |
+| `/sigil-review` | Run code review | Security / code-reviewer |
+| `/sigil-constitution` | Create/view constitution | constitution-writer |
+| `/sigil-prime` | Load project context for session | Context Primer |
+| `/sigil-learn` | View/search project learnings | Learning Reader |
+| `/sigil-connect` | Connect project to shared context repo | Connect Wizard |
+| `/sigil-profile` | Generate or view project profile | Profile Generator |
 | `/sigil-status` | Show workflow status | Status Reporter |
 | `/sigil-update` | Check for & install updates | Global update script |
 
@@ -718,7 +718,7 @@ STAGE 4: PROJECT FOUNDATION
    └────────────────────────┘
             │
             ▼
-   📄 /memory/project-foundation.md
+   📄 /.sigil/project-foundation.md
    ├── Tech Stack (locked in)
    ├── Architecture Patterns
    ├── Quality Standards
@@ -739,7 +739,7 @@ STAGE 5: CONSTITUTION (Pre-Populated)
    └────────────────────────┘
             │
             ▼
-   📄 /memory/constitution.md
+   📄 /.sigil/constitution.md
             │
             ▼
    ✅ READY FOR FEATURE DEVELOPMENT
@@ -769,7 +769,7 @@ STAGE 5: CONSTITUTION (Pre-Populated)
 ## 7. Constitution Creation Flow
 
 ```
-/constitution
+/sigil-constitution
 ══════════════════════════════════════════════════════════════════════════════
 
                     ┌────────────────────┐
@@ -870,7 +870,7 @@ STAGE 5: CONSTITUTION (Pre-Populated)
            │
            ▼
     ┌──────────────────────────────────────────────────────────────────────┐
-    │ 📄 /memory/constitution.md                                           │
+    │ 📄 /.sigil/constitution.md                                           │
     ├──────────────────────────────────────────────────────────────────────┤
     │ # Project Constitution                                               │
     │                                                                      │
@@ -891,7 +891,7 @@ STAGE 5: CONSTITUTION (Pre-Populated)
     ┌──────────────────┐
     │ .gitignore update│
     └──────────────────┘
-    • Auto-add: memory/project-context.md, specs/**/clarifications.md
+    • Auto-add: .sigil/project-context.md, .sigil/specs/**/clarifications.md
     • Prompt user: "Share constitution via git?" [Y/N]
 ```
 
@@ -918,7 +918,7 @@ LEARNING LOOP
 
 Learning files are organized per-feature in a directory structure:
 
-  memory/learnings/
+  .sigil/learnings/
   ├── active/
   │   ├── patterns.md          ← Validated reusable rules
   │   ├── gotchas.md           ← Project-specific traps
@@ -945,13 +945,13 @@ BEFORE TASK EXECUTION
     │ • Shared learnings load first; local layer on top                    │
     │                                                                      │
     │ Always loads (if they exist):                                        │
-    │ • memory/learnings/active/patterns.md                                │
-    │ • memory/learnings/active/gotchas.md                                 │
+    │ • .sigil/learnings/active/patterns.md                                │
+    │ • .sigil/learnings/active/gotchas.md                                 │
     │                                                                      │
     │ Conditionally loads:                                                 │
-    │ • memory/learnings/active/features/[feature-id].md                   │
+    │ • .sigil/learnings/active/features/[feature-id].md                   │
     │   (only for current feature)                                         │
-    │ • memory/learnings/active/decisions.md                               │
+    │ • .sigil/learnings/active/decisions.md                               │
     │   (only when task involves one of these):                            │
     │     - Architecture or design choices                                 │
     │     - Technology selection                                           │
@@ -999,7 +999,7 @@ AFTER TASK COMPLETION
     │ | Discovered a reusable rule?         | Pattern candidate |          │
     │ | What was actually done?             | Task note         |          │
     │                                                                      │
-    │ Writes to: memory/learnings/active/features/[feature-id].md          │
+    │ Writes to: .sigil/learnings/active/features/[feature-id].md          │
     │                                                                      │
     │ Skips capture for:                                                   │
     │ • Trivial tasks (docs-only, config tweaks, formatting)               │
@@ -1024,10 +1024,10 @@ AFTER TASK COMPLETION
 |-------|---------|------------|
 | `learning-reader` | Load shared + local learnings before tasks | Orchestrator, Developer |
 | `learning-capture` | Record learnings after task completion + shared push (silent, non-blocking) | Developer |
-| `learning-review` | Prune, promote, archive learnings | Manual via `/learn` |
-| `shared-context-sync` | Push/pull learnings and profiles to/from shared GitHub repo via MCP | learning-capture, profile-generator, `/prime` |
-| `connect-wizard` | Interactive setup for shared context connection | `/connect` |
-| `profile-generator` | Auto-detect tech stack and generate project profile | `/profile` |
+| `learning-review` | Prune, promote, archive learnings | Manual via `/sigil-learn` |
+| `shared-context-sync` | Push/pull learnings and profiles to/from shared GitHub repo via MCP | learning-capture, profile-generator, `/sigil-prime` |
+| `connect-wizard` | Interactive setup for shared context connection | `/sigil-connect` |
+| `profile-generator` | Auto-detect tech stack and generate project profile | `/sigil-profile` |
 
 ---
 
@@ -1345,45 +1345,45 @@ OUTPUT FILES BY WORKFLOW STAGE
 
 SPECIFY PHASE
 ─────────────
-📄 specs/[NNN-feature]/spec.md          ─── Full specification
+📄 .sigil/specs/[NNN-feature]/spec.md          ─── Full specification
 
 CLARIFY PHASE
 ─────────────
-📄 specs/[NNN-feature]/clarifications.md ─── Q&A log (ephemeral, gitignored)
+📄 .sigil/specs/[NNN-feature]/clarifications.md ─── Q&A log (ephemeral, gitignored)
 
 PLAN PHASE
 ──────────
-📄 specs/[NNN-feature]/plan.md          ─── Technical approach
-📄 specs/[NNN-feature]/adr-NNN-*.md     ─── Architecture Decision Records
+📄 .sigil/specs/[NNN-feature]/plan.md          ─── Technical approach
+📄 .sigil/specs/[NNN-feature]/adr-NNN-*.md     ─── Architecture Decision Records
 
 TASKS PHASE
 ───────────
-📄 specs/[NNN-feature]/tasks.md         ─── Decomposed implementation tasks
+📄 .sigil/specs/[NNN-feature]/tasks.md         ─── Decomposed implementation tasks
 
 IMPLEMENT PHASE
 ───────────────
-📄 memory/learnings/active/features/[feature-id].md ─── Per-feature learnings
-📄 memory/learnings/active/patterns.md  ─── Validated reusable rules
-📄 memory/learnings/active/gotchas.md   ─── Project-specific traps
-📄 memory/project-context.md            ─── Current state (auto-updated)
+📄 .sigil/learnings/active/features/[feature-id].md ─── Per-feature learnings
+📄 .sigil/learnings/active/patterns.md  ─── Validated reusable rules
+📄 .sigil/learnings/active/gotchas.md   ─── Project-specific traps
+📄 .sigil/project-context.md            ─── Current state (auto-updated)
 📄 [source files]                       ─── Actual implementation
 
 VALIDATE PHASE
 ──────────────
-📄 specs/[NNN-feature]/qa/task-{id}-validation.md ─── Per-task validation
-📄 specs/[NNN-feature]/qa/task-{id}-fix-{N}.md    ─── Fix attempt reports
+📄 .sigil/specs/[NNN-feature]/qa/task-{id}-validation.md ─── Per-task validation
+📄 .sigil/specs/[NNN-feature]/qa/task-{id}-fix-{N}.md    ─── Fix attempt reports
 
 REVIEW PHASE
 ────────────
-📄 specs/[NNN-feature]/reviews/         ─── Review reports
+📄 .sigil/specs/[NNN-feature]/reviews/         ─── Review reports
 
 PERSISTENT FILES
 ────────────────
-📄 memory/constitution.md               ─── Project guardrails (7 articles)
-📄 memory/project-foundation.md         ─── Discovery outcomes (if applicable)
-📄 memory/project-context.md            ─── Workflow state (auto-updated)
-📄 memory/project-profile.yaml          ─── Tech stack, APIs, dependencies (S2-102)
-📄 memory/learnings/                    ─── Growing knowledge base
+📄 .sigil/constitution.md               ─── Project guardrails (7 articles)
+📄 .sigil/project-foundation.md         ─── Discovery outcomes (if applicable)
+📄 .sigil/project-context.md            ─── Workflow state (auto-updated)
+📄 .sigil/project-profile.yaml          ─── Tech stack, APIs, dependencies (S2-102)
+📄 .sigil/learnings/                    ─── Growing knowledge base
 📄 CLAUDE.md                            ─── Sigil pointer
 📄 SIGIL.md                             ─── Enforcement rules
 ```
@@ -1396,7 +1396,7 @@ project-root/
 ├── SIGIL.md                             ─── Enforcement rules (auto-generated)
 ├── .gitignore                           ─── Updated during constitution setup
 │
-├── memory/
+├── .sigil/
 │   ├── constitution.md                  ─── Project guardrails (7 articles)
 │   ├── project-context.md               ─── Current workflow state (ephemeral)
 │   ├── project-foundation.md            ─── Discovery outcomes (if applicable)
@@ -1411,7 +1411,7 @@ project-root/
 │       │       └── [feature-id].md      ─── Per-feature learnings
 │       └── archive/                     ─── Pruned/outdated learnings
 │
-├── specs/
+├── .sigil/specs/
 │   └── [NNN-feature-name]/
 │       ├── spec.md                      ─── Full specification
 │       ├── clarifications.md            ─── Q&A log (gitignored)
@@ -1462,17 +1462,17 @@ Specify → Clarify → Plan → Tasks → Implement → Validate → Review
 | `/sigil` | Status + menu |
 | `/sigil "desc"` | Start feature |
 | `/sigil continue` | Resume work |
-| `/spec` | Create spec |
-| `/clarify` | Resolve ambiguities |
+| `/sigil-spec` | Create spec |
+| `/sigil-clarify` | Resolve ambiguities |
 | `/sigil-plan` | Create plan |
 | `/sigil-tasks` | Break into tasks |
-| `/validate` | Run QA |
-| `/review` | Code review |
-| `/constitution` | Project principles |
-| `/prime` | Load context |
-| `/learn` | View learnings |
-| `/connect` | Shared context setup |
-| `/profile` | Project profile |
+| `/sigil-validate` | Run QA |
+| `/sigil-review` | Code review |
+| `/sigil-constitution` | Project principles |
+| `/sigil-prime` | Load context |
+| `/sigil-learn` | View learnings |
+| `/sigil-connect` | Shared context setup |
+| `/sigil-profile` | Project profile |
 | `/sigil-status` | Workflow status |
 | `/sigil-update` | Check for updates |
 
@@ -1488,12 +1488,12 @@ Specify → Clarify → Plan → Tasks → Implement → Validate → Review
 | Task creation | task-decomposer |
 | Before any implementation task | learning-reader |
 | After any implementation task | learning-capture (→ shared-context-sync push if connected) |
-| `/connect` invoked | connect-wizard |
-| `/profile` invoked | profile-generator (→ shared-context-sync profile push if connected) |
-| `/prime` with shared context | shared-context-sync pull (learnings + profiles) + @inherit expansion |
+| `/sigil-connect` invoked | connect-wizard |
+| `/sigil-profile` invoked | profile-generator (→ shared-context-sync profile push if connected) |
+| `/sigil-prime` with shared context | shared-context-sync pull (learnings + profiles) + @inherit expansion |
 | Quality check | qa-validator (→ qa-fixer if issues) |
 | After all tasks complete | code-reviewer |
 
 ---
 
-*Sigil OS Version: 2.1.0*
+*Sigil OS Version: 2.1.1*

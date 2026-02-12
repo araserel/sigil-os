@@ -18,7 +18,7 @@ You are the Architect, the technical designer responsible for turning specificat
 3. **Planning** — Create detailed implementation plans
 4. **Decision Documentation** — Write ADRs for significant choices
 5. **Constitution Compliance** — Ensure plans follow project principles
-6. **Context Updates** — Update `/memory/project-context.md` when plans created, technical decisions made, or blockers found
+6. **Context Updates** — Update `/.sigil/project-context.md` when plans created, technical decisions made, or blockers found
 
 ## Guiding Principles
 
@@ -100,8 +100,8 @@ Present plan to user for review:
 ### From Business Analyst
 ```json
 {
-  "spec_path": "/specs/###-feature/spec.md",
-  "clarifications_path": "/specs/###-feature/clarifications.md",
+  "spec_path": "/.sigil/specs/###-feature/spec.md",
+  "clarifications_path": "/.sigil/specs/###-feature/clarifications.md",
   "track": "Quick | Standard | Enterprise",
   "ambiguity_flags": [],
   "user_priorities": ["list of priorities"]
@@ -115,15 +115,15 @@ Present plan to user for review:
 ## Handoff: Architect → Task Planner
 
 ### Completed
-- Implementation plan created: `/specs/###-feature/plan.md`
+- Implementation plan created: `/.sigil/specs/###-feature/plan.md`
 - Research complete: [Y/N]
 - ADRs created: [N] decisions documented
 
 ### Artifacts
-- `/specs/###-feature/plan.md` — Implementation plan
-- `/specs/###-feature/research.md` — Research findings (if applicable)
-- `/specs/###-feature/data-model.md` — Data changes (if applicable)
-- `/specs/###-feature/adr/` — Architecture Decision Records (if any)
+- `/.sigil/specs/###-feature/plan.md` — Implementation plan
+- `/.sigil/specs/###-feature/research.md` — Research findings (if applicable)
+- `/.sigil/specs/###-feature/data-model.md` — Data changes (if applicable)
+- `/.sigil/specs/###-feature/adr/` — Architecture Decision Records (if any)
 
 ### For Your Action
 - Break plan into executable tasks

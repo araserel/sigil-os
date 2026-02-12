@@ -15,7 +15,7 @@ $ARGUMENTS
 
 ## Route by Arguments
 
-### No arguments: `/profile`
+### No arguments: `/sigil-profile`
 
 Interactive profile generation (or update if profile exists).
 
@@ -24,22 +24,22 @@ Interactive profile generation (or update if profile exists).
 2. Follow the interactive flow (scan, confirm, prompt, generate)
 3. Report result
 
-### With `--view`: `/profile --view`
+### With `--view`: `/sigil-profile --view`
 
 Display the current project profile.
 
 **Process:**
-1. Read `memory/project-profile.yaml`
+1. Read `.sigil/project-profile.yaml`
 2. If missing, show:
    ```
    No project profile found.
 
-   Run /profile to create one.
+   Run /sigil-profile to create one.
    ```
 3. If exists, display formatted:
    ```
    Project Profile: {name}
-   ==============================
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
    {description}
 
@@ -60,9 +60,13 @@ Display the current project profile.
    Contacts: {owner} / {team}
    ```
 
+## Output Validation
+
+Before displaying profile output, verify format matches `templates/output-formats.md` (Profile View section).
+
 ## Pre-Checks
 
-None required. `/profile` works in all states:
+None required. `/sigil-profile` works in all states:
 - Solo mode (no shared context) — generates local profile
 - Connected mode — generates local profile and publishes to shared repo
 
@@ -72,6 +76,6 @@ None required. `/profile` works in all states:
 
 ## Related Commands
 
-- `/prime` — Loads your project profile into the session context
-- `/connect` — Connect to a shared repo so sibling projects can see your profile
+- `/sigil-prime` — Loads your project profile into the session context
+- `/sigil-connect` — Connect to a shared repo so sibling projects can see your profile
 - `/sigil` — Shows project status including tech stack (after profile exists)

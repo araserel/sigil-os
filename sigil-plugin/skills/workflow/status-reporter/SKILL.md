@@ -33,7 +33,7 @@ Generate a clear, human-readable status report of the current workflow state. Th
 
 ### Step 1: Load Context
 
-Read `/memory/project-context.md` to get current state:
+Read `/.sigil/project-context.md` to get current state:
 - Active feature
 - Current phase
 - Workflow track
@@ -59,7 +59,7 @@ Map workflow phases to progress indicators:
 
 ### Step 3: Format Output
 
-Generate status report in standard format (see Output Format below).
+Generate status report in standard format (see Output Format below). Verify icons and separators match `templates/output-formats.md`.
 
 ### Step 4: Add Recommendations
 
@@ -69,7 +69,7 @@ Based on current phase and state, suggest the next logical action for the user.
 
 ```json
 {
-  "context_path": "/memory/project-context.md"
+  "context_path": "/.sigil/project-context.md"
 }
 ```
 
@@ -90,38 +90,39 @@ Based on current phase and state, suggest the next logical action for the user.
 
 ## Output Format
 
+Before displaying, verify icons and separators match `templates/output-formats.md`.
+
 ```markdown
-## Workflow Status
+📋 Project: {ProjectName}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Feature:** [Name] | **Track:** [Track] | **Phase:** [Phase]
-
-### Progress
-- [x] Assess — Track determined
-- [x] Specify — spec.md created
-- [x] Clarify — Requirements clear
-- [x] Plan — plan.md created
-- [ ] Tasks — Breaking down work
-- [ ] Implement — Writing code
-- [ ] Validate — Running checks
-- [ ] Review — Final review
-- [ ] Complete — Done
+Active Feature: "{Feature Name}" | Track: {Track}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Assess        — Track determined
+✅ Specify       — spec.md created
+✅ Clarify       — Requirements clear
+✅ Plan          — plan.md created
+⬚ Tasks         — Breaking down work
+⬚ Implement     — Writing code
+⬚ Validate      — Running checks
+⬚ Review        — Final review
 
 **Overall:** [██████░░░░] 60%
 
 ### Current Activity
-[Plain language description of what's happening now]
+{Plain language description of what's happening now}
 
 ### Blockers
-[List blockers or "None - all clear"]
+{List blockers or "None — all clear"}
 
 ### Open Decisions
-[List pending decisions or "None pending"]
+{List pending decisions or "None pending"}
 
 ### Next Step
-[Clear instruction for user on what to do next]
+{Clear instruction for user on what to do next}
 
----
-*Last updated: [Timestamp]*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+*Last updated: {Timestamp}*
 ```
 
 ## Phase Descriptions
@@ -187,7 +188,7 @@ Example: "I want to add a password reset feature"
 
 ### Missing Context File
 
-If `/memory/project-context.md` doesn't exist:
+If `/.sigil/project-context.md` doesn't exist:
 1. Report "No active workflow"
 2. Suggest starting options
 3. Don't create error state

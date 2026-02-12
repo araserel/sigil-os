@@ -20,7 +20,7 @@ $ARGUMENTS
 Sigil OS is installed as a Claude Code plugin. Check the current state:
 
 1. Verify the plugin is installed by checking if `/sigil` command is available
-2. If installed, the plugin version is defined in the plugin manifest (2.1.0)
+2. If installed, the plugin version is defined in the plugin manifest (2.1.1)
 
 ### Step 2: Route Based on Arguments
 
@@ -40,11 +40,11 @@ Since Sigil OS is now a Claude Code plugin, updates are managed through the plug
 
 ```
 Sigil OS Update Check
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📦 Sigil OS Plugin
 
-Current version: 2.1.0
+Current version: 2.1.1
 Installation: Plugin-based (Claude Code)
 Marketplace: sigil-os
 
@@ -61,7 +61,7 @@ When user runs `/sigil-update now`:
 
 ```
 Sigil OS Update
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Updating Sigil OS plugin...
 
@@ -78,7 +78,7 @@ If Sigil commands aren't working:
 
 ```
 Sigil OS Update Check
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ❌ Sigil OS plugin not detected
 
@@ -100,7 +100,7 @@ If user has old global installation (`~/.sigil-os` exists):
 
 ```
 Sigil OS Update Check
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ⚠️ Legacy installation detected
 

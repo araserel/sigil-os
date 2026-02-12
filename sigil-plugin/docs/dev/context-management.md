@@ -1,6 +1,6 @@
 # Context Management Protocol
 
-> Guidelines for maintaining accurate project state in `/memory/project-context.md` across sessions.
+> Guidelines for maintaining accurate project state in `/.sigil/project-context.md` across sessions.
 
 ---
 
@@ -130,7 +130,7 @@ When decision is made:
 
 **Every session**, the Orchestrator must:
 
-1. **Read** `/memory/project-context.md`
+1. **Read** `/.sigil/project-context.md`
 
 2. **Announce** current state to user:
    ```
@@ -171,7 +171,7 @@ When receiving a handoff with State Transfer JSON, extract and update:
 ```json
 {
   "chain_id": "abc123",
-  "spec_path": "/specs/001-feature/",
+  "spec_path": "/.sigil/specs/001-feature/",
   "track": "Standard",
   "iteration_counts": {
     "clarifier": 2,
@@ -214,7 +214,7 @@ Keep these paths current:
 
 | Field | When to Update |
 |-------|----------------|
-| Current Spec | When spec-writer creates `/specs/###-feature/spec.md` |
+| Current Spec | When spec-writer creates `/.sigil/specs/###-feature/spec.md` |
 | Current Plan | When technical-planner creates `plan.md` |
 | Current Tasks | When task-decomposer creates `tasks.md` |
 | Next Human Touchpoint | Every phase transition |
@@ -230,7 +230,7 @@ Keep these paths current:
 1. **Current Work:**
    ```markdown
    - **Feature:** User Authentication
-   - **Spec Path:** /specs/001-user-auth/
+   - **Spec Path:** /.sigil/specs/001-user-auth/
    - **Track:** Standard
    - **Phase:** Specify
    - **Status:** Complete
@@ -249,7 +249,7 @@ Keep these paths current:
 
 4. **Quick Reference:**
    ```markdown
-   - Current Spec: `/specs/001-user-auth/spec.md`
+   - Current Spec: `/.sigil/specs/001-user-auth/spec.md`
    ```
 
 5. **Next Human Touchpoint:**
@@ -265,7 +265,7 @@ Keep these paths current:
 
 ### Missing Context File
 
-If `/memory/project-context.md` doesn't exist:
+If `/.sigil/project-context.md` doesn't exist:
 1. Copy from `/templates/project-context-template.md`
 2. Announce: "Starting fresh context — no previous state found"
 3. Proceed with current request

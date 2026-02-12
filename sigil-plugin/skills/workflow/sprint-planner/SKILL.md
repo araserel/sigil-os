@@ -38,7 +38,7 @@ Organize Sigil OS tasks or user stories into time-boxed sprints for teams using 
 - `spec_path`: string — For feature context
 
 **Auto-loaded:**
-- `project_context`: string — `/memory/project-context.md`
+- `project_context`: string — `/.sigil/project-context.md`
 
 ## Process
 
@@ -315,8 +315,8 @@ T002 → T003 → T005 → T007 → T009 → T010
 
 ```json
 {
-  "sprint_plan_path": "/specs/001-feature/sprint-plan.md",
-  "tasks_path": "/specs/001-feature/tasks.md",
+  "sprint_plan_path": "/.sigil/specs/001-feature/sprint-plan.md",
+  "tasks_path": "/.sigil/specs/001-feature/tasks.md",
   "configuration": {
     "sprint_length_days": 14,
     "team_capacity": 20,

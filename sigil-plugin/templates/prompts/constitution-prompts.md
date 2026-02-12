@@ -200,7 +200,7 @@ Why this matters: If you work with a team, sharing the constitution means everyo
 
 **Accessibility:** [plain description]
 
-This is saved at `/memory/constitution.md`. All AI agents will follow these rules automatically.
+This is saved at `/.sigil/constitution.md`. All AI agents will follow these rules automatically.
 
 Does this look right? Say 'yes' to confirm, or tell me what to change."
 
@@ -208,8 +208,8 @@ Does this look right? Say 'yes' to confirm, or tell me what to change."
 
 "Constitution saved. All future work on this project will follow these rules.
 
-To view it later: `/constitution`
-To update it: `/constitution edit`"
+To view it later: `/sigil-constitution`
+To update it: `/sigil-constitution edit`"
 
 ---
 
@@ -219,7 +219,7 @@ When a user says "suggest", "default", "whatever you think", or similar at any p
 
 **DO:** Provide a clear explanation of what was configured.
 
-"I've set up [specific choice]. This means [one-sentence impact explanation]. You can change this anytime by running `/constitution edit`."
+"I've set up [specific choice]. This means [one-sentence impact explanation]. You can change this anytime by running `/sigil-constitution edit`."
 
 **DON'T:** Silently accept without explanation.
 

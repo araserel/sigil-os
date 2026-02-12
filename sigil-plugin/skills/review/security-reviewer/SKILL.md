@@ -29,7 +29,7 @@ Identify security vulnerabilities and validate compliance with constitution secu
 ```json
 {
   "changed_files": ["src/auth.ts", "src/api/users.ts"],
-  "constitution_path": "/memory/constitution.md"
+  "constitution_path": "/.sigil/constitution.md"
 }
 ```
 
@@ -39,7 +39,7 @@ Identify security vulnerabilities and validate compliance with constitution secu
   "dependency_manifest": "package.json",
   "scan_depth": "surface | deep",
   "focus_areas": ["auth", "injection", "data_exposure"],
-  "previous_review": "/specs/.../reviews/security-review-v1.md"
+  "previous_review": "/.sigil/specs/.../reviews/security-review-v1.md"
 }
 ```
 
@@ -91,7 +91,7 @@ Identify security vulnerabilities and validate compliance with constitution secu
 }
 ```
 
-**Artifact Output:** `/specs/###-feature/reviews/security-review.md`
+**Artifact Output:** `/.sigil/specs/###-feature/reviews/security-review.md`
 
 ## OWASP Top 10 Checks (2021)
 
@@ -323,13 +323,13 @@ After fixes applied, re-run security review.
 
 ## Pre-Execution Check
 
-Before starting, update `memory/project-context.md`:
+Before starting, update `.sigil/project-context.md`:
 - Set **Current Phase** to `review`
 - Set **Feature** to the feature being reviewed
 - Set **Spec Path** to the active spec directory
 - Set **Last Updated** to the current timestamp
 
-If `memory/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
+If `.sigil/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
 
 ## Workflow
 
@@ -435,7 +435,7 @@ C) Escalate to DevOps
   "handoff_from": "code-reviewer",
   "review_status": "approved",
   "security_relevant_files": ["src/auth.ts"],
-  "code_review_report": "/specs/.../reviews/code-review.md"
+  "code_review_report": "/.sigil/specs/.../reviews/code-review.md"
 }
 ```
 
@@ -444,7 +444,7 @@ C) Escalate to DevOps
 {
   "handoff_to": "deploy-checker",
   "security_status": "approved",
-  "security_report": "/specs/.../reviews/security-review.md",
+  "security_report": "/.sigil/specs/.../reviews/security-review.md",
   "conditions": [],
   "blocked": false
 }

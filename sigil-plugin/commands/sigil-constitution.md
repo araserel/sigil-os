@@ -18,7 +18,7 @@ $ARGUMENTS
 ### View Mode (default)
 
 If no arguments or just viewing:
-1. Read `/memory/constitution.md`
+1. Read `/.sigil/constitution.md`
 2. Display the current constitution
 3. Highlight any incomplete sections
 4. If no constitution exists, offer to create one
@@ -35,6 +35,10 @@ If user wants to edit:
 If no constitution exists:
 1. Run the 3-round guided setup
 2. Generate and save the constitution
+
+## Output Validation
+
+When generating or displaying the constitution, verify article names match `templates/constitution-template.md` exactly (e.g., `Article 1: Technology Stack`, not `Tech Stack`).
 
 ## Process for Creating / Editing
 
@@ -106,8 +110,8 @@ A few optional preferences (say "skip" for smart defaults):
 3. Load template from `/templates/constitution-template.md`
 4. Fill in all 7 articles
 5. Handle `.gitignore` entries for Sigil artifacts
-6. Save to `/memory/constitution.md`
-7. Update `/memory/project-context.md`
+6. Save to `/.sigil/constitution.md`
+7. Update `/.sigil/project-context.md`
 
 ### Step 4: Confirm
 
@@ -122,7 +126,7 @@ Quality Level: [Project Type]
 - Reviews: [plain description]
 Accessibility: [plain description]
 
-Saved at /memory/constitution.md.
+Saved at /.sigil/constitution.md.
 All AI agents will follow these rules.
 ```
 
@@ -130,21 +134,21 @@ All AI agents will follow these rules.
 
 After viewing:
 ```
-Current Constitution: /memory/constitution.md
+Current Constitution: /.sigil/constitution.md
 
 [Display constitution content]
 
 ---
-To update: Run /constitution edit
+To update: Run /sigil-constitution edit
 ```
 
 After creating/editing:
 ```
-Constitution saved: /memory/constitution.md
+Constitution saved: /.sigil/constitution.md
 
 All future work will follow these rules automatically.
-To view: /constitution
-To update: /constitution edit
+To view: /sigil-constitution
+To update: /sigil-constitution edit
 ```
 
 ## Error Handling

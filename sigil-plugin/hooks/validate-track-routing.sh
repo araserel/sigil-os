@@ -17,7 +17,7 @@ if [ -z "$SUBAGENT_TYPE" ]; then
 fi
 
 PROJECT_ROOT="${CLAUDE_PROJECT_ROOT:-.}"
-CONTEXT_FILE="$PROJECT_ROOT/memory/project-context.md"
+CONTEXT_FILE="$PROJECT_ROOT/.sigil/project-context.md"
 
 # If no context file, allow any agent (no active workflow)
 if [ ! -f "$CONTEXT_FILE" ]; then

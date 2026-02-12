@@ -68,8 +68,8 @@ When you run `/sigil` for the first time, it creates these project files:
 
 | Folder | What It Contains |
 |--------|------------------|
-| `memory/` | Project rules, state, and learnings |
-| `specs/` | Feature specifications you create |
+| `.sigil/` | Project rules, state, and learnings |
+| `.sigil/specs/` | Feature specifications you create |
 | `SIGIL.md` | Enforcement rules (auto-generated) |
 
 > **Note:** The plugin itself is managed by Claude Code. Only your project-specific files live in your repository.
@@ -93,7 +93,7 @@ This opens an interactive session with Claude Code. You'll see a prompt where yo
 
 Type:
 ```
-/constitution
+/sigil-constitution
 ```
 
 Sigil guides you through 3 quick rounds in plain language:
@@ -374,7 +374,7 @@ During implementation, Sigil automatically captured lessons for future features:
 - **Gotchas** — Traps it encountered and how to avoid them
 - **Decisions** — Why certain choices were made
 
-Run `/learn` to see what was captured. These learnings help future features go smoother — Sigil remembers what worked and avoids past mistakes.
+Run `/sigil-learn` to see what was captured. These learnings help future features go smoother — Sigil remembers what worked and avoids past mistakes.
 
 ### Commit Your Changes
 
@@ -459,7 +459,7 @@ Choose option 1 to let Sigil try again, or option 3 if you want to involve a dev
 You can always start over:
 
 ```
-/spec "Add a contact form"
+/sigil-spec "Add a contact form"
 ```
 
 This creates a new specification from scratch.
@@ -480,7 +480,7 @@ Or from your terminal:
 claude plugin update sigil@sigil-os
 ```
 
-Your project files (`memory/`, `specs/`) are not affected by updates. Only the plugin components are updated.
+Your project files (`.sigil/`, `.sigil/specs/`) are not affected by updates. Only the plugin components are updated.
 
 After updating, start a new Claude Code session and run `/sigil` to verify.
 
@@ -495,7 +495,7 @@ These four commands cover most use cases:
 | `/sigil` | Show status and what to do next |
 | `/sigil "..."` | Start building a feature from your description |
 | `/sigil continue` | Resume work on an in-progress feature |
-| `/constitution` | Set up or update project rules |
+| `/sigil-constitution` | Set up or update project rules |
 
 You don't have to remember commands. Just say what you mean — "I want to add user login" works as well as `/sigil "Add login"`.
 

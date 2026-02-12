@@ -18,7 +18,7 @@ Guide users through connecting their project to a shared context repository. Han
 
 ## When to Invoke
 
-When the user runs `/connect` or says "connect to shared context", "set up shared context", "share learnings across projects", etc.
+When the user runs `/sigil-connect` or says "connect to shared context", "set up shared context", "share learnings across projects", etc.
 
 ## Inputs
 
@@ -34,7 +34,7 @@ When the user runs `/connect` or says "connect to shared context", "set up share
 Display:
 ```
 Shared Context Setup
-==============================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Sigil can share learnings and project context across
 your code projects. This helps when you work on more
@@ -44,7 +44,7 @@ mobile and web apps.
 Do you work across multiple code projects? [Y/n]:
 ```
 
-If user says no → exit with: "No problem. You can run `/connect` anytime if you change your mind."
+If user says no → exit with: "No problem. You can run `/sigil-connect` anytime if you change your mind."
 
 ### Step 2: GitHub MCP Check
 
@@ -53,7 +53,7 @@ Use the `shared-context-sync` skill's GitHub MCP Detection procedure.
 **If MCP detected:**
 ```
 Step 1 of 3: GitHub Connection
--------------------------------
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Checking... GitHub MCP detected.
 ```
@@ -61,7 +61,7 @@ Checking... GitHub MCP detected.
 **If MCP not detected:**
 ```
 Step 1 of 3: GitHub Connection
--------------------------------
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Checking... GitHub MCP not found.
 
@@ -69,15 +69,15 @@ Sharing context requires a GitHub connection (MCP).
 Want me to help you set that up? [Y/n]:
 ```
 
-If yes, display the setup guidance from `shared-context-sync` MCP Detection, then ask user to restart their session and run `/connect` again.
+If yes, display the setup guidance from `shared-context-sync` MCP Detection, then ask user to restart their session and run `/sigil-connect` again.
 
-If no → exit with: "You'll need GitHub MCP to use shared context. Run `/connect` when you're ready."
+If no → exit with: "You'll need GitHub MCP to use shared context. Run `/sigil-connect` when you're ready."
 
 ### Step 3: Repository Selection
 
 ```
 Step 2 of 3: Shared Context Repository
----------------------------------------
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Have you already created a shared context repo
 on GitHub? [y/N]:
@@ -138,8 +138,8 @@ standards for use across code projects via [Sigil OS](https://github.com/arasere
 ## How it works
 
 Projects connect to this repo using `sigil connect`. After connecting:
-- Learnings sync automatically when you use `/learn`
-- Latest shared context loads when you use `/prime`
+- Learnings sync automatically when you use `/sigil-learn`
+- Latest shared context loads when you use `/sigil-prime`
 
 Each project's learnings are stored in a subdirectory named after the project.
 ```
@@ -172,7 +172,7 @@ with @inherit markers. For example:
 
   <!-- @inherit: shared-standards/security-standards.md -->
 
-These will be expanded automatically when you run /prime.
+These will be expanded automatically when you run /sigil-prime.
 ```
 
 **If only `.gitkeep` or empty:** Skip silently — no standards to discover yet.
@@ -185,8 +185,8 @@ Step 3 of 3: Confirm
 
 Shared context is now active:
   - Repository: {owner/repo}
-  - Learnings sync when you use /learn
-  - Latest context loads when you use /prime
+  - Learnings sync when you use /sigil-learn
+  - Latest context loads when you use /sigil-prime
   - This project: {current-project-identity}
 
 To disconnect later, remove this project's entry
@@ -215,9 +215,9 @@ When invoked with a repo path (e.g., `sigil connect my-org/platform-context`):
 | Invalid repo path format | "Repo path should be `owner/repo` (e.g., `my-org/platform-context`)." Allow retry. |
 | Repo not accessible via MCP | "Could not reach `{repo}`. Check that the repository exists and you have access." Allow retry. |
 | MCP write fails during scaffold | "Could not set up the repo structure. Check your write access to `{repo}`." |
-| Git not initialized | Caught by `/connect` pre-checks, not this skill. |
-| No git remote | Caught by `/connect` pre-checks, not this skill. |
-| Already connected | Caught by `/connect`, shows current config and asks to update. |
+| Git not initialized | Caught by `/sigil-connect` pre-checks, not this skill. |
+| No git remote | Caught by `/sigil-connect` pre-checks, not this skill. |
+| Already connected | Caught by `/sigil-connect`, shows current config and asks to update. |
 | MCP permission denied | "Could not write to shared repo. Ask your admin for write access to `{repo}`." |
 
 ---

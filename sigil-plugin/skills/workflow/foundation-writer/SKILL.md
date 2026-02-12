@@ -170,8 +170,8 @@ Fill the Preferences Captured section:
 ### Step 7: Write Foundation Document
 
 ```
-1. Create /memory/ directory if not exists
-2. Write to /memory/project-foundation.md
+1. Create /.sigil/ directory if not exists
+2. Write to /.sigil/project-foundation.md
 3. Return path for confirmation
 ```
 
@@ -182,7 +182,7 @@ Show summary and request approval:
 ```markdown
 ## Foundation Document Created
 
-I've compiled your project foundation at `/memory/project-foundation.md`.
+I've compiled your project foundation at `/.sigil/project-foundation.md`.
 
 ### Summary
 
@@ -210,12 +210,12 @@ Once you approve this foundation:
 ## Outputs
 
 **Artifact:**
-- `/memory/project-foundation.md` — Complete foundation document
+- `/.sigil/project-foundation.md` — Complete foundation document
 
 **Handoff Data:**
 ```json
 {
-  "foundation_path": "/memory/project-foundation.md",
+  "foundation_path": "/.sigil/project-foundation.md",
   "foundation_status": "draft",
   "awaiting_approval": true,
   "pre_populated_constitution": {
@@ -266,7 +266,7 @@ When user approves foundation:
 | Missing constraints | Run constraint-discovery first |
 | No stack selected | Return to stack-recommendation |
 | Template not found | Use embedded fallback template |
-| Write permission denied | Ask user to create /memory/ directory |
+| Write permission denied | Ask user to create /.sigil/ directory |
 
 ## Integration Points
 

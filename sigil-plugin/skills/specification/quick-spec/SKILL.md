@@ -77,7 +77,7 @@ Generated inline, not persisted unless requested.
 
 ## Output
 
-Single story file to `/specs/stories/`.
+Single story file to `/.sigil/specs/stories/`.
 
 ## When NOT to Use
 

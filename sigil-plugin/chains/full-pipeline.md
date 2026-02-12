@@ -331,7 +331,7 @@ User: "Add user authentication with email and password"
    → User confirms
 
 2. spec-writer
-   → Creates /specs/001-user-auth/spec.md
+   → Creates /.sigil/specs/001-user-auth/spec.md
    → Flags: "Session vs JWT unclear", "Password rules unspecified"
    → Detects UI components (login form, password reset)
 
@@ -349,7 +349,7 @@ User: "Add user authentication with email and password"
    → User approves design
 
 5. technical-planner
-   → Creates /specs/001-user-auth/plan.md
+   → Creates /.sigil/specs/001-user-auth/plan.md
    → React framework is now a constraint
    → Recommends jose library for JWT
    → User approves

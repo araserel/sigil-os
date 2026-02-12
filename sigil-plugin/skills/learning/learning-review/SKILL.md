@@ -18,7 +18,7 @@ Maintain learning quality through periodic review. Promote validated pattern can
 
 ## When to Invoke
 
-- User runs `/learn --review`
+- User runs `/sigil-learn --review`
 - A feature is marked complete in project-context.md
 - User asks to "clean up learnings" or "review what we learned"
 - Any learning file exceeds its item limit
@@ -27,7 +27,7 @@ Maintain learning quality through periodic review. Promote validated pattern can
 
 ### Step 1: Load All Active Learnings
 
-Read all files in `/memory/learnings/active/`:
+Read all files in `/.sigil/learnings/active/`:
 - `patterns.md`
 - `gotchas.md`
 - `decisions.md`
@@ -98,7 +98,7 @@ Stale items (no recent activity):
 
 #### Promoting a Pattern
 
-1. Add to `/memory/learnings/active/patterns.md`:
+1. Add to `/.sigil/learnings/active/patterns.md`:
 ```markdown
 - **[Pattern description]**
   - When: Context for when this applies
@@ -111,8 +111,8 @@ Stale items (no recent activity):
 
 #### Archiving Feature Notes
 
-1. Move `/memory/learnings/active/features/[feature-id].md`
-   → `/memory/learnings/archived/[feature-id].md`
+1. Move `/.sigil/learnings/active/features/[feature-id].md`
+   → `/.sigil/learnings/archived/[feature-id].md`
 
 2. Add archive header:
 ```markdown
@@ -153,7 +153,7 @@ All limits healthy.
 
 ### Step 5: Update Project Context
 
-Note the review in `/memory/project-context.md`:
+Note the review in `/.sigil/project-context.md`:
 ```markdown
 ## Recent Activity
 - [YYYY-MM-DD] Learning review: promoted 2 patterns, archived 001-user-auth
@@ -242,12 +242,12 @@ Choice:
 ## Outputs
 
 **Files modified:**
-- `/memory/learnings/active/patterns.md` (promotions)
-- `/memory/learnings/active/gotchas.md` (deduplication)
-- `/memory/learnings/active/decisions.md` (deduplication)
-- `/memory/learnings/active/features/*.md` (tag removal)
-- `/memory/learnings/archived/*.md` (archives)
-- `/memory/project-context.md` (activity log)
+- `/.sigil/learnings/active/patterns.md` (promotions)
+- `/.sigil/learnings/active/gotchas.md` (deduplication)
+- `/.sigil/learnings/active/decisions.md` (deduplication)
+- `/.sigil/learnings/active/features/*.md` (tag removal)
+- `/.sigil/learnings/archived/*.md` (archives)
+- `/.sigil/project-context.md` (activity log)
 
 ## Error Handling
 

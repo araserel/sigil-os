@@ -32,17 +32,17 @@ Transform implementation plans into ordered, trackable tasks. Creates a clear ex
 - `max_tasks`: number — Maximum tasks before flagging (default: 20)
 
 **Auto-loaded:**
-- `project_context`: string — `/memory/project-context.md`
+- `project_context`: string — `/.sigil/project-context.md`
 
 ## Pre-Execution Check
 
-Before starting, update `memory/project-context.md`:
+Before starting, update `.sigil/project-context.md`:
 - Set **Current Phase** to `tasks`
 - Set **Feature** to the feature being decomposed
 - Set **Spec Path** to the active spec directory
 - Set **Last Updated** to the current timestamp
 
-If `memory/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
+If `.sigil/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
 
 ## Process
 
@@ -142,14 +142,14 @@ If total_tasks < 3:
 ## Outputs
 
 **Artifact:**
-- `/specs/###-feature/tasks.md` — Task breakdown
+- `/.sigil/specs/###-feature/tasks.md` — Task breakdown
 
 **Handoff Data:**
 ```json
 {
-  "tasks_path": "/specs/001-feature/tasks.md",
-  "plan_path": "/specs/001-feature/plan.md",
-  "spec_path": "/specs/001-feature/spec.md",
+  "tasks_path": "/.sigil/specs/001-feature/tasks.md",
+  "plan_path": "/.sigil/specs/001-feature/plan.md",
+  "spec_path": "/.sigil/specs/001-feature/spec.md",
   "total_tasks": 12,
   "phases": ["Setup", "Foundation", "Auth Flow", "Accessibility", "Testing"],
   "blocking_tasks": ["T001", "T002", "T005"],

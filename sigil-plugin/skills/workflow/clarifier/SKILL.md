@@ -18,7 +18,7 @@ Systematically reduce ambiguity in specifications through targeted questions. En
 ## When to Invoke
 
 - Spec has `requires_clarification: true` in handoff
-- User requests `/clarify`
+- User requests `/sigil-clarify`
 - User says "let's clarify" or "I have more details"
 - Open Questions section has unresolved items
 
@@ -36,13 +36,13 @@ Systematically reduce ambiguity in specifications through targeted questions. En
 
 ## Pre-Execution Check
 
-Before starting, update `memory/project-context.md`:
+Before starting, update `.sigil/project-context.md`:
 - Set **Current Phase** to `clarify`
 - Set **Feature** to the feature being clarified
 - Set **Spec Path** to the active spec directory
 - Set **Last Updated** to the current timestamp
 
-If `memory/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
+If `.sigil/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
 
 ## Process
 
@@ -136,16 +136,16 @@ If iteration >= max AND ambiguities remain:
 ## Outputs
 
 **Artifact:**
-- `/specs/###-feature/clarifications.md` — Q&A log
+- `/.sigil/specs/###-feature/clarifications.md` — Q&A log
 
 **Updated Artifact:**
-- `/specs/###-feature/spec.md` — Updated with clarifications
+- `/.sigil/specs/###-feature/spec.md` — Updated with clarifications
 
 **Handoff Data:**
 ```json
 {
-  "spec_path": "/specs/001-feature/spec.md",
-  "clarifications_path": "/specs/001-feature/clarifications.md",
+  "spec_path": "/.sigil/specs/001-feature/spec.md",
+  "clarifications_path": "/.sigil/specs/001-feature/clarifications.md",
   "all_resolved": true,
   "remaining_ambiguities": [],
   "iteration": 2,
@@ -161,7 +161,7 @@ If iteration >= max AND ambiguities remain:
 ```markdown
 # Clarifications: [Feature Name]
 
-> **Spec:** [/specs/###-feature/spec.md]
+> **Spec:** [/.sigil/specs/###-feature/spec.md]
 > **Rounds:** [N]
 > **Status:** [In Progress | Complete]
 

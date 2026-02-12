@@ -5,7 +5,7 @@ version: 1.0.0
 category: workflow
 chainable: true
 invokes: [clarifier, visual-analyzer]
-invoked_by: [orchestrator, business-analyst]
+invoked_by: [orchestrator, business-analyst, quick-spec]
 tools: Read, Write, Edit, Glob, Grep
 ---
 
@@ -18,7 +18,7 @@ Transform natural language feature descriptions into structured specifications. 
 ## When to Invoke
 
 - User describes a new feature or enhancement
-- User requests `/spec [description]`
+- User requests `/sigil-spec [description]`
 - User says "I want...", "We need...", "Build me..."
 - Business Analyst agent receives a feature request
 
@@ -28,8 +28,8 @@ Transform natural language feature descriptions into structured specifications. 
 - `feature_description`: string — Natural language description of what to build
 
 **Auto-loaded:**
-- `constitution_path`: string — `/memory/constitution.md` (loaded automatically)
-- `project_context`: string — `/memory/project-context.md` (loaded for context)
+- `constitution_path`: string — `/.sigil/constitution.md` (loaded automatically)
+- `project_context`: string — `/.sigil/project-context.md` (loaded for context)
 
 **Optional:**
 - `visual_assets`: string[] — Paths to mockups, wireframes, or design files
@@ -38,22 +38,22 @@ Transform natural language feature descriptions into structured specifications. 
 
 ## Pre-Execution Check
 
-Before starting, update `memory/project-context.md`:
+Before starting, update `.sigil/project-context.md`:
 - Set **Current Phase** to `specify`
 - Set **Feature** to the feature being specified
-- Set **Spec Path** to the target spec directory (e.g., `/specs/###-feature/`)
+- Set **Spec Path** to the target spec directory (e.g., `/.sigil/specs/###-feature/`)
 - Set **Last Updated** to the current timestamp
 
-If `memory/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
+If `.sigil/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
 
 ## Process
 
 ### Step 1: Context Gathering
 
 ```
-1. Load constitution from /memory/constitution.md
-2. Load project context from /memory/project-context.md
-3. Scan /specs/ for existing features (avoid conflicts)
+1. Load constitution from /.sigil/constitution.md
+2. Load project context from /.sigil/project-context.md
+3. Scan /.sigil/specs/ for existing features (avoid conflicts)
 4. Determine next feature number (###)
 ```
 
@@ -109,7 +109,7 @@ Verify spec against constitution:
 ### Step 6: Create Feature Directory
 
 ```
-1. Create /specs/###-feature-name/ directory
+1. Create /.sigil/specs/###-feature-name/ directory
 2. Write spec.md to directory
 3. Update project-context.md with new feature
 ```
@@ -127,12 +127,12 @@ If ambiguities detected:
 ## Outputs
 
 **Artifact:**
-- `/specs/###-feature-name/spec.md` — Complete feature specification
+- `/.sigil/specs/###-feature-name/spec.md` — Complete feature specification
 
 **Handoff Data:**
 ```json
 {
-  "spec_path": "/specs/001-user-auth/spec.md",
+  "spec_path": "/.sigil/specs/001-user-auth/spec.md",
   "feature_id": "001",
   "feature_name": "user-auth",
   "ambiguity_flags": [
@@ -170,7 +170,7 @@ Before completing, verify:
 
 | Error | Resolution |
 |-------|------------|
-| Constitution not found | Prompt user to run `/constitution` first |
+| Constitution not found | Prompt user to run `/sigil-constitution` first |
 | Feature number conflict | Increment to next available number |
 | Description too vague | Ask for more detail before generating |
 | Template not found | Use embedded fallback template |
@@ -179,7 +179,7 @@ Before completing, verify:
 
 **Simple:**
 ```
-User: /spec Add user authentication with login and logout
+User: /sigil-spec Add user authentication with login and logout
 ```
 
 **With context:**
@@ -191,7 +191,7 @@ User: I need a feature that lets users log in with their email and password,
 
 **With visuals:**
 ```
-User: /spec Create the checkout flow based on these mockups
+User: /sigil-spec Create the checkout flow based on these mockups
       [attached: checkout-step1.png, checkout-step2.png]
 ```
 

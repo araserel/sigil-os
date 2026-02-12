@@ -32,20 +32,20 @@ Transform clarified specifications into actionable implementation plans. Identif
 - `research_results`: object — Output from researcher skill if pre-research done
 
 **Auto-loaded:**
-- `constitution_path`: string — `/memory/constitution.md`
-- `project_context`: string — `/memory/project-context.md`
-- `current_profile`: object — From `/memory/project-profile.yaml` (if exists)
+- `constitution_path`: string — `/.sigil/constitution.md`
+- `project_context`: string — `/.sigil/project-context.md`
+- `current_profile`: object — From `/.sigil/project-profile.yaml` (if exists)
 - `sibling_profiles`: array — From `~/.sigil/cache/shared/profiles/` (if connected)
 
 ## Pre-Execution Check
 
-Before starting, update `memory/project-context.md`:
+Before starting, update `.sigil/project-context.md`:
 - Set **Current Phase** to `plan`
 - Set **Feature** to the feature being planned
 - Set **Spec Path** to the active spec directory
 - Set **Last Updated** to the current timestamp
 
-If `memory/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
+If `.sigil/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
 
 ## Process
 
@@ -187,18 +187,18 @@ Then:
 ## Outputs
 
 **Primary Artifact:**
-- `/specs/###-feature/plan.md` — Implementation plan
+- `/.sigil/specs/###-feature/plan.md` — Implementation plan
 
 **Secondary Artifacts (if applicable):**
-- `/specs/###-feature/research.md` — Research findings
-- `/specs/###-feature/data-model.md` — Data changes
-- `/specs/###-feature/adr/ADR-###-topic.md` — Architecture decisions
+- `/.sigil/specs/###-feature/research.md` — Research findings
+- `/.sigil/specs/###-feature/data-model.md` — Data changes
+- `/.sigil/specs/###-feature/adr/ADR-###-topic.md` — Architecture decisions
 
 **Handoff Data:**
 ```json
 {
-  "plan_path": "/specs/001-feature/plan.md",
-  "spec_path": "/specs/001-feature/spec.md",
+  "plan_path": "/.sigil/specs/001-feature/plan.md",
+  "spec_path": "/.sigil/specs/001-feature/spec.md",
   "estimated_complexity": "standard",
   "gate_violations": [],
   "requires_adr": true,

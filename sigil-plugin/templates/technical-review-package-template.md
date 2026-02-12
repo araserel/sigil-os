@@ -177,19 +177,19 @@
 
 | Document | Path | Status |
 |----------|------|--------|
-| Spec | `/specs/[ID]/spec.md` | Complete |
-| Clarifications | `/specs/[ID]/clarifications.md` | Complete |
-| Plan | `/specs/[ID]/plan.md` | Approved |
-| Tasks | `/specs/[ID]/tasks.md` | Complete |
+| Spec | `/.sigil/specs/[ID]/spec.md` | Complete |
+| Clarifications | `/.sigil/specs/[ID]/clarifications.md` | Complete |
+| Plan | `/.sigil/specs/[ID]/plan.md` | Approved |
+| Tasks | `/.sigil/specs/[ID]/tasks.md` | Complete |
 
 ### Quality Reports
 
 | Report | Path | Status |
 |--------|------|--------|
-| QA Validation | `/specs/[ID]/qa/validation.md` | [Status] |
-| Code Review | `/specs/[ID]/reviews/code-review.md` | [Status] |
-| Security Review | `/specs/[ID]/reviews/security-review.md` | [Status] |
-| Deploy Readiness | `/specs/[ID]/reviews/deploy-readiness.md` | [Status] |
+| QA Validation | `/.sigil/specs/[ID]/qa/validation.md` | [Status] |
+| Code Review | `/.sigil/specs/[ID]/reviews/code-review.md` | [Status] |
+| Security Review | `/.sigil/specs/[ID]/reviews/security-review.md` | [Status] |
+| Deploy Readiness | `/.sigil/specs/[ID]/reviews/deploy-readiness.md` | [Status] |
 
 ### Architecture Decision Records
 

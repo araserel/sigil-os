@@ -34,7 +34,7 @@ Generate a comprehensive Technical Review Package when a non-technical user requ
 Collect all artifacts for the feature:
 
 ```
-/specs/###-feature/
+/.sigil/specs/###-feature/
 ├── spec.md
 ├── clarifications.md
 ├── plan.md
@@ -78,7 +78,7 @@ Generate a brief (3-5 sentence) summary for the non-technical user to include wh
 ```json
 {
   "feature_id": "001-password-reset",
-  "spec_path": "/specs/001-password-reset/",
+  "spec_path": "/.sigil/specs/001-password-reset/",
   "requested_by": "User name (optional)",
   "reason": "Pre-production review (optional)"
 }
@@ -88,7 +88,7 @@ Generate a brief (3-5 sentence) summary for the non-technical user to include wh
 
 ```json
 {
-  "package_path": "/specs/001-password-reset/technical-review-package.md",
+  "package_path": "/.sigil/specs/001-password-reset/technical-review-package.md",
   "summary_for_user": "Plain-English description to share with engineer",
   "artifacts_included": ["spec.md", "plan.md", "..."],
   "missing_artifacts": [],
@@ -98,7 +98,7 @@ Generate a brief (3-5 sentence) summary for the non-technical user to include wh
 
 ## Output Artifact
 
-`/specs/###-feature/technical-review-package.md`
+`/.sigil/specs/###-feature/technical-review-package.md`
 
 ## Writing Guidelines
 

@@ -71,10 +71,10 @@ Scan for the presence of key indicators:
    - .circleci/
 
 6. Check for existing Sigil artifacts:
-   - /memory/constitution.md
-   - /memory/project-context.md
-   - /memory/project-foundation.md
-   - /specs/ directory
+   - /.sigil/constitution.md
+   - /.sigil/project-context.md
+   - /.sigil/project-foundation.md
+   - /.sigil/specs/ directory
 ```
 
 ### Step 2: Stack Detection
@@ -397,7 +397,7 @@ What would you like to build?
 
 ### Assessment Path Routing
 
-When the classification is `scaffolded` or `mature` AND no constitution exists (`/memory/constitution.md` not found):
+When the classification is `scaffolded` or `mature` AND no constitution exists (`/.sigil/constitution.md` not found):
 
 1. Set `recommended_track: "assessment-constitution"`
 2. Include full `detected_stack` in handoff data

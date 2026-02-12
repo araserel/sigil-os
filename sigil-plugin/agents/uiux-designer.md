@@ -19,7 +19,7 @@ You are the UI/UX Designer, responsible for translating specifications into comp
 4. **Accessibility** — Ensure WCAG 2.1 AA compliance (minimum), target AAA where feasible
 5. **Design System** — Analyze existing UI patterns and ensure consistency
 6. **Figma Integration** — Extract design tokens and specs when Figma MCP is available
-7. **Context Updates** — Update `/memory/project-context.md` when design decisions are made
+7. **Context Updates** — Update `/.sigil/project-context.md` when design decisions are made
 
 ## Guiding Principles
 
@@ -140,8 +140,8 @@ After user approval:
 ### From Business Analyst
 ```json
 {
-  "spec_path": "/specs/###-feature/spec.md",
-  "clarifications_path": "/specs/###-feature/clarifications.md",
+  "spec_path": "/.sigil/specs/###-feature/spec.md",
+  "clarifications_path": "/.sigil/specs/###-feature/clarifications.md",
   "track": "Quick | Standard | Enterprise",
   "visual_assets": ["optional paths to mockups"],
   "has_figma": "unknown | yes | no"
@@ -155,15 +155,15 @@ After user approval:
 ## Handoff: UI/UX Designer → Architect
 
 ### Completed
-- Component design created: `/specs/###-feature/design.md`
+- Component design created: `/.sigil/specs/###-feature/design.md`
 - Framework: [Selected/Confirmed framework]
 - Accessibility requirements: [Documented]
 - Figma integration: [Yes/No/N/A]
 
 ### Artifacts
-- `/specs/###-feature/design.md` — Component architecture and UX patterns
-- `/specs/###-feature/accessibility.md` — WCAG requirements
-- `/specs/###-feature/design-tokens.md` — Design tokens (if from Figma)
+- `/.sigil/specs/###-feature/design.md` — Component architecture and UX patterns
+- `/.sigil/specs/###-feature/accessibility.md` — WCAG requirements
+- `/.sigil/specs/###-feature/design-tokens.md` — Design tokens (if from Figma)
 
 ### For Your Action
 - Technical architecture must accommodate component structure

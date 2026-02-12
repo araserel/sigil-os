@@ -61,7 +61,7 @@ Try:
 
 ### Fix 3 -- Start Over with More Detail
 
-Run `/spec` again with a richer description. Try to answer common questions before they come up.
+Run `/sigil-spec` again with a richer description. Try to answer common questions before they come up.
 
 Instead of:
 > "Add a contact form"
@@ -69,7 +69,7 @@ Instead of:
 Try:
 > "Add a contact form with name, email, and message fields. Show a success notice on submit. Send an email copy to the user. Use honeypot spam protection. The form must work on mobile and meet accessibility standards."
 
-> **Tip:** Before you type `/spec`, write down three things: who uses the feature, what they do, and what they see when it works. That alone prevents most clarification loops.
+> **Tip:** Before you type `/sigil-spec`, write down three things: who uses the feature, what they do, and what they see when it works. That alone prevents most clarification loops.
 
 ---
 
@@ -134,17 +134,17 @@ You should now see the quality check pass on the next run.
 Run the command below and type out your full feature description. Do not assume Sigil remembers anything from before.
 
 ```
-/spec [your complete feature description]
+/sigil-spec [your complete feature description]
 ```
 
 You should now see a new specification that matches your description.
 
 ### Fix 2 -- Check Your Constitution
 
-Run `/constitution` and review the technology choices and standards listed. If they do not match your project, update them.
+Run `/sigil-constitution` and review the technology choices and standards listed. If they do not match your project, update them.
 
 ```
-/constitution
+/sigil-constitution
 ```
 
 You should now see a constitution that reflects your real project rules.
@@ -180,11 +180,11 @@ Sigil stores its memory in a `/memory` folder inside your project. If that folde
 1. Make sure you opened your terminal in the same project folder you used before.
 2. Check that a `/memory` folder exists inside your project.
 3. Open the `/memory` folder and confirm it contains files.
-4. If the files are gone, run `/constitution` to recreate your project principles.
-5. Run `/spec` to restart your feature.
+4. If the files are gone, run `/sigil-constitution` to recreate your project principles.
+5. Run `/sigil-spec` to restart your feature.
 
 ```
-$ ls memory/
+$ ls .sigil/
 project-context.md   decisions.md   ...
 ```
 
@@ -209,7 +209,7 @@ Sigil fills in gaps when your description leaves room for guesses. Rushed answer
 ### Caught Early (Before Tasks Start)
 
 1. Run `/sigil-status` and read the specification carefully.
-2. Run `/clarify` to correct the parts that are wrong.
+2. Run `/sigil-clarify` to correct the parts that are wrong.
 3. Run `/sigil-plan` to generate a new plan.
 
 ```
@@ -310,7 +310,7 @@ These are serious issues like missing required files, critical security problems
 1. What command did you run? Copy the full input.
 2. What output did you get? Copy the full response.
 3. What did you expect to happen?
-4. Run `/constitution` and copy the output.
+4. Run `/sigil-constitution` and copy the output.
 5. Run `/sigil-status` and copy the output.
 
 ```
@@ -326,7 +326,7 @@ Having all five items ready makes it much easier for someone to help you.
 ### Common Questions
 
 **Q: Can I undo a clarification answer?**
-A: Not directly. Run `/spec` again to start fresh if you need to change a key decision.
+A: Not directly. Run `/sigil-spec` again to start fresh if you need to change a key decision.
 
 **Q: How do I change the track (the complexity level -- Quick, Standard, or Enterprise)?**
 A: The track is chosen based on feature size. Describe a smaller feature to get a simpler track.

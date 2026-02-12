@@ -65,8 +65,8 @@ Plain-English definitions for terms used in Sigil. If a word sounds technical, y
 | **Sentinel File** | The local connection file (`~/.sigil/registry.json`) that maps your projects to their shared repo |
 | **Shared Standards** | Organizational rules stored in `shared-standards/` in the shared repo, referenced by projects via `@inherit` markers |
 | **@inherit** | A marker in your constitution (e.g., `<!-- @inherit: shared-standards/security.md -->`) that pulls in standards from the shared repo |
-| **Offline Queue** | When the shared repo is unreachable, learnings save locally and sync automatically on your next `/prime` |
-| **Project Profile** | A YAML file (`memory/project-profile.yaml`) that describes your project's tech stack, exposed APIs, consumed dependencies, and sibling relationships — used by agents for context and cross-repo impact warnings |
+| **Offline Queue** | When the shared repo is unreachable, learnings save locally and sync automatically on your next `/sigil-prime` |
+| **Project Profile** | A YAML file (`.sigil/project-profile.yaml`) that describes your project's tech stack, exposed APIs, consumed dependencies, and sibling relationships — used by agents for context and cross-repo impact warnings |
 
 ---
 

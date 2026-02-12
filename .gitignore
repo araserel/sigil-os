@@ -28,6 +28,9 @@ Thumbs.db
 .idea/
 *.swp
 
+# Generated printables
+sigil-plugin/docs/printables/
+
 # Build artifacts
 node_modules/
 __pycache__/

@@ -210,7 +210,7 @@ File: `~/.sigil/cache/shared/queue/{timestamp_ms}.json`
 2. Use current timestamp in milliseconds as filename
 3. Write to `~/.sigil/cache/shared/queue/`
 
-**Drain (on `/prime` or next successful MCP write):**
+**Drain (on `/sigil-prime` or next successful MCP write):**
 
 1. List all `.json` files in `~/.sigil/cache/shared/queue/`
 2. Sort by filename (chronological order)
@@ -237,7 +237,7 @@ File: `~/.sigil/cache/shared/queue/{timestamp_ms}.json`
 
 **Queue Status:**
 
-Return count of pending and failed items for display in `/learn` and `/sigil` status.
+Return count of pending and failed items for display in `/sigil-learn` and `/sigil` status.
 
 ---
 
@@ -346,7 +346,7 @@ Called by `prime` at session start.
 2. Return cached data from `~/.sigil/cache/shared/`
 3. Do NOT delete cache or sentinel
 4. Still attempt queue drain (will also fail, items stay queued)
-5. Continue session normally — MCP failure must never block `/prime`
+5. Continue session normally — MCP failure must never block `/sigil-prime`
 
 ---
 
@@ -369,7 +369,7 @@ Before appending a learning to the shared repo (step 7 of Push Protocol), check 
 
 - Do NOT push to shared repo
 - Do NOT queue locally
-- Log: "Duplicate learning detected — skipping shared sync. Run `/learn --review` to manage."
+- Log: "Duplicate learning detected — skipping shared sync. Run `/sigil-learn --review` to manage."
 - Still write locally (local capture is unaffected)
 
 **Limitations (V1):**
@@ -384,7 +384,7 @@ Before appending a learning to the shared repo (step 7 of Push Protocol), check 
 
 ### Profile Push
 
-Called by `profile-generator` after writing or updating `memory/project-profile.yaml`.
+Called by `profile-generator` after writing or updating `.sigil/project-profile.yaml`.
 
 **Inputs:**
 - `repo_name`: Current project's repo name (from identity detection)
@@ -395,7 +395,7 @@ Called by `profile-generator` after writing or updating `memory/project-profile.
 2. Determine shared repo from sentinel lookup (e.g., `araserel/platform-context`)
 3. Split shared repo into `owner` and `repo` parts
 4. Determine target file path: `profiles/{repo_name}.yaml`
-5. Read local `memory/project-profile.yaml`
+5. Read local `.sigil/project-profile.yaml`
 6. **Read existing file via MCP:**
    ```
    mcp__github__get_file_contents(owner, repo, path="profiles/{repo_name}.yaml")
@@ -447,7 +447,7 @@ Called by `prime` at session start (as part of pull protocol).
 
 1. Log warning: "Profile sync unavailable, using cached profiles."
 2. Return cached profiles from `~/.sigil/cache/shared/profiles/`
-3. Continue session normally — MCP failure must never block `/prime`
+3. Continue session normally — MCP failure must never block `/sigil-prime`
 
 ### Profile Change Detection
 
@@ -455,7 +455,7 @@ Called by `prime` to determine if the local profile needs republishing.
 
 **Procedure:**
 
-1. Read `memory/project-profile.yaml` — if missing, return (no profile to sync)
+1. Read `.sigil/project-profile.yaml` — if missing, return (no profile to sync)
 2. Compute SHA256 hash of file contents
 3. Read `~/.sigil/cache/shared/profile-hashes.json`
 4. Compare local hash with cached `local_hash` entry
@@ -540,7 +540,7 @@ Called by `connect-wizard` when a shared repo is empty or missing the expected s
 | `sigil` | Sentinel check | During state detection |
 | `connect-wizard` | Write sentinel, scaffold repo | During `sigil connect` |
 | `learn` | Queue status | When displaying learning summary |
-| `profile-generator` | Profile Push | After writing/updating `memory/project-profile.yaml` |
+| `profile-generator` | Profile Push | After writing/updating `.sigil/project-profile.yaml` |
 | `prime` | Profile Pull + change detection | At session start (alongside learning pull) |
 
 ---

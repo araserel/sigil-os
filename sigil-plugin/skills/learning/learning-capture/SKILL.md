@@ -28,7 +28,7 @@ Do NOT invoke:
 ## Inputs
 
 **Auto-loaded:**
-- Current feature ID from `/memory/project-context.md`
+- Current feature ID from `/.sigil/project-context.md`
 - Task just completed (from context)
 
 **Context available:**
@@ -60,7 +60,7 @@ If `mode: review-findings` is present, skip the normal Process steps and use the
 
 ### Step 1: Identify Current Feature
 
-Read `/memory/project-context.md` to get:
+Read `/.sigil/project-context.md` to get:
 - Current feature ID (e.g., `001-user-auth`)
 - Feature name
 
@@ -89,7 +89,7 @@ If duplicate exists, skip capture.
 
 ### Step 4: Write to Appropriate File
 
-**For task notes** → `/memory/learnings/active/features/[feature-id].md`
+**For task notes** → `/.sigil/learnings/active/features/[feature-id].md`
 
 ```markdown
 ## [Feature Name]
@@ -101,7 +101,7 @@ If duplicate exists, skip capture.
   - Note: Any other relevant detail (optional)
 ```
 
-**For gotchas** → `/memory/learnings/active/gotchas.md`
+**For gotchas** → `/.sigil/learnings/active/gotchas.md`
 
 ```markdown
 - **[Short description of the trap]**
@@ -111,7 +111,7 @@ If duplicate exists, skip capture.
   - Added: [YYYY-MM-DD]
 ```
 
-**For decisions** → `/memory/learnings/active/decisions.md`
+**For decisions** → `/.sigil/learnings/active/decisions.md`
 
 ```markdown
 - **[YYYY-MM-DD] [Decision title]**
@@ -176,8 +176,8 @@ If no findings pass the filter, skip capture entirely (silent exit).
 
 The developer's own learning-capture runs first (Step 6 of the developer agent). Check for existing entries:
 
-1. Read `/memory/learnings/active/gotchas.md`
-2. Read `/memory/learnings/active/features/[feature-id].md`
+1. Read `/.sigil/learnings/active/gotchas.md`
+2. Read `/.sigil/learnings/active/features/[feature-id].md`
 3. For each filtered finding, check if the same concept is already captured:
    - Same root cause, different wording = duplicate → skip
    - Same area but distinct insight = not a duplicate → capture
@@ -186,7 +186,7 @@ If all findings are duplicates, skip capture (silent exit).
 
 ### RF-3: Write Gotchas
 
-For each non-duplicate finding, write to `/memory/learnings/active/gotchas.md` using the standard format with an added `Source:` field:
+For each non-duplicate finding, write to `/.sigil/learnings/active/gotchas.md` using the standard format with an added `Source:` field:
 
 ```markdown
 - **[Short description of the trap]**
@@ -197,7 +197,7 @@ For each non-duplicate finding, write to `/memory/learnings/active/gotchas.md` u
   - Added: [YYYY-MM-DD]
 ```
 
-Also add a task note to `/memory/learnings/active/features/[feature-id].md`:
+Also add a task note to `/.sigil/learnings/active/features/[feature-id].md`:
 
 ```markdown
 - **[Task ID]** [Brief description of what was fixed]
@@ -225,15 +225,15 @@ Enforce these limits when writing:
 
 | File | Max Items | Action on Exceed |
 |------|-----------|------------------|
-| patterns.md | 30 | Warn user, suggest `/learn --review` |
-| gotchas.md | 30 | Warn user, suggest `/learn --review` |
+| patterns.md | 30 | Warn user, suggest `/sigil-learn --review` |
+| gotchas.md | 30 | Warn user, suggest `/sigil-learn --review` |
 | decisions.md | 20 | Warn user, allow overflow |
 | Feature notes | 20 per feature | Summarize older entries |
 
 If a file exceeds its limit:
 ```
 Note: [file] has reached its limit (X items).
-Run `/learn --review` to prune and promote learnings.
+Run `/sigil-learn --review` to prune and promote learnings.
 ```
 
 ## Writing Guidelines
@@ -273,9 +273,9 @@ Run `/learn --review` to prune and promote learnings.
 ## Outputs
 
 **Files modified:**
-- `/memory/learnings/active/features/[feature-id].md` (task notes)
-- `/memory/learnings/active/gotchas.md` (if gotcha found)
-- `/memory/learnings/active/decisions.md` (if decision made)
+- `/.sigil/learnings/active/features/[feature-id].md` (task notes)
+- `/.sigil/learnings/active/gotchas.md` (if gotcha found)
+- `/.sigil/learnings/active/decisions.md` (if decision made)
 
 **No handoff data** — This skill completes silently.
 

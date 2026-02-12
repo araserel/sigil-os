@@ -1,3 +1,6 @@
+<!-- STRICT TEMPLATE: Preserve EXACT heading names, column structure, and formatting.
+     Fill in [BRACKETED] values but do not rename articles or restructure sections. -->
+
 # Project Constitution: [PROJECT NAME]
 
 > These principles are immutable. All agents respect these boundaries without being reminded.

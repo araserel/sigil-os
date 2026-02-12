@@ -32,7 +32,7 @@ Quick Flow is a streamlined workflow for simple, well-understood changes. It ski
          ▼
 ┌──────────────────────────┐
 │  constitution-check      │ ← File existence check (not a skill invocation)
-│  /memory/constitution.md │
+│  /.sigil/constitution.md │
 └──────────────────────────┘
          │
          │ [If exists: inject constraints + tech-stack into quick-spec context]
@@ -78,13 +78,13 @@ Quick Flow is a streamlined workflow for simple, well-understood changes. It ski
 
 Between complexity assessment and quick-spec, check for the project constitution:
 
-1. **Check** if `/memory/constitution.md` exists (file-existence check, NOT a constitution-writer invocation)
+1. **Check** if `/.sigil/constitution.md` exists (file-existence check, NOT a constitution-writer invocation)
 2. **If YES:**
    - Extract ONLY the `constraints` and `tech-stack` sections from the constitution
    - Inject as context into quick-spec (keep injected context under 500 tokens)
    - Do NOT run schema validation or full parse — this is a lightweight extraction
 3. **If NO:**
-   - Emit user-facing warning: *"No project constitution found. Quick spec will proceed without project constraints. Run `/constitution` to create one."*
+   - Emit user-facing warning: *"No project constitution found. Quick spec will proceed without project constraints. Run `/sigil-constitution` to create one."*
    - Continue without blocking
 
 This ensures Quick Flow specs respect project rules when available, without adding ceremony when they're not.

@@ -35,7 +35,7 @@ Transform Sigil OS task breakdowns into user story format compatible with extern
 - `epic_name`: string — Parent epic name for grouping
 
 **Auto-loaded:**
-- `project_context`: string — `/memory/project-context.md`
+- `project_context`: string — `/.sigil/project-context.md`
 
 ## Process
 
@@ -191,15 +191,15 @@ Title,Description,Priority,Estimate,Labels,Parent
 
 ```json
 {
-  "stories_path": "/specs/001-feature/stories.md",
-  "tasks_path": "/specs/001-feature/tasks.md",
+  "stories_path": "/.sigil/specs/001-feature/stories.md",
+  "tasks_path": "/.sigil/specs/001-feature/tasks.md",
   "total_stories": 8,
   "total_points": 21,
   "export_format": "standard",
   "exports_generated": {
-    "markdown": "/specs/001-feature/stories.md",
-    "jira_json": "/specs/001-feature/stories-jira.json",
-    "csv": "/specs/001-feature/stories.csv"
+    "markdown": "/.sigil/specs/001-feature/stories.md",
+    "jira_json": "/.sigil/specs/001-feature/stories-jira.json",
+    "csv": "/.sigil/specs/001-feature/stories.csv"
   },
   "story_mapping": {
     "STORY-001": ["T001", "T002", "T003"],

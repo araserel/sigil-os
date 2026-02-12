@@ -113,13 +113,13 @@ Follow these steps when you start Sigil for the first time.
 
 ```mermaid
 flowchart LR
-    A["1. /constitution"] --> B["2. /sigil-status"]
-    B --> C["3. /spec"]
+    A["1. /sigil-constitution"] --> B["2. /sigil-status"]
+    B --> C["3. /sigil-spec"]
 ```
 
 1. **Set up your project rulebook.**
    ```
-   /constitution
+   /sigil-constitution
    ```
    Answer questions about your project's technology and standards.
 
@@ -131,7 +131,7 @@ flowchart LR
 
 3. **Create your first feature.**
    ```
-   /spec [your feature description]
+   /sigil-spec [your feature description]
    ```
    Describe what you want to build in plain words.
 
@@ -224,7 +224,7 @@ The vague example will need many rounds of follow-up questions. The detailed exa
 
 ### Understanding the Feature Document
 
-When you run `/spec`, Sigil creates a document with these sections.
+When you run `/sigil-spec`, Sigil creates a document with these sections.
 
 **Summary:** One paragraph that describes the feature and its purpose.
 
@@ -255,7 +255,7 @@ After creating a feature document, you may need to clear up gaps.
 
 **Command:**
 ```
-/clarify
+/sigil-clarify
 ```
 
 **What to expect:**
@@ -476,7 +476,7 @@ When blockers appear, they need action.
 
 | Blocker | What to Do |
 |---------|------------|
-| Follow-up question needed | Answer via `/clarify` |
+| Follow-up question needed | Answer via `/sigil-clarify` |
 | Rulebook conflict | Review with tech lead; update the rulebook if needed |
 | Outside dependency | Talk to the team that owns that piece |
 | Resource not available | Escalate to project leadership |
@@ -488,16 +488,16 @@ If you work on more than one project, Sigil can create a **project profile** for
 **Creating a profile:**
 
 ```
-/profile
+/sigil-profile
 ```
 
 Sigil scans your project files and detects your tech stack automatically. It then asks a few questions about what your project does and what it shares.
 
-You should now see a `memory/project-profile.yaml` file in your project folder.
+You should now see a `.sigil/project-profile.yaml` file in your project folder.
 
 **Why profiles matter:**
 
-- When you start a session with `/prime`, Sigil loads your profile and profiles from connected projects.
+- When you start a session with `/sigil-prime`, Sigil loads your profile and profiles from connected projects.
 - If your project changes something that another project depends on, Sigil warns you during planning.
 - Profiles help new team members understand each project at a glance.
 
@@ -528,11 +528,11 @@ flowchart LR
 
 1. **Capture** -- Lessons are recorded after each task.
 2. **Reference** -- Relevant lessons load before each task starts.
-3. **Review** -- Run `/learn --review` to clean up.
+3. **Review** -- Run `/sigil-learn --review` to clean up.
 4. **Promote** -- Proven patterns move to the permanent file.
 5. **Archive** -- Finished feature notes move to storage.
 
-**Using `/learn --review`:**
+**Using `/sigil-learn --review`:**
 
 Run this from time to time to tidy up lessons. You will be asked to:
 
@@ -540,7 +540,7 @@ Run this from time to time to tidy up lessons. You will be asked to:
 - Archive finished feature notes
 - Remove duplicates and stale entries
 
-> **Note:** Lessons are stored in `/memory/learnings/` and stay small -- about 3% of context.
+> **Note:** Lessons are stored in `/.sigil/learnings/` and stay small -- about 3% of context.
 
 ---
 
@@ -552,7 +552,7 @@ Run this from time to time to tidy up lessons. You will be asked to:
 |--------------|--------------|-----------|
 | "Maximum clarification rounds reached" | Requirements too vague or conflicting | Shrink scope and give direct answers |
 | "QA validation failed" | A deep design issue | Review with your tech lead |
-| Unexpected output | Context mix-up | Start fresh with `/spec` |
+| Unexpected output | Context mix-up | Start fresh with `/sigil-spec` |
 
 ### Getting Help
 

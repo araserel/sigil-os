@@ -119,12 +119,12 @@ Check findings against constitution:
 ## Outputs
 
 **Artifact:**
-- `/specs/###-feature/research.md` — Research findings
+- `/.sigil/specs/###-feature/research.md` — Research findings
 
 **Handoff Data:**
 ```json
 {
-  "research_path": "/specs/001-feature/research.md",
+  "research_path": "/.sigil/specs/001-feature/research.md",
   "questions_answered": 3,
   "questions_total": 3,
   "confidence_levels": {
@@ -152,7 +152,7 @@ Check findings against constitution:
 ```markdown
 # Research: [Topic]
 
-> **Feature:** [/specs/###-feature/]
+> **Feature:** [/.sigil/specs/###-feature/]
 > **Requested By:** [technical-planner]
 > **Date:** [DATE]
 

@@ -58,7 +58,7 @@ Create an ADR when:
 - `decision_drivers`: string[] — Criteria for evaluation
 
 **Auto-loaded:**
-- `constitution`: string — `/memory/constitution.md` (for constraint alignment)
+- `constitution`: string — `/.sigil/constitution.md` (for constraint alignment)
 - `existing_adrs`: string[] — Previous ADRs for numbering and linking
 
 ## Process
@@ -66,7 +66,7 @@ Create an ADR when:
 ### Step 1: Determine ADR Number
 
 ```
-1. Scan /specs/{feature}/adr/ for existing ADRs
+1. Scan /.sigil/specs/{feature}/adr/ for existing ADRs
 2. Get highest number, increment by 1
 3. For global decisions, use G prefix and scan global ADRs
 4. Format: ADR-001, ADR-002, or ADR-G001
@@ -143,7 +143,7 @@ For each decision driver, assess how well each option satisfies it:
 ```
 1. Load template from /templates/adr-template.md
 2. Fill in all sections
-3. Write to /specs/{feature}/adr/ADR-###-{slug}.md
+3. Write to /.sigil/specs/{feature}/adr/ADR-###-{slug}.md
 4. Update plan.md to reference new ADR
 ```
 
@@ -287,8 +287,8 @@ NextAuth satisfies our time-to-market driver while maintaining security. The bui
 
 ## Related
 
-- **Specification:** /specs/001-user-auth/spec.md
-- **Plan:** /specs/001-user-auth/plan.md
+- **Specification:** /.sigil/specs/001-user-auth/spec.md
+- **Plan:** /.sigil/specs/001-user-auth/plan.md
 
 ---
 
@@ -299,7 +299,7 @@ NextAuth satisfies our time-to-market driver while maintaining security. The bui
 
 ```json
 {
-  "adr_path": "/specs/001-user-auth/adr/ADR-001-nextauth.md",
+  "adr_path": "/.sigil/specs/001-user-auth/adr/ADR-001-nextauth.md",
   "adr_number": "ADR-001",
   "decision_title": "Use NextAuth for Authentication",
   "status": "accepted",
@@ -317,7 +317,7 @@ NextAuth satisfies our time-to-market driver while maintaining security. The bui
     "neutral": 1
   },
   "requires_approval": false,
-  "related_spec": "/specs/001-user-auth/spec.md",
+  "related_spec": "/.sigil/specs/001-user-auth/spec.md",
   "review_date": "2026-03-01"
 }
 ```
@@ -398,14 +398,14 @@ When recommending an option, present clearly:
 |-------|------------|
 | No options provided | Cannot create ADR without alternatives |
 | Single option | Ask if there are truly no alternatives |
-| Directory doesn't exist | Create /specs/{feature}/adr/ directory |
+| Directory doesn't exist | Create /.sigil/specs/{feature}/adr/ directory |
 | Conflicting ADR number | Increment to next available |
 | Constitution conflict | Flag the conflict, may need constitution update |
 
 ## Integration Points
 
 - **Invoked by:** `architect` agent, `technical-planner` skill
-- **Outputs to:** `/specs/{feature}/adr/` directory
+- **Outputs to:** `/.sigil/specs/{feature}/adr/` directory
 - **Referenced by:** Implementation plan
 - **Updates:** Project context with pending decisions
 

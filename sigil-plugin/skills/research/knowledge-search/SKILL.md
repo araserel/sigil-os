@@ -35,7 +35,7 @@ Search the project's accumulated knowledge base to find relevant context, past d
 - `limit`: number — Maximum results per category (default: 5)
 
 **Auto-loaded:**
-- `project_context`: string — `/memory/project-context.md`
+- `project_context`: string — `/.sigil/project-context.md`
 
 ## Process
 
@@ -54,7 +54,7 @@ Search the project's accumulated knowledge base to find relevant context, past d
 ### Step 2: Search Specifications
 
 ```
-1. Glob: /specs/**/*.md
+1. Glob: /.sigil/specs/**/*.md
 2. For each spec:
    a. Check title and summary for relevance
    b. Search requirements for matching concepts
@@ -66,8 +66,8 @@ Search the project's accumulated knowledge base to find relevant context, past d
 ### Step 3: Search Decisions
 
 ```
-1. Glob: /specs/**/adr/*.md (feature ADRs)
-2. Read: /memory/constitution.md
+1. Glob: /.sigil/specs/**/adr/*.md (feature ADRs)
+2. Read: /.sigil/constitution.md
 3. For each decision document:
    a. Check decision title and context
    b. Match against query concepts
@@ -78,9 +78,9 @@ Search the project's accumulated knowledge base to find relevant context, past d
 ### Step 4: Search Learnings
 
 ```
-1. Read: /memory/learnings/active/patterns.md
-2. Read: /memory/learnings/active/gotchas.md
-3. Read: /memory/learnings/active/decisions.md
+1. Read: /.sigil/learnings/active/patterns.md
+2. Read: /.sigil/learnings/active/gotchas.md
+3. Read: /.sigil/learnings/active/decisions.md
 4. For each learning:
    a. Match against query
    b. Check if applies to current context
@@ -129,7 +129,7 @@ Search the project's accumulated knowledge base to find relevant context, past d
 
 ### Relevant Specifications
 
-#### /specs/002-checkout/spec.md
+#### /.sigil/specs/002-checkout/spec.md
 **Relevance:** 92%
 **Summary:** Checkout form with payment validation
 
@@ -141,7 +141,7 @@ Search the project's accumulated knowledge base to find relevant context, past d
 
 ---
 
-#### /specs/001-user-auth/spec.md
+#### /.sigil/specs/001-user-auth/spec.md
 **Relevance:** 78%
 **Summary:** Login and registration forms
 
@@ -179,7 +179,7 @@ Search the project's accumulated knowledge base to find relevant context, past d
 
 ### Relevant Patterns
 
-#### /memory/learnings/active/patterns.md
+#### /.sigil/learnings/active/patterns.md
 **Pattern:** Form Validation Pattern
 **Relevance:** 90%
 
@@ -193,7 +193,7 @@ When building forms:
 
 ---
 
-#### /memory/learnings/active/gotchas.md
+#### /.sigil/learnings/active/gotchas.md
 **Gotcha:** Async Validation
 **Relevance:** 75%
 
@@ -276,9 +276,9 @@ When implementing form validation for current feature:
 
 | Scope | Locations Searched | Best For |
 |-------|-------------------|----------|
-| `specs` | `/specs/**/*.md` | Finding similar features |
-| `decisions` | `/specs/**/adr/*.md`, `/memory/constitution.md` | Finding applicable rules |
-| `learnings` | `/memory/learnings/active/*.md` | Finding patterns and gotchas |
+| `specs` | `/.sigil/specs/**/*.md` | Finding similar features |
+| `decisions` | `/.sigil/specs/**/adr/*.md`, `/.sigil/constitution.md` | Finding applicable rules |
+| `learnings` | `/.sigil/learnings/active/*.md` | Finding patterns and gotchas |
 | `code` | `/src/**/*.{ts,tsx,js,jsx}` | Finding implementation examples |
 | `all` | All of the above | Comprehensive context |
 

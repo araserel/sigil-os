@@ -15,7 +15,7 @@ $ARGUMENTS
 
 ## Route by Arguments
 
-### With argument: `/connect my-org/platform-context`
+### With argument: `/sigil-connect my-org/platform-context`
 
 Direct connection mode. Skip the interactive prompts and connect directly.
 
@@ -24,7 +24,7 @@ Direct connection mode. Skip the interactive prompts and connect directly.
 2. Invoke the `connect-wizard` skill with `mode: direct` and the provided repo path
 3. Report result
 
-### No arguments: `/connect`
+### No arguments: `/sigil-connect`
 
 Interactive guided setup.
 
@@ -70,6 +70,6 @@ If yes, proceed with connection flow using the new repo. If no, exit.
 
 ## Related Commands
 
-- `/prime` — Loads shared context at session start (after connecting)
-- `/learn` — Captured learnings sync to shared repo (after connecting)
+- `/sigil-prime` — Loads shared context at session start (after connecting)
+- `/sigil-learn` — Captured learnings sync to shared repo (after connecting)
 - `/sigil` — Shows shared context status in state detection

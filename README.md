@@ -88,12 +88,12 @@ claude
 Then type this command to create your project's **constitution** (a short file of rules that guide how Sigil works in your project):
 
 ```
-/constitution
+/sigil-constitution
 ```
 
 Answer three quick rounds of questions about your project. Sigil fills in the details for you.
 
-You should now see a new `memory/constitution.md` file in your project folder.
+You should now see a new `.sigil/constitution.md` file in your project folder.
 
 ### Check That Everything Works
 
@@ -139,8 +139,8 @@ Sigil guides you through:
 | `/sigil` | Show status and next steps |
 | `/sigil "description"` | Start building a new feature |
 | `/sigil continue` | Resume where you left off |
-| `/connect` | Share learnings across projects |
-| `/profile` | Generate or view your project profile |
+| `/sigil-connect` | Share learnings across projects |
+| `/sigil-profile` | Generate or view your project profile |
 | `/sigil-update` | Check for plugin updates |
 
 ---

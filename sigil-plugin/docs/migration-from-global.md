@@ -37,7 +37,7 @@ rm -f ~/.claude/.sigil-version
 rm -rf ~/.sigil-os/
 ```
 
-**Note:** This removes global Sigil components. Your project-specific files (`memory/`, `specs/`) are not affected.
+**Note:** This removes global Sigil components. Your project-specific files (`.sigil/`, `.sigil/specs/`) are not affected.
 
 ### Step 2: Install the Plugin
 
@@ -82,10 +82,10 @@ These project-specific directories are **not affected** by the migration:
 
 | Directory | Purpose | Migration Impact |
 |-----------|---------|------------------|
-| `memory/constitution.md` | Project principles | No change |
-| `memory/project-context.md` | Workflow state | No change |
-| `memory/learnings/` | Captured learnings | No change |
-| `specs/` | Feature specifications | No change |
+| `.sigil/constitution.md` | Project principles | No change |
+| `.sigil/project-context.md` | Workflow state | No change |
+| `.sigil/learnings/` | Captured learnings | No change |
+| `.sigil/specs/` | Feature specifications | No change |
 
 ## What Changes
 

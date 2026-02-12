@@ -18,8 +18,8 @@ $ARGUMENTS
 ### Step 1: Load Core Context
 
 Always load:
-1. `/memory/constitution.md` - Project principles
-2. `/memory/project-context.md` - Current state
+1. `/.sigil/constitution.md` - Project principles
+2. `/.sigil/project-context.md` - Current state
 3. `CLAUDE.md` - Sigil OS instructions (if exists)
 
 ### Step 1b: Pull Shared Context (if connected)
@@ -60,7 +60,7 @@ Shared Context: Offline — using cached data
 
 ### Step 1c: Expand @inherit Markers
 
-If `/memory/constitution.md` contains `<!-- @inherit: ... -->` markers and shared context is active:
+If `/.sigil/constitution.md` contains `<!-- @inherit: ... -->` markers and shared context is active:
 
 1. For each `@inherit` marker, extract the referenced path (e.g., `shared-standards/security-standards.md`)
 2. Fetch the referenced file from shared repo via MCP:
@@ -80,7 +80,7 @@ If `/memory/constitution.md` contains `<!-- @inherit: ... -->` markers and share
 
 Load project profile data for agent context:
 
-1. Read `memory/project-profile.yaml` — if exists, inject full profile into agent context
+1. Read `.sigil/project-profile.yaml` — if exists, inject full profile into agent context
 2. If connected and profile exists:
    a. Run profile change detection via `shared-context-sync`:
       - Compute SHA256 of local profile
@@ -102,12 +102,12 @@ Sibling profiles: 3 loaded (api-server, mobile-app, shared-components)
 If profile exists but not connected:
 ```
 Tech Stack: TypeScript, Next.js 14, React 18
-Sibling profiles: Not connected — run /connect to enable
+Sibling profiles: Not connected — run /sigil-connect to enable
 ```
 
 If no profile:
 ```
-Project profile: Not configured — run /profile to set up
+Project profile: Not configured — run /sigil-profile to set up
 ```
 
 ### Step 2: Determine Focus
@@ -120,10 +120,10 @@ Based on arguments:
 ### Step 3: Load Feature Context (if specified)
 
 For a specific feature:
-1. `/specs/NNN-feature-name/spec.md`
-2. `/specs/NNN-feature-name/plan.md` (if exists)
-3. `/specs/NNN-feature-name/tasks.md` (if exists)
-4. `/specs/NNN-feature-name/clarifications.md` (if exists)
+1. `/.sigil/specs/NNN-feature-name/spec.md`
+2. `/.sigil/specs/NNN-feature-name/plan.md` (if exists)
+3. `/.sigil/specs/NNN-feature-name/tasks.md` (if exists)
+4. `/.sigil/specs/NNN-feature-name/clarifications.md` (if exists)
 5. Recent QA reports (if any)
 
 ### Step 4: Load Focus Area Context (if specified)
@@ -212,7 +212,7 @@ You are now primed to work on [focus area].
 Quick actions:
 - Continue implementation: "Implement TASK-NNN"
 - Check status: /sigil-status
-- Validate work: /validate
+- Validate work: /sigil-validate
 ```
 
 ## Output
@@ -255,6 +255,6 @@ If shared context is active, include the "What's New" summary from Step 1b betwe
 
 If context seems stale during a session:
 ```
-Run /prime to refresh context.
+Run /sigil-prime to refresh context.
 Your current work will be preserved.
 ```

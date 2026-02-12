@@ -65,7 +65,7 @@ Automatically sync tasks from Sigil to your project tracking system.
 
 **Without MCP:**
 ```
-Task Planner creates → /specs/###/tasks.md
+Task Planner creates → /.sigil/specs/###/tasks.md
 Developer references → tasks.md manually
 ```
 
@@ -124,7 +124,7 @@ Publish specifications and documentation to your team wiki automatically.
 
 **Without MCP:**
 ```
-Spec created → /specs/###/spec.md (local only)
+Spec created → /.sigil/specs/###/spec.md (local only)
 Team access → Must check repository
 ```
 
@@ -266,7 +266,7 @@ Phase: Implement → Validate
 Status: 5/8 tasks complete
 Next: QA validation running
 
-View details: /specs/001-user-auth/
+View details: /.sigil/specs/001-user-auth/
 ```
 
 ---
@@ -339,7 +339,7 @@ You should now see the service listed when you check your MCP connections.
 Add MCP preferences to your project context:
 
 ```markdown
-<!-- /memory/project-context.md -->
+<!-- /.sigil/project-context.md -->
 
 ## MCP Integrations
 

@@ -105,7 +105,7 @@ All skills in the Discovery chain are driven by the **Orchestrator** agent. Ther
 **Trigger:** Classification is "mature"
 **Condition:** Codebase has established infrastructure
 **Behavior:**
-1. Check if `/memory/constitution.md` exists
+1. Check if `/.sigil/constitution.md` exists
 2. **If constitution exists:** Route to `complexity-assessor` → `quick-flow` OR `full-pipeline` based on the user's request complexity
 3. **If constitution missing:** Invoke `constitution-writer` first (mature codebases need a constitution too), then route to `complexity-assessor`
 
@@ -155,7 +155,7 @@ This ensures mature codebases aren't blocked from feature work but still get a c
 **Data Passed:**
 ```json
 {
-  "foundation_path": "/memory/project-foundation.md",
+  "foundation_path": "/.sigil/project-foundation.md",
   "pre_populated_constitution": {
     "article_1": {...}
   }
@@ -327,11 +327,11 @@ User: "I want to build a task manager app"
 
 After Discovery completes:
 
-1. Foundation document exists at `/memory/project-foundation.md`
-2. Constitution exists at `/memory/constitution.md`
-3. Project context initialized at `/memory/project-context.md`
+1. Foundation document exists at `/.sigil/project-foundation.md`
+2. Constitution exists at `/.sigil/constitution.md`
+3. Project context initialized at `/.sigil/project-context.md`
 4. User can now use standard workflow:
-   - `/spec` to create features
+   - `/sigil-spec` to create features
    - Full pipeline chain for implementation
 
 ## Version History

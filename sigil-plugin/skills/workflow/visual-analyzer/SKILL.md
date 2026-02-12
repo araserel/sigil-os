@@ -33,7 +33,7 @@ Extract functional requirements, UI elements, and accessibility considerations f
 - `spec_path`: string — Related spec for context alignment
 
 **Auto-loaded:**
-- `constitution`: string — `/memory/constitution.md` (for accessibility requirements)
+- `constitution`: string — `/.sigil/constitution.md` (for accessibility requirements)
 
 ## Process
 
@@ -285,7 +285,7 @@ When not specified, recommend:
 
 **With mockup:**
 ```
-User: /spec Build the checkout flow
+User: /sigil-spec Build the checkout flow
       [attached: checkout-page.png]
 
 → visual-analyzer extracts form fields, buttons, step indicators

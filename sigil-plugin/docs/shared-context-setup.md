@@ -7,7 +7,7 @@ Share learnings and standards across your code projects through a shared GitHub 
 Before you start, make sure you have:
 
 1. **A GitHub account** with access to create repositories.
-2. **GitHub MCP** connected to Claude Code. If you are not sure, `/connect` will check for you and guide you through setup.
+2. **GitHub MCP** connected to Claude Code. If you are not sure, `/sigil-connect` will check for you and guide you through setup.
 3. **A git repository** with a remote set for each project you want to connect.
 
 ## Step 1: Create a Shared Repository
@@ -29,7 +29,7 @@ You should now see an empty repository on GitHub.
 Open your project in Claude Code and run:
 
 ```
-/connect your-username/platform-context
+/sigil-connect your-username/platform-context
 ```
 
 Replace `your-username/platform-context` with the path to your shared repo.
@@ -42,7 +42,7 @@ Sigil will:
 
 You should now see a confirmation message with your shared repo and project details.
 
-> **Note:** If GitHub MCP is not configured, Sigil will walk you through setting it up. Follow the on-screen instructions, then restart Claude Code and run `/connect` again.
+> **Note:** If GitHub MCP is not configured, Sigil will walk you through setting it up. Follow the on-screen instructions, then restart Claude Code and run `/sigil-connect` again.
 
 ## Step 3: Verify the Connection
 
@@ -54,7 +54,7 @@ Shared Context: Connected
   Queued: 0 pending syncs
 ```
 
-Run `/prime` to pull the latest shared context. If the repo is new, there won't be any shared learnings yet.
+Run `/sigil-prime` to pull the latest shared context. If the repo is new, there won't be any shared learnings yet.
 
 You should now see shared context status in your session output.
 
@@ -63,7 +63,7 @@ You should now see shared context status in your session output.
 Repeat Step 2 for each project you want to share context between.
 
 1. Open the next project in Claude Code.
-2. Run `/connect your-username/platform-context`.
+2. Run `/sigil-connect your-username/platform-context`.
 
 Each project gets its own entry in `~/.sigil/registry.json`. All projects connected to the same shared repo share learnings.
 
@@ -71,26 +71,26 @@ Each project gets its own entry in `~/.sigil/registry.json`. All projects connec
 
 ### Learnings sync automatically
 
-- When you capture a learning (via `/learn` or during task completion), it writes locally **and** pushes to the shared repo.
-- When you start a session (via `/prime`), the latest shared learnings load automatically.
+- When you capture a learning (via `/sigil-learn` or during task completion), it writes locally **and** pushes to the shared repo.
+- When you start a session (via `/sigil-prime`), the latest shared learnings load automatically.
 - A "what's new" summary shows any new entries since your last session.
 
 ### Project profiles sync too
 
-Run `/profile` to create a project profile. It describes your tech stack, what your project exposes (APIs, events, packages), and what it consumes from other projects.
+Run `/sigil-profile` to create a project profile. It describes your tech stack, what your project exposes (APIs, events, packages), and what it consumes from other projects.
 
 - When you create or update a profile, it publishes to the shared repo's `profiles/` directory.
-- When you run `/prime`, profiles from connected projects load automatically.
+- When you run `/sigil-prime`, profiles from connected projects load automatically.
 - If your plan changes something another project depends on, Sigil warns you during planning.
 
-> **Tip:** Profiles work even without shared context. In solo mode, `/profile` still generates a local profile that gives Sigil better understanding of your project.
+> **Tip:** Profiles work even without shared context. In solo mode, `/sigil-profile` still generates a local profile that gives Sigil better understanding of your project.
 
 ### Offline support
 
 If GitHub MCP is unreachable (network down, MCP not running):
 - Learnings and profiles save locally and queue for later sync.
 - Cached shared learnings and sibling profiles load from your last successful pull.
-- Queued items sync automatically on your next `/prime`.
+- Queued items sync automatically on your next `/sigil-prime`.
 
 ### Shared standards (optional)
 
@@ -101,7 +101,7 @@ If your shared repo has files in `shared-standards/`, you can reference them in 
 <!-- @inherit: shared-standards/security-standards.md -->
 ```
 
-During `/prime`, these markers expand with the referenced content from the shared repo.
+During `/sigil-prime`, these markers expand with the referenced content from the shared repo.
 
 ## Disconnecting
 
@@ -141,10 +141,10 @@ You have read access but not write access.
 
 Learnings may not have synced yet.
 
-**Fix:** Run `/prime` in the other project to pull the latest shared learnings. Check `/learn` to see if any items are queued.
+**Fix:** Run `/sigil-prime` in the other project to pull the latest shared learnings. Check `/sigil-learn` to see if any items are queued.
 
 ### "Shared context unavailable, using cached data"
 
 GitHub MCP failed during the pull. Sigil is using the last cached copy.
 
-**Fix:** This is expected during network issues. Sigil continues working normally. The cache updates on your next successful `/prime`.
+**Fix:** This is expected during network issues. Sigil continues working normally. The cache updates on your next successful `/sigil-prime`.

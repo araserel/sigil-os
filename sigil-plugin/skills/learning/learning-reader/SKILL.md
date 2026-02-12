@@ -23,7 +23,7 @@ Load relevant past learnings before starting work. This ensures validated patter
 ## Inputs
 
 **Auto-loaded:**
-- Current feature ID from `/memory/project-context.md`
+- Current feature ID from `/.sigil/project-context.md`
 - Current task context (what's about to be done)
 
 ## Process
@@ -55,35 +55,35 @@ Shared learnings load **first** — they represent the organizational baseline. 
 
 These files are always loaded when they exist:
 
-1. **Patterns** — `/memory/learnings/active/patterns.md`
+1. **Patterns** — `/.sigil/learnings/active/patterns.md`
    - Validated rules that must be followed
    - Highest priority learnings
 
-2. **Gotchas** — `/memory/learnings/active/gotchas.md`
+2. **Gotchas** — `/.sigil/learnings/active/gotchas.md`
    - Project-specific traps to avoid
    - Common mistakes already encountered
 
-3. **Waivers** — `/memory/waivers.md` (critical: load before constitution checks)
+3. **Waivers** — `/.sigil/waivers.md` (critical: load before constitution checks)
    - Constitution violations waived by human decision
    - Must be loaded early so constitution checks respect existing waivers
 
-4. **Tech Debt** — `/memory/tech-debt.md` (contextual: load during review phase)
+4. **Tech Debt** — `/.sigil/tech-debt.md` (contextual: load during review phase)
    - Non-blocking suggestions from past code reviews
    - Load when entering the review phase to avoid re-flagging known items
 
 ### Step 2: Load Feature-Specific Notes
 
-Check `/memory/project-context.md` for current feature ID.
+Check `/.sigil/project-context.md` for current feature ID.
 
 If working on an existing feature:
-- Read `/memory/learnings/active/features/[feature-id].md`
+- Read `/.sigil/learnings/active/features/[feature-id].md`
 - This provides context from earlier tasks in the same feature
 
 **Do NOT** read feature files for other features (reduces noise).
 
 ### Step 3: Conditionally Load Decisions
 
-Only read `/memory/learnings/active/decisions.md` if the current task involves:
+Only read `/.sigil/learnings/active/decisions.md` if the current task involves:
 - Architecture or design choices
 - Technology selection
 - Integration approaches
@@ -123,8 +123,8 @@ Shared and local learnings share a combined budget of ~5,500 tokens. Shared lear
 |------|-----------|-------------|--------|
 | Shared patterns (all repos) | 15 | ~450 | `~/.sigil/cache/shared/learnings/` |
 | Shared gotchas (all repos) | 15 | ~450 | `~/.sigil/cache/shared/learnings/` |
-| Local patterns.md | 30 | ~900 | `/memory/learnings/active/` |
-| Local gotchas.md | 30 | ~900 | `/memory/learnings/active/` |
+| Local patterns.md | 30 | ~900 | `/.sigil/learnings/active/` |
+| Local gotchas.md | 30 | ~900 | `/.sigil/learnings/active/` |
 | decisions.md | 20 | ~800 | Local (+ shared if architecture task) |
 | Feature notes | 20 | ~600 | Local only |
 | waivers.md | 20 | ~800 | Local only |
@@ -142,7 +142,7 @@ This represents ~4% of context window.
 
 ## Loading Rules
 
-1. **Never read from `/memory/learnings/archived/`**
+1. **Never read from `/.sigil/learnings/archived/`**
    - Archived items are historical, not active guidance
 
 2. **Don't read other features' notes**

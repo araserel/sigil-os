@@ -8,7 +8,7 @@
 set -e
 
 PROJECT_ROOT="${CLAUDE_PROJECT_ROOT:-.}"
-CONTEXT_FILE="$PROJECT_ROOT/memory/project-context.md"
+CONTEXT_FILE="$PROJECT_ROOT/.sigil/project-context.md"
 
 # If no context file, minimal output
 if [ ! -f "$CONTEXT_FILE" ]; then
@@ -48,7 +48,7 @@ cat << EOF
     "tasks_completed": "${TASKS_COMPLETED:-none}",
     "last_updated": "${LAST_UPDATED:-unknown}"
   },
-  "reminder": "If you made workflow progress this session, update memory/project-context.md with the new state.",
+  "reminder": "If you made workflow progress this session, update .sigil/project-context.md with the new state.",
   "next_session_hint": "Run /sigil continue to resume from the current phase."
 }
 EOF

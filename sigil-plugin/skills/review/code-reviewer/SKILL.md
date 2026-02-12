@@ -18,7 +18,7 @@ Perform structured code review against project standards, constitution principle
 ## When to Invoke
 
 - qa-validator passes all checks
-- User requests `/review` or "review code"
+- User requests `/sigil-review` or "review code"
 - Entering Review phase from Validate phase
 - Changes are ready for final quality assessment
 
@@ -28,18 +28,18 @@ Perform structured code review against project standards, constitution principle
 ```json
 {
   "changed_files": ["src/services/auth.ts", "src/models/user.ts"],
-  "spec_path": "/specs/001-feature/spec.md"
+  "spec_path": "/.sigil/specs/001-feature/spec.md"
 }
 ```
 
 **Optional:**
 ```json
 {
-  "plan_path": "/specs/001-feature/plan.md",
-  "constitution_path": "/memory/constitution.md",
+  "plan_path": "/.sigil/specs/001-feature/plan.md",
+  "constitution_path": "/.sigil/constitution.md",
   "review_depth": "standard | thorough",
   "focus_areas": ["error_handling", "architecture"],
-  "previous_review": "/specs/001-feature/reviews/code-review-v1.md",
+  "previous_review": "/.sigil/specs/001-feature/reviews/code-review-v1.md",
   "qa_fix_metadata": {
     "implementation_modified": false,
     "files_changed_classified": {},
@@ -49,7 +49,7 @@ Perform structured code review against project standards, constitution principle
 ```
 
 **Auto-loaded:**
-- Constitution from `/memory/constitution.md`
+- Constitution from `/.sigil/constitution.md`
 - Project coding standards
 - Existing codebase patterns
 
@@ -84,11 +84,11 @@ Perform structured code review against project standards, constitution principle
   "approval_conditions": [],
   "commendations": ["Good error handling in auth service"],
   "tech_debt_captured": 2,
-  "tech_debt_path": "/memory/tech-debt.md"
+  "tech_debt_path": "/.sigil/tech-debt.md"
 }
 ```
 
-**Artifact Output:** `/specs/###-feature/reviews/code-review.md`
+**Artifact Output:** `/.sigil/specs/###-feature/reviews/code-review.md`
 
 ## Review Criteria
 
@@ -279,13 +279,13 @@ const user = getUserById(id);
 
 ## Pre-Execution Check
 
-Before starting, update `memory/project-context.md`:
+Before starting, update `.sigil/project-context.md`:
 - Set **Current Phase** to `review`
 - Set **Feature** to the feature being reviewed
 - Set **Spec Path** to the active spec directory
 - Set **Last Updated** to the current timestamp
 
-If `memory/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
+If `.sigil/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
 
 ## Workflow
 
@@ -314,9 +314,9 @@ If `memory/project-context.md` does not exist, create it using the State Trackin
 
 ## Tech Debt Persistence
 
-After completing the review, if any findings have `severity: "suggestion"`, persist them to `/memory/tech-debt.md`:
+After completing the review, if any findings have `severity: "suggestion"`, persist them to `/.sigil/tech-debt.md`:
 
-1. **Read** `/memory/tech-debt.md` (create if it doesn't exist)
+1. **Read** `/.sigil/tech-debt.md` (create if it doesn't exist)
 2. **Duplicate check** — Skip if an entry with the same file and concept already exists
 3. **Append** each new suggestion using the entry format below
 4. **Cap at 50 items** — If the file exceeds 50 entries, add a warning comment: `<!-- Tech debt backlog at capacity. Review and triage before adding more. -->`
@@ -397,7 +397,7 @@ Proceeding with focused review on changed sections only.
   "handoff_from": "qa-validator",
   "validation_status": "pass",
   "changed_files": ["..."],
-  "validation_report": "/specs/.../qa/validation.md"
+  "validation_report": "/.sigil/specs/.../qa/validation.md"
 }
 ```
 
@@ -406,7 +406,7 @@ Proceeding with focused review on changed sections only.
 {
   "handoff_to": "security-reviewer",
   "review_status": "approved",
-  "review_report": "/specs/.../reviews/code-review.md",
+  "review_report": "/.sigil/specs/.../reviews/code-review.md",
   "security_relevant_files": ["src/auth.ts"],
   "findings_for_security": [...]
 }

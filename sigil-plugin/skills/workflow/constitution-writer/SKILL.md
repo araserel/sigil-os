@@ -18,9 +18,9 @@ Guide users through creating their project constitution—the immutable principl
 ## When to Invoke
 
 - New project setup
-- User requests `/constitution`
+- User requests `/sigil-constitution`
 - User asks about "project principles" or "project rules"
-- No constitution exists in `/memory/constitution.md`
+- No constitution exists in `/.sigil/constitution.md`
 - After Discovery chain completes (invoked by foundation-writer)
 
 ## Design Principles
@@ -103,7 +103,7 @@ Determine pre-population path (in priority order):
 
 1. IF foundation_path provided:
    → Use Foundation Path (from Discovery chain)
-   - Load /memory/project-foundation.md
+   - Load /.sigil/project-foundation.md
    - Extract pre_populated_constitution data
    - Pre-fill stack information
    - Skip Round 1, go directly to Round 2
@@ -127,7 +127,7 @@ Determine pre-population path (in priority order):
 ### Step 1: Check for Existing Constitution
 
 ```
-Check if /memory/constitution.md exists:
+Check if /.sigil/constitution.md exists:
 
 - If exists and not updating:
   Show: "This project already has a constitution. Would you like to
@@ -166,7 +166,23 @@ A few questions:
 
 **Error Case:** If detection fails entirely, show: "I couldn't detect your tech stack automatically. Let me ask a few questions instead." Then ask the above questions.
 
+#### Project Category Detection (after Round 1)
+
+Based on the detected/confirmed stack, classify the project into one of these categories. This determines which Round 3 questions are relevant:
+
+| Category | Detection Criteria |
+|----------|-------------------|
+| **Backend API/Service** | Backend framework detected (Express, FastAPI, Django REST, Spring Boot, etc.) + no frontend framework |
+| **Frontend/Fullstack** | Frontend framework detected (React, Next.js, Vue, Nuxt, Svelte, Angular, etc.) |
+| **Mobile** | Mobile framework detected (React Native, Flutter, Swift/UIKit, Kotlin/Jetpack) |
+| **CLI Tool** | No web or mobile framework; CLI libraries detected (Commander, Click, Cobra, etc.) |
+| **Library/Package** | No application framework; library structure indicators (exports only, no app entry point) |
+
+Store the detected category for use in Round 3 filtering.
+
 #### Round 2: Project Type (Single Cascading Question)
+
+**Use the `AskUserQuestion` tool** (not inline numbered lists) for this choice.
 
 ```
 What kind of project is this?
@@ -197,37 +213,56 @@ This single choice auto-configures ALL Tier 1 decisions:
 | Code review | Optional | Required for key areas | Required for everything |
 | E2E testing | Critical flows only | Key user journeys | All user flows |
 
-#### Round 3: Optional Preferences
+#### Round 3: Optional Preferences (Context-Filtered)
 
+**Use the `AskUserQuestion` tool** (not inline numbered lists) for all user choices in Round 3.
+
+Filter questions based on the project category detected after Round 1:
+
+| Question | Backend | Frontend | Mobile | CLI | Library |
+|----------|---------|----------|--------|-----|---------|
+| External services approval | Ask | Ask | Ask | Ask | Ask |
+| Offline support | **Skip** | Ask | Ask | **Skip** | **Skip** |
+| Accessibility (WCAG) | **Skip** | Ask | Ask | **Skip** | **Skip** |
+
+**Always ask — External services:**
 ```
-A few optional preferences (say "skip" to use smart defaults):
+Should I ask before adding features that need external
+services (like payment processors or email senders)?
 
-1. Should I ask before adding features that need external
-   services (like payment processors or email senders)?
+Why this matters: External services may have costs or require
+accounts to set up.
 
-   Why this matters: External services may have costs or require
-   accounts to set up.
-
-   - Yes (Recommended): I'll flag these for your approval
-   - No: I'll add them as needed
-
-2. Should the app work when users have no internet?
-
-   Why this matters: Offline mode means users can access their data
-   with poor signal, but adds complexity.
-
-   - Yes: Works offline, syncs when connected
-   - No (Default): Requires internet connection
-
-3. How accessible should this be?
-
-   Why this matters: Accessibility ensures people with disabilities
-   can use your app. It's also a legal requirement in many countries.
-
-   - Works for everyone (Recommended): Follows accessibility
-     standards so all users can participate
-   - Standard: Basic accessibility included
+- Yes (Recommended): I'll flag these for your approval
+- No: I'll add them as needed
 ```
+
+**Ask only for Frontend, Mobile — Offline support:**
+```
+Should the app work when users have no internet?
+
+Why this matters: Offline mode means users can access their data
+with poor signal, but adds complexity.
+
+- Yes: Works offline, syncs when connected
+- No (Default): Requires internet connection
+```
+
+For skipped projects (Backend, CLI, Library): Auto-apply default "Requires internet connection."
+
+**Ask only for Frontend, Mobile — Accessibility:**
+```
+How accessible should this be?
+
+Why this matters: Accessibility ensures people with disabilities
+can use your app. It's also a legal requirement in many countries.
+
+- Works for everyone (Recommended): Follows accessibility
+  standards so all users can participate
+- Standard: Basic accessibility included
+```
+
+For skipped projects (Backend, CLI, Library): Mark Article 7 as "N/A — no user interface."
 
 ### Step 3: Auto-Configure and Generate
 
@@ -235,7 +270,7 @@ Using the project type selection + stack detection + optional preferences:
 
 1. **Auto-decide all Tier 1 items** based on stack and project type
 2. **Load template** from `/templates/constitution-template.md`
-3. **Fill in all articles** with:
+3. **Fill in all [BRACKETED] placeholders** in the template. Preserve EXACT article names (`Article 1: Technology Stack`, not `Tech Stack`), subsection names, and checkbox formatting. Do not restructure or rename any sections. Fill with:
    - Detected/confirmed stack (Article 1)
    - Auto-decided code standards with jargon translations (Article 2)
    - Project-type-appropriate testing (Article 3)
@@ -244,15 +279,18 @@ Using the project type selection + stack detection + optional preferences:
    - Project-type-appropriate approvals (Article 6)
    - Selected accessibility level (Article 7)
 4. **Add inline jargon explanations** for all technical terms
-5. **Write to** `/memory/constitution.md`
+5. **Write to** `/.sigil/constitution.md`
 
 ### Step 4: Gitignore Handling
 
 **Auto-add (no prompt needed):**
 ```gitignore
 # Sigil OS - Ephemeral artifacts (auto-added)
-memory/project-context.md
-specs/**/clarifications.md
+.sigil/project-context.md
+.sigil/learnings/
+.sigil/waivers.md
+.sigil/tech-debt.md
+.sigil/specs/**/clarifications.md
 ```
 
 **Prompt user:**
@@ -270,7 +308,7 @@ Implementation:
 - Check if `.gitignore` exists; create if not
 - Append entries without duplication
 - Use clear comment header: `# Sigil OS - Ephemeral artifacts`
-- If user says No to sharing: also add `memory/constitution.md`
+- If user says No to sharing: also add `.sigil/constitution.md`
 
 **Error case:** If gitignore write fails, show: "Couldn't update .gitignore — you may need to add these entries manually: [list entries]"
 
@@ -292,21 +330,21 @@ Here's what I set up:
 
 **Accessibility:** [plain description]
 
-This is saved at /memory/constitution.md. All AI agents will follow
+This is saved at /.sigil/constitution.md. All AI agents will follow
 these rules automatically.
 
-To change it later, run /constitution edit.
+To change it later, run /sigil-constitution edit.
 ```
 
 ## Outputs
 
 **Artifact:**
-- `/memory/constitution.md` — Complete project constitution
+- `/.sigil/constitution.md` — Complete project constitution
 
 **Handoff Data:**
 ```json
 {
-  "constitution_path": "/memory/constitution.md",
+  "constitution_path": "/.sigil/constitution.md",
   "project_name": "Project Name",
   "project_type": "mvp|production|enterprise",
   "articles_completed": 7,
@@ -434,8 +472,8 @@ When invoked from `codebase-assessment`:
 
 ### Trigger Conditions
 
-1. No `/memory/constitution.md` exists
-2. No `/memory/project-foundation.md` exists
+1. No `/.sigil/constitution.md` exists
+2. No `/.sigil/project-foundation.md` exists
 3. Codebase-assessment classifies repo as "scaffolded" or "mature"
 
 ### Assessment Path Flow
@@ -455,7 +493,7 @@ When invoked from `codebase-assessment`:
 
 ## Backward Compatibility
 
-- Existing constitutions in `/memory/constitution.md` continue to work unchanged
+- Existing constitutions in `/.sigil/constitution.md` continue to work unchanged
 - The 7-article structure is preserved
 - Only the creation flow changes — the output format stays the same
 - Constitutions created by previous versions are fully valid

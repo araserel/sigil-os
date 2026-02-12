@@ -1,6 +1,6 @@
 # Implementation Plan: [FEATURE NAME]
 
-> **Spec:** [/specs/###-feature/spec.md]
+> **Spec:** [/.sigil/specs/###-feature/spec.md]
 > **Created:** [DATE]
 > **Status:** [Draft | In Review | Approved]
 > **Complexity:** [Simple | Standard | Complex]

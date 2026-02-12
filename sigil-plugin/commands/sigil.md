@@ -30,20 +30,20 @@ If the hook output indicates files need to be created/updated, follow the instru
 
 Read the following files to understand current project state:
 
-1. **Constitution:** `/memory/constitution.md`
+1. **Constitution:** `/.sigil/constitution.md`
    - Exists and complete? → Project is configured
    - Exists but template only? → Needs constitution setup
    - Missing? → First-time setup needed
 
-2. **Project Foundation:** `/memory/project-foundation.md`
+2. **Project Foundation:** `/.sigil/project-foundation.md`
    - Exists? → Discovery track completed
    - Missing? → May need Discovery for greenfield projects
 
-3. **Project Context:** `/memory/project-context.md`
+3. **Project Context:** `/.sigil/project-context.md`
    - Check `Active Workflow` section for in-progress work
    - Check `Current Phase` for where to resume
 
-4. **Specs Directory:** `/specs/`
+4. **Specs Directory:** `/.sigil/specs/`
    - Scan for existing feature directories
    - Check for incomplete specs (missing plan.md or tasks.md)
 
@@ -95,7 +95,7 @@ Read project-context.md to find current phase and feature, then route:
 | tasks | Resume task-decomposer |
 | implement | Go to Step 4b — resume implementation loop |
 | validate | Resume qa-validator on current task |
-| review | Resume code review via Skill(skill: "review") |
+| review | Resume code review via Skill(skill: "sigil-review") |
 | none | Show status, suggest next action |
 
 **Resume behavior for implement phase:**
@@ -162,7 +162,7 @@ Runs after task-decomposer completes OR when `/sigil continue` resumes an implem
 
 #### Entry: Show Tasks and Begin
 
-1. Read tasks file from spec path (`/specs/###-feature/tasks.md`)
+1. Read tasks file from spec path (`/.sigil/specs/###-feature/tasks.md`)
 2. Display brief task summary (total count, phases, first unblocked task)
 3. Auto-continue to first unblocked task (do NOT wait for user to pick)
 4. Update project-context.md: Current Phase -> implement, add Current Task field
@@ -178,7 +178,7 @@ For each incomplete task (respecting dependency order):
 - Emit progress: `Implementation Loop: [completed]/[total] tasks - Task T### implementing`
 
 **B. QA Validation Phase**
-- Invoke `Skill(skill: "validate")` with task context
+- Invoke `Skill(skill: "sigil-validate")` with task context
 - Emit progress: `Implementation Loop: [completed]/[total] tasks - Task T### validating (attempt N/5)`
 - If passes -> mark task complete, continue to C
 - If fails -> fix loop:
@@ -199,9 +199,9 @@ For each incomplete task (respecting dependency order):
 
 #### After All Tasks: Code Review
 
-1. Invoke `Skill(skill: "review")` with all changed files across all tasks + spec_path
+1. Invoke `Skill(skill: "sigil-review")` with all changed files across all tasks + spec_path
 2. If blockers found -> present to user for decision
-3. **After security/code review completes:** If the review (via `Skill(skill: "review")`) produced findings at severity Medium or above that were remediated, invoke `learning-capture` in review findings mode. Pass the resolved findings list (id, title, severity, OWASP category, resolution) from the security agent's Resolved Findings output. This is silent and non-blocking.
+3. **After security/code review completes:** If the review (via `Skill(skill: "sigil-review")`) produced findings at severity Medium or above that were remediated, invoke `learning-capture` in review findings mode. Pass the resolved findings list (id, title, severity, OWASP category, resolution) from the security agent's Resolved Findings output. This is silent and non-blocking.
 4. If approved -> show completion summary, update context: Current Phase -> none
 
 #### Progress Indicator
@@ -253,21 +253,20 @@ Continue? (Y/n) or describe a new feature to start
 
 ## Output Formats
 
-### Welcome (First Run)
+Before displaying any output, verify format matches `templates/output-formats.md`.
+
+### Welcome (First Run — no `.sigil/` directory)
 
 ```
 Welcome to Sigil OS! 👋
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Sigil helps you build software through structured specifications.
 No coding knowledge required — just describe what you want to build.
 
 This project doesn't have Sigil OS set up yet.
 
-Would you like to:
-1. Set up project principles (recommended first step)
-2. Describe a feature to build
-
-Your choice (1/2), or just describe what you want to build:
+Run /sigil-setup to get started.
 ```
 
 ### Status Dashboard
@@ -306,15 +305,16 @@ Primary Command:
   /sigil help               Show this help
 
 Individual Commands (for direct access):
-  /spec "description"       Create a feature specification
-  /clarify                  Resolve specification ambiguities
-  /sigil-plan               Create implementation plan
-  /sigil-tasks              Break plan into tasks
-  /validate                 Run QA validation
-  /review                   Run code review
-  /constitution             View/edit project principles
-  /prime                    Load project context
-  /sigil-status             Show workflow status
+  /sigil-setup                    Set up Sigil OS in this project
+  /sigil-spec "description"       Create a feature specification
+  /sigil-clarify                  Resolve specification ambiguities
+  /sigil-plan                     Create implementation plan
+  /sigil-tasks                    Break plan into tasks
+  /sigil-validate                 Run QA validation
+  /sigil-review                   Run code review
+  /sigil-constitution             View/edit project principles
+  /sigil-prime                    Load project context
+  /sigil-status                   Show workflow status
 
 Natural Language:
   Just describe what you want! Sigil understands:
@@ -331,8 +331,8 @@ Resuming: "User Authentication"
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Last activity: Planning phase (60% complete)
-Spec: /specs/001-user-auth/spec.md
-Plan: /specs/001-user-auth/plan.md (in progress)
+Spec: /.sigil/specs/001-user-auth/spec.md
+Plan: /.sigil/specs/001-user-auth/plan.md (in progress)
 
 Continuing technical planning...
 ```
@@ -345,7 +345,7 @@ Continuing technical planning...
 ⚠️  You have a feature in progress
 
 Current: "User Authentication" (Planning phase)
-Location: /specs/001-user-auth/
+Location: /.sigil/specs/001-user-auth/
 
 Options:
 1. Continue with current feature
@@ -390,7 +390,7 @@ When the user's message doesn't start with `/sigil`, the orchestrator should rec
 
 ## State Tracking
 
-After each action, update `/memory/project-context.md`:
+After each action, update `/.sigil/project-context.md`:
 
 ```markdown
 ## Active Workflow

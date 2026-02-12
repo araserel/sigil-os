@@ -17,9 +17,9 @@ $ARGUMENTS
 
 ### Step 1: Load Context
 
-1. Read `/memory/constitution.md` for project constraints and principles
-2. Read `/memory/project-context.md` for current project state
-3. Scan `/specs/` directory to determine the next feature number
+1. Read `/.sigil/constitution.md` for project constraints and principles
+2. Read `/.sigil/project-context.md` for current project state
+3. Scan `/.sigil/specs/` directory to determine the next feature number
 
 ### Step 2: Analyze the Request
 
@@ -33,7 +33,7 @@ From the user's description, extract:
 ### Step 3: Generate Specification
 
 1. Load the template from `/templates/spec-template.md`
-2. Create a feature directory: `/specs/NNN-feature-name/`
+2. Create a feature directory: `/.sigil/specs/NNN-feature-name/`
 3. Generate `spec.md` with:
    - Summary (2-3 sentences: what and why)
    - User Scenarios (categorized as P1/P2/P3)
@@ -44,7 +44,7 @@ From the user's description, extract:
 
 ### Step 4: Validate Against Constitution
 
-Check the specification against `/memory/constitution.md`:
+Check the specification against `/.sigil/constitution.md`:
 - Technology references match constitution
 - Security requirements included
 - Accessibility requirements addressed
@@ -60,11 +60,11 @@ If there are unclear aspects:
 
 ## Output
 
-Create the specification at `/specs/NNN-feature-name/spec.md`
+Create the specification at `/.sigil/specs/NNN-feature-name/spec.md`
 
 Then report:
 ```
-Specification Created: /specs/NNN-feature-name/spec.md
+Specification Created: /.sigil/specs/NNN-feature-name/spec.md
 
 Summary: [Brief description]
 
@@ -77,7 +77,7 @@ Open Questions: [Count] items need clarification
 - [Question 2]
 
 Next Steps:
-- Run /clarify to resolve ambiguities
+- Run /sigil-clarify to resolve ambiguities
 - Or run /sigil-plan to proceed to technical planning
 ```
 
@@ -92,6 +92,6 @@ Next Steps:
 
 ## Error Handling
 
-- **No constitution found:** Prompt user to run `/constitution` first
+- **No constitution found:** Prompt user to run `/sigil-constitution` first
 - **Description too vague:** Ask for more detail before generating
 - **Feature number conflict:** Increment to next available number

@@ -135,7 +135,7 @@ See [Error Handling Protocol](/docs/dev/error-handling.md) for full error taxono
 - Initial specification created
 
 ### Artifacts
-- /specs/###-feature/spec.md
+- /.sigil/specs/###-feature/spec.md
 
 ### For Your Action
 - Resolve [N] identified ambiguities
@@ -154,8 +154,8 @@ See [Error Handling Protocol](/docs/dev/error-handling.md) for full error taxono
 - [N] clarifications resolved
 
 ### Artifacts
-- /specs/###-feature/spec.md
-- /specs/###-feature/clarifications.md
+- /.sigil/specs/###-feature/spec.md
+- /.sigil/specs/###-feature/clarifications.md
 
 ### For Your Action
 - Create implementation plan
@@ -177,9 +177,9 @@ See [Error Handling Protocol](/docs/dev/error-handling.md) for full error taxono
 - [N] ADRs documented
 
 ### Artifacts
-- /specs/###-feature/plan.md
-- /specs/###-feature/research.md (if applicable)
-- /specs/###-feature/adr/ (if applicable)
+- /.sigil/specs/###-feature/plan.md
+- /.sigil/specs/###-feature/research.md (if applicable)
+- /.sigil/specs/###-feature/adr/ (if applicable)
 
 ### For Your Action
 - Break plan into executable tasks
@@ -201,7 +201,7 @@ See [Error Handling Protocol](/docs/dev/error-handling.md) for full error taxono
 - First task prepared
 
 ### Artifacts
-- /specs/###-feature/tasks.md
+- /.sigil/specs/###-feature/tasks.md
 
 ### For Your Action
 - Execute T001: [Task name]

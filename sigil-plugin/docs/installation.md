@@ -133,7 +133,7 @@ claude
 2. Run the setup command:
 
 ```
-> /constitution
+> /sigil-constitution
 ```
 
 3. Answer three quick rounds of questions:
@@ -143,7 +143,7 @@ claude
 
 Sigil fills in all the details for you based on your answers.
 
-You should now see a new `memory/constitution.md` file in your project.
+You should now see a new `.sigil/constitution.md` file in your project.
 
 ### Check That Sigil Is Running
 
@@ -164,7 +164,7 @@ Use this list to make sure everything is ready:
 - [ ] `claude --version` prints a version number
 - [ ] `claude plugin list` shows `sigil`
 - [ ] `/sigil status` shows the Sigil dashboard
-- [ ] `memory/constitution.md` exists (after running `/constitution`)
+- [ ] `.sigil/constitution.md` exists (after running `/sigil-constitution`)
 - [ ] `SIGIL.md` exists at your project root (created on first run)
 
 ---
@@ -241,7 +241,7 @@ Or use the built-in command inside Claude Code:
 /sigil-update
 ```
 
-Your project files (`memory/`, `specs/`) stay the same. Only the add-on parts change.
+Your project files (`.sigil/`, `.sigil/specs/`) stay the same. Only the add-on parts change.
 
 After updating:
 

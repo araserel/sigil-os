@@ -5,7 +5,7 @@ version: 1.2.0
 category: qa
 chainable: true
 invokes: []
-invoked_by: [qa-engineer]
+invoked_by: [qa-engineer, qa-validator]
 tools: Read, Write, Edit, Bash, Glob
 ---
 
@@ -26,7 +26,7 @@ Attempt automated remediation of validation failures before escalating to human 
 **Required:**
 ```json
 {
-  "validation_report_path": "/specs/001-feature/qa/task-T001-validation.md",
+  "validation_report_path": "/.sigil/specs/001-feature/qa/task-T001-validation.md",
   "issues": [
     {
       "type": "lint",
@@ -97,7 +97,7 @@ Attempt automated remediation of validation failures before escalating to human 
 }
 ```
 
-**Artifact Output:** `/specs/###-feature/qa/task-{id}-fix-{iteration}.md`
+**Artifact Output:** `/.sigil/specs/###-feature/qa/task-{id}-fix-{iteration}.md`
 
 ## Fix Categories
 
@@ -185,13 +185,13 @@ npx eslint --fix --rule 'import/order: error'
 
 ## Pre-Execution Check
 
-Before starting, update `memory/project-context.md`:
+Before starting, update `.sigil/project-context.md`:
 - Set **Current Phase** to `validate`
 - Set **Feature** to the feature being fixed
 - Set **Spec Path** to the active spec directory
 - Set **Last Updated** to the current timestamp
 
-If `memory/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
+If `.sigil/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
 
 ## Workflow
 

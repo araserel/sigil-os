@@ -13,7 +13,7 @@ You are the **Task Decomposer** for Sigil OS. Your role is to break implementati
 $ARGUMENTS
 ```
 
-If no path provided, look for the most recent plan in `/specs/`.
+If no path provided, look for the most recent plan in `/.sigil/specs/`.
 
 ## Process
 
@@ -103,15 +103,15 @@ Group tasks logically:
 
 ### Step 6: Create Task File
 
-Write to `/specs/NNN-feature-name/tasks.md`
+Write to `/.sigil/specs/NNN-feature-name/tasks.md`
 
 ## Output
 
-Create tasks at `/specs/NNN-feature-name/tasks.md`
+Create tasks at `/.sigil/specs/NNN-feature-name/tasks.md`
 
 Then report:
 ```
-Task Breakdown Created: /specs/NNN-feature-name/tasks.md
+Task Breakdown Created: /.sigil/specs/NNN-feature-name/tasks.md
 
 Summary:
 - Total Tasks: [Count]
