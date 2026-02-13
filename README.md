@@ -2,57 +2,38 @@
 
 **Inscribe it. Ship it.**
 
-A sigil is a symbol charged with intent — a mark that transforms thought into action. Sigil OS works the same way: you describe what you want, and it inscribes the specs, plans, and code to ship it. No guesswork, no ceremony, just structured intent made real.
-
 **Specification-driven development for non-technical users of Claude Code.**
 
-Transform natural language descriptions into implemented, tested features through structured workflows.
+Sigil is a plugin for Claude Code, Anthropic's AI coding tool. Transform natural language descriptions into implemented, tested features through structured workflows.
+
+> **v2.1.2** · Active development — expect breaking changes between minor versions.
+
+---
+
+## What Is Sigil?
+
+Sigil is like having a technical team that speaks your language. You describe what you want to build in plain English, and Sigil's agents write specs, plan implementation, and generate code — with checkpoints along the way where you review and approve before anything ships. Simple requests get fast-tracked; complex ones get full specification-and-review workflows automatically.
+
+```mermaid
+flowchart LR
+    A["You describe<br>a feature"] --> B["Sigil writes<br>the spec"] --> C["You review<br>& approve"] --> D["Sigil builds<br>& tests"] --> E["Working<br>code"]
+
+    style A fill:#e0f2fe,stroke:#0ea5e9
+    style B fill:#a5b4fc,stroke:#6366f1
+    style C fill:#fef3c7,stroke:#f59e0b
+    style D fill:#a5b4fc,stroke:#6366f1
+    style E fill:#d1fae5,stroke:#10b981
+```
+
+**Who is it for?** Product managers, founders, solo builders, and anyone who wants to ship features through Claude Code without writing code themselves.
 
 ---
 
 ## Installation
 
-Sigil is an add-on for Claude Code, Anthropic's AI coding tool. Two pieces stack on top of each other:
+Sigil requires Claude Code with a Pro, Max, or API plan. See [Anthropic's setup guide](https://docs.anthropic.com/en/docs/claude-code) to install Claude Code if you haven't already.
 
-```mermaid
-flowchart LR
-    A[Claude Code] --> B[Sigil]
-
-    style A fill:#a5b4fc,stroke:#6366f1
-    style B fill:#d1fae5,stroke:#10b981
-```
-
-### What You Need First
-
-Open your **terminal** (the app where you type commands). On Mac, search for "Terminal." On Windows, use WSL (Windows Subsystem for Linux) or PowerShell.
-
-**Step 1 — Install Claude Code**
-
-Claude Code is Anthropic's AI coding assistant. Sigil runs inside it.
-
-**macOS / Linux / WSL:**
-
-```bash
-curl -fsSL https://claude.ai/install.sh | bash
-```
-
-**Windows:**
-
-Download the installer from the [Claude Code releases page](https://github.com/anthropics/claude-code/releases).
-
-Then check that it worked:
-
-```bash
-claude --version
-```
-
-You should now see a version number on screen. You also need a Claude Pro, Max, or API plan — [sign up here](https://www.anthropic.com/pricing) if you don't have one.
-
-> **Note:** See [Anthropic's setup guide](https://docs.anthropic.com/en/docs/claude-code) if you run into trouble with Claude Code.
-
-### Install Sigil
-
-Now you are ready to add Sigil. Run these two commands one at a time:
+Once Claude Code is installed, add Sigil:
 
 ```bash
 claude plugin marketplace add araserel/sigil-os
@@ -62,43 +43,15 @@ claude plugin marketplace add araserel/sigil-os
 claude plugin install sigil@sigil-os
 ```
 
-Then check that it worked:
+Verify it worked:
 
 ```bash
 claude plugin list
 ```
 
-You should now see `sigil` in the list that prints out.
+You should see `sigil` in the list.
 
-> **Tip:** You can also run these from inside Claude Code by typing `/plugin marketplace add araserel/sigil-os` and `/plugin install sigil@sigil-os`.
-
-### Set Up Your First Project
-
-After installing, open your project folder in Claude Code:
-
-```bash
-claude
-```
-
-Then type this command to create your project's **constitution** (a short file of rules that guide how Sigil works in your project):
-
-```
-/sigil-constitution
-```
-
-Answer three quick rounds of questions about your project. Sigil fills in the details for you.
-
-You should now see a new `.sigil/constitution.md` file in your project folder.
-
-### Check That Everything Works
-
-Type this inside Claude Code:
-
-```
-/sigil status
-```
-
-You should now see the Sigil dashboard. It shows the version number and every command you can use.
+Something not working? See the [Troubleshooting Guide](sigil-plugin/docs/troubleshooting.md).
 
 **Quick checklist:**
 
@@ -106,49 +59,136 @@ You should now see the Sigil dashboard. It shows the version number and every co
 - [ ] `claude plugin list` shows `sigil`
 - [ ] `/sigil status` shows the Sigil dashboard
 
-> **Note:** Something not working? See the [Quick Start Guide](sigil-plugin/docs/quick-start.md) for detailed setup help and troubleshooting.
-
 ---
 
 ## Quick Start
 
-Once installed, describe what you want to build:
+After installing the plugin, set up your first project in four commands:
 
 ```
-/sigil "Add a user login page with email and password"
+cd your-project
+claude
+/sigil-setup
+/sigil "Add a contact form with email validation"
 ```
 
-Sigil guides you through:
-1. **Specification** — Captures requirements
-2. **Clarification** — Resolves ambiguities
-3. **Planning** — Creates implementation plan
-4. **Tasks** — Breaks plan into actionable items
-5. **Implementation** — Writes and validates code
-6. **Review** — Security and code review
+`/sigil-setup` creates your project's constitution (rules that guide Sigil), optionally generates a project profile, and configures enforcement. You only run it once per project.
 
-### Key Commands
+`/sigil "..."` starts building. Sigil assesses complexity, selects the right workflow track, and assigns specialized agents to handle specification, planning, implementation, and review.
 
-| Command | Purpose |
-|---------|---------|
-| `/sigil` | Show status and next steps |
-| `/sigil "description"` | Start building a new feature |
-| `/sigil continue` | Resume where you left off |
-| `/sigil-connect` | Share learnings across projects |
-| `/sigil-profile` | Generate or view your project profile |
-| `/sigil-update` | Check for plugin updates |
+See the [Quick Start Guide](sigil-plugin/docs/quick-start.md) for a detailed walkthrough.
+
+### How the Build Loop Works
+
+Once Sigil starts building, each task goes through a validate-and-fix cycle before moving on. After all tasks pass, you review the final result.
+
+```mermaid
+sequenceDiagram
+    actor You
+    participant Dev as Developer
+    participant QA
+
+    loop Each task
+        Dev->>Dev: Build task
+        Dev->>QA: Validate
+        loop Auto-fix (up to 5 attempts)
+            QA-->>Dev: Issues found
+            Dev->>QA: Fix applied
+        end
+        QA-->>Dev: Pass
+    end
+
+    Dev->>You: Code review
+    You->>Dev: Approved
+```
 
 ---
 
-## Updating
+## Commands
 
-```
-/plugin update sigil@sigil-os
+### Getting Started
+
+| Command | Purpose |
+|---------|---------|
+| `/sigil-setup` | Initialize Sigil in a new project |
+| `/sigil "description"` | Start building a feature |
+| `/sigil continue` | Resume where you left off |
+| `/sigil-status` | Show workflow progress and next steps |
+
+### During Development
+
+| Command | Purpose |
+|---------|---------|
+| `/sigil-spec` | Create a feature specification |
+| `/sigil-clarify` | Resolve specification ambiguities |
+| `/sigil-plan` | Generate implementation plan |
+| `/sigil-tasks` | Break plan into tasks |
+| `/sigil-validate` | Run QA validation checks |
+| `/sigil-review` | Structured code review |
+| `/sigil-handoff` | Generate engineer review package |
+
+### Project Management
+
+| Command | Purpose |
+|---------|---------|
+| `/sigil-constitution` | View or edit project rules |
+| `/sigil-learn` | View, search, or review learnings |
+| `/sigil-prime` | Load project context for a session |
+| `/sigil-connect` | Link project to shared context repo |
+| `/sigil-profile` | Generate or view project profile |
+| `/sigil-update` | Check for plugin updates |
+
+See the [Command Reference](sigil-plugin/docs/command-reference.md) for detailed usage of all 16 commands.
+
+### Sharing Context Across Projects
+
+Connect multiple projects to a shared GitHub repo. Learnings and project profiles sync automatically so each project benefits from what the others have learned.
+
+```mermaid
+---
+config:
+  layout: dagre
+---
+flowchart LR
+    subgraph Project A
+        A1[Learnings]
+        A2[Profile]
+    end
+
+    subgraph Project B
+        B1[Learnings]
+        B2[Profile]
+    end
+
+    subgraph Project C
+        C1[Learnings]
+        C2[Profile]
+    end
+
+    subgraph Shared Repo
+        S1[("Shared<br>Learnings")]
+        S2[("Project<br>Profiles")]
+    end
+
+    A1 <-->|sync| S1
+    B1 <-->|sync| S1
+    C1 <-->|sync| S1
+
+    A2 <-->|sync| S2
+    B2 <-->|sync| S2
+    C2 <-->|sync| S2
+
+    style S1 fill:#a5b4fc,stroke:#6366f1
+    style S2 fill:#a5b4fc,stroke:#6366f1
+    style A1 fill:#d1fae5,stroke:#10b981
+    style A2 fill:#d1fae5,stroke:#10b981
+    style B1 fill:#e0f2fe,stroke:#0ea5e9
+    style B2 fill:#e0f2fe,stroke:#0ea5e9
+    style C1 fill:#fef3c7,stroke:#f59e0b
+    style C2 fill:#fef3c7,stroke:#f59e0b
 ```
 
-Or use the familiar command:
-```
-/sigil-update
-```
+See the [Shared Context Setup Guide](sigil-plugin/docs/shared-context-setup.md) to get started.
 
 ---
 
@@ -157,7 +197,7 @@ Or use the familiar command:
 - [Quick Start Guide](sigil-plugin/docs/quick-start.md)
 - [User Guide](sigil-plugin/docs/user-guide.md)
 - [Command Reference](sigil-plugin/docs/command-reference.md)
-- [Shared Context Setup](sigil-plugin/docs/shared-context-setup.md)
+- [Shared Context Setup](sigil-plugin/docs/shared-context-setup.md) — share learnings and context across multiple repositories
 
 ### Migrating from Global Install?
 
@@ -165,51 +205,10 @@ If you previously used `install-global.sh`, see the [Migration Guide](sigil-plug
 
 ---
 
-## For Contributors
+## Development
 
-### Repository Structure
-
-| Path | Purpose |
-|------|---------|
-| `sigil-plugin/` | **The plugin** — distributable product |
-| `CLAUDE.md` | Development instructions |
-| `STATUS.md` | Implementation status |
-| `tools/` | Development utilities (linter, etc.) |
-| `tests/` | Test files |
-
-### Development Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/araserel/sigil-os.git
-cd sigil-os
-
-# Install locally for testing
-claude plugin marketplace add ./
-claude plugin install sigil@sigil-os
-
-# Run the linter
-python3 tools/workflow-linter.py --verbose
-```
-
-### Key Files
-
-| File | Purpose |
-|------|---------|
-| `sigil-plugin/.claude-plugin/plugin.json` | Plugin manifest |
-| `sigil-plugin/commands/` | Slash commands |
-| `sigil-plugin/agents/` | Agent definitions |
-| `sigil-plugin/skills/` | Skill implementations |
-| `sigil-plugin/hooks/` | Lifecycle hooks |
+See [CLAUDE.md](CLAUDE.md) for development instructions, repository structure, and contributing guidelines.
 
 ---
 
-## Links
-
-- [Plugin Documentation](sigil-plugin/docs/README.md)
-- [Development Status](STATUS.md)
-- [Project Roadmap](PROJECT_PLAN.md)
-
----
-
-Built with [Claude Code](https://www.anthropic.com/claude-code) by Anthropic.
+Built for [Claude Code](https://www.anthropic.com/claude-code) by Anthropic.
