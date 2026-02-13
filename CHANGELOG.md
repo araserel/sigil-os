@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.1.3] - 2026-02-13
+
+### Fixed
+- **Broken link in status-reporter:** Fixed `context-management.md` reference missing `dev/` subdirectory (`/docs/context-management.md` → `/docs/dev/context-management.md`)
+
 ## [2.1.2] - 2026-02-12
 
 ### Fixed

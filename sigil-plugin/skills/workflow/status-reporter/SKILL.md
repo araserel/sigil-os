@@ -223,7 +223,7 @@ Orchestrator invokes status-reporter when:
 
 ### With Context Management
 
-This skill reads from but never writes to project context. Context updates are handled by individual agents per the [Context Management Protocol](/docs/context-management.md).
+This skill reads from but never writes to project context. Context updates are handled by individual agents per the [Context Management Protocol](/docs/dev/context-management.md).
 
 ## Notes
 
