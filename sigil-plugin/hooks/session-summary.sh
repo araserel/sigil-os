@@ -22,16 +22,17 @@ EOF
 fi
 
 # Extract key workflow fields from project-context.md
+# Template format: - **Key:** value  (colon is inside the bold markers)
 extract_field() {
-    local pattern="$1"
-    grep -oE "$pattern: .+" "$CONTEXT_FILE" 2>/dev/null | head -1 | sed "s/$pattern: //" || echo ""
+    local key="$1"
+    sed -n "s/.*\*\*${key}:\*\* *//p" "$CONTEXT_FILE" 2>/dev/null | head -1
 }
 
-FEATURE=$(extract_field '\*\*Feature\*\*')
-PHASE=$(extract_field '\*\*Current Phase\*\*')
-SPEC_PATH=$(extract_field '\*\*Spec Path\*\*')
-TASKS_COMPLETED=$(extract_field '\*\*Tasks Completed\*\*')
-LAST_UPDATED=$(extract_field '\*\*Last Updated\*\*')
+FEATURE=$(extract_field 'Feature')
+PHASE=$(extract_field 'Current Phase')
+SPEC_PATH=$(extract_field 'Spec Path')
+TASKS_COMPLETED=$(extract_field 'Completed')
+LAST_UPDATED=$(extract_field 'Last Updated')
 
 # Remove markdown formatting
 FEATURE=$(echo "$FEATURE" | sed 's/\*//g')

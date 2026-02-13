@@ -1,7 +1,7 @@
 ---
 name: preflight-check
 description: Creates SIGIL.md with enforcement rules and adds a pointer to the project's CLAUDE.md. Now invoked automatically via SessionStart hook.
-version: 2.0.0
+version: 2.1.0
 category: workflow
 chainable: true
 invoked_by: [hook:SessionStart]

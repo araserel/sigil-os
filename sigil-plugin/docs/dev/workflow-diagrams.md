@@ -67,6 +67,8 @@ resume, and help.
 | `/sigil-connect` | Connect project to shared context repo | Connect Wizard |
 | `/sigil-profile` | Generate or view project profile | Profile Generator |
 | `/sigil-status` | Show workflow status | Status Reporter |
+| `/sigil-handoff` | Generate engineer review package | handoff-packager |
+| `/sigil-setup` | Initialize Sigil OS in a project | Setup Wizard |
 | `/sigil-update` | Check for & install updates | Global update script |
 
 **Note:** `/sigil-plan`, `/sigil-tasks`, and `/sigil-status` use prefixed names
@@ -1474,6 +1476,8 @@ Specify → Clarify → Plan → Tasks → Implement → Validate → Review
 | `/sigil-connect` | Shared context setup |
 | `/sigil-profile` | Project profile |
 | `/sigil-status` | Workflow status |
+| `/sigil-handoff` | Engineer review package |
+| `/sigil-setup` | Project setup |
 | `/sigil-update` | Check for updates |
 
 ### Key Skill Invocations

@@ -173,13 +173,13 @@ Try:
 
 ### Why This Happens
 
-Sigil stores its memory in a `/memory` folder inside your project. If that folder is missing, moved, or damaged, Sigil starts with a blank slate. Starting from a different folder can also cause this.
+Sigil stores its state in a `.sigil/` folder inside your project. If that folder is missing, moved, or damaged, Sigil starts with a blank slate. Starting from a different folder can also cause this.
 
 ### How to Fix
 
 1. Make sure you opened your terminal in the same project folder you used before.
-2. Check that a `/memory` folder exists inside your project.
-3. Open the `/memory` folder and confirm it contains files.
+2. Check that a `.sigil/` folder exists inside your project.
+3. Open the `.sigil/` folder and confirm it contains files.
 4. If the files are gone, run `/sigil-constitution` to recreate your project principles.
 5. Run `/sigil-spec` to restart your feature.
 
@@ -190,7 +190,7 @@ project-context.md   decisions.md   ...
 
 You should now see your project state restored or a clean starting point ready to go.
 
-> **Warning:** Do not delete the `/memory` folder. It holds all of Sigil's saved context for your project. Losing it means starting over.
+> **Warning:** Do not delete the `.sigil/` folder. It holds all of Sigil's saved context for your project. Losing it means starting over.
 
 ---
 

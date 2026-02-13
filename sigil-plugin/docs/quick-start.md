@@ -24,9 +24,35 @@ flowchart LR
 
 ## Prerequisites
 
-You need **Node.js 18+**, **Claude Code**, and **Git** installed. If you're not sure, the [Installation Guide](installation.md) walks you through each one.
+You need **Claude Code** and **Git** installed.
 
-Already have them? Skip to Installation below.
+### Install Claude Code
+
+Claude Code is Anthropic's AI coding assistant. Sigil runs inside it.
+
+**macOS / Linux / WSL:**
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+**Windows:**
+
+Download the installer from the [Claude Code releases page](https://github.com/anthropics/claude-code/releases).
+
+Verify it worked:
+
+```bash
+claude --version
+```
+
+You need a Claude Pro, Max, or API plan. Sign in:
+
+```bash
+claude auth login
+```
+
+> **Note:** See [Anthropic's docs](https://docs.anthropic.com/en/docs/claude-code) for more setup help.
 
 ### Starting from Zero?
 
@@ -37,8 +63,6 @@ If you have an idea but no code yet — that's perfect. Sigil is designed for ex
 ## Installation
 
 Sigil is a Claude Code plugin (a set of tools that run inside Claude Code, the AI coding assistant). Installation takes about 30 seconds.
-
-For full details and troubleshooting, see the [Installation Guide](installation.md).
 
 ### Step 1: Add the Marketplace
 

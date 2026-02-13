@@ -12,38 +12,33 @@ Transform natural language descriptions into implemented, tested features throug
 
 ## Installation
 
-Sigil is an add-on for Claude Code, Anthropic's AI coding tool. Three building blocks stack on top of each other to make it work:
+Sigil is an add-on for Claude Code, Anthropic's AI coding tool. Two pieces stack on top of each other:
 
 ```mermaid
 flowchart LR
-    A[Node.js] --> B[Claude Code] --> C[Sigil]
+    A[Claude Code] --> B[Sigil]
 
-    style A fill:#e0f2fe,stroke:#0ea5e9
-    style B fill:#a5b4fc,stroke:#6366f1
-    style C fill:#d1fae5,stroke:#10b981
+    style A fill:#a5b4fc,stroke:#6366f1
+    style B fill:#d1fae5,stroke:#10b981
 ```
 
 ### What You Need First
 
-Open your **terminal** (the app where you type commands). On Mac, search for "Terminal." On Windows, search for "PowerShell."
+Open your **terminal** (the app where you type commands). On Mac, search for "Terminal." On Windows, use WSL (Windows Subsystem for Linux) or PowerShell.
 
-**Step 1 — Check for Node.js**
+**Step 1 — Install Claude Code**
 
-Node.js is a free tool that runs programs on your computer. Type this and press Enter:
+Claude Code is Anthropic's AI coding assistant. Sigil runs inside it.
 
-```bash
-node --version
-```
-
-You should now see a number like `v18.x.x` or higher. If you get an error, [download Node.js here](https://nodejs.org/) and install it first.
-
-**Step 2 — Install Claude Code**
-
-This command downloads Claude Code. Copy and paste it into your terminal:
+**macOS / Linux / WSL:**
 
 ```bash
-npm install -g @anthropic-ai/claude-code
+curl -fsSL https://claude.ai/install.sh | bash
 ```
+
+**Windows:**
+
+Download the installer from the [Claude Code releases page](https://github.com/anthropics/claude-code/releases).
 
 Then check that it worked:
 
@@ -107,12 +102,11 @@ You should now see the Sigil dashboard. It shows the version number and every co
 
 **Quick checklist:**
 
-- [ ] `node --version` shows v18 or higher
 - [ ] `claude --version` shows a version number
 - [ ] `claude plugin list` shows `sigil`
 - [ ] `/sigil status` shows the Sigil dashboard
 
-> **Note:** Something not working? See the [full Installation Guide](sigil-plugin/docs/installation.md) for step-by-step fixes.
+> **Note:** Something not working? See the [Quick Start Guide](sigil-plugin/docs/quick-start.md) for detailed setup help and troubleshooting.
 
 ---
 

@@ -26,6 +26,6 @@ Documentation for contributors and developers extending Sigil OS.
 
 ## Additional Resources
 
-- [Development Workflows](../../../docs/Sigil_OS_Development_Workflows.md) — Adding skills, agents, hooks, and validation
+- [Extending Skills](extending-skills.md) — Adding skills, agents, hooks, and validation
 - [CLAUDE.md](../../../CLAUDE.md) — Repository structure and development rules
 - [STATUS.md](../../../STATUS.md) — Implementation status

@@ -21,7 +21,8 @@
 | `/sigil-prime` | Load project context for a session | Starting a new session |
 | `/sigil-connect` | Connect project to shared context repo | Multi-project sharing setup |
 | `/sigil-profile` | Generate or view project profile | Describing your tech stack and APIs |
-| `/handoff` | Generate engineer review package | Ready for technical review |
+| `/sigil-handoff` | Generate engineer review package | Ready for technical review |
+| `/sigil-setup` | Initialize Sigil OS in a new project | First-time project setup |
 | `/sigil-update` | Check for and install Sigil updates | Keeping Sigil current |
 
 ---
@@ -49,7 +50,7 @@
         ↓
     /sigil-review
         ↓
-     /handoff
+     /sigil-handoff
 ```
 
 You can use `/sigil`, `/sigil-status`, or `/sigil status` at any point to see where you are.
@@ -592,14 +593,14 @@ The constitution ensures:
 
 ---
 
-## /handoff
+## /sigil-handoff
 
 Generate a package for engineer review.
 
 ### Syntax
 
 ```
-/handoff
+/sigil-handoff
 ```
 
 ### What It Does
@@ -919,6 +920,44 @@ Published to shared repo: profiles/web-app.yaml
 
 ---
 
+## /sigil-setup
+
+Initialize Sigil OS in a new project.
+
+### Syntax
+
+```
+/sigil-setup
+```
+
+### What It Does
+
+1. Creates the `.sigil/` directory structure
+2. Runs the constitution writer to set up project principles
+3. Optionally generates a project profile
+4. Creates `SIGIL.md` with enforcement rules
+5. Adds a pointer to `CLAUDE.md`
+
+### When to Use
+
+- First time using Sigil in a project
+- When `/sigil` detects no `.sigil/` directory and recommends setup
+
+### What You Get
+
+After setup completes:
+
+```
+.sigil/
+├── constitution.md    ← Your project's rules
+├── project-context.md ← Workflow state tracker
+└── learnings/         ← Empty, ready for use
+SIGIL.md               ← Enforcement rules
+CLAUDE.md              ← Updated with pointer
+```
+
+---
+
 ## /sigil-update
 
 Check for and install Sigil OS updates.
@@ -946,13 +985,11 @@ Check for and install Sigil OS updates.
 ```markdown
 ## Sigil OS Update Check
 
-Current version: 1.1.0
-Latest version: 1.2.0
+Current version: X.Y.Z
+Latest version: X.Y.Z+1
 
-### What's New in 1.2.0
-- Added Discovery track for greenfield projects
-- Improved QA validation loop
-- Bug fixes for context staleness detection
+### What's New
+- [Summary of changes in latest version]
 
 Run the update? (Y/n)
 ```
@@ -975,7 +1012,8 @@ Run the update? (Y/n)
 | `/sigil-prime` | Load session context | `/sigil-prime authentication` |
 | `/sigil-connect` | Shared context setup | `/sigil-connect org/repo` |
 | `/sigil-profile` | Project profile | `/sigil-profile --view` |
-| `/handoff` | Engineer review | `/handoff` |
+| `/sigil-handoff` | Engineer review | `/sigil-handoff` |
+| `/sigil-setup` | Initialize project | `/sigil-setup` |
 | `/sigil-update` | Check for updates | `/sigil-update` |
 
 ### Typical Workflow
@@ -989,7 +1027,7 @@ Run the update? (Y/n)
 6. /sigil-tasks
 7. /sigil-status (check progress)
 8. /sigil-validate (verify quality)
-9. /handoff (before deployment)
+9. /sigil-handoff (before deployment)
 ```
 
 ---

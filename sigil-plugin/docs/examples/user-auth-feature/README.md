@@ -282,7 +282,7 @@ T002 (Schema) ──► T003 (Migration) ──┘
 
 With everything documented, Sarah was ready to hand off to engineering.
 
-**Command:** `/handoff`
+**Command:** `/sigil-handoff`
 
 **What Engineers Received:**
 

@@ -250,7 +250,7 @@ Most skills are at v1.0.0 (initial release). Skills modified by cross-cutting sp
 | technical-planner | 1.1.0 | Stable |
 | task-decomposer | 1.0.0 | Stable |
 | constitution-writer | 2.0.0 | Stable |
-| preflight-check | 2.0.0 | Stable |
+| preflight-check | 2.1.0 | Stable |
 | handoff-packager | 1.0.0 | Stable |
 | status-reporter | 1.0.0 | Stable |
 | foundation-writer | 1.0.0 | Stable |
@@ -301,8 +301,8 @@ Most skills are at v1.0.0 (initial release). Skills modified by cross-cutting sp
 
 | Skill | Version | Status |
 |-------|---------|--------|
-| learning-capture | 1.2.0 | Stable |
-| learning-reader | 1.2.0 | Stable |
+| learning-capture | 1.3.0 | Stable |
+| learning-reader | 1.3.0 | Stable |
 | learning-review | 1.0.0 | Stable |
 
 ### Shared Context Skills

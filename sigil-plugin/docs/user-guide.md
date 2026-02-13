@@ -376,7 +376,7 @@ Sigil balances speed with control using three levels. Here is when it pauses for
 
 ### The Handoff Process
 
-When your feature documents are complete, use `/handoff` to create an engineering package.
+When your feature documents are complete, use `/sigil-handoff` to create an engineering package.
 
 **What engineers get:**
 
@@ -389,7 +389,7 @@ When your feature documents are complete, use `/handoff` to create an engineerin
 
 ```mermaid
 flowchart LR
-    A["/handoff"] --> B["Feature Doc"]
+    A["/sigil-handoff"] --> B["Feature Doc"]
     A --> C["Follow-Up Answers"]
     A --> D["Build Plan"]
     A --> E["Task Breakdown"]

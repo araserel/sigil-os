@@ -68,7 +68,7 @@ You should see the Sigil OS status dashboard.
 The plugin will automatically update your project's `SIGIL.md` file on first run. The new version:
 
 - References plugin-based components instead of `~/.claude/` paths
-- Uses enforcement version 2.0.0
+- Uses enforcement version 2.1.0
 - Maintains the same mandatory rules
 
 Your `CLAUDE.md` pointer line remains unchanged:
@@ -107,7 +107,7 @@ For teams, add Sigil OS to your project's plugin configuration:
   "plugins": {
     "sigil-os": {
       "enabled": true,
-      "version": "2.0.0"
+      "version": "2.1.2"
     }
   }
 }

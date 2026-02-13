@@ -312,6 +312,7 @@ Individual Commands (for direct access):
   /sigil-tasks                    Break plan into tasks
   /sigil-validate                 Run QA validation
   /sigil-review                   Run code review
+  /sigil-handoff                        Generate engineer review package
   /sigil-constitution             View/edit project principles
   /sigil-prime                    Load project context
   /sigil-status                   Show workflow status

@@ -10,8 +10,7 @@ Start here if you use Sigil to build features, manage projects, or work with spe
 
 | Document | What It Covers | Start Here If... |
 |----------|---------------|------------------|
-| [Quick Start](quick-start.md) | 30-minute hands-on tutorial | You're new to Sigil |
-| [Installation](installation.md) | Prerequisites, setup, and verification | You need to install Sigil |
+| [Quick Start](quick-start.md) | Install, set up, and build your first feature | You're new to Sigil |
 | [User Guide](user-guide.md) | Complete reference for daily use | You want the full picture |
 | [Command Reference](command-reference.md) | Every slash command with examples | You need command syntax |
 | [Troubleshooting](troubleshooting.md) | Common issues and solutions | Something went wrong |
@@ -20,10 +19,9 @@ Start here if you use Sigil to build features, manage projects, or work with spe
 
 ### Reading Order (New Users)
 
-1. [Installation](installation.md) — Get Sigil running
-2. [Quick Start](quick-start.md) — Build your first feature
-3. [User Guide](user-guide.md) — Learn the full workflow
-4. [Command Reference](command-reference.md) — Look up commands as needed
+1. [Quick Start](quick-start.md) — Install Sigil and build your first feature
+2. [User Guide](user-guide.md) — Learn the full workflow
+3. [Command Reference](command-reference.md) — Look up commands as needed
 
 ---
 
@@ -45,7 +43,7 @@ These documents cover Sigil's internals, architecture, and extension points.
 
 1. [Workflow Diagrams](dev/workflow-diagrams.md) — Understand the system architecture
 2. [Extending Skills](dev/extending-skills.md) — Learn how to add capabilities
-3. [Development Workflows](../../docs/Sigil_OS_Development_Workflows.md) — Day-to-day development patterns
+3. [Context Management](dev/context-management.md) — Day-to-day development patterns
 
 ---
 

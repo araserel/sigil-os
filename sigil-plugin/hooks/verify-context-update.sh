@@ -51,7 +51,7 @@ case "$FILE_NAME" in
         UPDATE_FIELD="Current Phase: tasks -> implement"
         ;;
     constitution.md)
-        if echo "$DIR_PATH" | grep -q ".sigil"; then
+        if echo "$DIR_PATH" | grep -qF ".sigil"; then
             NEEDS_UPDATE="true"
             UPDATE_REASON="Constitution updated"
             UPDATE_FIELD="Constitution: modified"
@@ -65,7 +65,7 @@ esac
 
 # Check if file is in a specs directory (implementation file)
 if [ "$NEEDS_UPDATE" = "false" ]; then
-    if echo "$DIR_PATH" | grep -qE "/\.sigil/specs/[0-9]+-"; then
+    if echo "$DIR_PATH" | grep -qE "(^|/)\.sigil/specs/[0-9]+-"; then
         case "$FILE_NAME" in
             *.ts|*.tsx|*.js|*.jsx|*.py|*.go|*.rs|*.java|*.swift|*.kt)
                 NEEDS_UPDATE="true"
