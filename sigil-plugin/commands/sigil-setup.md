@@ -76,11 +76,7 @@ Skill(skill: "sigil-profile")
 
 ### Step 5: Run Preflight Check
 
-The preflight check creates `SIGIL.md` with enforcement rules and adds a pointer to `CLAUDE.md`:
-
-```
-Skill(skill: "sigil-prime")
-```
+The preflight check creates `SIGIL.md` with enforcement rules and adds a pointer to `CLAUDE.md`. Read the preflight-check SKILL.md and follow its process to create these files.
 
 This ensures the project has:
 - `./SIGIL.md` with enforcement rules
@@ -144,4 +140,3 @@ This project already has Sigil OS set up.
 - `/sigil` — Show project status (after setup)
 - `/sigil-constitution` — Edit project constitution
 - `/sigil-profile` — Generate/update project profile
-- `/sigil-prime` — Load project context into session

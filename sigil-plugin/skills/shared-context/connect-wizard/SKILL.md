@@ -139,7 +139,7 @@ standards for use across code projects via [Sigil OS](https://github.com/arasere
 
 Projects connect to this repo using `sigil connect`. After connecting:
 - Learnings sync automatically when you use `/sigil-learn`
-- Latest shared context loads when you use `/sigil-prime`
+- Latest shared context loads automatically at session start
 
 Each project's learnings are stored in a subdirectory named after the project.
 ```
@@ -172,7 +172,7 @@ with @inherit markers. For example:
 
   <!-- @inherit: shared-standards/security-standards.md -->
 
-These will be expanded automatically when you run /sigil-prime.
+These will be expanded automatically at session start.
 ```
 
 **If only `.gitkeep` or empty:** Skip silently — no standards to discover yet.
@@ -186,7 +186,7 @@ Step 3 of 3: Confirm
 Shared context is now active:
   - Repository: {owner/repo}
   - Learnings sync when you use /sigil-learn
-  - Latest context loads when you use /sigil-prime
+  - Latest context loads automatically at session start
   - This project: {current-project-identity}
 
 To disconnect later, remove this project's entry

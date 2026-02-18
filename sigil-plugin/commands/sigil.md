@@ -95,7 +95,7 @@ Read project-context.md to find current phase and feature, then route:
 | tasks | Resume task-decomposer |
 | implement | Go to Step 4b — resume implementation loop |
 | validate | Resume qa-validator on current task |
-| review | Resume code review via Skill(skill: "sigil-review") |
+| review | Resume code review — read the code-reviewer SKILL.md and follow its process |
 | none | Show status, suggest next action |
 
 **Resume behavior for implement phase:**
@@ -106,7 +106,7 @@ When resuming implement phase:
 4. Do NOT attempt to resume mid-task. Each resume starts fresh at the task level.
 
 **"status":**
-→ Show detailed status of all workflows (delegate to /sigil-status)
+→ Show detailed status of all workflows (invoke status-reporter skill)
 
 **"help":**
 → Show available commands and current capabilities
@@ -178,7 +178,7 @@ For each incomplete task (respecting dependency order):
 - Emit progress: `Implementation Loop: [completed]/[total] tasks - Task T### implementing`
 
 **B. QA Validation Phase**
-- Invoke `Skill(skill: "sigil-validate")` with task context
+- Read the qa-engineer agent definition and the qa-validator SKILL.md, then run validation with task context
 - Emit progress: `Implementation Loop: [completed]/[total] tasks - Task T### validating (attempt N/5)`
 - If passes -> mark task complete, continue to C
 - If fails -> fix loop:
@@ -195,13 +195,13 @@ For each incomplete task (respecting dependency order):
 
 **Invocation distinction:**
 - Agents (developer, qa-engineer) -> Read the agent .md file and adopt its behavior
-- Skills (validate, review) -> Invoke via `Skill(skill: "skill-name")`
+- Skills (validate, review) -> Read the skill's SKILL.md and follow its process
 
 #### After All Tasks: Code Review
 
-1. Invoke `Skill(skill: "sigil-review")` with all changed files across all tasks + spec_path
+1. Read the code-reviewer SKILL.md and run code review with all changed files across all tasks + spec_path
 2. If blockers found -> present to user for decision
-3. **After security/code review completes:** If the review (via `Skill(skill: "sigil-review")`) produced findings at severity Medium or above that were remediated, invoke `learning-capture` in review findings mode. Pass the resolved findings list (id, title, severity, OWASP category, resolution) from the security agent's Resolved Findings output. This is silent and non-blocking.
+3. **After security/code review completes:** If the review produced findings at severity Medium or above that were remediated, invoke `learning-capture` in review findings mode. Pass the resolved findings list (id, title, severity, OWASP category, resolution) from the security agent's Resolved Findings output. This is silent and non-blocking.
 4. If approved -> show completion summary, update context: Current Phase -> none
 
 #### Progress Indicator
@@ -304,18 +304,14 @@ Primary Command:
   /sigil status             Detailed workflow status
   /sigil help               Show this help
 
-Individual Commands (for direct access):
-  /sigil-setup                    Set up Sigil OS in this project
-  /sigil-spec "description"       Create a feature specification
-  /sigil-clarify                  Resolve specification ambiguities
-  /sigil-plan                     Create implementation plan
-  /sigil-tasks                    Break plan into tasks
-  /sigil-validate                 Run QA validation
-  /sigil-review                   Run code review
-  /sigil-handoff                        Generate engineer review package
-  /sigil-constitution             View/edit project principles
-  /sigil-prime                    Load project context
-  /sigil-status                   Show workflow status
+Additional Commands:
+  /sigil-setup              Set up Sigil OS in this project
+  /sigil-handoff            Generate engineer review package
+  /sigil-constitution       View/edit project principles
+  /sigil-learn              View, search, or review learnings
+  /sigil-connect            Connect to shared context repo
+  /sigil-profile            Generate or view project profile
+  /sigil-update             Check for Sigil updates
 
 Natural Language:
   Just describe what you want! Sigil understands:

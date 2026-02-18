@@ -1,7 +1,7 @@
 ---
 name: preflight-check
 description: Creates SIGIL.md with enforcement rules and adds a pointer to the project's CLAUDE.md. Now invoked automatically via SessionStart hook.
-version: 2.1.0
+version: 2.2.0
 category: workflow
 chainable: true
 invoked_by: [hook:SessionStart]
@@ -19,7 +19,7 @@ Create a standalone `SIGIL.md` file with mandatory enforcement rules and ensure 
 ## Constants
 
 ```
-ENFORCEMENT_VERSION: 2.1.0
+ENFORCEMENT_VERSION: 2.2.0
 ```
 
 **Versioning:** `ENFORCEMENT_VERSION` tracks independently from the Sigil OS plugin version in `plugin.json`. Bump it only when the enforcement section content changes (new rules, modified instructions). Plugin releases that don't change enforcement content leave this version unchanged.
@@ -82,7 +82,7 @@ Only print a message if something changed:
 The following is the canonical SIGIL.md content. Use this exact content (substituting the current `ENFORCEMENT_VERSION` into the version marker) when creating or updating the file.
 
 ```markdown
-<!-- SIGIL-OS v2.1.0 -->
+<!-- SIGIL-OS v2.2.0 -->
 # Sigil OS — Enforcement Rules
 
 These rules are MANDATORY. They override default Claude Code behavior for all workflow actions.
@@ -93,7 +93,7 @@ Sigil OS components are provided by the **sigil-os plugin**:
 - **Agents:** 9 specialist agents (orchestrator, architect, developer, qa-engineer, security, uiux-designer, business-analyst, task-planner, devops)
 - **Skills:** Organized by category (workflow, design, QA, review, research, learning, ui, engineering, specification)
 - **Chains:** Pipeline definitions (full-pipeline, quick-flow, discovery-chain)
-- **Commands:** Slash command definitions (sigil, sigil-spec, sigil-clarify, sigil-validate, sigil-review, etc.)
+- **Commands:** Slash command definitions (sigil, sigil-setup, sigil-constitution, sigil-handoff, etc.)
 
 All components are automatically available when the sigil-os plugin is installed.
 
@@ -101,18 +101,21 @@ All components are automatically available when the sigil-os plugin is installed
 
 When performing workflow actions, you MUST use the Skill tool with the exact skill name. NEVER perform these actions inline or by writing files directly.
 
-| Action | MUST call | NEVER do instead |
-|--------|-----------|------------------|
-| Write a specification | `Skill(skill: "sigil-spec")` | Write a spec.md file yourself |
-| Clarify ambiguities | `Skill(skill: "sigil-clarify")` | Ask clarification questions ad-hoc |
-| Create implementation plan | `Skill(skill: "sigil-plan")` | Write a plan.md file yourself |
-| Break plan into tasks | `Skill(skill: "sigil-tasks")` | Create tasks with TaskCreate directly |
-| Run QA validation | `Skill(skill: "sigil-validate")` | Review code yourself without the skill |
-| Run code review | `Skill(skill: "sigil-review")` | Review code yourself without the skill |
+| Action | MUST do | NEVER do instead |
+|--------|--------|------------------|
+| Start a feature workflow | Use `/sigil "description"` | Write a spec.md file yourself |
 | View/edit constitution | `Skill(skill: "sigil-constitution")` | Edit constitution.md directly |
 | Capture learnings | `Skill(skill: "sigil-learn")` | Write to learnings files directly |
-| Load project context | `Skill(skill: "sigil-prime")` | Read context files ad-hoc |
-| Show workflow status | `Skill(skill: "sigil-status")` | Summarize status yourself |
+| Show workflow status | Use `/sigil` or `/sigil status` | Summarize status yourself |
+
+The following actions are handled automatically by the `/sigil` orchestrator and should not be invoked manually:
+- Specification writing (auto-invoked when you describe a feature)
+- Clarification (auto-invoked after spec if ambiguities exist)
+- Planning (auto-invoked after clarification)
+- Task breakdown (auto-invoked after planning)
+- QA validation (auto-invoked after each task implementation)
+- Code review (auto-invoked after all tasks pass validation)
+- Context loading (auto-runs at session start via hook)
 
 **Note:** Design skills (`ui-designer`, `accessibility`, `ux-patterns`, etc.) are invoked by the UI/UX Designer agent during the Plan phase, not listed here. They are called through agent delegation, not direct user commands.
 
@@ -160,7 +163,7 @@ When these artifacts are created during a /sigil workflow, the next phase begins
 | `plan.md` | Task Breakdown | Auto-continue to task-decomposer |
 | `tasks.md` | Implementation | Auto-continue to Developer agent |
 | Task code changes | Validation | Invoke qa-validator |
-| All tasks validated | Code Review | Invoke `Skill(skill: "sigil-review")` |
+| All tasks validated | Code Review | Read code-reviewer SKILL.md and run review |
 
 ## Implementation Loop Rule
 
@@ -170,14 +173,14 @@ After `tasks.md` is created, the develop/validate loop runs automatically:
 3. Validate it (following qa-engineer agent protocol)
 4. If validation fails, fix and re-validate (max 5 attempts)
 5. Move to the next task
-6. After all tasks pass validation, run `Skill(skill: "sigil-review")` on all changed files
+6. After all tasks pass validation, read the code-reviewer SKILL.md and run review on all changed files
 
 Do NOT wait for user input between tasks. The loop continues until all tasks are complete or a blocker requires human decision.
 
 ## Correct vs Incorrect Examples
 
-CORRECT: Call `Skill(skill: "sigil-spec")` to create a specification.
-INCORRECT: Write a `spec.md` file directly without invoking the spec skill.
+CORRECT: Use `/sigil "description"` to start a feature workflow.
+INCORRECT: Write a `spec.md` file directly without the workflow.
 
 CORRECT: Read the chain definition then follow each phase in order.
 INCORRECT: Jump directly to implementation after the user describes a feature.
@@ -185,7 +188,7 @@ INCORRECT: Jump directly to implementation after the user describes a feature.
 CORRECT: Read the developer agent definition before writing code.
 INCORRECT: Start writing code using default Claude Code behavior.
 
-CORRECT: Use `Skill(skill: "sigil-validate")` to run QA checks.
+CORRECT: Read the qa-validator SKILL.md and follow its process to run QA checks.
 INCORRECT: Review the code yourself and declare it "looks good."
 ```
 

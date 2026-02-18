@@ -18,7 +18,7 @@ Automatically verify that completed work meets quality standards before human re
 ## When to Invoke
 
 - Developer marks task as complete
-- User requests `/sigil-validate` or `/qa`
+- Auto-invoked after each task implementation completes
 - Entering Validate phase from Implement phase
 - Re-validation after qa-fixer applies fixes
 

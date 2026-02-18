@@ -18,7 +18,7 @@ Perform structured code review against project standards, constitution principle
 ## When to Invoke
 
 - qa-validator passes all checks
-- User requests `/sigil-review` or "review code"
+- Auto-invoked after all tasks pass validation
 - Entering Review phase from Validate phase
 - Changes are ready for final quality assessment
 

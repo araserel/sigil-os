@@ -53,26 +53,19 @@ resume, and help.
 | `/sigil` | Show status, offer menu | Orchestrator |
 | `/sigil "feature"` | Start feature workflow | Orchestrator → Track routing |
 | `/sigil continue` | Resume current workflow | Orchestrator → Phase resume |
-| `/sigil status` | Display progress | Orchestrator (delegates to /sigil-status) |
+| `/sigil status` | Display progress | Orchestrator → Status Reporter |
 | `/sigil help` | Show available commands | Orchestrator |
-| `/sigil-spec "description"` | Write/edit specification | Business Analyst / spec-writer |
-| `/sigil-clarify` | Resolve spec ambiguities | Business Analyst / clarifier |
-| `/sigil-plan` | Generate implementation plan | Architect / technical-planner |
-| `/sigil-tasks` | Break plan into executable tasks | Task Planner / task-decomposer |
-| `/sigil-validate` | Run QA validation checks | QA Engineer / qa-validator |
-| `/sigil-review` | Run code review | Security / code-reviewer |
+| `/sigil-setup` | Initialize Sigil OS in a project | Setup Wizard |
+| `/sigil-handoff` | Generate engineer review package | handoff-packager |
 | `/sigil-constitution` | Create/view constitution | constitution-writer |
-| `/sigil-prime` | Load project context for session | Context Primer |
 | `/sigil-learn` | View/search project learnings | Learning Reader |
 | `/sigil-connect` | Connect project to shared context repo | Connect Wizard |
 | `/sigil-profile` | Generate or view project profile | Profile Generator |
-| `/sigil-status` | Show workflow status | Status Reporter |
-| `/sigil-handoff` | Generate engineer review package | handoff-packager |
-| `/sigil-setup` | Initialize Sigil OS in a project | Setup Wizard |
 | `/sigil-update` | Check for & install updates | Global update script |
 
-**Note:** `/sigil-plan`, `/sigil-tasks`, and `/sigil-status` use prefixed names
-to avoid conflicts with Claude Code built-in commands.
+**Note:** Workflow phases (specify, clarify, plan, tasks, validate, review) and
+context loading are handled automatically by the `/sigil` orchestrator and do
+not have standalone commands.
 
 ---
 
@@ -1027,7 +1020,7 @@ AFTER TASK COMPLETION
 | `learning-reader` | Load shared + local learnings before tasks | Orchestrator, Developer |
 | `learning-capture` | Record learnings after task completion + shared push (silent, non-blocking) | Developer |
 | `learning-review` | Prune, promote, archive learnings | Manual via `/sigil-learn` |
-| `shared-context-sync` | Push/pull learnings and profiles to/from shared GitHub repo via MCP | learning-capture, profile-generator, `/sigil-prime` |
+| `shared-context-sync` | Push/pull learnings and profiles to/from shared GitHub repo via MCP | learning-capture, profile-generator, session start |
 | `connect-wizard` | Interactive setup for shared context connection | `/sigil-connect` |
 | `profile-generator` | Auto-detect tech stack and generate project profile | `/sigil-profile` |
 
@@ -1464,20 +1457,12 @@ Specify → Clarify → Plan → Tasks → Implement → Validate → Review
 | `/sigil` | Status + menu |
 | `/sigil "desc"` | Start feature |
 | `/sigil continue` | Resume work |
-| `/sigil-spec` | Create spec |
-| `/sigil-clarify` | Resolve ambiguities |
-| `/sigil-plan` | Create plan |
-| `/sigil-tasks` | Break into tasks |
-| `/sigil-validate` | Run QA |
-| `/sigil-review` | Code review |
+| `/sigil-setup` | Project setup |
+| `/sigil-handoff` | Engineer review package |
 | `/sigil-constitution` | Project principles |
-| `/sigil-prime` | Load context |
 | `/sigil-learn` | View learnings |
 | `/sigil-connect` | Shared context setup |
 | `/sigil-profile` | Project profile |
-| `/sigil-status` | Workflow status |
-| `/sigil-handoff` | Engineer review package |
-| `/sigil-setup` | Project setup |
 | `/sigil-update` | Check for updates |
 
 ### Key Skill Invocations
@@ -1494,10 +1479,10 @@ Specify → Clarify → Plan → Tasks → Implement → Validate → Review
 | After any implementation task | learning-capture (→ shared-context-sync push if connected) |
 | `/sigil-connect` invoked | connect-wizard |
 | `/sigil-profile` invoked | profile-generator (→ shared-context-sync profile push if connected) |
-| `/sigil-prime` with shared context | shared-context-sync pull (learnings + profiles) + @inherit expansion |
+| Session start with shared context | shared-context-sync pull (learnings + profiles) + @inherit expansion |
 | Quality check | qa-validator (→ qa-fixer if issues) |
 | After all tasks complete | code-reviewer |
 
 ---
 
-*Sigil OS Version: 2.1.1*
+*Sigil OS Version: 0.22.0*

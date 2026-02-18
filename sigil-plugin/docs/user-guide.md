@@ -113,27 +113,27 @@ Follow these steps when you start Sigil for the first time.
 
 ```mermaid
 flowchart LR
-    A["1. /sigil-constitution"] --> B["2. /sigil-status"]
-    B --> C["3. /sigil-spec"]
+    A["1. /sigil-setup"] --> B["2. /sigil"]
+    B --> C["3. /sigil 'description'"]
 ```
 
-1. **Set up your project rulebook.**
+1. **Set up your project.**
    ```
-   /sigil-constitution
+   /sigil-setup
    ```
-   Answer questions about your project's technology and standards.
+   Creates the project structure, walks you through your project rulebook, and configures enforcement.
 
 2. **Check the current status.**
    ```
-   /sigil-status
+   /sigil
    ```
    See what is in progress and which stage you are in.
 
 3. **Create your first feature.**
    ```
-   /sigil-spec [your feature description]
+   /sigil "your feature description"
    ```
-   Describe what you want to build in plain words.
+   Describe what you want to build in plain words. All workflow phases run automatically.
 
 You should now see a structured feature document ready for review.
 
@@ -224,7 +224,7 @@ The vague example will need many rounds of follow-up questions. The detailed exa
 
 ### Understanding the Feature Document
 
-When you run `/sigil-spec`, Sigil creates a document with these sections.
+When you run `/sigil "description"`, Sigil creates a document with these sections.
 
 **Summary:** One paragraph that describes the feature and its purpose.
 
@@ -253,10 +253,7 @@ When you run `/sigil-spec`, Sigil creates a document with these sections.
 
 After creating a feature document, you may need to clear up gaps.
 
-**Command:**
-```
-/sigil-clarify
-```
+Clarification runs automatically after spec creation if ambiguities are detected. You can also say "let's clarify" or "I have more details."
 
 **What to expect:**
 
@@ -291,7 +288,7 @@ You should now see your updated feature document with all gaps resolved.
 
 ### Reading a Build Plan
 
-After follow-up questions, `/sigil-plan` creates a technical plan. Here is how to read it.
+After follow-up questions, Sigil automatically creates a technical plan. Here is how to read it.
 
 **Rulebook Gate Checks:** Confirms the plan follows your project rules. All boxes should be checked. If not, talk to your tech lead.
 
@@ -311,7 +308,7 @@ After follow-up questions, `/sigil-plan` creates a technical plan. Here is how t
 
 ### Understanding Task Breakdowns
 
-The `/sigil-tasks` command creates a list of work items. Here is how to read it.
+After the plan is approved, Sigil automatically creates a list of work items. Here is how to read it.
 
 **Task structure:**
 
@@ -429,7 +426,7 @@ You will make decisions throughout the workflow. Here is a simple framework.
 
 ### Checking Progress
 
-Run `/sigil-status` at any time to see where things stand.
+Run `/sigil` at any time to see where things stand.
 
 **Example output:**
 
@@ -476,7 +473,7 @@ When blockers appear, they need action.
 
 | Blocker | What to Do |
 |---------|------------|
-| Follow-up question needed | Answer via `/sigil-clarify` |
+| Follow-up question needed | Answer via `/sigil continue` |
 | Rulebook conflict | Review with tech lead; update the rulebook if needed |
 | Outside dependency | Talk to the team that owns that piece |
 | Resource not available | Escalate to project leadership |
@@ -497,7 +494,7 @@ You should now see a `.sigil/project-profile.yaml` file in your project folder.
 
 **Why profiles matter:**
 
-- When you start a session with `/sigil-prime`, Sigil loads your profile and profiles from connected projects.
+- When you start a session, Sigil loads your profile and profiles from connected projects automatically.
 - If your project changes something that another project depends on, Sigil warns you during planning.
 - Profiles help new team members understand each project at a glance.
 
@@ -552,7 +549,7 @@ Run this from time to time to tidy up lessons. You will be asked to:
 |--------------|--------------|-----------|
 | "Maximum clarification rounds reached" | Requirements too vague or conflicting | Shrink scope and give direct answers |
 | "QA validation failed" | A deep design issue | Review with your tech lead |
-| Unexpected output | Context mix-up | Start fresh with `/sigil-spec` |
+| Unexpected output | Context mix-up | Start fresh with `/sigil "description"` |
 
 ### Getting Help
 

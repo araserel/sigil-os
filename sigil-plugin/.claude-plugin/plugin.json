@@ -1,6 +1,6 @@
 {
   "name": "sigil",
-  "version": "2.1.3",
+  "version": "0.22.0",
   "description": "Specification-driven development system for Claude Code",
   "author": {
     "name": "Adam Riedthaler"

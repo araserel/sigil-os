@@ -160,7 +160,7 @@ Start building features with /sigil to begin capturing learnings.
 ## Related Commands
 
 - `/sigil` — Main entry point, uses learnings automatically
-- `/sigil-status` — Shows workflow status
+- `/sigil` — Shows workflow status
 - `/sigil-constitution` — Project principles (different from learnings)
 
 ## Skills Invoked

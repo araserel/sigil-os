@@ -70,6 +70,6 @@ If yes, proceed with connection flow using the new repo. If no, exit.
 
 ## Related Commands
 
-- `/sigil-prime` — Loads shared context at session start (after connecting)
+- `/sigil` — Shared context loads automatically at session start (after connecting)
 - `/sigil-learn` — Captured learnings sync to shared repo (after connecting)
 - `/sigil` — Shows shared context status in state detection

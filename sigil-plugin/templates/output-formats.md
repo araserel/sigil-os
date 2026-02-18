@@ -168,17 +168,14 @@ Primary Command:
   /sigil status             Detailed workflow status
   /sigil help               Show this help
 
-Individual Commands (for direct access):
-  /sigil-setup                    Set up Sigil OS in this project
-  /sigil-spec "description"       Create a feature specification
-  /sigil-clarify                  Resolve specification ambiguities
-  /sigil-plan                     Create implementation plan
-  /sigil-tasks                    Break plan into tasks
-  /sigil-validate                 Run QA validation
-  /sigil-review                   Run code review
-  /sigil-constitution             View/edit project principles
-  /sigil-prime                    Load project context
-  /sigil-status                   Show workflow status
+Additional Commands:
+  /sigil-setup              Set up Sigil OS in this project
+  /sigil-handoff            Generate engineer review package
+  /sigil-constitution       View/edit project principles
+  /sigil-learn              View, search, or review learnings
+  /sigil-connect            Connect to shared context repo
+  /sigil-profile            Generate or view project profile
+  /sigil-update             Check for Sigil updates
 
 Natural Language:
   Just describe what you want! Sigil understands:

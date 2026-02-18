@@ -18,7 +18,7 @@ Systematically reduce ambiguity in specifications through targeted questions. En
 ## When to Invoke
 
 - Spec has `requires_clarification: true` in handoff
-- User requests `/sigil-clarify`
+- Auto-invoked after spec-writer completes with ambiguities
 - User says "let's clarify" or "I have more details"
 - Open Questions section has unresolved items
 

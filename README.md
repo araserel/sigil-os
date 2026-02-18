@@ -6,7 +6,7 @@
 
 Sigil is a plugin for Claude Code, Anthropic's AI coding tool. Transform natural language descriptions into implemented, tested features through structured workflows.
 
-> **v2.1.2** · Active development — expect breaking changes between minor versions.
+> **v0.22.0** · Active development — expect breaking changes between minor versions.
 
 ---
 
@@ -106,39 +106,33 @@ sequenceDiagram
 
 ## Commands
 
-### Getting Started
+### Core
+
+| Command | Purpose |
+|---------|---------|
+| `/sigil` | Show status and menu |
+| `/sigil "description"` | Start building a feature |
+| `/sigil continue` | Resume where you left off |
+| `/sigil help` | Show all commands |
+
+### Setup & Configuration
 
 | Command | Purpose |
 |---------|---------|
 | `/sigil-setup` | Initialize Sigil in a new project |
-| `/sigil "description"` | Start building a feature |
-| `/sigil continue` | Resume where you left off |
-| `/sigil-status` | Show workflow progress and next steps |
-
-### During Development
-
-| Command | Purpose |
-|---------|---------|
-| `/sigil-spec` | Create a feature specification |
-| `/sigil-clarify` | Resolve specification ambiguities |
-| `/sigil-plan` | Generate implementation plan |
-| `/sigil-tasks` | Break plan into tasks |
-| `/sigil-validate` | Run QA validation checks |
-| `/sigil-review` | Structured code review |
-| `/sigil-handoff` | Generate engineer review package |
-
-### Project Management
-
-| Command | Purpose |
-|---------|---------|
 | `/sigil-constitution` | View or edit project rules |
-| `/sigil-learn` | View, search, or review learnings |
-| `/sigil-prime` | Load project context for a session |
-| `/sigil-connect` | Link project to shared context repo |
 | `/sigil-profile` | Generate or view project profile |
+| `/sigil-connect` | Link project to shared context repo |
+
+### Utilities
+
+| Command | Purpose |
+|---------|---------|
+| `/sigil-handoff` | Generate engineer review package |
+| `/sigil-learn` | View, search, or review learnings |
 | `/sigil-update` | Check for plugin updates |
 
-See the [Command Reference](sigil-plugin/docs/command-reference.md) for detailed usage of all 16 commands.
+See the [Command Reference](sigil-plugin/docs/command-reference.md) for detailed usage.
 
 ### Sharing Context Across Projects
 

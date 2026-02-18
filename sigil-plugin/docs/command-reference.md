@@ -9,51 +9,31 @@
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
 | `/sigil` | **Unified entry point** — status, start, resume | Starting any workflow |
-| `/sigil-spec` | Create a feature specification | Starting a new feature |
-| `/sigil-clarify` | Resolve ambiguities | Spec has open questions |
-| `/sigil-plan` | Generate implementation plan | Spec is approved |
-| `/sigil-tasks` | Break plan into tasks | Plan is approved |
-| `/sigil-validate` | Run QA validation checks | After each task (automatic), or manually anytime |
-| `/sigil-review` | Run structured code review | After all tasks pass validation |
-| `/sigil-status` | Show workflow progress | Anytime |
+| `/sigil-setup` | Initialize Sigil OS in a new project | First-time project setup |
+| `/sigil-handoff` | Generate engineer review package | Ready for technical review |
 | `/sigil-constitution` | View or edit project rules | First-time setup or updates |
 | `/sigil-learn` | View, search, or review learnings | Reviewing institutional memory |
-| `/sigil-prime` | Load project context for a session | Starting a new session |
 | `/sigil-connect` | Connect project to shared context repo | Multi-project sharing setup |
 | `/sigil-profile` | Generate or view project profile | Describing your tech stack and APIs |
-| `/sigil-handoff` | Generate engineer review package | Ready for technical review |
-| `/sigil-setup` | Initialize Sigil OS in a new project | First-time project setup |
 | `/sigil-update` | Check for and install Sigil updates | Keeping Sigil current |
 
 ---
 
 ## Command Flow
 
-`/sigil` is the recommended entry point. It detects your project state and routes to the right phase automatically.
+`/sigil` is the recommended entry point. It detects your project state and routes to the right phase automatically. All workflow phases (specification, clarification, planning, tasks, validation, review) are handled automatically by the orchestrator.
 
 ```
-/sigil (entry point — detects state, suggests next action)
+/sigil-setup (one-time project setup)
         ↓
-/sigil-constitution (one-time setup)
+/sigil "description" (start a feature — all phases run automatically)
         ↓
-    /sigil-spec "description"
+    Specify → Clarify → Plan → Tasks → Implement → Validate → Review
         ↓
-    /sigil-clarify (if needed)
-        ↓
-      /sigil-plan
-        ↓
-      /sigil-tasks
-        ↓
-    [Implementation]
-        ↓
-    /sigil-validate
-        ↓
-    /sigil-review
-        ↓
-     /sigil-handoff
+/sigil-handoff (when ready for engineer review)
 ```
 
-You can use `/sigil`, `/sigil-status`, or `/sigil status` at any point to see where you are.
+You can use `/sigil` or `/sigil status` at any point to see where you are.
 
 ---
 
@@ -107,409 +87,6 @@ You don't need to remember the exact syntax. These all work:
 - **Every time you start a session** — `/sigil` orients you
 - **Starting a new feature** — `/sigil "your description"`
 - **Returning after a break** — `/sigil continue`
-
----
-
-## /sigil-spec
-
-Create a new feature specification from your description.
-
-### Syntax
-
-```
-/sigil-spec [your feature description]
-```
-
-### What It Does
-
-1. Analyzes your description to understand what you want
-2. Determines the right workflow track (Quick, Standard, or Enterprise)
-3. Creates a structured specification document
-4. Identifies any ambiguities that need clarification
-
-### Example
-
-**You type:**
-```
-/sigil-spec Add a contact form that lets visitors send messages to our support team
-```
-
-**Sigil responds with:**
-- A track recommendation (e.g., "Standard track recommended")
-- A specification document with:
-  - Summary of your feature
-  - User scenarios (P1/P2/P3 priority)
-  - Functional requirements
-  - Success criteria
-  - Out of scope items
-  - Any open questions
-
-### Expected Output
-
-```markdown
-## Feature Specification: Contact Form
-
-### Summary
-Allow website visitors to send messages to the support team
-through a simple form interface.
-
-### User Scenarios
-
-#### P1 (Must Have)
-- [ ] US-001: As a visitor, I want to submit a message so that
-      I can contact support
-
-#### P2 (Should Have)
-- [ ] US-002: As a visitor, I want to receive confirmation so
-      that I know my message was sent
-
-### Requirements
-| ID | Requirement | Priority |
-|----|-------------|----------|
-| FR-001 | Display contact form with name, email, message | P1 |
-| FR-002 | Validate email format before submission | P1 |
-
-### Open Questions
-- Q1: Should we send an email confirmation to the visitor?
-- Q2: What fields are required vs optional?
-```
-
-### When to Use
-
-- Starting any new feature or enhancement
-- Beginning a bug fix that needs documentation
-- When you have an idea you want to develop
-
-### Tips for Better Results
-
-**Do:**
-- Describe what the user should be able to do
-- Mention who will use the feature
-- Include any important constraints
-
-**Avoid:**
-- Technical implementation details
-- Vague descriptions like "make it better"
-- Multiple unrelated features in one spec
-
-### Common Mistakes
-
-| Mistake | Problem | Better Approach |
-|---------|---------|-----------------|
-| Too vague | "Add login" | "Add email/password login for registered users" |
-| Too technical | "Add JWT auth with refresh tokens" | "Let users stay logged in between visits" |
-| Too big | "Build e-commerce platform" | Start with one feature: "Add shopping cart" |
-
----
-
-## /sigil-clarify
-
-Start a question-and-answer session to resolve ambiguities in your specification.
-
-### Syntax
-
-```
-/sigil-clarify
-```
-
-### What It Does
-
-1. Reviews your current specification
-2. Identifies unclear or ambiguous requirements
-3. Asks targeted questions to resolve them
-4. Updates the specification with your answers
-
-### Example
-
-**You type:**
-```
-/sigil-clarify
-```
-
-**Sigil asks:**
-```markdown
-## Clarification Questions
-
-### Scope Questions
-**Q1:** Should the contact form include a subject line, or just a message?
-- A) Subject line required
-- B) No subject line, just message
-- C) Optional subject line
-
-### Behavior Questions
-**Q2:** What happens after successful submission?
-- A) Show success message on same page
-- B) Redirect to thank-you page
-- C) Both show message and send email confirmation
-```
-
-**You answer:**
-```
-Q1: C (optional subject line)
-Q2: C (show message and send email)
-```
-
-### Expected Output
-
-After answering, Sigil:
-- Updates your specification with the clarified requirements
-- Records the Q&A in `clarifications.md`
-- Either asks more questions or confirms the spec is ready
-
-### When to Use
-
-- After `/sigil-spec` if there are open questions
-- When you realize something was unclear
-- When Sigil asks for clarification
-
-### How Many Rounds?
-
-- Sigil asks up to 5 questions per round
-- Maximum 3 rounds of clarification
-- If still unclear after 3 rounds, you'll be asked to simplify or split the feature
-
-### Tips
-
-- Answer directly — "A" or "B" is fine
-- If none of the options fit, explain what you want
-- Say "I don't know" if you need help deciding
-
----
-
-## /sigil-plan
-
-Generate a technical implementation plan from your specification.
-
-### Syntax
-
-```
-/sigil-plan
-```
-
-### What It Does
-
-1. Analyzes your clarified specification
-2. Researches any technical unknowns
-3. Creates a detailed implementation plan
-4. Validates against your project's constitution (rules)
-
-### Example
-
-**You type:**
-```
-/sigil-plan
-```
-
-**Sigil creates:**
-```markdown
-## Implementation Plan: Contact Form
-
-### Technical Approach
-Create a React form component with server-side email handling.
-
-### Files to Change
-| File | Change |
-|------|--------|
-| components/ContactForm.tsx | New - form component |
-| pages/api/contact.ts | New - API endpoint |
-| styles/contact.css | New - styling |
-
-### Dependencies
-- No new dependencies needed
-
-### Risk Assessment
-| Risk | Likelihood | Mitigation |
-|------|------------|------------|
-| Email delivery issues | Low | Use established email service |
-
-### Testing Strategy
-- Unit tests for form validation
-- Integration test for email sending
-```
-
-### Expected Output
-
-The plan includes:
-- **Technical approach** — How it will be built
-- **Files to change** — What will be created or modified
-- **Dependencies** — Any new tools or libraries needed
-- **Risk assessment** — What could go wrong and how to prevent it
-- **Testing strategy** — How quality will be verified
-
-### When to Use
-
-- After your specification is complete and clarified
-- When you're ready to start building
-
-### What You Review
-
-You don't need to understand every technical detail. Focus on:
-- Does the scope look right?
-- Are there any concerning risks?
-- Does the approach match your expectations?
-
-### Approving the Plan
-
-After reviewing:
-- Say "approve" or "looks good" to proceed
-- Say "I have concerns about..." to discuss changes
-- Ask "what does X mean?" for clarification
-
----
-
-## /sigil-tasks
-
-Break the approved plan into executable work items.
-
-### Syntax
-
-```
-/sigil-tasks
-```
-
-### What It Does
-
-1. Analyzes the implementation plan
-2. Breaks work into small, trackable tasks
-3. Identifies dependencies between tasks
-4. Marks which tasks can run in parallel
-
-### Example
-
-**You type:**
-```
-/sigil-tasks
-```
-
-**Sigil creates:**
-```markdown
-## Tasks: Contact Form
-
-### Phase 1: Setup
-- [ ] **T001:** Create form component file structure
-- [ ] **T002:** Set up API endpoint skeleton [P]
-
-### Phase 2: Core Features
-- [ ] **T003:** Implement form fields (name, email, message) [Depends: T001]
-- [ ] **T004:** Add form validation [Depends: T003]
-- [ ] **T005:** Connect form to API [Depends: T002, T004]
-
-### Phase 3: Testing
-- [ ] **T006:** Write unit tests [P]
-- [ ] **T007:** Write integration tests [Depends: T005]
-
-**Legend:**
-[P] = Can run in parallel with other tasks
-[Depends: X] = Must wait for task X to complete
-```
-
-### Expected Output
-
-The task list shows:
-- **Task ID** — T001, T002, etc.
-- **Description** — What the task accomplishes
-- **Dependencies** — What must finish first
-- **Parallelization** — [P] means it can run alongside other tasks
-
-### When to Use
-
-- After the implementation plan is approved
-- When you want to see the detailed work breakdown
-
-### Understanding Task Symbols
-
-| Symbol | Meaning |
-|--------|---------|
-| `[ ]` | Not started |
-| `[~]` | In progress |
-| `[x]` | Complete |
-| `[P]` | Can run in parallel |
-| `[B]` | Blocking other tasks |
-
-### What Happens Next
-
-After tasks are created, implementation begins automatically:
-- Tasks are completed in order
-- You can check `/sigil-status` anytime
-- You'll be notified if something needs your attention
-
----
-
-## /sigil-status
-
-Show the current state of your workflow.
-
-### Syntax
-
-```
-/sigil-status
-```
-
-### What It Does
-
-1. Checks your current project context
-2. Shows which phase you're in
-3. Displays progress and any blockers
-4. Suggests what to do next
-
-### Example Output
-
-```markdown
-## Workflow Status
-
-**Feature:** Contact Form | **Track:** Standard | **Phase:** Implement
-
-### Progress
-- [x] Assess — Track determined
-- [x] Specify — spec.md created
-- [x] Clarify — Requirements clear
-- [x] Plan — plan.md created
-- [x] Tasks — 7 tasks created
-- [~] Implement — Writing code
-- [ ] Validate — Pending
-- [ ] Review — Pending
-
-**Overall:** [████████░░] 60%
-
-### Current Activity
-Completing task T005: Connect form to API
-
-### Blockers
-None - all clear
-
-### Next Step
-No action needed - implementation in progress
-```
-
-### When to Use
-
-- Anytime you want to know where things stand
-- After stepping away and returning
-- When you're not sure what to do next
-
-### Understanding the Output
-
-| Section | What It Tells You |
-|---------|-------------------|
-| Feature/Track/Phase | Which feature, complexity level, and current stage |
-| Progress | Checkmarks show completed phases |
-| Current Activity | What's happening right now |
-| Blockers | Any issues preventing progress |
-| Next Step | What you need to do (if anything) |
-
-### If There's No Active Workflow
-
-```markdown
-## Workflow Status
-
-**No active workflow**
-
-You can start a new workflow by:
-- Describing what you want to build
-- Requesting to work on a specific feature
-
-Example: "I want to add a password reset feature"
-```
 
 ---
 
@@ -664,53 +241,6 @@ Sigil provides a summary you can copy:
 
 ---
 
-## /sigil-validate
-
-Run automated quality assurance checks on implemented code.
-
-### Syntax
-
-```
-/sigil-validate
-```
-
-### What It Does
-
-1. Runs automated quality checks against the current implementation:
-   - Tests pass
-   - Lint/type checks pass
-   - Requirements from the spec are covered
-   - No regressions detected
-2. If issues are found, attempts automatic remediation (up to 5 attempts)
-3. Escalates to you if issues persist after remediation
-
-### When to Use
-
-- After implementation is complete
-- Before requesting a handoff or review
-- When you want to verify quality at any point
-
-### Expected Output
-
-```markdown
-## Validation Results
-
-### Checks
-- [x] Tests passing (12/12)
-- [x] No lint errors
-- [x] Requirements coverage: 100%
-- [ ] Performance threshold: 1 issue
-
-### Issues Found
-1. Page load time exceeds 2s target (measured: 2.3s)
-   - Attempting fix...
-   - Fixed: Optimized image loading
-
-### Result: PASS (after 1 fix cycle)
-```
-
----
-
 ## /sigil-learn
 
 View, search, or review project learnings.
@@ -764,40 +294,6 @@ View, search, or review project learnings.
 
 ---
 
-## /sigil-prime
-
-Load project context to prepare for a development session.
-
-### Syntax
-
-```
-/sigil-prime
-/sigil-prime [focus area]
-```
-
-### What It Does
-
-1. Reads your project constitution, current context, and active learnings
-2. Loads relevant patterns and gotchas into the session
-3. Optionally focuses on a specific area (e.g., a feature or module)
-4. Reports the current state so you can pick up where you left off
-
-### When to Use
-
-- At the start of every new Claude Code session
-- When switching between features or areas of work
-- When context seems stale or incomplete
-
-### Example
-
-```
-/sigil-prime authentication
-```
-
-Loads all context relevant to authentication work: constitution rules, auth-related learnings, and any active auth specs.
-
----
-
 ## /sigil-connect
 
 Connect your project to a shared context repository for cross-project learnings.
@@ -827,7 +323,7 @@ Connect your project to a shared context repository for cross-project learnings.
 ### After Connecting
 
 - Learnings sync automatically when you use `/sigil-learn`
-- Latest shared context loads when you use `/sigil-prime`
+- Latest shared context loads automatically at session start
 - A "what's new" summary shows entries added since your last session
 
 ### When to Use
@@ -909,14 +405,13 @@ Published to shared repo: profiles/web-app.yaml
 
 ### After Creating a Profile
 
-- `/sigil-prime` loads your profile into every session
-- Sibling projects see your profile on their next `/sigil-prime`
+- Your profile loads into every session automatically
+- Sibling projects see your profile on their next session start
 - The architect agent warns you if your changes might affect projects that consume your APIs
 
 ### Related
 
 - `/sigil-connect` — Connect to a shared repo to share profiles across projects
-- `/sigil-prime` — Loads profiles into session context
 
 ---
 
@@ -1001,34 +496,38 @@ Run the update? (Y/n)
 | Command | Purpose | Example |
 |---------|---------|---------|
 | `/sigil` | Entry point — status + routing | `/sigil "Add user login"` |
-| `/sigil-spec` | Start new feature | `/sigil-spec Add user login` |
-| `/sigil-clarify` | Answer questions | `/sigil-clarify` |
-| `/sigil-plan` | Create tech plan | `/sigil-plan` |
-| `/sigil-tasks` | Break into tasks | `/sigil-tasks` |
-| `/sigil-validate` | Run QA checks | `/sigil-validate` |
-| `/sigil-status` | Check progress | `/sigil-status` |
+| `/sigil-setup` | Initialize project | `/sigil-setup` |
+| `/sigil-handoff` | Engineer review | `/sigil-handoff` |
 | `/sigil-constitution` | Set project rules | `/sigil-constitution` |
 | `/sigil-learn` | View/review learnings | `/sigil-learn --review` |
-| `/sigil-prime` | Load session context | `/sigil-prime authentication` |
 | `/sigil-connect` | Shared context setup | `/sigil-connect org/repo` |
 | `/sigil-profile` | Project profile | `/sigil-profile --view` |
-| `/sigil-handoff` | Engineer review | `/sigil-handoff` |
-| `/sigil-setup` | Initialize project | `/sigil-setup` |
 | `/sigil-update` | Check for updates | `/sigil-update` |
 
 ### Typical Workflow
 
 ```
-1. /sigil (start here — detects state automatically)
-2. /sigil-constitution  (one-time setup)
-3. /sigil-spec "feature description"
-4. /sigil-clarify (if questions arise)
-5. /sigil-plan
-6. /sigil-tasks
-7. /sigil-status (check progress)
-8. /sigil-validate (verify quality)
-9. /sigil-handoff (before deployment)
+1. /sigil-setup (one-time project setup)
+2. /sigil "feature description" (all phases run automatically)
+3. /sigil (check progress anytime)
+4. /sigil continue (resume after a break)
+5. /sigil-handoff (before deployment)
 ```
+
+### Retired Commands
+
+These commands have been removed. Use `/sigil` instead — it handles all workflow phases automatically.
+
+| Old Command | What to Use Instead |
+|-------------|-------------------|
+| `sigil-spec` | `/sigil "description"` |
+| `sigil-clarify` | `/sigil continue` (auto-invoked) |
+| `sigil-plan` | `/sigil continue` (auto-invoked) |
+| `sigil-tasks` | `/sigil continue` (auto-invoked) |
+| `sigil-validate` | Runs automatically after each task |
+| `sigil-review` | Runs automatically after all tasks pass |
+| `sigil-status` | `/sigil` or `/sigil status` |
+| `sigil-prime` | Context loads automatically at session start |
 
 ---
 

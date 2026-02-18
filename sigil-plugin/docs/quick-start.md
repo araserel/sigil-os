@@ -483,7 +483,7 @@ Choose option 1 to let Sigil try again, or option 3 if you want to involve a dev
 You can always start over:
 
 ```
-/sigil-spec "Add a contact form"
+/sigil "Add a contact form"
 ```
 
 This creates a new specification from scratch.

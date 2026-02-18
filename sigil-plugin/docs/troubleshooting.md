@@ -61,7 +61,7 @@ Try:
 
 ### Fix 3 -- Start Over with More Detail
 
-Run `/sigil-spec` again with a richer description. Try to answer common questions before they come up.
+Run `/sigil "description"` again with a richer description. Try to answer common questions before they come up.
 
 Instead of:
 > "Add a contact form"
@@ -69,7 +69,7 @@ Instead of:
 Try:
 > "Add a contact form with name, email, and message fields. Show a success notice on submit. Send an email copy to the user. Use honeypot spam protection. The form must work on mobile and meet accessibility standards."
 
-> **Tip:** Before you type `/sigil-spec`, write down three things: who uses the feature, what they do, and what they see when it works. That alone prevents most clarification loops.
+> **Tip:** Before you type `/sigil "description"`, write down three things: who uses the feature, what they do, and what they see when it works. That alone prevents most clarification loops.
 
 ---
 
@@ -96,7 +96,7 @@ This usually points to a deeper problem, not a simple bug.
 
 ### How to Fix
 
-1. Run `/sigil-status` and look at which check keeps failing.
+1. Run `/sigil` and look at which check keeps failing.
 2. Share the output with your tech lead.
 3. Pick the right action from the table below.
 
@@ -107,11 +107,11 @@ This usually points to a deeper problem, not a simple bug.
 | Technical limit | Adjust the feature to fit what is possible |
 | Missing information | Add the missing details to your specification |
 
-4. Run `/sigil-plan` and then `/sigil-tasks` with the corrected information.
+4. Run `/sigil continue` to regenerate the plan and tasks with the corrected information.
 
 You should now see the quality check pass on the next run.
 
-> **Note:** If you are unsure which problem type applies, share the full `/sigil-status` output with your tech lead. They can pinpoint the root cause.
+> **Note:** If you are unsure which problem type applies, share the full `/sigil` output with your tech lead. They can pinpoint the root cause.
 
 ---
 
@@ -134,7 +134,7 @@ You should now see the quality check pass on the next run.
 Run the command below and type out your full feature description. Do not assume Sigil remembers anything from before.
 
 ```
-/sigil-spec [your complete feature description]
+/sigil "description" [your complete feature description]
 ```
 
 You should now see a new specification that matches your description.
@@ -168,7 +168,7 @@ Try:
 ### What You See
 
 - Sigil does not remember your previous work.
-- `/sigil-status` shows no active features.
+- `/sigil` shows no active features.
 - You are asked to set up a constitution again.
 
 ### Why This Happens
@@ -181,7 +181,7 @@ Sigil stores its state in a `.sigil/` folder inside your project. If that folder
 2. Check that a `.sigil/` folder exists inside your project.
 3. Open the `.sigil/` folder and confirm it contains files.
 4. If the files are gone, run `/sigil-constitution` to recreate your project principles.
-5. Run `/sigil-spec` to restart your feature.
+5. Run `/sigil "description"` to restart your feature.
 
 ```
 $ ls .sigil/
@@ -208,12 +208,12 @@ Sigil fills in gaps when your description leaves room for guesses. Rushed answer
 
 ### Caught Early (Before Tasks Start)
 
-1. Run `/sigil-status` and read the specification carefully.
-2. Run `/sigil-clarify` to correct the parts that are wrong.
-3. Run `/sigil-plan` to generate a new plan.
+1. Run `/sigil` and read the specification carefully.
+2. Run `/sigil continue` to correct the parts that are wrong.
+3. Run `/sigil continue` to generate a new plan.
 
 ```
-$ /sigil-plan
+$ /sigil continue
 Plan generated: 4 tasks across 2 phases.
 Ready for review.
 ```
@@ -225,10 +225,10 @@ You should now see a plan that matches your intent.
 1. Stop the current implementation.
 2. Open the specification and find what went wrong.
 3. Update the specification with corrected requirements.
-4. Run `/sigil-plan` and then `/sigil-tasks` to regenerate work items.
+4. Run `/sigil continue` to regenerate work items.
 
 ```
-$ /sigil-tasks
+$ /sigil continue
 Tasks regenerated: 3 tasks.
 Ready for implementation.
 ```
@@ -311,10 +311,10 @@ These are serious issues like missing required files, critical security problems
 2. What output did you get? Copy the full response.
 3. What did you expect to happen?
 4. Run `/sigil-constitution` and copy the output.
-5. Run `/sigil-status` and copy the output.
+5. Run `/sigil` and copy the output.
 
 ```
-$ /sigil-status
+$ /sigil
 Phase: planning
 Track: standard
 Active Feature: user-auth
@@ -326,7 +326,7 @@ Having all five items ready makes it much easier for someone to help you.
 ### Common Questions
 
 **Q: Can I undo a clarification answer?**
-A: Not directly. Run `/sigil-spec` again to start fresh if you need to change a key decision.
+A: Not directly. Run `/sigil "description"` again to start fresh if you need to change a key decision.
 
 **Q: How do I change the track (the complexity level -- Quick, Standard, or Enterprise)?**
 A: The track is chosen based on feature size. Describe a smaller feature to get a simpler track.
@@ -352,7 +352,7 @@ Most issues fall into one of four buckets.
 
 When in doubt, start here:
 
-1. Run `/sigil-status` to see where things stand.
+1. Run `/sigil` to see where things stand.
 2. Review the specification for accuracy.
 3. Ask your tech lead if the issue is technical.
 4. Start fresh if context seems corrupted.

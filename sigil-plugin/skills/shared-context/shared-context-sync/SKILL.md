@@ -5,7 +5,7 @@ version: 1.2.0
 category: shared-context
 chainable: false
 invokes: []
-invoked_by: [learning-capture, learning-reader, prime, sigil, connect-wizard, profile-generator]
+invoked_by: [learning-capture, learning-reader, sigil, connect-wizard, profile-generator]
 tools: Read, Write, Edit, Bash, ToolSearch, mcp__github__get_file_contents, mcp__github__create_or_update_file, mcp__github__push_files
 model: haiku
 ---
@@ -210,7 +210,7 @@ File: `~/.sigil/cache/shared/queue/{timestamp_ms}.json`
 2. Use current timestamp in milliseconds as filename
 3. Write to `~/.sigil/cache/shared/queue/`
 
-**Drain (on `/sigil-prime` or next successful MCP write):**
+**Drain (at session start or next successful MCP write):**
 
 1. List all `.json` files in `~/.sigil/cache/shared/queue/`
 2. Sort by filename (chronological order)
@@ -346,7 +346,7 @@ Called by `prime` at session start.
 2. Return cached data from `~/.sigil/cache/shared/`
 3. Do NOT delete cache or sentinel
 4. Still attempt queue drain (will also fail, items stay queued)
-5. Continue session normally — MCP failure must never block `/sigil-prime`
+5. Continue session normally — MCP failure must never block session start
 
 ---
 
@@ -447,7 +447,7 @@ Called by `prime` at session start (as part of pull protocol).
 
 1. Log warning: "Profile sync unavailable, using cached profiles."
 2. Return cached profiles from `~/.sigil/cache/shared/profiles/`
-3. Continue session normally — MCP failure must never block `/sigil-prime`
+3. Continue session normally — MCP failure must never block session start
 
 ### Profile Change Detection
 
@@ -536,12 +536,12 @@ Called by `connect-wizard` when a shared repo is empty or missing the expected s
 |--------|-----------|------|
 | `learning-capture` | Push | After writing a learning locally |
 | `learning-reader` | Read cache | Before loading local learnings |
-| `prime` | Pull + queue drain | At session start |
+| `prime` (session start) | Pull + queue drain | At session start |
 | `sigil` | Sentinel check | During state detection |
 | `connect-wizard` | Write sentinel, scaffold repo | During `sigil connect` |
 | `learn` | Queue status | When displaying learning summary |
 | `profile-generator` | Profile Push | After writing/updating `.sigil/project-profile.yaml` |
-| `prime` | Profile Pull + change detection | At session start (alongside learning pull) |
+| `prime` (session start) | Profile Pull + change detection | At session start (alongside learning pull) |
 
 ---
 

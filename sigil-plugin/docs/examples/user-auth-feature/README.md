@@ -41,7 +41,7 @@ Before creating any features, Sarah's team established a project constitution. T
 
 With the constitution in place, Sarah was ready to describe the authentication feature.
 
-**Command:** `/sigil-spec Add user authentication to the application`
+**Command:** `/sigil "Add user authentication to the application"`
 
 **What Sarah Provided:**
 
@@ -93,7 +93,7 @@ Session: id, userId, token, expiresAt, createdAt
 
 Some requirements were ambiguous. Sigil asked targeted questions to resolve them.
 
-**Command:** `/sigil-clarify`
+**What happened next:** Sigil automatically started clarification
 
 **What Happened:** Over two rounds, Sigil asked 7 questions (see `clarifications.md`):
 
@@ -152,7 +152,7 @@ Some requirements were ambiguous. Sigil asked targeted questions to resolve them
 
 With requirements clarified, Sigil generated an implementation plan.
 
-**Command:** `/sigil-plan`
+**What happened next:** Sigil automatically generated the plan
 
 **What Sigil Produced:** A technical plan (see `plan.md`) with:
 
@@ -220,7 +220,7 @@ Potential problems and how they'd be prevented:
 
 Finally, Sigil converted the plan into actionable tasks.
 
-**Command:** `/sigil-tasks`
+**What happened next:** Sigil automatically broke the plan into tasks
 
 **What Sigil Produced:** 18 tasks across 3 phases (see `tasks.md`):
 
@@ -309,7 +309,7 @@ With everything documented, Sarah was ready to hand off to engineering.
 
 ### Tips for Your Projects
 
-1. **Be specific in your initial description** - The more detail you provide to `/sigil-spec`, the fewer clarification rounds needed.
+1. **Be specific in your initial description** - The more detail you provide to `/sigil "description"`, the fewer clarification rounds needed.
 
 2. **Answer clarification questions thoughtfully** - These decisions affect implementation. Take time to consider the options.
 

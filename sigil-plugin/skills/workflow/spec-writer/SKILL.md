@@ -18,7 +18,7 @@ Transform natural language feature descriptions into structured specifications. 
 ## When to Invoke
 
 - User describes a new feature or enhancement
-- User requests `/sigil-spec [description]`
+- User runs `/sigil "description"` to start a new feature
 - User says "I want...", "We need...", "Build me..."
 - Business Analyst agent receives a feature request
 
@@ -179,7 +179,7 @@ Before completing, verify:
 
 **Simple:**
 ```
-User: /sigil-spec Add user authentication with login and logout
+User: /sigil "Add user authentication with login and logout"
 ```
 
 **With context:**
@@ -191,7 +191,7 @@ User: I need a feature that lets users log in with their email and password,
 
 **With visuals:**
 ```
-User: /sigil-spec Create the checkout flow based on these mockups
+User: /sigil "Create the checkout flow based on these mockups"
       [attached: checkout-step1.png, checkout-step2.png]
 ```
 
