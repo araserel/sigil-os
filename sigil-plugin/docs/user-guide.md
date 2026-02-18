@@ -175,7 +175,7 @@ Assess → Specify → Clarify → Plan → Tasks → Implement (with per-task Q
 
 **Validate:** Automated checks confirm quality before review.
 
-**Review:** Final approval before the feature ships.
+**Review:** Final approval before the feature ships. After review passes, Sigil asks what you want to do next: start another feature, hand off to an engineer, or wrap up.
 
 ### Discovery Track -- Starting a New Project
 
@@ -373,7 +373,9 @@ Sigil balances speed with control using three levels. Here is when it pauses for
 
 ### The Handoff Process
 
-When your feature documents are complete, use `/sigil-handoff` to create an engineering package.
+When a feature completes (code review passes), Sigil automatically asks what you want to do next. One of the options is **"Hand off to an engineer"**, which generates the review package right there — no extra command needed.
+
+You can also run `/sigil-handoff` independently at any time to create a package on demand.
 
 **What engineers get:**
 

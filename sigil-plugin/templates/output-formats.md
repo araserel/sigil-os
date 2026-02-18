@@ -185,6 +185,20 @@ Natural Language:
   - "Keep going" / "Continue"
 ```
 
+## Feature Complete
+
+```
+Feature Complete: "{Feature Name}" ✅
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tasks: {N} completed
+Code review: {Status} ({blockers} blockers, {warnings} warnings, {suggestions} suggestions)
+Spec: {spec_path}
+{If learnings captured: Learnings captured: {N} patterns, {N} gotchas}
+```
+
+---
+
 ## Usage
 
 Before displaying any output to the user, verify:

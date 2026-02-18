@@ -202,7 +202,13 @@ For each incomplete task (respecting dependency order):
 1. Read the code-reviewer SKILL.md and run code review with all changed files across all tasks + spec_path
 2. If blockers found -> present to user for decision
 3. **After security/code review completes:** If the review produced findings at severity Medium or above that were remediated, invoke `learning-capture` in review findings mode. Pass the resolved findings list (id, title, severity, OWASP category, resolution) from the security agent's Resolved Findings output. This is silent and non-blocking.
-4. If approved -> show completion summary, update context: Current Phase -> none
+4. If approved -> show completion summary (use Feature Complete format from output-formats.md)
+5. Update context: Current Phase -> none
+6. Present next-action prompt using AskUserQuestion:
+   - Option 1: "Build another feature" → prompt for description → route to Step 3 (spec-writer)
+   - Option 2: "Hand off to an engineer" → read handoff-packager SKILL.md and generate package for current spec_path → show package location and summary
+   - Option 3: "Done for now" → show closing message: "Your work is saved. Run /sigil anytime to pick up where you left off."
+   Only show this prompt when review status is APPROVED. If blockers exist, the existing escalation flow handles it (no change to that path).
 
 #### Progress Indicator
 

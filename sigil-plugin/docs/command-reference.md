@@ -30,8 +30,10 @@
         ↓
     Specify → Clarify → Plan → Tasks → Implement → Validate → Review
         ↓
-/sigil-handoff (when ready for engineer review)
+    Next-action prompt: build another feature, hand off, or wrap up
 ```
+
+After code review passes, Sigil offers your next step inline — including engineer handoff. You can also run `/sigil-handoff` independently at any time.
 
 You can use `/sigil` or `/sigil status` at any point to see where you are.
 
@@ -70,6 +72,10 @@ The unified entry point for all Sigil workflows. This is the recommended way to 
    - No active workflow → Suggests starting one
    - Active workflow → Shows status and suggests next step
    - With a description → Starts the spec-first workflow
+5. After a feature completes (code review passes), presents a **next-action prompt**:
+   - **Build another feature** — start a new spec immediately
+   - **Hand off to an engineer** — generate a review package inline (same as `/sigil-handoff`)
+   - **Done for now** — wrap up the session
 
 ### Natural Language Alternatives
 
