@@ -18,11 +18,11 @@ Sigil is like having a technical team that speaks your language. You describe wh
 flowchart LR
     A["You describe<br>a feature"] --> B["Sigil writes<br>the spec"] --> C["You review<br>& approve"] --> D["Sigil builds<br>& tests"] --> E["Working<br>code"]
 
-    style A fill:#e0f2fe,stroke:#0ea5e9
-    style B fill:#a5b4fc,stroke:#6366f1
-    style C fill:#fef3c7,stroke:#f59e0b
-    style D fill:#a5b4fc,stroke:#6366f1
-    style E fill:#d1fae5,stroke:#10b981
+    style A fill:#e0f2fe,stroke:#0ea5e9,color:#1e293b
+    style B fill:#a5b4fc,stroke:#6366f1,color:#1e293b
+    style C fill:#fef3c7,stroke:#f59e0b,color:#1e293b
+    style D fill:#a5b4fc,stroke:#6366f1,color:#1e293b
+    style E fill:#d1fae5,stroke:#10b981,color:#1e293b
 ```
 
 ### Two Ways to Work
@@ -185,14 +185,14 @@ flowchart LR
     B2 <-->|sync| S2
     C2 <-->|sync| S2
 
-    style S1 fill:#a5b4fc,stroke:#6366f1
-    style S2 fill:#a5b4fc,stroke:#6366f1
-    style A1 fill:#d1fae5,stroke:#10b981
-    style A2 fill:#d1fae5,stroke:#10b981
-    style B1 fill:#e0f2fe,stroke:#0ea5e9
-    style B2 fill:#e0f2fe,stroke:#0ea5e9
-    style C1 fill:#fef3c7,stroke:#f59e0b
-    style C2 fill:#fef3c7,stroke:#f59e0b
+    style S1 fill:#a5b4fc,stroke:#6366f1,color:#1e293b
+    style S2 fill:#a5b4fc,stroke:#6366f1,color:#1e293b
+    style A1 fill:#d1fae5,stroke:#10b981,color:#1e293b
+    style A2 fill:#d1fae5,stroke:#10b981,color:#1e293b
+    style B1 fill:#e0f2fe,stroke:#0ea5e9,color:#1e293b
+    style B2 fill:#e0f2fe,stroke:#0ea5e9,color:#1e293b
+    style C1 fill:#fef3c7,stroke:#f59e0b,color:#1e293b
+    style C2 fill:#fef3c7,stroke:#f59e0b,color:#1e293b
 ```
 
 See the [Shared Context Setup Guide](sigil-plugin/docs/shared-context-setup.md) to get started.
