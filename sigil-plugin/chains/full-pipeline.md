@@ -1,7 +1,7 @@
 ---
 name: full-pipeline
 description: Complete spec-to-implementation workflow for Standard and Enterprise tracks.
-version: 1.1.0
+version: 1.3.0
 track: standard, enterprise
 entry_skill: complexity-assessor
 ---
@@ -22,6 +22,10 @@ The full pipeline is the standard workflow for features that need proper specifi
 ## Pre-Chain: Preflight Check
 
 The `preflight-check` skill runs via the SessionStart hook **before** this chain begins. It validates environment, constitution existence, and project context. This is not part of the chain sequence itself — it is a hook-triggered prerequisite.
+
+## Pre-Chain: Configuration Loading
+
+After preflight, the Orchestrator reads `./SIGIL.md` and extracts the `## Configuration` section. The `user_track` and `execution_mode` values are passed through the chain and influence skill behavior at each phase (question depth, output detail level, specialist visibility).
 
 ## Chain Sequence
 
@@ -80,6 +84,12 @@ The `preflight-check` skill runs via the SessionStart hook **before** this chain
 │          Per-Task Loop               │
 │                                      │
 │  ┌─────────────────────────────┐    │
+│  │  specialist-selection       │    │
+│  │  (assign dev specialist)    │    │
+│  └─────────────────────────────┘    │
+│              │                       │
+│              ▼                       │
+│  ┌─────────────────────────────┐    │
 │  │    learning-reader          │    │
 │  │    (load past learnings)    │    │
 │  └─────────────────────────────┘    │
@@ -87,12 +97,19 @@ The `preflight-check` skill runs via the SessionStart hook **before** this chain
 │              ▼                       │
 │  ┌─────────────────────────────┐    │
 │  │    Developer Agent          │    │
-│  │    (Implementation)         │    │
+│  │    (+ specialist overlay)   │    │
+│  └─────────────────────────────┘    │
+│              │                       │
+│              ▼                       │
+│  ┌─────────────────────────────┐    │
+│  │  specialist-selection       │    │
+│  │  (assign QA specialists)    │    │
 │  └─────────────────────────────┘    │
 │              │                       │
 │              ▼                       │
 │  ┌─────────────────────────────┐    │
 │  │      qa-validator           │    │
+│  │   (+ specialist overlay)    │    │
 │  └─────────────────────────────┘    │
 │              │                       │
 │      [If issues found]               │
@@ -158,7 +175,8 @@ file documents the sequence and state transitions; the `/sigil` command executes
 
 Most boxes in the diagram are **skills** (invoked by agents). The key exceptions are:
 - **uiux-designer** — This is the **UI/UX Designer agent** (defined in `agents/uiux-designer.md`), not a skill. It has its own routing, tools, and human checkpoint.
-- **Developer Agent** — This is the **Developer agent** (defined in `agents/developer.md`), which invokes skills like `learning-reader` and `learning-capture`.
+- **Developer Agent** — This is the **Developer agent** (defined in `agents/developer.md`), optionally overlaid with a **specialist** from `agents/specialists/`. Skills like `learning-reader` and `learning-capture` are invoked by the agent.
+- **specialist-selection** — This is a **skill** (defined in `skills/workflow/specialist-selection/SKILL.md`) invoked twice per task: once to select the developer specialist, once to select validation specialists.
 - All other boxes (complexity-assessor, spec-writer, clarifier, technical-planner, etc.) are **skills** invoked by the Orchestrator or their parent agent.
 
 When `/sigil continue` is invoked with `Current Phase: implement`, the sigil command
@@ -216,20 +234,30 @@ reads the task list and resumes the implementation loop at the current task.
 **Condition:** Human approval received
 **Data Passed:** `{ plan_path, spec_path }`
 
-### task-decomposer → learning-reader (per-task)
+### task-decomposer → specialist-selection (per-task)
 **Trigger:** Task about to start
 **Condition:** Always, before each Developer task
-**Data Passed:** `{ task_context, feature_id }`
+**Data Passed:** `{ task_description, task_files }`
+
+### specialist-selection → learning-reader (per-task)
+**Trigger:** Specialist assigned (or base agent selected)
+**Condition:** Always
+**Data Passed:** `{ task_context, feature_id, developer_specialist }`
 
 ### learning-reader → Developer
 **Trigger:** Learnings loaded
 **Condition:** Always (proceeds even if no learnings found)
 **Data Passed:** `{ relevant_highlights, patterns_loaded, gotchas_loaded }`
 
-### Developer → QA Engineer (qa-validator)
+### Developer → specialist-selection (validation)
 **Trigger:** Task implementation complete
-**Condition:** Developer marks task done (per-task handoff, not after all tasks)
-**Data Passed:** `{ task_id, files_changed }`
+**Condition:** Developer marks task done
+**Data Passed:** `{ task_description, task_files }`
+
+### specialist-selection → QA Engineer (qa-validator)
+**Trigger:** Validation specialists assigned
+**Condition:** Always (at minimum functional-qa)
+**Data Passed:** `{ task_id, files_changed, validation_specialists }`
 
 ### qa-validator → qa-fixer
 **Trigger:** Validation failures
@@ -313,6 +341,8 @@ Between skills, preserve:
 - `chain_id`: Unique identifier for this chain execution
 - `spec_path`: Current spec location
 - `track`: Selected workflow track
+- `user_track`: Configuration user track (non-technical | technical)
+- `execution_mode`: Configuration execution mode (automatic | directed)
 - `iteration_counts`: Loop counters for clarifier and QA
 - `has_ui`: Whether feature has UI components
 - `framework`: UI framework (if selected by uiux-designer)
@@ -399,5 +429,6 @@ If user requests "quick planning":
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.3.0 | 2026-02-19 | S3-100/S3-101: Added configuration loading pre-chain, specialist-selection in per-task loop (dev + QA), user_track/execution_mode to context preservation, updated agents vs skills note |
 | 1.1.0 | 2026-02-10 | Audit: Fixed researcher ordering (after technical-planner), added agent annotations, learning-reader in per-task loop, preflight-check note, optional deploy-checker/handoff-packager extensions |
 | 1.0.0 | 2026-01-20 | Initial release |

@@ -113,14 +113,25 @@ claude
 
 This opens an interactive session with Claude Code. You'll see a prompt where you can type commands.
 
-### Step 2: Set Up Project Principles
+### Step 2: Run Setup
 
 Type:
 ```
-/sigil-constitution
+/sigil-setup
 ```
 
-Sigil guides you through 3 quick rounds in plain language:
+Sigil first asks about your role:
+
+```
+What best describes your role?
+
+1. Product / Business — Plain English, technical decisions handled automatically
+2. Engineering / Technical — Shows implementation details and trade-offs
+
+> 1
+```
+
+Then guides you through 3 quick rounds to set up your project principles:
 
 ```
 Round 1: I scanned your project and found:

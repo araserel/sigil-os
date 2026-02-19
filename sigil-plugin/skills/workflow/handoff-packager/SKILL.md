@@ -1,13 +1,13 @@
 ---
 name: handoff-packager
 description: Generates a Technical Review Package for engineer handoff. Bundles all feature artifacts into a single, well-organized document that provides full context for technical review.
-version: 1.0.0
+version: 1.1.0
 category: workflow
 chainable: false
 invokes: []
 invoked_by: [orchestrator]
 tools: Read, Write, Glob
-inputs: [spec_path, feature_id]
+inputs: [spec_path, feature_id, user_track]
 outputs: [technical-review-package.md]
 ---
 
@@ -29,6 +29,18 @@ Generate a comprehensive Technical Review Package when a non-technical user requ
 **Context:** User has been working through the spec-driven workflow and wants to bring in technical expertise before proceeding (typically before production deployment).
 
 ## Workflow
+
+### Step 0: Load Configuration
+
+```
+1. Read ./SIGIL.md and parse the ## Configuration section
+2. Extract user_track value (default: non-technical)
+3. Adapt package contents based on track
+```
+
+**User track branching:**
+- **`non-technical`:** Generate a summary-focused package with demo instructions, business context, and a plain-English explanation of what was built. Minimize code details. Emphasize what to tell the engineer and what to expect.
+- **`technical`:** Full current behavior plus code walkthrough sections, architecture decision details, dependency rationale, and test coverage summary. Include file-level change descriptions and code snippets for key changes.
 
 ### Step 1: Gather Artifacts
 Collect all artifacts for the feature:
@@ -149,4 +161,5 @@ The user remains in control of whether to share the package and how to act on en
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1.0 | 2026-02-19 | S3-100: Added user_track branching — non-technical generates summary-focused package with business context, technical adds code walkthrough and architecture details |
 | 1.0.0 | 2026-01-20 | Initial release |

@@ -1485,4 +1485,4 @@ Specify → Clarify → Plan → Tasks → Implement → Validate → Review
 
 ---
 
-*Sigil OS Version: 0.22.0*
+*Sigil OS Version: 0.23.0*

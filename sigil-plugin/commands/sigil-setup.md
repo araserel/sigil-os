@@ -42,7 +42,24 @@ Create the `.sigil/` directory and subdirectories:
 
 Use the Write tool to create placeholder files if needed to establish the directory structure.
 
-### Step 3: Run Constitution Writer
+### Step 3: Ask User Track
+
+Use the `AskUserQuestion` tool to ask:
+
+```
+What best describes your role?
+
+This helps Sigil tailor its communication style and the level
+of technical detail it shows you.
+```
+
+Options:
+- **Product / Business** → Sets `user_track: non-technical` — "Sigil will handle technical decisions automatically and communicate in plain English."
+- **Engineering / Technical** → Sets `user_track: technical` — "Sigil will show technical details, trade-offs, and specialist names."
+
+Store the answer for use after Step 6 (preflight check) creates SIGIL.md.
+
+### Step 4: Run Constitution Writer
 
 Invoke the constitution writer skill:
 
@@ -52,7 +69,7 @@ Skill(skill: "sigil-constitution")
 
 This guides the user through 3 rounds of questions to create `.sigil/constitution.md`.
 
-### Step 4: Optionally Run Profile Generator
+### Step 5: Optionally Run Profile Generator
 
 After the constitution is created, ask:
 
@@ -74,15 +91,17 @@ If yes, invoke:
 Skill(skill: "sigil-profile")
 ```
 
-### Step 5: Run Preflight Check
+### Step 6: Run Preflight Check
 
 The preflight check creates `SIGIL.md` with enforcement rules and adds a pointer to `CLAUDE.md`. Read the preflight-check SKILL.md and follow its process to create these files.
 
 This ensures the project has:
-- `./SIGIL.md` with enforcement rules
+- `./SIGIL.md` with enforcement rules (including Configuration section)
 - `./CLAUDE.md` with pointer to SIGIL.md
 
-### Step 6: Configure Gitignore
+After SIGIL.md is created, update the `## Configuration` section's YAML block with the user's track selection from Step 3. If the user chose "Engineering / Technical", set `user_track: technical`. Otherwise leave the default `non-technical`.
+
+### Step 7: Configure Gitignore
 
 Check if `.gitignore` exists. If not, create it. Add the following entries (without duplication):
 
@@ -97,7 +116,7 @@ Check if `.gitignore` exists. If not, create it. Add the following entries (with
 
 Note: `.sigil/constitution.md`, `.sigil/project-foundation.md`, `.sigil/project-profile.yaml`, and `.sigil/specs/` are committed to git by default.
 
-### Step 7: Completion Summary
+### Step 8: Completion Summary
 
 Display using canonical format from `templates/output-formats.md`:
 
@@ -106,6 +125,7 @@ Setup Complete!
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ✅ Directory structure created (.sigil/)
+✅ Role selected ([Product / Business | Engineering / Technical])
 ✅ Constitution created (7 articles)
 ✅ Profile generated (or "⬚ Profile — skipped, run /sigil-profile later")
 ✅ Enforcement rules installed (SIGIL.md)
@@ -115,6 +135,7 @@ You're ready to go! Try:
   /sigil "describe your first feature"
 
 Or run /sigil help to see all commands.
+To change your role later: /sigil-config set user_track [non-technical|technical]
 ```
 
 ## Pre-Checks

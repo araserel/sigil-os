@@ -1,7 +1,7 @@
 ---
 name: orchestrator
 description: Central routing and coordination agent. Routes requests to appropriate agents, manages workflow state, tracks progress, provides status updates.
-version: 1.4.0
+version: 1.6.0
 tools: [Read, Write, Glob, Grep]
 active_phases: all
 human_tier: auto
@@ -113,6 +113,37 @@ When a request matches multiple agents:
 2. If no current phase, route to the most specific match
 3. If still ambiguous, ask user: "This could be handled by [Agent A] (for X) or [Agent B] (for Y). Which direction?"
 
+## Configuration Awareness
+
+Route communication style and detail level based on `user_track`:
+
+| Aspect | `non-technical` | `technical` |
+|--------|----------------|-------------|
+| Agent names | Hidden | Shown |
+| Specialist names | Hidden | Shown (e.g., "api-developer") |
+| Phase names | Plain English ("Writing code") | Technical ("Implement phase") |
+| File paths | Hidden | Shown |
+| Trade-off details | Auto-decided | Surfaced for user input |
+| Progress format | "3 of 8 steps done" | "T003/T008 implementing" |
+
+## Specialist Routing
+
+During implementation and validation phases, invoke the `specialist-selection` skill to determine appropriate specialists:
+
+**Implementation Phase:**
+- Before each task, pass task description and file list to specialist-selection
+- Load the assigned specialist definition and merge with base agent
+- If no specialist assigned, use base developer agent
+
+**Validation Phase:**
+- After each task implementation, invoke specialist-selection for validation specialists
+- Always includes functional-qa; may add edge-case-qa, performance-qa, appsec-reviewer, or data-privacy-reviewer based on rules
+- Load each assigned QA/security specialist and merge with base agent
+
+**Specialist Visibility:**
+- `non-technical` track: Do not mention specialist names to user. Use plain descriptions ("Running security checks" instead of "appsec-reviewer validating")
+- `technical` track: Show specialist name in progress output ("Developer Agent (api-developer) implementing T003")
+
 ## Workflow State Tracking
 
 Track and report:
@@ -123,6 +154,8 @@ Track and report:
 **Feature:** [Feature name or "None active"]
 **Phase:** [Current phase]
 **Track:** [Quick | Standard | Enterprise]
+**User Track:** [non-technical | technical]
+**Execution Mode:** [automatic | directed]
 **Active Agent:** [Agent currently working]
 **Blocking Issues:** [Any blockers]
 **Next Step:** [What happens next]
@@ -361,6 +394,8 @@ Would you like to:
 
 **On every session start**, before processing user requests:
 
+0. **Load Configuration** — Read `./SIGIL.md` and parse the `## Configuration` section. Extract `user_track` (default: `non-technical`) and `execution_mode` (default: `automatic`). Store these values for use in all routing decisions and output formatting.
+
 1. **Load Context** — Read `/.sigil/project-context.md`
 
 2. **Announce Current State** — If an active workflow exists:
@@ -432,6 +467,7 @@ See `/docs/context-management.md` for full protocol.
 | `stack-recommendation` | Generate and present technology stack options |
 | `foundation-writer` | Compile Discovery outputs into foundation document |
 | `constitution-writer` | Create project constitution from foundation or scratch |
+| `specialist-selection` | Select appropriate specialist agents for implementation and validation tasks |
 | `connect-wizard` | Interactive shared context setup flow |
 | `profile-generator` | Auto-detect tech stack and generate project profile |
 
@@ -600,6 +636,7 @@ Always structure responses clearly:
 |---------|------|---------|
 | 1.0.0 | 2026-01-20 | Initial release |
 | 1.0.1 | 2026-01-24 | Discrepancy fixes |
+| 1.6.0 | 2026-02-19 | S3-100/S3-101: Added configuration reading at session startup, user_track-aware routing, specialist-selection skill invocation, specialist visibility rules |
 | 1.4.0 | 2026-02-10 | Audit: Added UI/UX Designer routing, constitution-writer skill, post-Architect UI routing check |
 | 1.3.0 | 2026-02-09 | S2-102: Added profile-generator routing — profile trigger words, profile-generator skill invocation |
 | 1.2.0 | 2026-02-09 | S2-101: Added shared context routing — connect trigger words, connect-wizard skill invocation |

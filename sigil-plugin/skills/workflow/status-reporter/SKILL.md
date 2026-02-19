@@ -1,13 +1,13 @@
 ---
 name: status-reporter
 description: Generates clear, non-technical workflow status output. Reads project context and presents current state in plain language.
-version: 1.0.0
+version: 1.1.0
 category: workflow
 chainable: false
 invokes: []
 invoked_by: [orchestrator]
 tools: Read, Glob
-inputs: [context_path]
+inputs: [context_path, user_track]
 outputs: [status_output]
 ---
 
@@ -15,7 +15,7 @@ outputs: [status_output]
 
 ## Purpose
 
-Generate a clear, human-readable status report of the current workflow state. This skill reads the project context and formats it as an easy-to-understand dashboard suitable for non-technical users.
+Generate a clear, human-readable status report of the current workflow state. This skill reads the project context and formats it as an easy-to-understand dashboard, adapting detail level to the configured user track.
 
 ## When Invoked
 
@@ -30,6 +30,18 @@ Generate a clear, human-readable status report of the current workflow state. Th
 **Context:** User wants to understand current workflow state without technical details.
 
 ## Workflow
+
+### Step 0: Load Configuration
+
+```
+1. Read ./SIGIL.md and parse the ## Configuration section
+2. Extract user_track value (default: non-technical)
+3. Adapt output formatting based on track
+```
+
+**User track branching:**
+- **`non-technical`:** Use plain-English phase names ("Writing the code" instead of "Implement"), hide agent names, show progress as "3 of 8 steps done", hide file paths and spec locations
+- **`technical`:** Use current behavior (phase names, agent names visible) plus show specialist names when S3-101 specialists are active (e.g., "Developer Agent (api-developer) implementing T003")
 
 ### Step 1: Load Context
 
@@ -236,4 +248,5 @@ This skill reads from but never writes to project context. Context updates are h
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1.0 | 2026-02-19 | S3-100: Added user_track branching — non-technical uses plain English phase names and hides agent details, technical shows specialist names |
 | 1.0.0 | 2026-01-20 | Initial release |

@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.23.0] - 2026-02-19
+
+### Added
+
+**S3-100: Configuration System**
+- **`/sigil-config` command:** View, set, and reset project-level configuration (user track, execution mode). Supports display, set, and reset modes with validation and human-readable descriptions.
+- **Configuration section in SIGIL.md:** New `## Configuration` and `## Configuration Compliance` sections in the SIGIL.md enforcement template. Default config: `user_track: non-technical`, `execution_mode: automatic`.
+- **Track question in `/sigil-setup`:** New Step 3 asks "What best describes your role?" to set user track during project setup. Selection persists to SIGIL.md Configuration section.
+- **User track branching in 4 skills:** constitution-writer (v2.1.0), clarifier (v1.2.0), status-reporter (v1.1.0), and handoff-packager (v1.1.0) now adapt behavior based on `user_track`. Non-technical track auto-resolves technical decisions and uses plain English; technical track surfaces trade-offs and implementation details.
+- **Orchestrator configuration awareness:** Session startup reads SIGIL.md Configuration. Routing, output formatting, and specialist visibility adapt to user track.
+- **Full-pipeline configuration loading:** Pre-chain step loads `user_track` and `execution_mode` and passes them through the chain.
+
+**S3-101: Specialist Agent Library**
+- **9 specialist agent definitions** in `agents/specialists/`: api-developer, frontend-developer, data-developer, integration-developer (extend developer); functional-qa, edge-case-qa, performance-qa (extend qa-engineer); appsec-reviewer, data-privacy-reviewer (extend security). Each is 30-55 lines of domain-specific overrides.
+- **`specialist-selection` skill (v1.0.0):** Selects appropriate specialist agents via file scope matching, keyword matching, and tech stack filtering. Handles multi-domain tasks and validation specialist assignment rules.
+- **Specialist assignment in task-decomposer (v1.1.0):** New Step 4.5 invokes specialist-selection for each task. Tasks now include a `Specialist:` field.
+- **Specialist loading in implementation loop:** `/sigil` command's Step 4b now loads specialist definitions, merges with base agents, and applies specialist behavior per-task. QA validation and security review phases also use specialist overlays.
+- **Specialist routing in orchestrator (v1.6.0):** Added specialist-selection to Skills Invoked, specialist visibility rules by user track, and specialist routing documentation.
+- **Full-pipeline specialist integration (v1.3.0):** specialist-selection added to per-task loop diagram (dev + QA), state transitions updated, agents-vs-skills note updated.
+- **Agents README updated:** Replaced placeholder with full Specialists section covering inheritance model, all 9 specialists, and custom specialist instructions.
+
+### Changed
+- **ENFORCEMENT_VERSION:** 2.2.0 → 2.3.0 (preflight-check SKILL.md, preflight-check.sh, SIGIL.md template)
+- **Plugin version:** 0.22.0 → 0.23.0 (plugin.json, marketplace.json)
+- **SIGIL.md upgrade path:** When updating SIGIL.md from an older version, existing Configuration YAML values are parsed and merged back into the new template.
+- **`/sigil-setup` renumbered:** Steps 3-7 renumbered to 4-8 to accommodate new track question at Step 3.
+
 ## [0.22.0] - 2026-02-18
 
 ### Added

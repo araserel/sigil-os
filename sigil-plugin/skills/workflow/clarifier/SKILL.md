@@ -1,7 +1,7 @@
 ---
 name: clarifier
 description: Reduces specification ambiguity through structured Q&A. Invoke when spec has ambiguity flags or user requests clarification.
-version: 1.1.0
+version: 1.2.0
 category: workflow
 chainable: true
 invokes: []
@@ -27,6 +27,9 @@ Systematically reduce ambiguity in specifications through targeted questions. En
 **Required:**
 - `spec_path`: string — Path to spec needing clarification
 
+**Optional:**
+- `user_track`: string — From SIGIL.md Configuration section (`non-technical` | `technical`)
+
 **From Handoff:**
 - `ambiguity_flags`: string[] — List of identified ambiguities
 - `iteration`: number — Current clarification round (default: 1)
@@ -45,6 +48,18 @@ Before starting, update `.sigil/project-context.md`:
 If `.sigil/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
 
 ## Process
+
+### Step 0: Load Configuration
+
+```
+1. Read ./SIGIL.md and parse the ## Configuration section
+2. Extract user_track value (default: non-technical)
+3. Store for use in question generation and presentation
+```
+
+**User track branching:**
+- **`non-technical`:** Auto-resolve "Technical" category ambiguities with sensible defaults (logged as `[auto — non-technical track]` in clarifications.md). Rephrase remaining questions in business terms. Hide implementation details.
+- **`technical`:** Surface all categories including Technical. Add implementation trade-off framing to questions (e.g., "This affects performance vs. maintainability — which matters more here?"). Show file paths and component names in question context.
 
 ### Step 1: Load Context
 
@@ -272,4 +287,5 @@ Clarifier: All questions resolved. Updating spec and proceeding to planning.
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2026-01-20 | Initial release |
+| 1.2.0 | 2026-02-19 | S3-100: Added user_track branching — non-technical auto-resolves Technical ambiguities, technical surfaces all categories with trade-off framing |
 | 1.1.0 | 2026-02-09 | SX-003: Added `[human]` source tags to clarifications for provenance tracking |

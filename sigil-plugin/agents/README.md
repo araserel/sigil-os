@@ -49,6 +49,48 @@ tools: [List of permitted tools]
 [How this agent transitions work to others]
 ```
 
-## Adding Specialist Agents
+## Specialists
 
-Additional specialist agents can be added from the awesome-subagents library. Place them in this directory following the standard format.
+Specialist agents provide domain-specific behavior overrides for base agents. They live in the `specialists/` subdirectory and are loaded at runtime by the implementation loop when the `specialist-selection` skill assigns them to a task.
+
+### Inheritance Model
+
+Each specialist file declares an `extends` field in its frontmatter (e.g., `extends: developer`). At runtime:
+1. The base agent definition is loaded first
+2. The specialist's override sections replace matching sections in the base
+3. The merged behavior applies for the duration of that task
+4. Tasks without a specialist assignment use the base agent directly
+
+### Developer Specialists (extend `developer`)
+
+| Specialist | File | Focus |
+|-----------|------|-------|
+| API Developer | `specialists/api-developer.md` | API contracts, backwards compat, REST/GraphQL |
+| Frontend Developer | `specialists/frontend-developer.md` | Components, accessibility, responsive design |
+| Data Developer | `specialists/data-developer.md` | Schema integrity, migrations, query performance |
+| Integration Developer | `specialists/integration-developer.md` | Third-party APIs, retry/circuit-breaker, credentials |
+
+### QA Specialists (extend `qa-engineer`)
+
+| Specialist | File | Focus |
+|-----------|------|-------|
+| Functional QA | `specialists/functional-qa.md` | Business logic correctness, requirement coverage |
+| Edge Case QA | `specialists/edge-case-qa.md` | Boundaries, race conditions, adversarial testing |
+| Performance QA | `specialists/performance-qa.md` | Load patterns, query analysis, metrics validation |
+
+### Security Specialists (extend `security`)
+
+| Specialist | File | Focus |
+|-----------|------|-------|
+| AppSec Reviewer | `specialists/appsec-reviewer.md` | OWASP Top 10, auth flaws, injection vectors |
+| Data Privacy Reviewer | `specialists/data-privacy-reviewer.md` | PII handling, encryption, GDPR/CCPA |
+
+### Adding Custom Specialists
+
+To create a custom specialist:
+
+1. Create a new `.md` file in `specialists/`
+2. Include YAML frontmatter with `name`, `extends` (must reference a valid base agent), and `description`
+3. Add override sections: Priorities, Evaluation Criteria, Risk Tolerance, Domain Context, Collaboration Notes
+4. Keep files lean (30-50 lines) — only include differentiation from the base agent
+5. The `specialist-selection` skill will need file scope or keyword patterns added to recognize the new specialist

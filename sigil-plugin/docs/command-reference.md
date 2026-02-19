@@ -15,6 +15,7 @@
 | `/sigil-learn` | View, search, or review learnings | Reviewing institutional memory |
 | `/sigil-connect` | Connect project to shared context repo | Multi-project sharing setup |
 | `/sigil-profile` | Generate or view project profile | Describing your tech stack and APIs |
+| `/sigil-config` | View or change configuration (user track, execution mode) | Adjusting Sigil's behavior |
 | `/sigil-update` | Check for and install Sigil updates | Keeping Sigil current |
 
 ---
@@ -434,10 +435,11 @@ Initialize Sigil OS in a new project.
 ### What It Does
 
 1. Creates the `.sigil/` directory structure
-2. Runs the constitution writer to set up project principles
-3. Optionally generates a project profile
-4. Creates `SIGIL.md` with enforcement rules
-5. Adds a pointer to `CLAUDE.md`
+2. Asks your role (Product/Business or Engineering/Technical) to set user track
+3. Runs the constitution writer to set up project principles
+4. Optionally generates a project profile
+5. Creates `SIGIL.md` with enforcement rules and your configuration
+6. Adds a pointer to `CLAUDE.md`
 
 ### When to Use
 
@@ -456,6 +458,57 @@ After setup completes:
 SIGIL.md               ← Enforcement rules
 CLAUDE.md              ← Updated with pointer
 ```
+
+---
+
+## /sigil-config
+
+View or change your project's Sigil configuration.
+
+### Syntax
+
+```
+/sigil-config
+/sigil-config set <key> <value>
+/sigil-config reset
+```
+
+### Variants
+
+| Usage | What It Does |
+|-------|-------------|
+| `/sigil-config` | Show current settings and offer to change them |
+| `/sigil-config set user_track technical` | Switch to technical mode |
+| `/sigil-config set user_track non-technical` | Switch to non-technical mode |
+| `/sigil-config set execution_mode directed` | Enable directed execution (technical track only) |
+| `/sigil-config reset` | Reset all settings to defaults |
+
+### Settings
+
+| Setting | Options | Default | What It Controls |
+|---------|---------|---------|-----------------|
+| **User Track** | `non-technical`, `technical` | `non-technical` | Communication style, question depth, detail level |
+| **Execution Mode** | `automatic`, `directed` | `automatic` | How specialists are selected (directed requires technical track) |
+
+### User Track Details
+
+**Non-Technical (default):**
+- Plain English communication — no jargon or file paths
+- Technical decisions made automatically with sensible defaults
+- Progress shown as "3 of 8 steps done"
+- Best for product managers, founders, and business stakeholders
+
+**Technical:**
+- Shows agent names, specialist names, and implementation details
+- Surfaces technical trade-offs for your input
+- Progress shown as "T003/T008 implementing (api-developer)"
+- Best for engineers and technical leads
+
+### When to Use
+
+- After initial setup if you want to change your track
+- When switching between non-technical and technical workflows
+- To enable directed mode for manual specialist selection
 
 ---
 
@@ -508,6 +561,7 @@ Run the update? (Y/n)
 | `/sigil-learn` | View/review learnings | `/sigil-learn --review` |
 | `/sigil-connect` | Shared context setup | `/sigil-connect org/repo` |
 | `/sigil-profile` | Project profile | `/sigil-profile --view` |
+| `/sigil-config` | Configure Sigil | `/sigil-config set user_track technical` |
 | `/sigil-update` | Check for updates | `/sigil-update` |
 
 ### Typical Workflow

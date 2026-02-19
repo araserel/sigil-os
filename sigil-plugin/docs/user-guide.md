@@ -19,12 +19,14 @@ This guide walks you through every part of Sigil. Start here if you are new. Com
 ## Table of Contents
 
 1. [Getting Started](#part-1-getting-started)
-2. [Creating Features](#part-2-creating-features)
-3. [Understanding Technical Output](#part-3-understanding-technical-output)
-4. [Working with Your Team](#part-4-working-with-your-team)
-5. [Status and Tracking](#part-5-status-and-tracking)
-6. [Troubleshooting](#part-6-troubleshooting)
-7. [Appendices](#appendices)
+2. [Configuration](#part-15-configuration)
+3. [Creating Features](#part-2-creating-features)
+4. [Understanding Technical Output](#part-3-understanding-technical-output)
+5. [Working with Your Team](#part-4-working-with-your-team)
+6. [Status and Tracking](#part-5-status-and-tracking)
+7. [Specialists](#part-55-specialists)
+8. [Troubleshooting](#part-6-troubleshooting)
+9. [Appendices](#appendices)
 
 ---
 
@@ -136,6 +138,54 @@ flowchart LR
    Describe what you want to build in plain words. All workflow phases run automatically.
 
 You should now see a structured feature document ready for review.
+
+---
+
+## Part 1.5: Configuration
+
+### User Track
+
+When you first set up Sigil, it asks about your role. This sets your **user track**, which controls how Sigil communicates with you.
+
+| Track | Who It Is For | What Changes |
+|-------|---------------|-------------|
+| **Non-Technical** (default) | Product managers, founders, business stakeholders | Plain English, technical decisions made automatically, progress shown as "3 of 8 steps done" |
+| **Technical** | Engineers, technical leads | Shows agent names, specialist names, file paths, implementation trade-offs, progress as "T003 implementing (api-developer)" |
+
+You can change your track at any time:
+
+```
+/sigil-config set user_track technical
+```
+
+Or switch back:
+
+```
+/sigil-config set user_track non-technical
+```
+
+### Execution Mode
+
+The execution mode controls how Sigil selects specialists for tasks:
+
+| Mode | What It Does |
+|------|-------------|
+| **Automatic** (default) | Sigil picks the best specialist for each task based on the files and description |
+| **Directed** | You control which specialists are used (requires technical track) |
+
+### Viewing Your Configuration
+
+Run `/sigil-config` with no arguments to see your current settings and get an offer to change them.
+
+### Resetting to Defaults
+
+If you want to start over with default settings:
+
+```
+/sigil-config reset
+```
+
+This sets user track back to "non-technical" and execution mode back to "automatic."
 
 ---
 
@@ -540,6 +590,66 @@ Run this from time to time to tidy up lessons. You will be asked to:
 - Remove duplicates and stale entries
 
 > **Note:** Lessons are stored in `/.sigil/learnings/` and stay small -- about 3% of context.
+
+---
+
+## Part 5.5: Specialists
+
+### What Are Specialists?
+
+When Sigil builds a feature, it breaks the work into tasks. Each task is handled by a Developer agent. Specialists are domain-specific overlays that make the Developer (or QA Engineer, or Security agent) focus on what matters most for that particular task.
+
+Think of it like this: a general contractor can build anything, but when it comes to electrical work, you want an electrician. Specialists are the electricians, plumbers, and roofers of the Sigil world.
+
+### How Specialists Improve Output
+
+Without specialists, every task gets the same general-purpose treatment. With specialists:
+
+- **API tasks** get an API Developer that focuses on backwards compatibility, versioning, and documentation
+- **Frontend tasks** get a Frontend Developer that focuses on accessibility, responsive design, and performance
+- **Database tasks** get a Data Developer that focuses on migration safety and query performance
+- **Security reviews** get an AppSec Reviewer that knows the OWASP Top 10
+
+### Available Specialists
+
+**For building code (extend Developer):**
+
+| Name | What It Focuses On |
+|------|-------------------|
+| API Developer | API contracts, backwards compatibility, REST/GraphQL |
+| Frontend Developer | Components, accessibility, responsive design |
+| Data Developer | Schema integrity, migration safety, query performance |
+| Integration Developer | Third-party APIs, retry patterns, credential management |
+
+**For checking quality (extend QA Engineer):**
+
+| Name | What It Focuses On |
+|------|-------------------|
+| Functional QA | Business logic correctness, requirement coverage |
+| Edge Case QA | Boundaries, race conditions, adversarial testing |
+| Performance QA | Load patterns, query analysis, metrics validation |
+
+**For security review (extend Security):**
+
+| Name | What It Focuses On |
+|------|-------------------|
+| AppSec Reviewer | OWASP Top 10, authentication flaws, injection vectors |
+| Data Privacy Reviewer | PII handling, encryption, GDPR/CCPA compliance |
+
+### How Selection Works
+
+Sigil automatically picks the right specialist based on:
+
+1. **What files the task touches** — API routes get the API Developer, component files get the Frontend Developer
+2. **What the task description says** — Keywords like "migration" or "query" trigger the Data Developer
+3. **Your project's tech stack** — No database? The Data Developer won't be assigned
+
+You don't need to do anything. Specialist selection is automatic.
+
+### Visibility
+
+- **Non-technical track:** You won't see specialist names. Sigil works with them behind the scenes.
+- **Technical track:** Specialist names appear in progress output (e.g., "api-developer implementing T003").
 
 ---
 

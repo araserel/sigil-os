@@ -45,6 +45,18 @@ Plain-English definitions for terms used in Sigil. If a word sounds technical, y
 
 ---
 
+## Configuration Terms
+
+| Term | What It Means |
+|------|---------------|
+| **User Track** | A setting that controls how Sigil communicates with you: `non-technical` (plain English, auto-decides technical details) or `technical` (shows implementation details, trade-offs, and specialist names) |
+| **Execution Mode** | A setting that controls how specialists are selected: `automatic` (Sigil chooses) or `directed` (you choose, requires technical track) |
+| **Specialist** | A domain-specific overlay that customizes a base agent's behavior for a particular type of work (e.g., an API Developer specialist makes the Developer agent focus on API contracts and backwards compatibility) |
+| **Base Agent** | One of the 9 core agents (like Developer or QA Engineer) that a specialist extends with domain-specific behavior |
+| **Specialist Selection** | The process of matching a task to the most appropriate specialist based on what files it touches and what it's about |
+
+---
+
 ## Sigil-Specific Terms
 
 | Term | What It Means |

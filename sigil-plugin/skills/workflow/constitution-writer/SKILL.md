@@ -1,7 +1,7 @@
 ---
 name: constitution-writer
 description: Creates project constitution through guided conversation accessible to non-technical users. Uses tiered questions (auto-decide technical details, translate necessary questions, keep business decisions) with a maximum of 3 interaction rounds. Invoke when setting up a new project or when user says "constitution", "project principles", or "project setup". Can be pre-populated from project foundation or codebase assessment.
-version: 2.0.0
+version: 2.1.0
 category: workflow
 chainable: true
 invokes: []
@@ -85,6 +85,7 @@ Replace open-ended questions with pre-configured defaults the user can accept or
 **Optional:**
 - `tech_preferences`: object — Any known technology preferences
 - `existing_constitution`: string — Path to existing constitution to update
+- `user_track`: string — From SIGIL.md Configuration section (`non-technical` | `technical`)
 
 **From Discovery Chain (when invoked by foundation-writer):**
 - `foundation_path`: string — Path to approved foundation document
@@ -96,7 +97,19 @@ Replace open-ended questions with pre-configured defaults the user can accept or
 
 ## Process
 
-### Step 0: Check for Pre-Population Sources
+### Step 0: Load Configuration
+
+```
+1. Read ./SIGIL.md and parse the ## Configuration section
+2. Extract user_track value (default: non-technical)
+3. Store for use throughout the flow
+```
+
+**User track branching:**
+- **`non-technical` (default):** Current behavior — auto-decide all Tier 1 items silently, translate Tier 2 questions to plain language, keep 3-round maximum
+- **`technical`:** Show Tier 1 auto-decisions for override opportunity ("I'll use strict TypeScript — want to change this?"), ask Tier 2 questions in technical framing ("What test coverage target? (default: 60%)"), add Round 3 technical questions: architectural pattern preference, test framework preference, CI/CD pipeline preference
+
+### Step 0b: Check for Pre-Population Sources
 
 ```
 Determine pre-population path (in priority order):
@@ -505,4 +518,5 @@ When invoked from `codebase-assessment`:
 | 1.0.0 | 2026-01-20 | Initial release |
 | 1.1.0 | 2026-01-20 | Added Foundation integration, pre-population support |
 | 1.2.0 | 2026-01-27 | Added Assessment Path integration for established repos |
+| 2.1.0 | 2026-02-19 | S3-100: Added user_track branching — technical track shows Tier 1 decisions for override, uses technical framing for Tier 2, adds Round 3 technical questions |
 | 2.0.0 | 2026-01-29 | Non-technical user refactor: tiered questions, 3-round max, plain language, smart defaults, jargon translation, gitignore handling, friendly errors |

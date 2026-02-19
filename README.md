@@ -6,7 +6,7 @@
 
 Sigil is a plugin for Claude Code, Anthropic's AI coding tool. Transform natural language descriptions into implemented, tested features through structured workflows.
 
-> **v0.22.0** · Active development — expect breaking changes between minor versions.
+> **v0.23.0** · Active development — expect breaking changes between minor versions.
 
 ---
 
@@ -120,6 +120,7 @@ sequenceDiagram
 | Command | Purpose |
 |---------|---------|
 | `/sigil-setup` | Initialize Sigil in a new project |
+| `/sigil-config` | View or change configuration (track, mode) |
 | `/sigil-constitution` | View or edit project rules |
 | `/sigil-profile` | Generate or view project profile |
 | `/sigil-connect` | Link project to shared context repo |

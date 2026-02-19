@@ -1,10 +1,10 @@
 ---
 name: task-decomposer
 description: Breaks implementation plans into executable tasks. Invoke when plan is approved and user requests task breakdown, says "tasks", or "break down".
-version: 1.0.0
+version: 1.1.0
 category: workflow
 chainable: true
-invokes: []
+invokes: [specialist-selection]
 invoked_by: [task-planner, orchestrator]
 tools: Read, Write, Edit, Glob
 ---
@@ -103,6 +103,19 @@ Order tasks to:
 3. Group by phase for clarity
 4. Place tests before implementations (test-first)
 
+### Step 4.5: Specialist Assignment
+
+For each task, invoke the `specialist-selection` skill with the task description and file list:
+
+```
+For each task:
+  1. Pass task_description and task_files to specialist-selection
+  2. Receive developer_specialist and validation_specialists
+  3. Store assignment for use in Step 5
+```
+
+If specialist-selection returns no match, the task uses the base agent (no specialist override).
+
 ### Step 5: Task Enrichment
 
 For each task, add:
@@ -110,6 +123,7 @@ For each task, add:
 ```markdown
 - [ ] **T###** [B|P] [Description]
   - Files: `[paths to files affected]`
+  - Specialist: [specialist name or "base" if no specialist assigned]
   - Depends on: [T### list]
   - Acceptance: [How to verify complete]
 ```
@@ -163,6 +177,7 @@ If total_tasks < 3:
     "id": "T001",
     "description": "Set up authentication module directory structure",
     "phase": "Setup",
+    "specialist": null,
     "blocking": true,
     "files": ["src/auth/", "src/auth/index.ts"],
     "depends_on": [],
@@ -182,6 +197,7 @@ Before completing, verify:
 - [ ] Parallel opportunities identified
 - [ ] Each task has clear acceptance criteria
 - [ ] Accessibility tasks included
+- [ ] Specialist assigned for each task (or explicitly "base")
 - [ ] Task count within reasonable range
 
 ## Task ID Format
@@ -265,4 +281,5 @@ Phase 2: Core Implementation
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1.0 | 2026-02-19 | S3-101: Added specialist assignment via specialist-selection skill, Specialist field in task format, specialist check in quality checklist |
 | 1.0.0 | 2026-01-20 | Initial release |

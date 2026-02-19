@@ -172,13 +172,26 @@ Runs after task-decomposer completes OR when `/sigil continue` resumes an implem
 For each incomplete task (respecting dependency order):
 
 **A. Developer Phase**
-- Read the `developer` agent definition (provided by sigil-os plugin) and adopt its behavior/protocol
+- Read the task's `Specialist:` field. If a specialist is assigned (not "base"):
+  1. Load `agents/specialists/[specialist-name].md`
+  2. Read the base agent from the `extends` field (e.g., `agents/developer.md`)
+  3. Merge: specialist sections override base agent sections of the same name
+  4. Adopt the merged behavior for this task
+- If no specialist assigned (field is "base" or missing): Read the `developer` agent definition and adopt its behavior/protocol as before
 - Pass task details: task_id, description, files, acceptance_criteria
 - Developer executes: load learnings -> understand -> test first -> implement -> verify -> capture learnings
-- Emit progress: `Implementation Loop: [completed]/[total] tasks - Task T### implementing`
+- Emit progress:
+  - `non-technical` track: `Building: [completed]/[total] steps - Working on [plain task description]`
+  - `technical` track: `Implementation Loop: [completed]/[total] tasks - Task T### implementing (api-developer)`
 
 **B. QA Validation Phase**
-- Read the qa-engineer agent definition and the qa-validator SKILL.md, then run validation with task context
+- Invoke `specialist-selection` skill for validation specialists, passing the task description and files
+- For each assigned validation specialist:
+  1. Load `agents/specialists/[specialist-name].md`
+  2. Read base agent from `extends` field (e.g., `agents/qa-engineer.md`)
+  3. Merge and adopt behavior
+- If no validation specialist beyond functional-qa: Read the qa-engineer agent definition
+- Read the qa-validator SKILL.md, then run validation with task context and specialist behavior
 - Emit progress: `Implementation Loop: [completed]/[total] tasks - Task T### validating (attempt N/5)`
 - If passes -> mark task complete, continue to C
 - If fails -> fix loop:
@@ -199,7 +212,8 @@ For each incomplete task (respecting dependency order):
 
 #### After All Tasks: Code Review
 
-1. Read the code-reviewer SKILL.md and run code review with all changed files across all tasks + spec_path
+1. Invoke `specialist-selection` for security specialists, passing all files changed across all tasks. If `appsec-reviewer` or `data-privacy-reviewer` is assigned, load the specialist and merge with base `security` agent before the security review phase. If neither is assigned, use the base `security` agent.
+2. Read the code-reviewer SKILL.md and run code review with all changed files across all tasks + spec_path
 2. If blockers found -> present to user for decision
 3. **After security/code review completes:** If the review produced findings at severity Medium or above that were remediated, invoke `learning-capture` in review findings mode. Pass the resolved findings list (id, title, severity, OWASP category, resolution) from the security agent's Resolved Findings output. This is silent and non-blocking.
 4. If approved -> show completion summary (use Feature Complete format from output-formats.md)
@@ -312,6 +326,7 @@ Primary Command:
 
 Additional Commands:
   /sigil-setup              Set up Sigil OS in this project
+  /sigil-config             View/change configuration (track, mode)
   /sigil-handoff            Generate engineer review package
   /sigil-constitution       View/edit project principles
   /sigil-learn              View, search, or review learnings

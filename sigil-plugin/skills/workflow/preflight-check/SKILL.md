@@ -1,7 +1,7 @@
 ---
 name: preflight-check
 description: Creates SIGIL.md with enforcement rules and adds a pointer to the project's CLAUDE.md. Now invoked automatically via SessionStart hook.
-version: 2.2.0
+version: 2.3.0
 category: workflow
 chainable: true
 invoked_by: [hook:SessionStart]
@@ -19,7 +19,7 @@ Create a standalone `SIGIL.md` file with mandatory enforcement rules and ensure 
 ## Constants
 
 ```
-ENFORCEMENT_VERSION: 2.2.0
+ENFORCEMENT_VERSION: 2.3.0
 ```
 
 **Versioning:** `ENFORCEMENT_VERSION` tracks independently from the Sigil OS plugin version in `plugin.json`. Bump it only when the enforcement section content changes (new rules, modified instructions). Plugin releases that don't change enforcement content leave this version unchanged.
@@ -50,8 +50,8 @@ The hook outputs JSON with instructions. Follow these steps based on the hook ou
 1. Read `./CLAUDE.md` from the project root.
 2. **Dev repo guard:** If the file contains the string `Sigil OS Development Environment`, skip entirely. This is the Sigil development repository — enforcement rules are not appropriate here. Report nothing.
 3. **Check/create SIGIL.md:**
-   - If hook indicates `sigil_md_action: "create"` → create SIGIL.md with content below. Report: `Created SIGIL.md with Sigil enforcement rules (v2.1.0).`
-   - If hook indicates `sigil_md_action: "update"` → overwrite SIGIL.md with content below. Report: `Updated SIGIL.md enforcement rules to v2.1.0.`
+   - If hook indicates `sigil_md_action: "create"` → create SIGIL.md with content below. Report: `Created SIGIL.md with Sigil enforcement rules (v2.3.0).`
+   - If hook indicates `sigil_md_action: "update"` → overwrite SIGIL.md with content below. When the old SIGIL.md has a `## Configuration` section, parse the existing YAML values before overwriting, then merge user config values back into the new template's Configuration section (preserving the user's `user_track` and `execution_mode` choices). Report: `Updated SIGIL.md enforcement rules to v2.3.0.`
    - If hook indicates `sigil_md_action: "none"` → skip (already current).
 4. **Check CLAUDE.md for pointer:**
    - If hook indicates `needs_pointer: true`:
@@ -70,8 +70,8 @@ Use this exact content as the pointer:
 #### Report
 
 Only print a message if something changed:
-- Created SIGIL.md: `Created SIGIL.md with Sigil enforcement rules (v2.1.0).`
-- Updated SIGIL.md version: `Updated SIGIL.md enforcement rules to v2.1.0.`
+- Created SIGIL.md: `Created SIGIL.md with Sigil enforcement rules (v2.3.0).`
+- Updated SIGIL.md version: `Updated SIGIL.md enforcement rules to v2.3.0.`
 - Created CLAUDE.md: `Created ./CLAUDE.md with SIGIL.md pointer.`
 - Added pointer to existing CLAUDE.md: `Added SIGIL.md pointer to ./CLAUDE.md.`
 - Migrated legacy block: `Migrated legacy enforcement block to SIGIL.md.`
@@ -82,7 +82,7 @@ Only print a message if something changed:
 The following is the canonical SIGIL.md content. Use this exact content (substituting the current `ENFORCEMENT_VERSION` into the version marker) when creating or updating the file.
 
 ```markdown
-<!-- SIGIL-OS v2.2.0 -->
+<!-- SIGIL-OS v2.3.0 -->
 # Sigil OS — Enforcement Rules
 
 These rules are MANDATORY. They override default Claude Code behavior for all workflow actions.
@@ -176,6 +176,18 @@ After `tasks.md` is created, the develop/validate loop runs automatically:
 6. After all tasks pass validation, read the code-reviewer SKILL.md and run review on all changed files
 
 Do NOT wait for user input between tasks. The loop continues until all tasks are complete or a blocker requires human decision.
+
+## Configuration Compliance
+
+Read the ## Configuration section at session start. Adapt all user-facing communication, question depth, and detail level to the configured `user_track`. When `user_track` is `non-technical`, auto-resolve technical decisions with sensible defaults and communicate in plain English without agent names, phase jargon, or file paths. When `user_track` is `technical`, surface technical trade-offs, show agent and specialist names, and include implementation details. Respect `execution_mode` for team composition decisions (S3-102).
+
+## Configuration
+
+```yaml
+# Sigil OS Configuration
+user_track: non-technical    # non-technical | technical
+execution_mode: automatic    # automatic | directed (directed requires technical track)
+```
 
 ## Correct vs Incorrect Examples
 
