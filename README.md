@@ -206,9 +206,6 @@ See the [Shared Context Setup Guide](sigil-plugin/docs/shared-context-setup.md) 
 - [Command Reference](sigil-plugin/docs/command-reference.md)
 - [Shared Context Setup](sigil-plugin/docs/shared-context-setup.md) — share learnings and context across multiple repositories
 
-### Migrating from Global Install?
-
-If you previously used `install-global.sh`, see the [Migration Guide](sigil-plugin/docs/migration-from-global.md).
 
 ---
 
