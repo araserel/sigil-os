@@ -28,7 +28,7 @@ Systematically reduce ambiguity in specifications through targeted questions. En
 - `spec_path`: string — Path to spec needing clarification
 
 **Optional:**
-- `user_track`: string — From SIGIL.md Configuration section (`non-technical` | `technical`)
+- `user_track`: string — From `.sigil/config.yaml` (`non-technical` | `technical`)
 
 **From Handoff:**
 - `ambiguity_flags`: string[] — List of identified ambiguities
@@ -52,7 +52,7 @@ If `.sigil/project-context.md` does not exist, create it using the State Trackin
 ### Step 0: Load Configuration
 
 ```
-1. Read ./SIGIL.md and parse the ## Configuration section
+1. Read .sigil/config.yaml. If not found, use defaults.
 2. Extract user_track value (default: non-technical)
 3. Store for use in question generation and presentation
 ```

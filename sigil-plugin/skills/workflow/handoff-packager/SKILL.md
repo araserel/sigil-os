@@ -33,7 +33,7 @@ Generate a comprehensive Technical Review Package when a non-technical user requ
 ### Step 0: Load Configuration
 
 ```
-1. Read ./SIGIL.md and parse the ## Configuration section
+1. Read .sigil/config.yaml. If not found, use defaults.
 2. Extract user_track value (default: non-technical)
 3. Adapt package contents based on track
 ```

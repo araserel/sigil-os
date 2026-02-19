@@ -85,7 +85,7 @@ Replace open-ended questions with pre-configured defaults the user can accept or
 **Optional:**
 - `tech_preferences`: object — Any known technology preferences
 - `existing_constitution`: string — Path to existing constitution to update
-- `user_track`: string — From SIGIL.md Configuration section (`non-technical` | `technical`)
+- `user_track`: string — From `.sigil/config.yaml` (`non-technical` | `technical`)
 
 **From Discovery Chain (when invoked by foundation-writer):**
 - `foundation_path`: string — Path to approved foundation document
@@ -100,7 +100,7 @@ Replace open-ended questions with pre-configured defaults the user can accept or
 ### Step 0: Load Configuration
 
 ```
-1. Read ./SIGIL.md and parse the ## Configuration section
+1. Read .sigil/config.yaml. If not found, use defaults.
 2. Extract user_track value (default: non-technical)
 3. Store for use throughout the flow
 ```

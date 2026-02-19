@@ -34,7 +34,7 @@ Generate a clear, human-readable status report of the current workflow state. Th
 ### Step 0: Load Configuration
 
 ```
-1. Read ./SIGIL.md and parse the ## Configuration section
+1. Read .sigil/config.yaml. If not found, use defaults.
 2. Extract user_track value (default: non-technical)
 3. Adapt output formatting based on track
 ```

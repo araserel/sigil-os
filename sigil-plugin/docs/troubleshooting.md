@@ -15,7 +15,7 @@ Find your symptom in the table below and jump to the matching section.
 | Unexpected output format | Context mix-up | Start fresh | [Unexpected Output](#unexpected-output) |
 | Missing context from a previous session | Session state issue | Check context files | [Session Recovery](#session-recovery) |
 | Feature takes wrong direction | Unclear first description | Rewrite your description | [Wrong Direction](#wrong-direction) |
-| "No Configuration section" | Older SIGIL.md version | Run `/sigil-setup` or use `/sigil-config set` | [Configuration Issues](#configuration-issues) |
+| "No config file found" | Config not yet created | Run `/sigil-config set` to create it | [Configuration Issues](#configuration-issues) |
 | "Directed mode requires technical track" | Incompatible settings | Set user_track to technical first | [Configuration Issues](#configuration-issues) |
 | "Specialist file not found" | Missing specialist file | Automatic fallback to base agent | [Specialist Issues](#specialist-issues) |
 
@@ -278,9 +278,17 @@ Add a section to your specification like the example below.
 
 ## Configuration Issues
 
-### "No Configuration section in SIGIL.md"
+### "No config file found"
 
-Your SIGIL.md was created before the Configuration feature was added. Run `/sigil-setup` to update it, or add configuration manually with `/sigil-config set user_track non-technical`.
+Your personal configuration file (`.sigil/config.yaml`) hasn't been created yet. Sigil uses defaults (`non-technical` track, `automatic` mode) when the file is missing. To create it explicitly:
+
+```
+/sigil-config set user_track non-technical
+```
+
+### Migrating from older versions
+
+If you upgraded from Sigil 0.23.0 or earlier, your configuration may still be in the `## Configuration` section of `SIGIL.md`. The next time you run `/sigil`, the preflight check automatically migrates your settings to `.sigil/config.yaml` and removes the old section from SIGIL.md. No action needed.
 
 ### "Directed mode requires the technical track"
 
@@ -299,7 +307,7 @@ If `/sigil-config` reports formatting issues, reset to defaults:
 /sigil-config reset
 ```
 
-This restores the default configuration without affecting the rest of SIGIL.md.
+This restores the default configuration in `.sigil/config.yaml`.
 
 ---
 

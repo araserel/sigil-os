@@ -394,7 +394,7 @@ Would you like to:
 
 **On every session start**, before processing user requests:
 
-0. **Load Configuration** — Read `./SIGIL.md` and parse the `## Configuration` section. Extract `user_track` (default: `non-technical`) and `execution_mode` (default: `automatic`). Store these values for use in all routing decisions and output formatting.
+0. **Load Configuration** — Read `.sigil/config.yaml`. If not found, use defaults (`user_track: non-technical`, `execution_mode: automatic`). Store these values for use in all routing decisions and output formatting.
 
 1. **Load Context** — Read `/.sigil/project-context.md`
 

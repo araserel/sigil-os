@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.23.1] - 2026-02-19
+
+### Changed
+- **Personal config moved to `.sigil/config.yaml`:** `user_track` and `execution_mode` are now stored in `.sigil/config.yaml` (gitignored) instead of the `## Configuration` section in SIGIL.md. This prevents personal preferences from being committed to git and silently overriding other team members' settings.
+- **SIGIL.md template:** Removed `## Configuration` YAML block. Updated `## Configuration Compliance` rule to reference `.sigil/config.yaml` with defaults.
+- **`/sigil-config` command:** Reads and writes `.sigil/config.yaml` instead of SIGIL.md. Gracefully handles missing file by using defaults.
+- **`/sigil-setup` command:** Writes config to `.sigil/config.yaml` immediately after role selection (Step 3). Adds `.sigil/config.yaml` to `.gitignore` entries.
+- **Orchestrator, 4 skills, full-pipeline chain:** All config readers updated from SIGIL.md to `.sigil/config.yaml` with fallback defaults.
+- **Automatic upgrade path:** When preflight-check detects an old-style `## Configuration` YAML block in SIGIL.md during update, it migrates values to `.sigil/config.yaml` and removes the block.
+- **Plugin version:** 0.23.0 → 0.23.1 (plugin.json, marketplace.json). ENFORCEMENT_VERSION stays 2.3.0 (enforcement rules unchanged).
+
 ## [0.23.0] - 2026-02-19
 
 ### Added

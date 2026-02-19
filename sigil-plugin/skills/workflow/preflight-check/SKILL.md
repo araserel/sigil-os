@@ -51,7 +51,7 @@ The hook outputs JSON with instructions. Follow these steps based on the hook ou
 2. **Dev repo guard:** If the file contains the string `Sigil OS Development Environment`, skip entirely. This is the Sigil development repository — enforcement rules are not appropriate here. Report nothing.
 3. **Check/create SIGIL.md:**
    - If hook indicates `sigil_md_action: "create"` → create SIGIL.md with content below. Report: `Created SIGIL.md with Sigil enforcement rules (v2.3.0).`
-   - If hook indicates `sigil_md_action: "update"` → overwrite SIGIL.md with content below. When the old SIGIL.md has a `## Configuration` section, parse the existing YAML values before overwriting, then merge user config values back into the new template's Configuration section (preserving the user's `user_track` and `execution_mode` choices). Report: `Updated SIGIL.md enforcement rules to v2.3.0.`
+   - If hook indicates `sigil_md_action: "update"` → overwrite SIGIL.md with content below. When the old SIGIL.md has a `## Configuration` section with a YAML block, extract the `user_track` and `execution_mode` values, write them to `.sigil/config.yaml`, and add `.sigil/config.yaml` to `.gitignore` if not already present. Omit the `## Configuration` YAML block from the new SIGIL.md (the template below no longer includes it). Report: `Updated SIGIL.md enforcement rules to v2.3.0.` If config was migrated, also report: `Migrated personal config to .sigil/config.yaml.`
    - If hook indicates `sigil_md_action: "none"` → skip (already current).
 4. **Check CLAUDE.md for pointer:**
    - If hook indicates `needs_pointer: true`:
@@ -179,15 +179,7 @@ Do NOT wait for user input between tasks. The loop continues until all tasks are
 
 ## Configuration Compliance
 
-Read the ## Configuration section at session start. Adapt all user-facing communication, question depth, and detail level to the configured `user_track`. When `user_track` is `non-technical`, auto-resolve technical decisions with sensible defaults and communicate in plain English without agent names, phase jargon, or file paths. When `user_track` is `technical`, surface technical trade-offs, show agent and specialist names, and include implementation details. Respect `execution_mode` for team composition decisions (S3-102).
-
-## Configuration
-
-```yaml
-# Sigil OS Configuration
-user_track: non-technical    # non-technical | technical
-execution_mode: automatic    # automatic | directed (directed requires technical track)
-```
+Read `.sigil/config.yaml` at session start. If the file does not exist, use defaults: `user_track: non-technical`, `execution_mode: automatic`. Adapt all user-facing communication, question depth, and detail level to the configured `user_track`. When `user_track` is `non-technical`, auto-resolve technical decisions with sensible defaults and communicate in plain English without agent names, phase jargon, or file paths. When `user_track` is `technical`, surface technical trade-offs, show agent and specialist names, and include implementation details. Respect `execution_mode` for team composition decisions (S3-102).
 
 ## Correct vs Incorrect Examples
 

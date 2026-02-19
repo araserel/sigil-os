@@ -25,7 +25,7 @@ The `preflight-check` skill runs via the SessionStart hook **before** this chain
 
 ## Pre-Chain: Configuration Loading
 
-After preflight, the Orchestrator reads `./SIGIL.md` and extracts the `## Configuration` section. The `user_track` and `execution_mode` values are passed through the chain and influence skill behavior at each phase (question depth, output detail level, specialist visibility).
+After preflight, the Orchestrator reads `.sigil/config.yaml` (defaults apply if the file is missing). The `user_track` and `execution_mode` values are passed through the chain and influence skill behavior at each phase (question depth, output detail level, specialist visibility).
 
 ## Chain Sequence
 

@@ -435,10 +435,10 @@ Initialize Sigil OS in a new project.
 ### What It Does
 
 1. Creates the `.sigil/` directory structure
-2. Asks your role (Product/Business or Engineering/Technical) to set user track
+2. Asks your role (Product/Business or Engineering/Technical) and saves to `.sigil/config.yaml`
 3. Runs the constitution writer to set up project principles
 4. Optionally generates a project profile
-5. Creates `SIGIL.md` with enforcement rules and your configuration
+5. Creates `SIGIL.md` with enforcement rules
 6. Adds a pointer to `CLAUDE.md`
 
 ### When to Use
@@ -452,6 +452,7 @@ After setup completes:
 
 ```
 .sigil/
+├── config.yaml        ← Your personal settings (gitignored)
 ├── constitution.md    ← Your project's rules
 ├── project-context.md ← Workflow state tracker
 └── learnings/         ← Empty, ready for use

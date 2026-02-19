@@ -145,7 +145,7 @@ You should now see a structured feature document ready for review.
 
 ### User Track
 
-When you first set up Sigil, it asks about your role. This sets your **user track**, which controls how Sigil communicates with you.
+When you first set up Sigil, it asks about your role. This sets your **user track**, which controls how Sigil communicates with you. Your track is stored in `.sigil/config.yaml` — a personal config file that is gitignored, so each team member can use their own track without affecting others.
 
 | Track | Who It Is For | What Changes |
 |-------|---------------|-------------|

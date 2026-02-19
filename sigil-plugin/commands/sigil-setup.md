@@ -57,7 +57,15 @@ Options:
 - **Product / Business** → Sets `user_track: non-technical` — "Sigil will handle technical decisions automatically and communicate in plain English."
 - **Engineering / Technical** → Sets `user_track: technical` — "Sigil will show technical details, trade-offs, and specialist names."
 
-Store the answer for use after Step 6 (preflight check) creates SIGIL.md.
+Write the user's selection to `.sigil/config.yaml` immediately (the `.sigil/` directory was created in Step 2):
+
+```yaml
+# Sigil OS Personal Configuration
+user_track: non-technical    # non-technical | technical
+execution_mode: automatic    # automatic | directed (directed requires technical track)
+```
+
+If the user chose "Engineering / Technical", set `user_track: technical`.
 
 ### Step 4: Run Constitution Writer
 
@@ -96,10 +104,8 @@ Skill(skill: "sigil-profile")
 The preflight check creates `SIGIL.md` with enforcement rules and adds a pointer to `CLAUDE.md`. Read the preflight-check SKILL.md and follow its process to create these files.
 
 This ensures the project has:
-- `./SIGIL.md` with enforcement rules (including Configuration section)
+- `./SIGIL.md` with enforcement rules
 - `./CLAUDE.md` with pointer to SIGIL.md
-
-After SIGIL.md is created, update the `## Configuration` section's YAML block with the user's track selection from Step 3. If the user chose "Engineering / Technical", set `user_track: technical`. Otherwise leave the default `non-technical`.
 
 ### Step 7: Configure Gitignore
 
@@ -107,6 +113,7 @@ Check if `.gitignore` exists. If not, create it. Add the following entries (with
 
 ```gitignore
 # Sigil OS - Ephemeral artifacts (auto-added)
+.sigil/config.yaml
 .sigil/project-context.md
 .sigil/learnings/
 .sigil/waivers.md

@@ -19,8 +19,8 @@ $ARGUMENTS
 
 If no arguments provided:
 
-1. Read `./SIGIL.md` from the project root
-2. Parse the `## Configuration` section's YAML block
+1. Read `.sigil/config.yaml`. If file does not exist, use defaults (`user_track: non-technical`, `execution_mode: automatic`).
+2. Parse the YAML content
 3. Display human-readable descriptions of current settings:
 
 ```
@@ -70,10 +70,10 @@ If arguments start with "set":
      ```
    - **Invalid key:** Show: `Unknown setting "[key]". Available settings: user_track, execution_mode`
    - **Invalid value:** Show: `Invalid value "[value]" for [key]. Allowed values: [list]`
-3. Read `./SIGIL.md`
-4. Parse the full Configuration YAML block
+3. Read `.sigil/config.yaml`. If file does not exist, start from defaults.
+4. Parse the YAML content
 5. Modify the target key, preserving all other keys (including any unknown keys for forward compatibility)
-6. Write the updated YAML back to SIGIL.md, preserving the rest of the file
+6. Write the updated YAML to `.sigil/config.yaml` (create the file if it does not exist)
 7. Confirm the change:
    ```
    Updated [key]: [old value] → [new value]
@@ -83,7 +83,7 @@ If arguments start with "set":
 
 If argument is "reset":
 
-1. Read current configuration from SIGIL.md
+1. Read current configuration from `.sigil/config.yaml` (use defaults if missing)
 2. Show diff from current to defaults:
    ```
    Reset configuration to defaults?
@@ -93,9 +93,9 @@ If argument is "reset":
      execution_mode: [current] → automatic
    ```
 3. Use AskUserQuestion to confirm: "Reset to defaults?" with options "Yes, reset" / "Cancel"
-4. If confirmed, write default YAML:
+4. If confirmed, write defaults to `.sigil/config.yaml`:
    ```yaml
-   # Sigil OS Configuration
+   # Sigil OS Personal Configuration
    user_track: non-technical    # non-technical | technical
    execution_mode: automatic    # automatic | directed (directed requires technical track)
    ```
@@ -107,10 +107,10 @@ Use plain-language error messages. Never show error codes or stack traces.
 
 | Situation | Response |
 |-----------|----------|
-| No SIGIL.md found | "Sigil OS is not set up in this project. Run `/sigil-setup` to get started." |
-| No Configuration section in SIGIL.md | "Your SIGIL.md doesn't have a Configuration section. This may mean it was created with an older version. Run `/sigil-setup` to update, or use `/sigil-config set` to add configuration." |
-| YAML parse failure | "The configuration section has formatting issues. Would you like to reset it to defaults?" |
-| Permission denied | "I don't have permission to modify SIGIL.md. Check your file permissions." |
+| No `.sigil/` directory found | "Sigil OS is not set up in this project. Run `/sigil-setup` to get started." |
+| No config file found | "No config file found — using defaults (non-technical track, automatic mode). Use `/sigil-config set` to customize." |
+| YAML parse failure | "The config file has formatting issues. Would you like to reset it to defaults?" |
+| Permission denied | "I don't have permission to modify `.sigil/config.yaml`. Check your file permissions." |
 
 ## Guidelines
 
@@ -118,7 +118,7 @@ Use plain-language error messages. Never show error codes or stack traces.
 - Always show the human-readable description alongside the raw value
 - When displaying, translate values into plain language (e.g., "non-technical" → "Plain English mode — technical decisions handled automatically")
 - Unknown keys in the YAML block should be preserved on write (forward compatibility)
-- The Configuration section in SIGIL.md is the single source of truth
+- `.sigil/config.yaml` is the source of truth for personal settings. It is gitignored so each user has their own configuration.
 
 ## Related Commands
 

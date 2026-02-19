@@ -93,8 +93,9 @@ When you run `/sigil` for the first time, it creates these project files:
 | Folder | What It Contains |
 |--------|------------------|
 | `.sigil/` | Project rules, state, and learnings |
+| `.sigil/config.yaml` | Your personal settings (gitignored — each user has their own) |
 | `.sigil/specs/` | Feature specifications you create |
-| `SIGIL.md` | Enforcement rules (auto-generated) |
+| `SIGIL.md` | Enforcement rules (auto-generated, shared) |
 
 > **Note:** The plugin itself is managed by Claude Code. Only your project-specific files live in your repository.
 
