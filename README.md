@@ -2,11 +2,11 @@
 
 **Inscribe it. Ship it.**
 
-**Specification-driven development for non-technical users of Claude Code.**
+**Specification-driven development for Claude Code — built for product managers, works for engineers too.**
 
 Sigil is a plugin for Claude Code, Anthropic's AI coding tool. Transform natural language descriptions into implemented, tested features through structured workflows.
 
-> **v0.23.0** · Active development — expect breaking changes between minor versions.
+> **v0.23.1** · Active development — expect breaking changes between minor versions.
 
 ---
 
@@ -25,7 +25,19 @@ flowchart LR
     style E fill:#d1fae5,stroke:#10b981
 ```
 
-**Who is it for?** Product managers, founders, solo builders, and anyone who wants to ship features through Claude Code without writing code themselves.
+### Two Ways to Work
+
+Sigil adapts to how you think. During setup, you pick a track that shapes the entire experience.
+
+| | Non-Technical (default) | Technical |
+|---|---|---|
+| **Best for** | Product managers, founders, solo builders | Engineers, tech leads |
+| **Communication** | Plain English, no jargon | Agent names, file paths, trade-offs |
+| **Technical decisions** | Handled automatically | Surfaced for your input |
+| **Progress** | "3 of 8 steps done" | "T003/T008 implementing (api-developer)" |
+| **Specialists** | Work silently in the background | Named in output so you can see who's doing what |
+
+Switch anytime with `/sigil-config set user_track technical` (or `non-technical`). Your track is a personal setting — it won't affect your teammates.
 
 ---
 
