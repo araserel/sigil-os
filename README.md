@@ -212,10 +212,4 @@ If you previously used `install-global.sh`, see the [Migration Guide](sigil-plug
 
 ---
 
-## Development
-
-See [CLAUDE.md](CLAUDE.md) for development instructions, repository structure, and contributing guidelines.
-
----
-
 Built for [Claude Code](https://www.anthropic.com/claude-code) by Anthropic.
