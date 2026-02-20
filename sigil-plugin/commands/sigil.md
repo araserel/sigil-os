@@ -169,7 +169,7 @@ After each phase completes successfully:
 | spec-writer | clarifier | Auto-continue (always check for ambiguities) |
 | clarifier | technical-planner | Auto-continue if no blocking questions |
 | technical-planner | task-decomposer | Auto-continue |
-| task-decomposer | implementation | Auto-continue — show task summary, begin first task |
+| task-decomposer | implementation | Auto-continue — commit spec artifacts, show task summary, begin first task |
 
 **Pause conditions:**
 - Blocking questions require user decision
@@ -183,9 +183,15 @@ Runs after task-decomposer completes OR when `/sigil continue` resumes an implem
 #### Entry: Show Tasks and Begin
 
 1. Read tasks file from spec path (`/.sigil/specs/###-feature/tasks.md`)
-2. Display brief task summary (total count, phases, first unblocked task)
-3. Auto-continue to first unblocked task (do NOT wait for user to pick)
-4. Update project-context.md: Current Phase -> implement, add Current Task field
+2. **Commit spec artifacts** as a restore point before implementation begins:
+   - Stage the spec directory: `git add .sigil/specs/###-feature-name/`
+   - This stages spec.md, plan.md, tasks.md, and any other artifacts created during specification
+   - Commit with message: `sigil: spec artifacts for ###-feature-name`
+   - If the commit fails (e.g., nothing to commit, git not configured), log a warning but do NOT block the implementation loop. This is a safety net, not a gate.
+   - Do NOT push to remote. The commit is local only.
+3. Display brief task summary (total count, phases, first unblocked task)
+4. Auto-continue to first unblocked task (do NOT wait for user to pick)
+5. Update project-context.md: Current Phase -> implement, add Current Task field
 
 #### Per-Task Cycle
 

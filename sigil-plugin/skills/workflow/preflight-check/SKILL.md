@@ -1,7 +1,7 @@
 ---
 name: preflight-check
 description: Creates SIGIL.md with enforcement rules and adds a pointer to the project's CLAUDE.md. Now invoked automatically via SessionStart hook.
-version: 2.3.0
+version: 2.4.0
 category: workflow
 chainable: true
 invoked_by: [hook:SessionStart]
@@ -19,7 +19,7 @@ Create a standalone `SIGIL.md` file with mandatory enforcement rules and ensure 
 ## Constants
 
 ```
-ENFORCEMENT_VERSION: 2.3.0
+ENFORCEMENT_VERSION: 2.4.0
 ```
 
 **Versioning:** `ENFORCEMENT_VERSION` tracks independently from the Sigil OS plugin version in `plugin.json`. Bump it only when the enforcement section content changes (new rules, modified instructions). Plugin releases that don't change enforcement content leave this version unchanged.
@@ -50,8 +50,8 @@ The hook outputs JSON with instructions. Follow these steps based on the hook ou
 1. Read `./CLAUDE.md` from the project root.
 2. **Dev repo guard:** If the file contains the string `Sigil OS Development Environment`, skip entirely. This is the Sigil development repository — enforcement rules are not appropriate here. Report nothing.
 3. **Check/create SIGIL.md:**
-   - If hook indicates `sigil_md_action: "create"` → create SIGIL.md with content below. Report: `Created SIGIL.md with Sigil enforcement rules (v2.3.0).`
-   - If hook indicates `sigil_md_action: "update"` → overwrite SIGIL.md with content below. When the old SIGIL.md has a `## Configuration` section with a YAML block, extract the `user_track` and `execution_mode` values, write them to `.sigil/config.yaml`, and add `.sigil/config.yaml` to `.gitignore` if not already present. Omit the `## Configuration` YAML block from the new SIGIL.md (the template below no longer includes it). Report: `Updated SIGIL.md enforcement rules to v2.3.0.` If config was migrated, also report: `Migrated personal config to .sigil/config.yaml.`
+   - If hook indicates `sigil_md_action: "create"` → create SIGIL.md with content below. Report: `Created SIGIL.md with Sigil enforcement rules (v2.4.0).`
+   - If hook indicates `sigil_md_action: "update"` → overwrite SIGIL.md with content below. When the old SIGIL.md has a `## Configuration` section with a YAML block, extract the `user_track` and `execution_mode` values, write them to `.sigil/config.yaml`, and add `.sigil/config.yaml` to `.gitignore` if not already present. Omit the `## Configuration` YAML block from the new SIGIL.md (the template below no longer includes it). Report: `Updated SIGIL.md enforcement rules to v2.4.0.` If config was migrated, also report: `Migrated personal config to .sigil/config.yaml.`
    - If hook indicates `sigil_md_action: "none"` → skip (already current).
 4. **Check CLAUDE.md for pointer:**
    - If hook indicates `needs_pointer: true`:
@@ -70,8 +70,8 @@ Use this exact content as the pointer:
 #### Report
 
 Only print a message if something changed:
-- Created SIGIL.md: `Created SIGIL.md with Sigil enforcement rules (v2.3.0).`
-- Updated SIGIL.md version: `Updated SIGIL.md enforcement rules to v2.3.0.`
+- Created SIGIL.md: `Created SIGIL.md with Sigil enforcement rules (v2.4.0).`
+- Updated SIGIL.md version: `Updated SIGIL.md enforcement rules to v2.4.0.`
 - Created CLAUDE.md: `Created ./CLAUDE.md with SIGIL.md pointer.`
 - Added pointer to existing CLAUDE.md: `Added SIGIL.md pointer to ./CLAUDE.md.`
 - Migrated legacy block: `Migrated legacy enforcement block to SIGIL.md.`
@@ -82,7 +82,7 @@ Only print a message if something changed:
 The following is the canonical SIGIL.md content. Use this exact content (substituting the current `ENFORCEMENT_VERSION` into the version marker) when creating or updating the file.
 
 ```markdown
-<!-- SIGIL-OS v2.3.0 -->
+<!-- SIGIL-OS v2.4.0 -->
 # Sigil OS — Enforcement Rules
 
 These rules are MANDATORY. They override default Claude Code behavior for all workflow actions.
@@ -164,6 +164,19 @@ When these artifacts are created during a /sigil workflow, the next phase begins
 | `tasks.md` | Implementation | Auto-continue to Developer agent |
 | Task code changes | Validation | Invoke qa-validator |
 | All tasks validated | Code Review | Read code-reviewer SKILL.md and run review |
+
+## External Context Integration
+
+When MCP tools (Atlassian, Figma, Jira, GitHub Issues, Linear, etc.) are used to fetch work items, designs, or requirements in the same session as a `/sigil` workflow invocation:
+
+1. Treat the fetched content as **input context** for the spec-writer, not as standalone completed actions
+2. When the user invokes `/sigil "description"` after fetching external context, pass all relevant fetched content (ticket descriptions, acceptance criteria, design references, linked requirements) as part of the feature description to the spec-writer
+3. Do NOT generate specs, tasks, or implementation plans outside of the `/sigil` workflow. All specification work MUST flow through the orchestrator's pipeline
+4. If external context was fetched but `/sigil` has not been invoked, prompt the user: "I've gathered context from [source]. Would you like to start a Sigil workflow with this? Run `/sigil` with a feature description to begin."
+
+CORRECT: Fetch Jira ticket → User runs `/sigil "implement JIRA-123 login feature"` → Spec-writer receives ticket context + description
+INCORRECT: Fetch Jira ticket → Generate spec.md directly from ticket → Start coding
+INCORRECT: Fetch Jira ticket → Create project-context.md stub → Stop
 
 ## Implementation Loop Rule
 

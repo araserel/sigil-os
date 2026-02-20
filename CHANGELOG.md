@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.25.1] - 2026-02-20
+
+### Fixed
+- **Setup now scaffolds project-context.md:** `/sigil-setup` creates `.sigil/project-context.md` from the template with default values, preventing Claude Code from improvising a malformed stub when enforcement rules require loading it.
+- **Auto-commit spec artifacts before implementation:** The orchestrator now commits spec.md, plan.md, and tasks.md to git before entering the implementation loop, creating a restore point in case of session loss. Commit is local-only and non-blocking (failures produce a warning, not a halt).
+
+### Added
+- **External Context Integration enforcement (SIGIL.md v2.4.0):** New enforcement section ensures MCP-fetched content (Atlassian, Figma, Jira, etc.) is routed through the `/sigil` workflow pipeline as spec-writer input rather than treated as standalone actions.
+
 ## [0.25.0] - 2026-02-20
 
 ### Added

@@ -133,6 +133,25 @@ This ensures the project has:
 - `./SIGIL.md` with enforcement rules
 - `./CLAUDE.md` with pointer to SIGIL.md
 
+### Step 6.5: Scaffold Project Context
+
+Create `.sigil/project-context.md` from the template so that workflow state tracking works from the first `/sigil` invocation:
+
+1. Read `templates/project-context-template.md`
+2. Write it to `.sigil/project-context.md` with these initial values:
+   - Replace all `[TIMESTAMP]` placeholders with the current ISO timestamp
+   - Set `Current Phase` to `none`
+   - Set `Feature` to `null`
+   - Set `Spec Path` to `null`
+   - Set `Track` to `null`
+   - Set `Constitution` path in Quick Reference to `/.sigil/constitution.md`
+   - Clear the Recent Activity table (leave headers, remove placeholder rows)
+   - Clear the Open Decisions section (leave the header)
+   - Clear the Blockers section (leave headers)
+   - Clear the Session Notes section (leave headers)
+
+This file is gitignored (ephemeral per-session state), but having it scaffolded prevents Claude Code from improvising a malformed stub when enforcement rules require loading it.
+
 ### Step 7: Configure Gitignore
 
 Check if `.gitignore` exists. If not, create it. Add the following entries (without duplication):
@@ -163,6 +182,7 @@ Setup Complete!
 ✅ Constitution created (7 articles [, N from shared standards])
 ✅ Profile generated (or "⬚ Profile — skipped, run /sigil-profile later")
 ✅ Enforcement rules installed (SIGIL.md)
+✅ Project context initialized (.sigil/project-context.md)
 ✅ Gitignore configured
 
 You're ready to go! Try:
