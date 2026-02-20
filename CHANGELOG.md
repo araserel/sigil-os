@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.24.0] - 2026-02-19
+
+### Fixed
+- **`/sigil-update` hardcoded version:** Removed hardcoded "2.1.1" version string; now reads dynamically from `plugin.json`.
+- **shared-context-sync version history ordering:** Fixed descending order (was 1.0.0, 1.2.0, 1.1.0 → now 1.2.0, 1.1.0, 1.0.0).
+- **learning-reader version history ordering:** Fixed descending order.
+- **quick-spec output contradiction:** Template said "not persisted" but Output section said it is. Clarified that specs persist to `/.sigil/specs/stories/` for downstream skills.
+- **Quick Flow diagram:** Updated to match quick-spec persistence fix.
+- **handoff-packager frontmatter version:** Frontmatter said 1.1.0 while version history showed 1.2.0. Synced frontmatter to 1.2.0.
+
+### Added
+- **Handoff destination branching (handoff-packager v1.2.0):** Users now choose between Option A (Branch + Technical Review Package) or Option B (Branch + Backlog Stories). Option B invokes story-preparer for Jira/Linear/Asana export. Single exit point for completed features.
+- **knowledge-search in BA and Architect (v1.2.0 each):** Both agents now invoke knowledge-search for broader project context before starting work. Complements the existing learning-reader integration.
+- **UI framework skills in Developer (v1.1.0):** Documented conditional routing to react-ui, vue-ui, flutter-ui, swift-ui, and react-native-ui based on project tech stack.
+- **code-reviewer user_track branching (v1.2.0):** Non-technical track gets summary-focused report with plain-English descriptions; technical track gets full line-level detail with code snippets.
+- **WCAG glossary entry:** Added Web Content Accessibility Guidelines definition to glossary.
+- **`model` frontmatter field documented:** Added `model` field to skill definition format, extending-skills guide, and skills README with usage guidance.
+- **Multi-team guide cross-reference:** Added link to multi-team-workflow.md from user guide's Learning Loop section.
+- **Design phase label:** Standard Track workflow diagram now labels Phase 2 as "DESIGN + PLAN".
+- **Enterprise track in user guide:** Added section explaining Enterprise track triggers (score 17-21), what it adds (research, mandatory ADRs, security review), and how to override track selection.
+- **Specialist merge protocol doc:** Extracted merge logic from inline command/agent definitions into `docs/dev/specialist-merge-protocol.md`. Documents field precedence, tool union, constraint inheritance, and examples.
+- **Artifact naming convention doc:** Created `docs/dev/artifact-naming-convention.md` cataloging all skill-generated artifacts, naming rules, and directory structure.
+- **Phase count consistency:** Aligned glossary, user guide, and key concepts to 7 user-facing stages (Validate runs within Implement, Design runs within Plan).
+
+### Changed
+- **sprint-planner archived:** Removed from active skills, agents, chains, and docs. Moved to `archive/skills/sprint-planner/`.
+- **story-preparer routing:** Now invoked by handoff-packager (was task-planner). Updated frontmatter, integration points, and agent references.
+- **task-planner trimmed:** Removed sprint-planner and story-preparer from Skills Invoked; removed "stories", "backlog", and "sprint" trigger words.
+- **technical-planner human checkpoints:** Standardized to track-based table format matching adr-writer.
+- **Plugin version:** 0.23.1 → 0.24.0 (plugin.json, marketplace.json). ENFORCEMENT_VERSION unchanged at 2.3.0.
+- **Quick Reference printable:** Updated phase header from 8 to 7 phases (removed Validate), version to 0.24.0, Task Planner description from "sprint planning" to "dependency ordering".
+
+### Removed
+- **VERSION file:** Deleted redundant `VERSION` file (was stale at 2.1.3; canonical version lives in `plugin.json`).
+
 ## [0.23.1] - 2026-02-19
 
 ### Changed

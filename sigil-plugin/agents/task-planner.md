@@ -73,16 +73,11 @@ Get the first task ready for immediate execution:
 | Skill | Purpose | When |
 |-------|---------|------|
 | `task-decomposer` | Break plan into tasks | After plan received |
-| `story-preparer` | Format tasks as stories | For story-based workflows |
-| `sprint-planner` | Organize into sprints | For sprint-based workflows |
 
 ## Trigger Words
 
 - "break down" — Decompose into tasks
 - "tasks" — Task-related work
-- "sprint" — Sprint planning
-- "stories" — User story formatting
-- "backlog" — Backlog management
 - "prioritize" — Task prioritization
 
 ## Input Expectations

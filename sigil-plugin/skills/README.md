@@ -16,7 +16,6 @@ Core development workflow skills:
 - `status-reporter.md` — Generate workflow status reports
 - `foundation-writer.md` — Compile Discovery outputs into foundation document
 - `visual-analyzer.md` — Analyze mockups and wireframes
-- `sprint-planner.md` — Organize tasks into sprints
 - `story-preparer.md` — Convert tasks to user story format
 
 ### design/
@@ -85,6 +84,7 @@ invoked_by: [skills that may call this]
 tools: [tools this skill uses]
 inputs: [required inputs]
 outputs: [produced outputs]
+model: haiku|sonnet  # Optional — request a specific model for this skill
 ---
 
 # Skill: [Name]
@@ -124,6 +124,18 @@ All skills use semantic versioning (MAJOR.MINOR.PATCH):
 Current versions: Most skills at **v1.0.0** (initial release). Several have been bumped by cross-cutting specs and Stage 2 features. See `/docs/dev/versioning.md` for the full version table.
 
 See `/docs/dev/versioning.md` for detailed versioning strategy.
+
+## Model Selection
+
+The optional `model` frontmatter field requests a specific model tier for skill execution. Use it when a skill's workload doesn't require the default model:
+
+| Value | When to Use | Examples |
+|-------|-------------|---------|
+| `haiku` | Lightweight read/write, file loading, simple classification | learning-reader, learning-capture, shared-context-sync |
+| `sonnet` | Moderate analysis, interactive wizards, structured generation | learning-review, connect-wizard, profile-generator |
+| *(omitted)* | Default model — complex reasoning, planning, code generation | Most skills |
+
+Only add `model` when there's a clear cost/speed benefit. When in doubt, omit it and use the default.
 
 ## Creating New Skills
 

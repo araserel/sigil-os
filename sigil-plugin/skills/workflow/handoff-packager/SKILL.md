@@ -1,10 +1,10 @@
 ---
 name: handoff-packager
 description: Generates a Technical Review Package for engineer handoff. Bundles all feature artifacts into a single, well-organized document that provides full context for technical review.
-version: 1.1.0
+version: 1.2.0
 category: workflow
 chainable: false
-invokes: []
+invokes: [story-preparer]
 invoked_by: [orchestrator]
 tools: Read, Write, Glob
 inputs: [spec_path, feature_id, user_track]
@@ -41,6 +41,30 @@ Generate a comprehensive Technical Review Package when a non-technical user requ
 **User track branching:**
 - **`non-technical`:** Generate a summary-focused package with demo instructions, business context, and a plain-English explanation of what was built. Minimize code details. Emphasize what to tell the engineer and what to expect.
 - **`technical`:** Full current behavior plus code walkthrough sections, architecture decision details, dependency rationale, and test coverage summary. Include file-level change descriptions and code snippets for key changes.
+
+### Step 0.5: Handoff Destination
+
+Before generating the handoff package, ask the user:
+
+"How would you like to hand this off?"
+
+**Option A: Branch + Technical Review Package**
+Push the feature branch and generate a Technical Review Package for an engineer to review.
+
+**Option B: Branch + Backlog Stories**
+Push the feature branch and create formatted user stories for your backlog tool (Jira, Linear, Asana, etc.).
+
+#### If Option A:
+Continue with the Technical Review Package generation flow (Steps 1-4 below).
+
+#### If Option B:
+1. Invoke `story-preparer` skill with the feature's `tasks.md` path
+2. Ask which backlog tool format to use (Jira, Linear, Asana, or generic)
+3. Generate stories in the selected format
+4. Present stories for review before any export
+5. Skip Steps 1-4 below (story output replaces the Technical Review Package)
+
+---
 
 ### Step 1: Gather Artifacts
 Collect all artifacts for the feature:
@@ -110,7 +134,8 @@ Generate a brief (3-5 sentence) summary for the non-technical user to include wh
 
 ## Output Artifact
 
-`/.sigil/specs/###-feature/technical-review-package.md`
+**Option A:** `/.sigil/specs/###-feature/technical-review-package.md`
+**Option B:** Formatted user stories (inline or exported to `/.sigil/specs/###-feature/stories/`)
 
 ## Writing Guidelines
 
@@ -161,5 +186,6 @@ The user remains in control of whether to share the package and how to act on en
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2.0 | 2026-02-19 | Added handoff destination branching — Option A (Technical Review Package) or Option B (Backlog Stories via story-preparer). Single exit point for completed features. |
 | 1.1.0 | 2026-02-19 | S3-100: Added user_track branching — non-technical generates summary-focused package with business context, technical adds code walkthrough and architecture details |
 | 1.0.0 | 2026-01-20 | Initial release |

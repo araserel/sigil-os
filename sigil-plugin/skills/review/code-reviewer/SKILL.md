@@ -1,7 +1,7 @@
 ---
 name: code-reviewer
 description: Perform structured code review against project standards and best practices. Invoke after qa-validator passes to review code quality before deployment.
-version: 1.1.0
+version: 1.2.0
 category: review
 chainable: true
 invokes: []
@@ -52,6 +52,23 @@ Perform structured code review against project standards, constitution principle
 - Constitution from `/.sigil/constitution.md`
 - Project coding standards
 - Existing codebase patterns
+- `user_track` from `.sigil/config.yaml` (default: `non-technical`)
+
+## User Track Branching
+
+The review report adapts based on the user's track:
+
+**`non-technical` track:**
+- Summary-focused report: overall status, blocker count, plain-English descriptions
+- Findings use business language ("This code could cause errors for users" not "Unhandled promise rejection")
+- Code snippets omitted from findings; replaced with file name and description
+- Approval status clearly states what to do next
+
+**`technical` track:**
+- Full line-level detail with code snippets, line numbers, and suggested fixes
+- Findings reference specific patterns, libraries, and constitution articles
+- Includes complexity metrics and architecture analysis
+- Tech debt entries include implementation context
 
 ## Outputs
 
@@ -424,5 +441,6 @@ Proceeding with focused review on changed sections only.
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0.0 | 2026-01-20 | Initial release |
+| 1.2.0 | 2026-02-19 | Added user_track branching — non-technical gets summary-focused report, technical gets line-level detail |
 | 1.1.0 | 2026-02-09 | S2-003: Added QA Fix Impact Notice and `qa_fix_metadata` input. SX-002: Added tech-debt persistence for non-blocking suggestions. Added Write tool. |
+| 1.0.0 | 2026-01-20 | Initial release |

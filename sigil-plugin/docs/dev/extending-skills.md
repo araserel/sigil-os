@@ -77,6 +77,7 @@ invoked_by: [list, of, skills, that, call, this]
 tools: Tool1, Tool2, Tool3
 inputs: [required_input1, required_input2]
 outputs: [output_artifact1, output_artifact2]
+model: haiku|sonnet  # Optional — omit for default model
 ---
 ```
 
@@ -100,6 +101,12 @@ The skill definition including purpose, workflow, inputs/outputs, and version hi
 | `tools` | string | Comma-separated Claude Code tools used |
 | `inputs` | array | Required input identifiers |
 | `outputs` | array | Output artifact identifiers |
+
+### Optional Frontmatter Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `model` | enum | Request a specific model tier: `haiku` (lightweight), `sonnet` (moderate). Omit for default model. See skills README for guidance. |
 
 ---
 

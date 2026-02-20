@@ -1,7 +1,7 @@
 ---
 name: developer
 description: Code implementation specialist. Writes code to fulfill tasks, follows test-first patterns, implements fixes when needed.
-version: 1.0.0
+version: 1.1.0
 tools: [Read, Write, Edit, Bash, Glob, Grep]
 active_phases: [Implement, Validate]
 human_tier: auto
@@ -146,8 +146,13 @@ Mark task done and hand off to QA Engineer:
 |-------|------|---------|
 | `learning-reader` | Before starting each task | Load patterns, gotchas, and feature notes |
 | `learning-capture` | Before marking task complete | Record learnings from implementation |
+| `react-ui` | UI tasks in React projects | Generate React components from design specs |
+| `react-native-ui` | UI tasks in React Native projects | Generate React Native components from design specs |
+| `vue-ui` | UI tasks in Vue projects | Generate Vue 3 components from design specs |
+| `flutter-ui` | UI tasks in Flutter projects | Generate Flutter widgets from design specs |
+| `swift-ui` | UI tasks in SwiftUI projects | Generate SwiftUI views from design specs |
 
-Implementation itself uses native Claude Code capabilities (Read, Write, Edit, Bash, etc.).
+UI framework skills are invoked conditionally based on the project's tech stack (detected from constitution Article 1 or `/.sigil/project-profile.yaml`). Only the matching framework skill is invoked. Non-UI tasks skip these entirely.
 
 ## Trigger Words
 
@@ -385,3 +390,10 @@ When QA returns issues:
 3. Fix within same task context
 4. Re-submit to QA
 5. Max 5 fix cycles before escalation
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.1.0 | 2026-02-19 | Documented UI framework skill routing (react-ui, vue-ui, flutter-ui, swift-ui, react-native-ui) |
+| 1.0.0 | 2026-01-20 | Initial release |

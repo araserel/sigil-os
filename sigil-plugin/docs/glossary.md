@@ -15,7 +15,7 @@ Plain-English definitions for terms used in Sigil. If a word sounds technical, y
 | **Functional Requirement** | A specific thing the system must do (e.g., "show a login form") |
 | **Handoff** | A package of documents passed to engineers so they can start building |
 | **Non-Functional Requirement** | How well the system must work — speed, security, or accessibility |
-| **Phase** | One stage of the workflow: Assess, Specify, Clarify, Plan, Tasks, Implement, Validate, or Review |
+| **Phase** | One stage of the workflow: Assess, Specify, Clarify, Plan, Tasks, Implement, or Review. (Validation runs automatically within the Implement phase after each task.) |
 | **Specification (Spec)** | A written plan that describes what a feature should do — the "what," not the "how" |
 | **Track** | The workflow path Sigil picks based on size: Quick (small), Standard (medium), or Enterprise (large) |
 | **User Scenario** | A short story: "As a [person], I want to [do something] so that [benefit]" |
@@ -42,6 +42,7 @@ Plain-English definitions for terms used in Sigil. If a word sounds technical, y
 | **Plugin** | An add-on that gives a program new features (Sigil is a plugin for Claude Code) |
 | **QA Loop** | An automatic fix-and-check cycle that runs up to 5 times before asking for help |
 | **Repository (Repo)** | A folder tracked by Git (version control software) that stores your project's history |
+| **WCAG** | Web Content Accessibility Guidelines — the international standard for making websites usable by everyone, including people with disabilities. Sigil targets WCAG AA (the middle level) by default. |
 
 ---
 

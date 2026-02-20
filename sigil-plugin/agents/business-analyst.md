@@ -1,7 +1,7 @@
 ---
 name: business-analyst
 description: Requirements expert and spec author. Gathers requirements from user descriptions, creates and maintains specifications, drives clarification conversations.
-version: 1.1.0
+version: 1.2.0
 tools: [Read, Write, Edit, Glob, Grep]
 active_phases: [Specify, Clarify]
 human_tier: review
@@ -45,11 +45,12 @@ When receiving a new feature request:
 
 1. **Understand the request** — Read the user's description carefully
 2. **Load learnings** — Invoke `learning-reader` to load patterns and past spec issues. This surfaces gotchas from previous features (e.g., "always specify error states for forms") and relevant decisions.
-3. **Check constitution** — Reference `/.sigil/constitution.md` for project constraints
-4. **Invoke spec-writer skill** — Generate initial specification
-5. **Review for completeness** — Check all required sections filled
-6. **Identify ambiguities** — Flag areas needing clarification
-7. **Present to user** — Share spec for review (Human Tier: Review)
+3. **Search project knowledge** — Invoke `knowledge-search` to find similar features, relevant decisions, and established patterns. This surfaces broader project context beyond task-specific learnings.
+4. **Check constitution** — Reference `/.sigil/constitution.md` for project constraints
+5. **Invoke spec-writer skill** — Generate initial specification
+6. **Review for completeness** — Check all required sections filled
+7. **Identify ambiguities** — Flag areas needing clarification
+8. **Present to user** — Share spec for review (Human Tier: Review)
 
 ### Phase 2: Clarify
 
@@ -70,6 +71,7 @@ When specification has ambiguities:
 | `clarifier` | Generate clarification questions | Ambiguities detected |
 | `visual-analyzer` | Analyze mockups/wireframes | Images provided |
 | `learning-reader` | Load past learnings (patterns, past spec issues) | Before writing spec |
+| `knowledge-search` | Search project knowledge for similar features and decisions | Before writing spec |
 
 ## Trigger Words
 
@@ -224,5 +226,6 @@ The spec is a contract between user intent and developer implementation. It shou
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2.0 | 2026-02-19 | Added knowledge-search integration for broader project context before spec writing |
 | 1.1.0 | 2026-02-10 | Audit: Added learning-reader integration before spec writing |
 | 1.0.0 | 2026-01-20 | Initial release |

@@ -251,18 +251,17 @@ Most skills are at v1.0.0 (initial release). Skills modified by cross-cutting sp
 | task-decomposer | 1.0.0 | Stable |
 | constitution-writer | 2.0.0 | Stable |
 | preflight-check | 2.1.0 | Stable |
-| handoff-packager | 1.0.0 | Stable |
+| handoff-packager | 1.2.0 | Stable |
 | status-reporter | 1.0.0 | Stable |
 | foundation-writer | 1.0.0 | Stable |
 | visual-analyzer | 1.0.0 | Stable |
-| sprint-planner | 1.0.0 | Stable |
 | story-preparer | 1.0.0 | Stable |
 
 ### Specification Skills
 
 | Skill | Version | Status |
 |-------|---------|--------|
-| quick-spec | 1.1.0 | Stable |
+| quick-spec | 1.2.0 | Stable |
 
 ### Design Skills
 
@@ -293,7 +292,7 @@ Most skills are at v1.0.0 (initial release). Skills modified by cross-cutting sp
 | qa-validator | 1.1.0 | Stable |
 | qa-fixer | 1.2.0 | Stable |
 | qa-escalation-policy | 1.1.0 | Stable |
-| code-reviewer | 1.1.0 | Stable |
+| code-reviewer | 1.2.0 | Stable |
 | security-reviewer | 1.0.0 | Stable |
 | deploy-checker | 1.0.0 | Stable |
 

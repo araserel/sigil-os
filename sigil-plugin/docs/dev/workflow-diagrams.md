@@ -223,8 +223,8 @@ PHASE 1: SPECIFY + CLARIFY
                                             📄 clarifications.md
                                                     │◀──────┘
 
-PHASE 2: PLAN
-─────────────
+PHASE 2: DESIGN + PLAN
+──────────────────────
         │
         ▼
   UI Feature? ────Yes────▶ ┌────────────────┐
@@ -389,7 +389,7 @@ Chain: quick-flow
    └────────────────────┘      with simplified constraints)
             │
             ▼
-    📄 quick-spec (inline, not persisted unless requested)
+    📄 quick-spec → /.sigil/specs/stories/
             │
             │  ╔═══════════════════════════════╗
             │  ║  SKIPPED:                     ║
@@ -1211,7 +1211,7 @@ ESCALATION SCENARIO (After 5 failed iterations)
 │  ─────────────────                                                          │
 │  Tools: Read, Write, Edit, Glob, Grep                                       │
 │  Human Tier: Auto                                                           │
-│  Skills: task-decomposer, sprint-planner, story-preparer                    │
+│  Skills: task-decomposer, story-preparer                                    │
 │  Invoked: Tasks phase                                                       │
 │  Role: Task decomposition, dependency mapping, parallelization,             │
 │        progress tracking                                                    │
@@ -1299,7 +1299,6 @@ Each agent operates at a specific human oversight level:
 | `preflight-check` | workflow | Verify Sigil OS installation |
 | `handoff-packager` | workflow | Generate technical review packages |
 | `visual-analyzer` | workflow | Analyze mockups/wireframes |
-| `sprint-planner` | workflow | Organize tasks into sprints |
 | `story-preparer` | workflow | Convert tasks to user story format |
 | `code-reviewer` | review | General code review |
 | `design-skill-creator` | ui | Meta-skill to create new framework skills |

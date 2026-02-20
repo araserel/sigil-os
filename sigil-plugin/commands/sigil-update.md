@@ -20,7 +20,7 @@ $ARGUMENTS
 Sigil OS is installed as a Claude Code plugin. Check the current state:
 
 1. Verify the plugin is installed by checking if `/sigil` command is available
-2. If installed, the plugin version is defined in the plugin manifest (2.1.1)
+2. If installed, read the current version from the plugin manifest (`plugin.json` → `version` field)
 
 ### Step 2: Route Based on Arguments
 
@@ -44,7 +44,7 @@ Sigil OS Update Check
 
 📦 Sigil OS Plugin
 
-Current version: 2.1.1
+Current version: [read from plugin.json → version field]
 Installation: Plugin-based (Claude Code)
 Marketplace: sigil-os
 

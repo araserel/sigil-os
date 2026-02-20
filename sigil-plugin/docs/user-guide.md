@@ -97,7 +97,7 @@ Get familiar with these terms before you begin.
 | **Specification** | A written document that says what a feature should do, who uses it, and how to tell it works. Often shortened to "spec" (short for specification). |
 | **Constitution** | Your project's rulebook of standards and required technologies that every feature must follow |
 | **Track** | The workflow path based on feature size: Quick (small), Standard (medium), Enterprise (large) |
-| **Phase** | A stage in the workflow, such as Assess, Specify, Clarify, Plan, Tasks, Implement, Validate, Review (each stage in the step-by-step process) |
+| **Phase** | A stage in the workflow: Assess, Specify, Clarify, Plan, Tasks, Implement, or Review. (Validation runs automatically within Implement after each task.) |
 | **Priority** | How important a requirement is: P1 (must have), P2 (should have), P3 (nice to have) |
 
 ### What Happens Behind the Scenes
@@ -250,6 +250,40 @@ If you are starting from scratch with no existing code, Sigil enters the **Disco
 The output is a `project-foundation.md` file. It gives context for every feature that follows. You do not need to know which framework or database to use. Sigil recommends options based on what you are building.
 
 You should now see a `project-foundation.md` file in your project folder.
+
+### Enterprise Track -- Maximum Rigor
+
+For large or high-stakes features, Sigil assigns the **Enterprise** track. This adds extra depth at every stage.
+
+**When Enterprise is assigned:**
+
+Sigil scores each feature request across 7 dimensions (scope, file count, integration, data, testing, risk, and ambiguity). Each dimension scores 1-3, giving a total between 7 and 21.
+
+| Score | Track |
+|-------|-------|
+| 7-10 | Quick Flow |
+| 11-16 | Standard |
+| 17-21 | Enterprise |
+
+Some features always get at least Enterprise: new services or systems, and anything with compliance requirements (like SOC2 or HIPAA).
+
+**What Enterprise adds:**
+
+| What | Standard | Enterprise |
+|------|----------|------------|
+| Research phase | Skipped | Required -- Sigil investigates unknowns before planning |
+| Architecture decisions | Optional | Required -- every major choice is documented |
+| Security review | Optional | Required |
+| Task count | 5-20 | 20+ |
+
+**Overriding the track:**
+
+At the complexity assessment checkpoint, Sigil shows its recommendation and score. You can override it:
+
+- "Use the enterprise workflow" -- upgrades to Enterprise
+- "This is simpler than that, use standard" -- downgrades
+
+You can also set Enterprise as the default for your project during `/sigil-setup` (Round 2: "Enterprise -- Maximum rigor").
 
 ### Writing Good Feature Descriptions
 
@@ -590,6 +624,10 @@ Run this from time to time to tidy up lessons. You will be asked to:
 - Remove duplicates and stale entries
 
 > **Note:** Lessons are stored in `/.sigil/learnings/` and stay small -- about 3% of context.
+
+### Working Across Multiple Projects
+
+If your team works on several projects that share patterns or standards, Sigil can sync learnings between them. See the [Multi-Team Workflow Guide](multi-team-workflow.md) for setup instructions and how shared context works.
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: architect
 description: Technical designer and decision maker. Researches technical approaches, creates implementation plans, documents architecture decisions (ADRs), validates against constitution gates.
-version: 1.1.0
+version: 1.2.0
 tools: [Read, Write, Edit, Bash, Glob, Grep, WebFetch, WebSearch]
 active_phases: [Plan]
 human_tier: review
@@ -51,10 +51,11 @@ Receive handoff from Business Analyst containing:
 
 ### Step 2: Research (if needed)
 For unknowns in the spec:
-1. **Invoke researcher skill** for investigation
-2. Search internal codebase for existing patterns
-3. Research external libraries if needed
-4. Document findings in research.md
+1. **Search project knowledge** — Invoke `knowledge-search` to find similar implementations, applicable decisions, and established patterns across the project
+2. **Invoke researcher skill** for investigation of external unknowns
+3. Search internal codebase for existing patterns
+4. Research external libraries if needed
+5. Document findings in research.md
 
 ### Step 3: Create Plan
 Using the spec and research:
@@ -85,6 +86,7 @@ Present plan to user for review:
 | `researcher` | Investigate unknowns | When research needed |
 | `adr-writer` | Document architecture decisions | Significant decisions |
 | `learning-reader` | Load past decisions, architecture gotchas | Before starting plan (Step 1) |
+| `knowledge-search` | Search project knowledge for similar implementations and decisions | During research (Step 2) |
 
 ## Trigger Words
 
@@ -305,5 +307,6 @@ Escalate to Orchestrator when:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2.0 | 2026-02-19 | Added knowledge-search integration for project context during research |
 | 1.1.0 | 2026-02-10 | Audit: Added `requires_ui_design` flag to plan handoff, learning-reader integration |
 | 1.0.0 | 2026-01-20 | Initial release |

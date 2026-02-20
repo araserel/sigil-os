@@ -5,7 +5,7 @@ version: 1.0.0
 category: workflow
 chainable: true
 invokes: []
-invoked_by: [task-planner, orchestrator]
+invoked_by: [handoff-packager]
 tools: Read, Write, Glob
 ---
 
@@ -301,9 +301,8 @@ User: Create stories with point estimates for sprint planning
 
 ## Integration Points
 
-- **Invoked by:** `task-planner` for story-based teams
-- **Receives from:** `task-decomposer`
-- **Works with:** `sprint-planner` for sprint organization
+- **Invoked by:** `handoff-packager` for backlog story generation
+- **Receives from:** `task-decomposer` (task list)
 - **Outputs to:** External tools (Jira, Linear, Asana)
 
 ## Tool-Specific Notes

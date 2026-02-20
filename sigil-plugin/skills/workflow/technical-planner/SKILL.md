@@ -236,9 +236,11 @@ Before completing, verify:
 
 ## Human Checkpoints
 
-- **Review Tier:** User reviews plan before proceeding
-- **Approve Tier:** If architecture changes or gate violations
-- ADRs presented for review before finalizing
+| Track | Tier | Behavior |
+|-------|------|----------|
+| Quick Flow | Auto | Plan inferred from quick-spec, no separate review |
+| Standard | Review | User reviews plan before proceeding to task breakdown |
+| Enterprise | Review | User reviews plan; ADRs presented separately for approval |
 
 ## Error Handling
 

@@ -1,6 +1,6 @@
 ---
 name: quick-spec
-version: 1.1.0
+version: 1.2.0
 description: Constraint wrapper around spec-writer for simple, well-understood changes
 category: specification
 chainable: true
@@ -73,11 +73,9 @@ Defaults: `story_type` defaults to `"outcome"`.
 [Optional — only if ambiguity risk]
 ```
 
-Generated inline, not persisted unless requested.
-
 ## Output
 
-Single story file to `/.sigil/specs/stories/`.
+Single story file persisted to `/.sigil/specs/stories/` so downstream skills (technical-planner, task-decomposer) can reference it.
 
 ## When NOT to Use
 
@@ -96,5 +94,6 @@ This skill acts as a constraint wrapper around spec-writer, not an independent s
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0.0 | 2026-01-20 | Initial release |
+| 1.2.0 | 2026-02-19 | Fixed output contradiction — spec always persisted to stories directory |
 | 1.1.0 | 2026-02-05 | Enriched from stub to proper thin-delegation skill |
+| 1.0.0 | 2026-01-20 | Initial release |

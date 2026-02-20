@@ -220,7 +220,7 @@ When the Developer agent receives a task, learning-reader runs first:
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0.0 | 2026-01-23 | Initial release |
-| 1.1.0 | 2026-02-09 | SX-001/SX-002: Added waivers.md and tech-debt.md to loading pipeline with contextual rules |
 | 1.3.0 | 2026-02-10 | Audit: Expanded invoked_by to include business-analyst, architect, qa-engineer |
 | 1.2.0 | 2026-02-09 | S2-101: Added Step 0 — load shared learnings from cache before local. Shared budget combined with local (~5,500 total). |
+| 1.1.0 | 2026-02-09 | SX-001/SX-002: Added waivers.md and tech-debt.md to loading pipeline with contextual rules |
+| 1.0.0 | 2026-01-23 | Initial release |
