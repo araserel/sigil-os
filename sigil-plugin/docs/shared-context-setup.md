@@ -92,16 +92,58 @@ If GitHub MCP is unreachable (network down, MCP not running):
 - Cached shared learnings and sibling profiles load from your last successful pull.
 - Queued items sync automatically on your next session start.
 
-### Shared standards (optional)
+### Shared standards
 
-If your shared repo has files in `shared-standards/`, you can reference them in your project's constitution:
+The `shared-standards/` folder in your shared repo holds organization-level rules that apply across all your projects. These are things like security policies, accessibility requirements, coding conventions, or compliance mandates — anything that should be consistent everywhere, not just in one project.
+
+Shared standards are applied **automatically** — you do not need to add markers by hand.
+
+**Adding standards:**
+
+Create markdown files directly in the `shared-standards/` directory of your shared repo on GitHub. For example:
+- `shared-standards/security-standards.md` — Authentication rules, data handling policies
+- `shared-standards/accessibility.md` — WCAG compliance requirements
+- `shared-standards/coding-conventions.md` — Naming patterns, file organization rules
+- `shared-standards/api-guidelines.md` — API versioning, error format standards
+
+Each file should contain the rules in plain language. Sigil agents read and follow them just like local constitution rules.
+
+**How standards reach your project:**
+
+Standards flow into your project's constitution automatically at three points:
+
+1. **During `/sigil-setup`:** If you connect to shared context during setup, Sigil discovers available standards and writes them directly into your constitution using `@inherit` markers.
+2. **During `/sigil-connect`:** If your project already has a constitution, Sigil offers to apply available standards to the matching articles.
+3. **At every session start (`/sigil`):** Sigil pulls the latest version of each standard from the shared repo and refreshes the content in your constitution. If a standard changed upstream, your project picks it up automatically.
+
+**What it looks like in your constitution:**
 
 ```markdown
 ## Article 4: Security Mandates
+
 <!-- @inherit: shared-standards/security-standards.md -->
+<!-- @inherit-start: shared-standards/security-standards.md -->
+[content from shared standard — auto-managed by Sigil, do not edit between these markers]
+<!-- @inherit-end: shared-standards/security-standards.md -->
+
+### Local Additions
+- Rate limit all public endpoints to 100 req/min
 ```
 
-At session start, these markers expand with the referenced content from the shared repo.
+The content between `@inherit-start` and `@inherit-end` is managed by Sigil — it gets refreshed from the shared repo every session. Your project-specific rules go in the `### Local Additions` section below, which Sigil never touches.
+
+**Discrepancy detection:**
+
+If your local rules conflict with a shared standard (for example, the standard requires 80% test coverage but your local rule says 60%), Sigil flags the discrepancy and asks you to resolve it. You can update your local rule, keep it and log a waiver, or skip the decision for now.
+
+**Why this matters:**
+
+- Update a standard once in the shared repo, and every connected project picks it up on the next session start.
+- New projects get your organization's standards immediately during setup.
+- Each project can still add its own rules on top of shared ones. The `### Local Additions` section is yours to edit freely.
+- Conflicts between shared and local rules are detected automatically.
+
+For more details on the @inherit pattern, see the [Multi-Team Workflow Guide](multi-team-workflow.md#how-shared-standards-work).
 
 ## Disconnecting
 

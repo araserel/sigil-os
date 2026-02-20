@@ -1,16 +1,20 @@
 ---
 name: shared-context-sync
 description: Orchestrates shared context operations — sentinel detection, repo identity, push/pull sync, cache management, and offline queue via GitHub MCP.
-version: 1.2.0
+version: 1.3.0
 category: shared-context
 chainable: false
 invokes: []
-invoked_by: [learning-capture, learning-reader, sigil, connect-wizard, profile-generator]
+invoked_by: [learning-capture, learning-reader, sigil, connect-wizard, profile-generator, constitution-writer]
 tools: Read, Write, Edit, Bash, ToolSearch, mcp__github__get_file_contents, mcp__github__create_or_update_file, mcp__github__push_files
 model: haiku
 ---
 
 # Skill: Shared Context Sync
+
+## Critical Constraint
+
+**NEVER use `git clone`, `git commit`, `git push`, `git pull`, `git fetch`, or any git write/remote operations.** The only permitted git commands are read-only local queries: `git rev-parse`, `git remote get-url`, and `git config user.email`. ALL remote repository operations — reading files, creating files, updating files, scaffolding — MUST go through GitHub MCP tools (`mcp__github__get_file_contents`, `mcp__github__create_or_update_file`, `mcp__github__push_files`). If MCP is unavailable, queue the operation locally for later retry rather than falling back to git CLI.
 
 ## Purpose
 
@@ -153,6 +157,10 @@ The local cache mirrors the shared repo state and stores the offline queue.
         │       └── ...
         ├── profiles/                # Cached sibling profiles (S2-102)
         │   └── api-server.yaml
+        ├── standards/               # Cached shared standards
+        │   ├── security-standards.md
+        │   ├── accessibility.md
+        │   └── coding-conventions.md
         └── queue/                   # Pending offline writes
             └── 1707234600000.json
 ```
@@ -168,6 +176,10 @@ Tracks when the last successful pull occurred and content hashes for "what's new
     "learnings/web-app/patterns.md": "sha256:abc123...",
     "learnings/web-app/gotchas.md": "sha256:def456...",
     "learnings/api-server/patterns.md": "sha256:789ghi..."
+  },
+  "standards_hashes": {
+    "shared-standards/security-standards.md": "sha256:jkl012...",
+    "shared-standards/accessibility.md": "sha256:mno345..."
   }
 }
 ```
@@ -177,8 +189,8 @@ Tracks when the last successful pull occurred and content hashes for "what's new
 When shared context activates for the first time (no cache directory exists):
 
 1. Create `~/.sigil/cache/shared/` directory tree
-2. Create empty `last-sync.json` with `{ "last_pull": null, "content_hashes": {} }`
-3. Create empty `learnings/`, `profiles/`, and `queue/` directories
+2. Create empty `last-sync.json` with `{ "last_pull": null, "content_hashes": {}, "standards_hashes": {} }`
+3. Create empty `learnings/`, `profiles/`, `standards/`, and `queue/` directories
 
 ---
 
@@ -476,6 +488,164 @@ Called by `prime` to determine if the local profile needs republishing.
 
 ---
 
+## Standards Pull Protocol
+
+Called by `/sigil` at session start and by `constitution-writer` during setup.
+
+**Procedure:**
+
+1. Check sentinel → if not active, return silently
+2. Determine shared repo from sentinel lookup (e.g., `araserel/platform-context`)
+3. Split shared repo into `owner` and `repo` parts
+4. **Read shared-standards directory via MCP:**
+   ```
+   mcp__github__get_file_contents(owner, repo, path="shared-standards/")
+   ```
+   This returns an array of directory entries. For each `.md` file (excluding `.gitkeep`):
+   ```
+   mcp__github__get_file_contents(owner, repo, path="shared-standards/{filename}")
+   ```
+5. For each file found:
+   a. Compare SHA from response with cached SHA in `~/.sigil/cache/shared/last-sync.json` under `standards_hashes`
+   b. If changed: decode content (base64) and update local cache at `~/.sigil/cache/shared/standards/{filename}`
+   c. If unchanged: skip (cache is current)
+6. Update `~/.sigil/cache/shared/last-sync.json` with new SHAs under `standards_hashes`
+7. Return list of standard files with their content
+
+**On MCP failure during pull:**
+
+1. Log warning: "Shared standards unavailable, using cached data."
+2. Read cached standards from `~/.sigil/cache/shared/standards/`
+3. Return cached content
+4. Continue normally — MCP failure must never block session start
+
+---
+
+## Standards Expand Protocol
+
+Called after Standards Pull to process `@inherit` markers in `constitution.md`.
+
+**Procedure:**
+
+1. Read `/.sigil/constitution.md`
+2. Find all `<!-- @inherit: shared-standards/{filename} -->` lines
+3. For each marker:
+   a. Look up `{filename}` in the pulled/cached standards
+   b. **If `@inherit-start`/`@inherit-end` block already exists** below the marker:
+      - Replace content between `<!-- @inherit-start: shared-standards/{filename} -->` and `<!-- @inherit-end: shared-standards/{filename} -->` with fresh standard content
+   c. **If no block exists yet:**
+      - Insert immediately after the `@inherit` line:
+        ```
+        <!-- @inherit-start: shared-standards/{filename} -->
+        [content from shared standard — auto-managed by Sigil, do not edit between these markers]
+        <!-- @inherit-end: shared-standards/{filename} -->
+        ```
+   d. **If referenced standard is not available** (not in pulled or cached data):
+      - If prior expansion exists: leave it unchanged
+      - If no prior expansion exists: insert `<!-- @inherit-pending: {filename} -->` after the marker
+4. Preserve all content outside the `@inherit-start`/`@inherit-end` blocks — headings, `### Local Additions` sections, and any other user content are never modified
+5. Write updated constitution back to `/.sigil/constitution.md`
+6. Return list of expanded markers and their status
+
+**Marker format example:**
+
+```markdown
+## Article 4: Security Mandates
+
+<!-- @inherit: shared-standards/security-standards.md -->
+<!-- @inherit-start: shared-standards/security-standards.md -->
+[content from shared standard — auto-managed by Sigil, do not edit between these markers]
+<!-- @inherit-end: shared-standards/security-standards.md -->
+
+### Local Additions
+- Rate limit all public endpoints to 100 req/min
+```
+
+On re-expansion, content between `@inherit-start` and `@inherit-end` is replaced with fresh content. The `@inherit` directive line is always preserved. Local Additions sections below the end marker are never touched.
+
+---
+
+## Standards Discover Protocol
+
+Called by `connect-wizard` and `constitution-writer` to list available standards.
+
+**Procedure:**
+
+1. Read `shared-standards/` directory via MCP (or from cache if MCP unavailable)
+2. For each `.md` file (excluding `.gitkeep`):
+   a. Extract title (first `# ` heading) and first paragraph
+   b. Infer `article_mapping` from filename:
+
+   | Filename | Suggested Article |
+   |----------|-------------------|
+   | `security-standards.md` | Article 4: Security Mandates |
+   | `accessibility.md` | Article 7: Accessibility Standards |
+   | `coding-conventions.md` | Article 2: Code Standards |
+   | `testing-standards.md` | Article 3: Testing Requirements |
+   | Other filenames | `null` (user chooses placement) |
+
+3. Return array of discovered standards:
+
+```json
+[
+  {
+    "filename": "security-standards.md",
+    "title": "Security Standards",
+    "summary": "First paragraph of the file...",
+    "article_mapping": "Article 4: Security Mandates",
+    "content": "Full file content..."
+  }
+]
+```
+
+**On MCP failure:** Return cached standards from `~/.sigil/cache/shared/standards/` with the same format, or empty array if no cache exists.
+
+---
+
+## Discrepancy Detection
+
+Runs after Standards Expand to flag conflicts between inherited and local content.
+
+**Procedure:**
+
+1. For each article in the constitution that has both an expanded `@inherit` block AND local content (content outside the `@inherit-start`/`@inherit-end` markers but still within the same article):
+   a. **Numeric threshold comparison:** Extract numeric values (e.g., coverage percentages, line limits, rate limits) from both inherited and local content. If local content specifies a weaker threshold than the inherited standard, flag it.
+   b. **Required/optional flag comparison:** If the inherited standard marks something as "required" or "must" and local content marks the same item as "optional" or "should," flag it.
+   c. **Contradictory rules:** If local content explicitly contradicts an inherited rule (e.g., inherited says "all endpoints authenticated," local says "public endpoints allowed"), flag it.
+2. Return list of discrepancies:
+
+```json
+[
+  {
+    "article": "Article 4: Security Mandates",
+    "type": "weaker_threshold",
+    "inherited": "Minimum 80% test coverage",
+    "local": "60% coverage target",
+    "suggestion": "Update local target to match shared standard (80%) or document a waiver"
+  }
+]
+```
+
+3. If no discrepancies found, return empty array
+
+**Display format for user:**
+
+```
+⚠️  Standards Discrepancy Detected
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Article 4: Security Mandates
+  Shared standard requires: 80% test coverage
+  Your local rule says: 60% coverage target
+
+Options:
+  1. Update local rule to match shared standard
+  2. Keep local rule and log a waiver
+  3. Skip for now
+```
+
+---
+
 ## Scaffolding Protocol
 
 Called by `connect-wizard` when a shared repo is empty or missing the expected structure.
@@ -527,6 +697,13 @@ Called by `connect-wizard` when a shared repo is empty or missing the expected s
 | Profile push fails (MCP) | Queue locally. Warn: "Profile sync unavailable, saved locally." |
 | Profile pull fails (MCP) | Use cached profiles. Log warning. |
 | Profile hash cache missing | Create it (first-time initialization). |
+| Standards directory empty | Return empty array. No error, no message. |
+| Standards pull fails (MCP) | Use cached standards. Log: "Shared standards unavailable, using cached data." |
+| Standards pull fails (404) | `shared-standards/` directory doesn't exist yet — return empty array. |
+| Standards cache missing | Return empty array (no prior pull has occurred). |
+| @inherit marker references missing file | Leave existing expanded content if any; insert `@inherit-pending` marker if no prior expansion. |
+| @inherit expand fails (no constitution) | Return silently — nothing to expand. |
+| Discrepancy detected | Display warning to user with resolution options. Do not auto-resolve. |
 
 ---
 
@@ -542,6 +719,9 @@ Called by `connect-wizard` when a shared repo is empty or missing the expected s
 | `learn` | Queue status | When displaying learning summary |
 | `profile-generator` | Profile Push | After writing/updating `.sigil/project-profile.yaml` |
 | `prime` (session start) | Profile Pull + change detection | At session start (alongside learning pull) |
+| `sigil` (session start) | Standards Pull + Expand + Discrepancy Detection | At session start, when shared context active and constitution has @inherit markers |
+| `constitution-writer` | Standards Discover + Standards Pull | During setup, when shared_standards provided |
+| `connect-wizard` | Standards Discover + Standards Expand | During connection, when standards found and constitution exists |
 
 ---
 
@@ -549,6 +729,7 @@ Called by `connect-wizard` when a shared repo is empty or missing the expected s
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.3.0 | 2026-02-20 | Added Standards protocols — Standards Pull, Standards Expand, Standards Discover, Discrepancy Detection. Added `standards/` to cache structure. Updated `last-sync.json` schema with `standards_hashes`. New integration points for sigil, constitution-writer, connect-wizard. |
 | 1.2.0 | 2026-02-09 | S2-102: Added Profile Protocol — profile push, pull, change detection, profile hash cache |
 | 1.1.0 | 2026-02-09 | Added specific MCP tool references, scaffolding protocol, duplicate detection V1, expanded error paths, graceful fallback details |
 | 1.0.0 | 2026-02-09 | Initial release — sentinel detection, repo identity, cache structure, queue management, push/pull protocols |

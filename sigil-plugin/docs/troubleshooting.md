@@ -18,6 +18,9 @@ Find your symptom in the table below and jump to the matching section.
 | "No config file found" | Config not yet created | Run `/sigil-config set` to create it | [Configuration Issues](#configuration-issues) |
 | "Directed mode requires technical track" | Incompatible settings | Set user_track to technical first | [Configuration Issues](#configuration-issues) |
 | "Specialist file not found" | Missing specialist file | Automatic fallback to base agent | [Specialist Issues](#specialist-issues) |
+| Standards not in constitution | Not connected or empty standards | Run `/sigil-connect` | [Shared Standards Issues](#shared-standards-issues) |
+| "@inherit-pending" in constitution | Standard file missing from shared repo | Create the file in shared-standards/ | [Shared Standards Issues](#shared-standards-issues) |
+| Standards conflict warning | Local rule contradicts shared standard | Resolve, waive, or skip | [Shared Standards Issues](#shared-standards-issues) |
 
 ---
 
@@ -324,6 +327,55 @@ If you notice a task being handled by the wrong specialist (visible in technical
 ### Specialist Has No Effect
 
 Specialists only add overrides to their base agent. If a task is very generic (like creating a directory or installing a dependency), the specialist and base agent produce the same result. This is expected for setup tasks.
+
+---
+
+## Shared Standards Issues
+
+### Standards not appearing in constitution
+
+Your constitution does not show any `@inherit` markers or shared standard content.
+
+**Likely causes:**
+- Shared context is not active. Run `/sigil-connect` to connect to a shared repo.
+- The shared repo's `shared-standards/` directory is empty. Add standards files there first.
+- You set up your constitution before connecting. Run `/sigil-connect` again — it will offer to apply available standards to your existing constitution.
+
+### "@inherit-pending" marker in constitution
+
+```
+<!-- @inherit-pending: security-standards.md -->
+```
+
+The constitution references a shared standard file that does not exist in the shared repo yet.
+
+**Fix:** Create the referenced file in `shared-standards/` in your shared repo on GitHub. The marker will be replaced with actual content on your next `/sigil` session start.
+
+### Standards conflict warning at session start
+
+```
+⚠️  Standards Discrepancy Detected
+  Shared standard requires: 80% test coverage
+  Your local rule says: 60% coverage target
+```
+
+Your local rules conflict with a shared standard. Sigil asks you to resolve the conflict.
+
+**Options:**
+1. **Update local rule** — change your constitution to match the shared standard
+2. **Log a waiver** — keep your local rule and record an exception
+3. **Skip** — decide later (the warning will repeat next session)
+
+### @inherit not expanding at session start
+
+The `@inherit` markers exist but the content between start/end markers is not updating.
+
+**Likely causes:**
+- GitHub MCP is not available. Check your MCP connection.
+- The shared repo is unreachable. Sigil keeps the previously expanded content until the connection returns.
+- The constitution file is not at the expected path (`/.sigil/constitution.md`).
+
+**Fix:** Run `/sigil` and check the status output. If it shows "Shared context unavailable," your MCP connection needs attention.
 
 ---
 

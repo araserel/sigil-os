@@ -6,7 +6,7 @@ category: shared-context
 chainable: false
 invokes: [shared-context-sync]
 invoked_by: [profile, orchestrator]
-tools: Read, Write, Bash, Glob, Grep
+tools: Read, Write, Bash, Glob, Grep, mcp__github__get_file_contents, mcp__github__create_or_update_file
 model: sonnet
 ---
 
@@ -15,6 +15,10 @@ model: sonnet
 ## Purpose
 
 Scan a project's codebase to auto-detect the tech stack, then interactively prompt the user for description, exposed APIs/events, consumed dependencies, and sibling project references. Generates `.sigil/project-profile.yaml` and optionally publishes to the shared repo if connected.
+
+## Critical Constraint
+
+**NEVER use `git clone`, `git commit`, `git push`, `git pull`, `git fetch`, or any git write/remote operations for publishing profiles.** The only permitted git commands are read-only local queries: `git remote get-url` (for repo identity) and `git config` (for user info). Profile publishing to the shared repo MUST go through the `shared-context-sync` skill's Profile Push protocol, which uses GitHub MCP tools. If MCP is unavailable, queue the operation locally rather than falling back to git CLI.
 
 ## When to Invoke
 

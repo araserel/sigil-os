@@ -141,9 +141,11 @@ When you start work, Sigil loads shared learnings from all connected projects. I
 
 ## How Shared Standards Work
 
-Your project's constitution (the rules that guide how Sigil works) can reference shared organizational standards stored in the shared repo.
+Your project's constitution (the rules that guide how Sigil works) can inherit organizational standards stored in the shared repo. Standards are applied automatically during setup and connection, and refreshed every session.
 
 ### The @inherit pattern
+
+When a shared standard applies to an article in your constitution, Sigil writes it using `@inherit` markers:
 
 ```markdown
 # Constitution: web-app
@@ -152,25 +154,44 @@ Your project's constitution (the rules that guide how Sigil works) can reference
 [repo-specific content]
 
 ## Article 4: Security Mandates
-<!-- @inherit: shared-standards/security-standards.md -->
 
-## Article 5: Accessibility
-<!-- @inherit: shared-standards/accessibility.md -->
+<!-- @inherit: shared-standards/security-standards.md -->
+<!-- @inherit-start: shared-standards/security-standards.md -->
+- All API endpoints must require authentication
+- Use environment variables for secrets
+- Input validation on all user-facing forms
+- Dependency review required before adding new packages
+<!-- @inherit-end: shared-standards/security-standards.md -->
+
+### Local Additions
+- Rate limit all public endpoints to 100 req/min
 ```
 
 ### How it works
 
 - Shared standards live in the `shared-standards/` directory of the shared repo.
-- Each project's constitution references them with `<!-- @inherit: ... -->` markers.
-- At session start, Sigil fetches the referenced files via MCP and expands them inline.
-- If the shared standard is unreachable, Sigil uses its cached copy.
-- Local constitution is the source of truth. Shared standards are read-only from consumer projects.
+- During `/sigil-setup` and `/sigil-connect`, Sigil discovers available standards and writes `@inherit` markers into the constitution automatically.
+- At every session start, Sigil pulls the latest version of each referenced standard and replaces the content between `@inherit-start` and `@inherit-end` markers. This keeps your constitution current with upstream changes.
+- The `@inherit` directive line is always preserved. Content outside the start/end markers — including the article heading and `### Local Additions` section — is never modified.
+- If the shared repo is unreachable, Sigil keeps the previously expanded content and logs a warning. Your session continues normally.
+- If a referenced standard file does not exist yet, Sigil inserts a `<!-- @inherit-pending -->` marker until the file becomes available.
+
+### Discrepancy detection
+
+After expanding standards, Sigil checks for conflicts between inherited and local content:
+
+- **Weaker thresholds:** Your local rule sets a lower bar than the shared standard (e.g., 60% coverage vs. 80% required).
+- **Contradictory flags:** The standard marks something as "required" but your local rule marks it as "optional."
+- **Direct contradictions:** Your local rule says the opposite of the shared standard.
+
+When a discrepancy is found, Sigil shows a warning and asks you to resolve it — update the local rule, log a waiver, or skip for now.
 
 ### What this means for your team
 
-- A new project starts with your organization's standards already available.
+- A new project gets your organization's standards immediately during setup.
 - When a security rule changes, one update in the shared repo reaches every project on the next session start.
-- Each project can still add its own rules on top of shared ones.
+- Each project can still add its own rules in the `### Local Additions` section.
+- Conflicts between shared and local rules are flagged automatically — no more silent drift.
 
 ## How Claude Code's Built-In Memory Fits In
 

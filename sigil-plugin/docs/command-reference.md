@@ -68,8 +68,9 @@ The unified entry point for all Sigil workflows. This is the recommended way to 
 
 1. Runs a **preflight check** to verify Sigil is installed correctly
 2. Loads your project context from `project-context.md`
-3. Detects your current workflow state
-4. Routes to the appropriate action:
+3. If shared context is active and your constitution has inherited standards, **pulls the latest standards** and refreshes them in your constitution. Flags any conflicts between shared and local rules.
+4. Detects your current workflow state
+5. Routes to the appropriate action:
    - No active workflow → Suggests starting one
    - Active workflow → Shows status and suggests next step
    - With a description → Starts the spec-first workflow
@@ -325,13 +326,14 @@ Connect your project to a shared context repository for cross-project learnings.
 2. Validates access to the shared repository
 3. Scaffolds the repo structure if empty (learnings, profiles, shared-standards)
 4. Creates a local connection file at `~/.sigil/registry.json`
-5. Discovers shared standards if available
+5. Discovers shared standards and offers to apply them to your constitution automatically
 
 ### After Connecting
 
 - Learnings sync automatically when you use `/sigil-learn`
 - Latest shared context loads automatically at session start
 - A "what's new" summary shows entries added since your last session
+- Shared standards refresh automatically at each session start
 
 ### When to Use
 
@@ -436,10 +438,11 @@ Initialize Sigil OS in a new project.
 
 1. Creates the `.sigil/` directory structure
 2. Asks your role (Product/Business or Engineering/Technical) and saves to `.sigil/config.yaml`
-3. Runs the constitution writer to set up project principles
-4. Optionally generates a project profile
-5. Creates `SIGIL.md` with enforcement rules
-6. Adds a pointer to `CLAUDE.md`
+3. Asks about shared context — if you work across multiple projects, connects to a shared repo and discovers organizational standards
+4. Runs the constitution writer to set up project principles (with shared standards applied automatically if available)
+5. Optionally generates a project profile
+6. Creates `SIGIL.md` with enforcement rules
+7. Adds a pointer to `CLAUDE.md`
 
 ### When to Use
 

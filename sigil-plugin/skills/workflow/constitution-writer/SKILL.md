@@ -1,7 +1,7 @@
 ---
 name: constitution-writer
 description: Creates project constitution through guided conversation accessible to non-technical users. Uses tiered questions (auto-decide technical details, translate necessary questions, keep business decisions) with a maximum of 3 interaction rounds. Invoke when setting up a new project or when user says "constitution", "project principles", or "project setup". Can be pre-populated from project foundation or codebase assessment.
-version: 2.1.0
+version: 2.2.0
 category: workflow
 chainable: true
 invokes: []
@@ -95,6 +95,9 @@ Replace open-ended questions with pre-configured defaults the user can accept or
 - `detected_stack`: object — Stack detected from codebase analysis
 - `classification`: string — "scaffolded" | "mature"
 
+**From Setup Path (when shared context is active):**
+- `shared_standards`: array (optional) — Available shared standards from Standards Discover protocol, each with `filename`, `title`, `summary`, `article_mapping`, and `content`
+
 ## Process
 
 ### Step 0: Load Configuration
@@ -136,6 +139,20 @@ Determine pre-population path (in priority order):
    → Use Standard Path
    - Ask Round 1 with graceful stack question
 ```
+
+### Step 0c: Check for Shared Standards
+
+```
+IF shared_standards provided (non-empty array):
+  → Map each standard to its article via article_mapping
+  → For mapped articles, plan to emit @inherit markers + expanded
+    content instead of generating local content in Step 3
+  → For standards with article_mapping = null, skip (user can
+    add manually later)
+  → Store the mapping for use in Step 3
+```
+
+This check runs regardless of which pre-population path was selected above. Shared standards override generated content for their mapped articles.
 
 ### Step 1: Check for Existing Constitution
 
@@ -283,7 +300,9 @@ Using the project type selection + stack detection + optional preferences:
 
 1. **Auto-decide all Tier 1 items** based on stack and project type
 2. **Load template** from `/templates/constitution-template.md`
-3. **Fill in all [BRACKETED] placeholders** in the template. Preserve EXACT article names (`Article 1: Technology Stack`, not `Tech Stack`), subsection names, and checkbox formatting. Do not restructure or rename any sections. Fill with:
+3. **Fill in all [BRACKETED] placeholders** in the template. Preserve EXACT article names (`Article 1: Technology Stack`, not `Tech Stack`), subsection names, and checkbox formatting. Do not restructure or rename any sections.
+
+   **For articles WITHOUT a mapped shared standard:** Fill normally with:
    - Detected/confirmed stack (Article 1)
    - Auto-decided code standards with jargon translations (Article 2)
    - Project-type-appropriate testing (Article 3)
@@ -291,8 +310,46 @@ Using the project type selection + stack detection + optional preferences:
    - Framework-standard architecture (Article 5)
    - Project-type-appropriate approvals (Article 6)
    - Selected accessibility level (Article 7)
-4. **Add inline jargon explanations** for all technical terms
+
+   **For articles WITH a mapped shared standard** (from Step 0c):
+   1. Keep the article heading (exact match from template)
+   2. Emit `<!-- @inherit: shared-standards/{filename} -->` directive
+   3. Emit `<!-- @inherit-start: shared-standards/{filename} -->` marker
+   4. Insert the actual standard content (from `shared_standards` array)
+   5. Emit `<!-- @inherit-end: shared-standards/{filename} -->` marker
+   6. Add empty `### Local Additions` section below the end marker
+   7. Do NOT generate additional content for this article — the shared standard is the source of truth
+
+4. **Add inline jargon explanations** for all technical terms (including within expanded shared standard content)
 5. **Write to** `/.sigil/constitution.md`
+
+### Step 3b: Standards Integration Summary (if shared_standards provided)
+
+Show the user which articles use shared standards and which are locally generated:
+
+```
+Standards Integration
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+From shared standards:
+  📋 Article 4: Security Mandates ← security-standards.md
+  📋 Article 7: Accessibility Standards ← accessibility.md
+
+Generated locally:
+  📋 Article 1: Technology Stack
+  📋 Article 2: Code Standards
+  📋 Article 3: Testing Requirements
+  📋 Article 5: Architecture Principles
+  📋 Article 6: Approval Requirements
+
+Want to add project-specific rules on top of any
+inherited article? You can edit the "Local Additions"
+sections in your constitution anytime.
+```
+
+Use the `AskUserQuestion` tool to ask if the user wants to add any project-specific additions now:
+- **Looks good** — Proceed to Step 4
+- **Add local rules** — For each inherited article, ask for any project-specific additions to place in the `### Local Additions` section
 
 ### Step 4: Gitignore Handling
 
@@ -518,5 +575,6 @@ When invoked from `codebase-assessment`:
 | 1.0.0 | 2026-01-20 | Initial release |
 | 1.1.0 | 2026-01-20 | Added Foundation integration, pre-population support |
 | 1.2.0 | 2026-01-27 | Added Assessment Path integration for established repos |
+| 2.2.0 | 2026-02-20 | Standards-aware generation — accepts `shared_standards` input, emits @inherit markers for articles with mapped shared standards, shows Standards Integration Summary (Step 3b), adds `### Local Additions` sections |
 | 2.1.0 | 2026-02-19 | S3-100: Added user_track branching — technical track shows Tier 1 decisions for override, uses technical framing for Tier 2, adds Round 3 technical questions |
 | 2.0.0 | 2026-01-29 | Non-technical user refactor: tiered questions, 3-round max, plain language, smart defaults, jargon translation, gitignore handling, friendly errors |

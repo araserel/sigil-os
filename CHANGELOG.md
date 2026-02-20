@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.25.0] - 2026-02-20
+
+### Added
+- **Shared Standards @inherit Implementation:** Standards from `shared-standards/` in the shared repo now flow into project constitutions automatically. Four new protocols in shared-context-sync v1.3.0: Standards Pull (fetches standards via MCP with SHA-based caching), Standards Expand (processes @inherit markers in constitution.md with start/end block format), Standards Discover (lists available standards with article mappings), and Discrepancy Detection (flags conflicts between inherited and local content).
+- **Standards-aware constitution generation (constitution-writer v2.2.0):** Accepts `shared_standards` input, emits `@inherit` markers with expanded content for articles with mapped shared standards, shows Standards Integration Summary, adds `### Local Additions` sections.
+- **Shared context step in `/sigil-setup`:** New Step 3.5 asks about shared context before constitution creation. If the user connects, shared standards are discovered and passed to the constitution writer.
+- **Session-start standards refresh (`/sigil` command):** Step 1 now pulls latest standards and re-expands @inherit blocks before reading the constitution. Discrepancies are flagged with resolution options.
+- **Active standards integration in connect-wizard v1.2.0:** Step 7 now offers to apply discovered standards to an existing constitution, handles content duplication (>70% overlap detection), and runs discrepancy detection.
+- **Troubleshooting entries:** Added 4 new entries for standards not appearing, @inherit-pending markers, standards conflict warnings, and @inherit not expanding.
+- **Glossary entries:** Added @inherit-start/@inherit-end, @inherit-pending, and Discrepancy Detection. Updated @inherit and Shared Standards definitions.
+
+### Changed
+- **shared-context-sync v1.3.0:** Added `standards/` to local cache structure, `standards_hashes` to last-sync.json schema, standards-specific error handling entries, new integration points for sigil/constitution-writer/connect-wizard callers.
+- **`/sigil` state detection reordered:** Shared context sentinel check and standards expansion now run before project foundation and context checks (items 2-3, was item 5).
+- **Status dashboard format:** Constitution line now shows inherited article count (e.g., "7 articles (3 from shared standards)").
+- **Documentation updated:** shared-context-setup.md, multi-team-workflow.md, user-guide.md, command-reference.md, troubleshooting.md, glossary.md all updated to reflect automatic @inherit expansion, start/end marker format, and discrepancy detection.
+
 ## [0.24.0] - 2026-02-19
 
 ### Fixed

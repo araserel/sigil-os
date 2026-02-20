@@ -123,13 +123,13 @@ flowchart LR
    ```
    /sigil-setup
    ```
-   Creates the project structure, walks you through your project rulebook, and configures enforcement.
+   Creates the project structure, walks you through your project rulebook, and configures enforcement. If you work across multiple projects, setup also asks whether to connect to a shared context repository. Connecting during setup means your organization's shared standards (security policies, coding conventions, etc.) are written into your rulebook automatically.
 
 2. **Check the current status.**
    ```
    /sigil
    ```
-   See what is in progress and which stage you are in.
+   See what is in progress and which stage you are in. If shared context is active, Sigil pulls the latest standards and refreshes your rulebook automatically.
 
 3. **Create your first feature.**
    ```
@@ -627,7 +627,15 @@ Run this from time to time to tidy up lessons. You will be asked to:
 
 ### Working Across Multiple Projects
 
-If your team works on several projects that share patterns or standards, Sigil can sync learnings between them. See the [Multi-Team Workflow Guide](multi-team-workflow.md) for setup instructions and how shared context works.
+If your team works on several projects that share patterns or standards, Sigil can sync learnings between them. Run `/sigil-connect` to link projects to a shared GitHub repository.
+
+Once connected:
+- Learnings sync automatically between projects.
+- Project profiles let Sigil warn you when a change affects another project.
+- Organization-level standards (security policies, accessibility requirements, coding conventions) live in the shared repo's `shared-standards/` folder and flow into your project's constitution automatically. Sigil applies them during setup or connection, and refreshes them every session start. If a shared standard changes upstream, your project picks it up on the next `/sigil`.
+- If your local rules conflict with a shared standard, Sigil flags the discrepancy and asks you to resolve it.
+
+See the [Shared Context Setup Guide](shared-context-setup.md) for step-by-step instructions and the [Multi-Team Workflow Guide](multi-team-workflow.md) for how shared context works across teams.
 
 ---
 

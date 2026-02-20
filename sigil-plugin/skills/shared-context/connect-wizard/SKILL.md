@@ -1,12 +1,12 @@
 ---
 name: connect-wizard
 description: Interactive setup flow for connecting a project to a shared context repository via GitHub MCP.
-version: 1.1.0
+version: 1.2.0
 category: shared-context
 chainable: false
 invokes: [shared-context-sync]
 invoked_by: [connect]
-tools: Read, Write, Bash, ToolSearch
+tools: Read, Write, Bash, ToolSearch, mcp__github__get_file_contents, mcp__github__create_or_update_file, mcp__github__push_files
 model: sonnet
 ---
 
@@ -15,6 +15,10 @@ model: sonnet
 ## Purpose
 
 Guide users through connecting their project to a shared context repository. Handles GitHub MCP detection, repo validation, directory scaffolding, and sentinel file creation.
+
+## Critical Constraint
+
+**NEVER use `git clone`, `git commit`, `git push`, `git pull`, `git fetch`, or any git write/remote operations.** The only permitted git commands are read-only local queries: `git rev-parse`, `git remote get-url`, and `git config`. ALL remote repository operations — reading files, creating files, scaffolding, validation — MUST go through GitHub MCP tools (`mcp__github__get_file_contents`, `mcp__github__create_or_update_file`, `mcp__github__push_files`). If MCP is unavailable, fail gracefully rather than falling back to git CLI.
 
 ## When to Invoke
 
@@ -151,31 +155,47 @@ Use the `shared-context-sync` skill's Write Sentinel Entry procedure:
 2. Write/update `~/.sigil/registry.json` with the new project entry
 3. Initialize local cache structure if needed
 
-### Step 7: Shared Standards Discovery
+### Step 7: Shared Standards Integration
 
-After connecting, check if `shared-standards/` has content via MCP:
+After connecting, invoke the Standards Discover protocol from `shared-context-sync` to check for available standards.
+
+**If no standards found:** Skip silently — no standards to integrate yet.
+
+**If standards found AND constitution exists** (`/.sigil/constitution.md` is present):
+
+1. Show available standards and their article mappings:
+   ```
+   Your team has shared standards available:
+     📋 security-standards.md → Article 4: Security Mandates
+     📋 accessibility.md → Article 7: Accessibility Standards
+
+   Apply these to your project's constitution? [Y/n]:
+   ```
+
+2. **If user says yes:**
+   a. For each standard with an `article_mapping`:
+      - Read the corresponding article from the constitution
+      - Insert `<!-- @inherit: shared-standards/{filename} -->` marker at the start of the article content
+      - If existing local content differs significantly from the standard (>70% overlap): remove the local content to avoid duplication
+      - If existing local content covers different topics than the standard (<70% overlap): move it to a `### Local Additions` section below the end marker
+      - Insert `<!-- @inherit-start -->` / `<!-- @inherit-end -->` block with the standard content
+   b. Invoke the Standards Expand protocol to write the updated constitution
+   c. Run Discrepancy Detection and present any conflicts to the user for resolution
+
+3. **If user says no:** Keep current constitution as-is. Show:
+   ```
+   No changes made. You can apply shared standards later by
+   adding @inherit markers to your constitution, or re-run
+   /sigil-connect.
+   ```
+
+**If standards found AND no constitution exists:**
 
 ```
-mcp__github__get_file_contents(owner, repo, path="shared-standards/")
+Your team has shared standards available. They will be
+applied automatically when you run /sigil-setup to create
+your project constitution.
 ```
-
-If the directory contains files beyond `.gitkeep` (e.g., `security-standards.md`, `accessibility.md`):
-
-**If standards exist:**
-```
-Your team has shared standards available:
-  - security-standards.md
-  - accessibility.md
-
-You can reference them in your project's constitution
-with @inherit markers. For example:
-
-  <!-- @inherit: shared-standards/security-standards.md -->
-
-These will be expanded automatically at session start.
-```
-
-**If only `.gitkeep` or empty:** Skip silently — no standards to discover yet.
 
 ### Step 8: Confirmation
 
@@ -236,7 +256,10 @@ When invoked with a repo path (e.g., `sigil connect my-org/platform-context`):
   "shared_repo": "my-org/platform-context",
   "project_identity": "my-org/web-app",
   "scaffolded": true,
-  "shared_standards_available": false
+  "shared_standards_available": true,
+  "shared_standards_applied": true,
+  "standards_applied": ["security-standards.md", "accessibility.md"],
+  "discrepancies_found": 0
 }
 ```
 
@@ -246,5 +269,6 @@ When invoked with a repo path (e.g., `sigil connect my-org/platform-context`):
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0.0 | 2026-02-09 | Initial release — interactive and direct connection flows |
+| 1.2.0 | 2026-02-20 | Active standards integration — Step 7 now offers to apply shared standards to existing constitutions with @inherit markers, handles duplication detection, runs discrepancy detection |
 | 1.1.0 | 2026-02-09 | Added MCP tool specifics to scaffolding and standards discovery, references shared-context-sync protocols |
+| 1.0.0 | 2026-02-09 | Initial release — interactive and direct connection flows |

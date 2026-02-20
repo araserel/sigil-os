@@ -35,19 +35,7 @@ Read the following files to understand current project state:
    - Exists but template only? → Needs constitution setup
    - Missing? → First-time setup needed
 
-2. **Project Foundation:** `/.sigil/project-foundation.md`
-   - Exists? → Discovery track completed
-   - Missing? → May need Discovery for greenfield projects
-
-3. **Project Context:** `/.sigil/project-context.md`
-   - Check `Active Workflow` section for in-progress work
-   - Check `Current Phase` for where to resume
-
-4. **Specs Directory:** `/.sigil/specs/`
-   - Scan for existing feature directories
-   - Check for incomplete specs (missing plan.md or tasks.md)
-
-5. **Shared Context:** `~/.sigil/registry.json`
+2. **Shared Context:** `~/.sigil/registry.json`
    - Exists and current project has entry? → Shared context active
    - Exists but no entry for current project? → Check `default_repo`
    - Missing? → Solo mode (no shared context UI)
@@ -59,6 +47,38 @@ Read the following files to understand current project state:
      Queued: 0 pending syncs
    ```
    If not active, do NOT show any shared context information.
+
+3. **Standards Expansion** (NEW — runs only when shared context is active AND constitution has `@inherit` markers):
+   a. Invoke the Standards Pull Protocol from `shared-context-sync` to fetch latest standards from the shared repo
+   b. Invoke the Standards Expand Protocol to update `@inherit` blocks in `/.sigil/constitution.md` with fresh content
+   c. Run Discrepancy Detection to check for conflicts between inherited and local content
+   d. If discrepancies found, show warnings with resolution options:
+      ```
+      ⚠️  Standards Discrepancy Detected
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+      Article 4: Security Mandates
+        Shared standard requires: All endpoints authenticated
+        Your local rule says: Public endpoints allowed
+
+      Options:
+        1. Update local rule to match shared standard
+        2. Keep local rule and log a waiver
+        3. Skip for now
+      ```
+   e. If no `@inherit` markers exist, skip this step silently
+
+4. **Project Foundation:** `/.sigil/project-foundation.md`
+   - Exists? → Discovery track completed
+   - Missing? → May need Discovery for greenfield projects
+
+5. **Project Context:** `/.sigil/project-context.md`
+   - Check `Active Workflow` section for in-progress work
+   - Check `Current Phase` for where to resume
+
+6. **Specs Directory:** `/.sigil/specs/`
+   - Scan for existing feature directories
+   - Check for incomplete specs (missing plan.md or tasks.md)
 
 #### 1b. Context Staleness Check
 
@@ -250,7 +270,7 @@ When showing status (no args or "status"):
 
 [Foundation Status]
 ✅ Foundation    - [stack summary or "Not configured"]
-✅ Constitution  - [X articles defined or "Not set up"]
+✅ Constitution  - [X articles (Y from shared standards) or "Not set up"]
 
 [Active Feature Status - if any]
 ✅ Specification - "[feature name]"
@@ -296,7 +316,7 @@ Run /sigil-setup to get started.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ✅ Foundation    - Next.js 14 + Supabase + TypeScript
-✅ Constitution  - 7 articles defined
+✅ Constitution  - 7 articles (3 from shared standards)
 
 Active Feature: "User Authentication"
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

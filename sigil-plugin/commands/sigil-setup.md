@@ -67,6 +67,30 @@ execution_mode: automatic    # automatic | directed (directed requires technical
 
 If the user chose "Engineering / Technical", set `user_track: technical`.
 
+### Step 3.5: Shared Context Check
+
+Ask the user about shared context before creating the constitution, so that shared standards can be incorporated:
+
+```
+Do you work across multiple code projects that share
+organization rules (security policies, coding standards)?
+
+- Yes — Let's connect now
+- No / Not sure — Skip (connect later with /sigil-connect)
+```
+
+Use the `AskUserQuestion` tool for this choice.
+
+**If Yes:**
+
+1. Invoke the `connect-wizard` skill (same as `/sigil-connect`)
+2. After connection succeeds, invoke the Standards Discover protocol from `shared-context-sync` to list available standards
+3. Store discovered `shared_standards` array for use in Step 4
+
+**If No / Not sure:**
+
+Proceed to Step 4 with no `shared_standards`. The user can connect later with `/sigil-connect`.
+
 ### Step 4: Run Constitution Writer
 
 Invoke the constitution writer skill:
@@ -74,6 +98,8 @@ Invoke the constitution writer skill:
 ```
 Skill(skill: "sigil-constitution")
 ```
+
+If `shared_standards` were discovered in Step 3.5, pass them to the constitution writer so it can emit `@inherit` markers for covered articles instead of generating local content.
 
 This guides the user through 3 rounds of questions to create `.sigil/constitution.md`.
 
@@ -133,7 +159,8 @@ Setup Complete!
 
 ✅ Directory structure created (.sigil/)
 ✅ Role selected ([Product / Business | Engineering / Technical])
-✅ Constitution created (7 articles)
+✅ Shared context [Connected to org/repo | ⬚ Skipped — run /sigil-connect later]
+✅ Constitution created (7 articles [, N from shared standards])
 ✅ Profile generated (or "⬚ Profile — skipped, run /sigil-profile later")
 ✅ Enforcement rules installed (SIGIL.md)
 ✅ Gitignore configured

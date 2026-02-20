@@ -33,6 +33,10 @@ Interactive guided setup.
 2. Follow the 3-step guided flow
 3. Report result
 
+## Critical Constraint
+
+**NEVER use `git clone`, `git commit`, `git push`, `git pull`, `git fetch`, or any git write/remote operations.** The only permitted git commands are the read-only pre-checks below (`git rev-parse`, `git remote get-url`). ALL remote repository operations MUST go through GitHub MCP tools via the `connect-wizard` and `shared-context-sync` skills. If MCP is unavailable, fail gracefully — never fall back to git CLI for remote operations.
+
 ## Pre-Checks
 
 Before invoking the connect-wizard skill, verify:

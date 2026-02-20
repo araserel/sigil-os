@@ -77,8 +77,11 @@ Plain-English definitions for terms used in Sigil. If a word sounds technical, y
 | **Shared Context** | A system that syncs learnings and standards across multiple code projects through a shared GitHub repository |
 | **Shared Repo** | A GitHub repository that stores learnings and standards shared between projects (e.g., `my-org/platform-context`) |
 | **Sentinel File** | The local connection file (`~/.sigil/registry.json`) that maps your projects to their shared repo |
-| **Shared Standards** | Organizational rules stored in `shared-standards/` in the shared repo, referenced by projects via `@inherit` markers |
-| **@inherit** | A marker in your constitution (e.g., `<!-- @inherit: shared-standards/security.md -->`) that pulls in standards from the shared repo |
+| **Shared Standards** | Organizational rules stored in `shared-standards/` in the shared repo. Applied automatically to project constitutions during setup, connection, and session start via `@inherit` markers |
+| **@inherit** | A marker in your constitution (e.g., `<!-- @inherit: shared-standards/security.md -->`) that tells Sigil to pull in standards from the shared repo. Applied automatically during setup and connection — you do not need to add these by hand |
+| **@inherit-start / @inherit-end** | Markers that bracket the auto-managed content from a shared standard. Content between these markers is refreshed from the shared repo at every session start. Do not edit content between these markers — use the `### Local Additions` section below them instead |
+| **@inherit-pending** | A placeholder marker inserted when a constitution references a shared standard file that does not exist yet in the shared repo. Replaced automatically when the file is created |
+| **Discrepancy Detection** | An automatic check that runs after standards are expanded. Flags conflicts between shared standards and local rules — for example, a shared standard requiring 80% test coverage while the local rule says 60% |
 | **Offline Queue** | When the shared repo is unreachable, learnings save locally and sync automatically on your next session start |
 | **Project Profile** | A YAML file (`.sigil/project-profile.yaml`) that describes your project's tech stack, exposed APIs, consumed dependencies, and sibling relationships — used by agents for context and cross-repo impact warnings |
 
