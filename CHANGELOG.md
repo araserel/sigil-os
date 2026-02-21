@@ -9,6 +9,9 @@
 ### Added
 - **External Context Integration enforcement (SIGIL.md v2.4.0):** New enforcement section ensures MCP-fetched content (Atlassian, Figma, Jira, etc.) is routed through the `/sigil` workflow pipeline as spec-writer input rather than treated as standalone actions.
 
+### Changed
+- **Documentation moved to root:** User-facing docs relocated from `sigil-plugin/docs/` to root `docs/` for easier access. Internal dev docs moved from `docs/` to `dev-docs/` (gitignored). All cross-references updated.
+
 ## [0.25.0] - 2026-02-20
 
 ### Added

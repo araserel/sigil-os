@@ -6,7 +6,7 @@
 
 Sigil is a plugin for Claude Code, Anthropic's AI coding tool. Transform natural language descriptions into implemented, tested features through structured workflows.
 
-> **v0.25.0** · Active development — expect breaking changes between minor versions.
+> **v0.25.1** · Active development — expect breaking changes between minor versions.
 
 ---
 
