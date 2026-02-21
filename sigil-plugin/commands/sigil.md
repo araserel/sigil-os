@@ -201,7 +201,7 @@ For each incomplete task (respecting dependency order):
 - Read the task's `Specialist:` field. If a specialist is assigned (not "base"):
   1. Load `agents/specialists/[specialist-name].md`
   2. Read the base agent from the `extends` field (e.g., `agents/developer.md`)
-  3. Merge per the [specialist merge protocol](../docs/dev/specialist-merge-protocol.md): specialist sections override matching base sections, tools and constraints are inherited
+  3. Merge per the [specialist merge protocol](../../docs/dev/specialist-merge-protocol.md): specialist sections override matching base sections, tools and constraints are inherited
   4. Adopt the merged behavior for this task
 - If no specialist assigned (field is "base" or missing): Read the `developer` agent definition and adopt its behavior/protocol as before
 - Pass task details: task_id, description, files, acceptance_criteria
@@ -215,7 +215,7 @@ For each incomplete task (respecting dependency order):
 - For each assigned validation specialist:
   1. Load `agents/specialists/[specialist-name].md`
   2. Read base agent from `extends` field (e.g., `agents/qa-engineer.md`)
-  3. Merge per the [specialist merge protocol](../docs/dev/specialist-merge-protocol.md) and adopt behavior
+  3. Merge per the [specialist merge protocol](../../docs/dev/specialist-merge-protocol.md) and adopt behavior
 - If no validation specialist beyond functional-qa: Read the qa-engineer agent definition
 - Read the qa-validator SKILL.md, then run validation with task context and specialist behavior
 - Emit progress: `Implementation Loop: [completed]/[total] tasks - Task T### validating (attempt N/5)`

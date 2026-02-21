@@ -4,7 +4,7 @@
 /STATUS.md
 /.sigil-spec-progress.md
 /specs/
-/docs/
+/dev-docs/
 /tools/
 /tests/
 /test-runs/
@@ -29,7 +29,7 @@ Thumbs.db
 *.swp
 
 # Generated printables
-sigil-plugin/docs/printables/
+docs/printables/
 
 # Build artifacts
 node_modules/

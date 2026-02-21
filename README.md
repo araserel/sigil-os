@@ -63,7 +63,7 @@ claude plugin list
 
 You should see `sigil` in the list.
 
-Something not working? See the [Troubleshooting Guide](sigil-plugin/docs/troubleshooting.md).
+Something not working? See the [Troubleshooting Guide](docs/troubleshooting.md).
 
 **Quick checklist:**
 
@@ -88,7 +88,7 @@ claude
 
 `/sigil "..."` starts building. Sigil assesses complexity, selects the right workflow track, and assigns specialized agents to handle specification, planning, implementation, and review.
 
-See the [Quick Start Guide](sigil-plugin/docs/quick-start.md) for a detailed walkthrough.
+See the [Quick Start Guide](docs/quick-start.md) for a detailed walkthrough.
 
 ### How the Build Loop Works
 
@@ -145,7 +145,7 @@ sequenceDiagram
 | `/sigil-learn` | View, search, or review learnings |
 | `/sigil-update` | Check for plugin updates |
 
-See the [Command Reference](sigil-plugin/docs/command-reference.md) for detailed usage.
+See the [Command Reference](docs/command-reference.md) for detailed usage.
 
 ### Sharing Context Across Projects
 
@@ -195,16 +195,16 @@ flowchart LR
     style C2 fill:#fef3c7,stroke:#f59e0b,color:#1e293b
 ```
 
-See the [Shared Context Setup Guide](sigil-plugin/docs/shared-context-setup.md) to get started.
+See the [Shared Context Setup Guide](docs/shared-context-setup.md) to get started.
 
 ---
 
 ## Documentation
 
-- [Quick Start Guide](sigil-plugin/docs/quick-start.md)
-- [User Guide](sigil-plugin/docs/user-guide.md)
-- [Command Reference](sigil-plugin/docs/command-reference.md)
-- [Shared Context Setup](sigil-plugin/docs/shared-context-setup.md) — share learnings and context across multiple repositories
+- [Quick Start Guide](docs/quick-start.md)
+- [User Guide](docs/user-guide.md)
+- [Command Reference](docs/command-reference.md)
+- [Shared Context Setup](docs/shared-context-setup.md) — share learnings and context across multiple repositories
 
 
 ---

@@ -61,7 +61,7 @@ Each specialist file declares an `extends` field in its frontmatter (e.g., `exte
 3. The merged behavior applies for the duration of that task
 4. Tasks without a specialist assignment use the base agent directly
 
-For full merge rules (field precedence, tool union, constraint inheritance), see [Specialist Merge Protocol](../docs/dev/specialist-merge-protocol.md).
+For full merge rules (field precedence, tool union, constraint inheritance), see [Specialist Merge Protocol](../../docs/dev/specialist-merge-protocol.md).
 
 ### Developer Specialists (extend `developer`)
 

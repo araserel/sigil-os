@@ -118,7 +118,7 @@ To migrate:
    /plugin marketplace add araserel/sigil-os
    /plugin install sigil@sigil-os
 
-See: sigil-plugin/docs/migration-from-global.md
+See: docs/migration-from-global.md
 ```
 
 ## Guidelines
