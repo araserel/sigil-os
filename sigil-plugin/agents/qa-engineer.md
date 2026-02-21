@@ -366,5 +366,5 @@ Developer completes task
 |---------|------|---------|
 | 1.0.0 | 2026-01-20 | Initial release |
 | 1.1.0 | 2026-02-09 | S2-003: Added QA Fix Impact section and file categorization to review handoff |
-| 1.3.0 | 2026-02-10 | Audit: Fixed phantom "Code Reviewer" agent reference → "Review Phase", clarified code-reviewer is a skill, added learning integration |
 | 1.2.0 | 2026-02-09 | SX-005: Added Issue History table to Fix Loop Summary handoff (FR-006), issue_history passing in fix loop workflow |
+| 1.3.0 | 2026-02-10 | Audit: Fixed phantom "Code Reviewer" agent reference → "Review Phase", clarified code-reviewer is a skill, added learning integration |

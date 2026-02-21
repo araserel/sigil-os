@@ -4,7 +4,7 @@ description: Captures and structures the core problem statement, target users, a
 version: 1.0.0
 category: research
 chainable: true
-invokes: []
+invokes: [constraint-discovery]
 invoked_by: [orchestrator, codebase-assessment]
 tools: Read, Write, Edit
 ---

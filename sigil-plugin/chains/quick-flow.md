@@ -85,18 +85,20 @@ When the orchestrator routes a maintenance ticket to Quick Flow (category `maint
 
 ## Constitution Check
 
-Between complexity assessment and quick-spec, check for the project constitution:
+Before starting quick-spec, verify `/.sigil/constitution.md` exists.
 
-1. **Check** if `/.sigil/constitution.md` exists (file-existence check, NOT a constitution-writer invocation)
-2. **If YES:**
-   - Extract ONLY the `constraints` and `tech-stack` sections from the constitution
-   - Inject as context into quick-spec (keep injected context under 500 tokens)
-   - Do NOT run schema validation or full parse — this is a lightweight extraction
-3. **If NO:**
-   - Emit user-facing warning: *"No project constitution found. Quick spec will proceed without project constraints. Run `/sigil-constitution` to create one."*
-   - Continue without blocking
+**If exists:** Extract technology stack and code standards constraints. Pass to quick-spec as context so generated specs respect project guardrails.
 
-This ensures Quick Flow specs respect project rules when available, without adding ceremony when they're not.
+**If missing:** Block and redirect to constitution setup:
+```
+Before we can build this, let's set up your project principles.
+This takes about 2 minutes and ensures consistent decisions.
+
+Starting constitution setup...
+```
+→ Run constitution-writer, then return to quick-spec.
+
+Note: When Quick Flow is entered via sigil.md (the normal path), the constitution check has already passed in Step 3.1. This check is a safety net for direct chain invocation.
 
 ## Skill Descriptions
 

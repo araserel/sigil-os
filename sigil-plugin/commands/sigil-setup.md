@@ -158,6 +158,18 @@ Create `.sigil/project-context.md` from the template so that workflow state trac
 
 This file is gitignored (ephemeral per-session state), but having it scaffolded prevents Claude Code from improvising a malformed stub when enforcement rules require loading it.
 
+### Step 6.6: Scaffold Waivers File
+
+Create `.sigil/waivers.md` from the template so that override tracking works from the first waiver:
+
+1. Read `templates/waiver-template.md`
+2. Write it to `.sigil/waivers.md` with these initial values:
+   - Clear the Active Overrides table (leave headers, remove example rows)
+   - Clear the Waiver Log section (leave the header)
+   - Keep the Field Documentation section as-is (reference material)
+
+This file is gitignored (ephemeral per-session state), but having it scaffolded prevents skills from encountering a missing file when checking for active overrides.
+
 ### Step 7: Configure Gitignore
 
 Check if `.gitignore` exists. If not, create it. Add the following entries (without duplication):

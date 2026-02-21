@@ -57,7 +57,7 @@ Read the following files to understand current project state:
         Display hard-block format and offer resolution. Do NOT proceed to Step 2 until all blocking discrepancies are resolved.
         ```
         🚫 Required Standard Missing
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         Article 4: Security Mandates (required)
           Your organization requires this standard but it is
@@ -71,7 +71,7 @@ Read the following files to understand current project state:
         Display warnings with resolution options, then proceed.
         ```
         ⚠️  Standards Discrepancy Detected
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         Article 3: Testing Requirements (recommended)
           Shared standard requires: All endpoints authenticated
@@ -94,7 +94,7 @@ Read the following files to understand current project state:
    d. If any overrides expired during this check, show warning:
       ```
       ⚠️  Override Expired
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
       Article 3: Testing Requirements
         Override: Reduce coverage target to 50% for MVP phase
@@ -210,9 +210,34 @@ If user provided a feature description (plain text or enriched):
    ```
    → Run Discovery Track, then return to start spec
 
-3. **Ready for spec?**
+3. **Run complexity assessment**
+   - Read the complexity-assessor SKILL.md and run it with the user's description
+   - If ticket_metadata is present, pass it to complexity-assessor for scoring adjustments
+   - Route based on score:
+     - **Score 7-10 (Quick Flow):** Use Quick Flow path (see Quick Flow behavior below)
+     - **Score 11-16 (Standard):** Continue to spec-writer (current behavior)
+     - **Score 17-21 (Enterprise):** Continue to spec-writer, flag for Enterprise extensions in Step 4
+   - Store the `track` result in project-context.md and chain context for downstream use
+   - If ticket-loader already set a track override (e.g., maintenance → Quick Flow, bug → cap at Standard), respect it — complexity-assessor confirms or adjusts
+
+4. **Start spec-writer**
    → Start spec-writer with user's description
    → After spec completes, auto-continue through workflow
+
+### Quick Flow Path (Score 7-10)
+
+When complexity-assessor returns Quick Flow:
+
+1. Read the quick-spec SKILL.md (not spec-writer) — lightweight spec, no P2/P3 scenarios
+2. Auto-continue to task-decomposer (skip clarifier — Quick Flow trades thoroughness for speed)
+3. Implementation loop with these differences from Standard/Enterprise:
+   - No specialist-selection (use base developer and qa-engineer agents)
+   - QA validation: max 1 fix attempt (not 5)
+   - Skip formal code review after all tasks
+   - Skip security review (unless override trigger fired)
+4. If QA fix resolves a Major/Critical issue, still invoke learning-capture
+
+Constitution is already verified in Step 3.1 (blocking) before reaching this path, so no additional check needed.
 
 ### Step 4: Auto-Continue Logic
 
@@ -221,8 +246,14 @@ After each phase completes successfully:
 | From | To | Behavior |
 |------|-----|----------|
 | spec-writer | clarifier | Auto-continue (always check for ambiguities) |
-| clarifier | technical-planner | Auto-continue if no blocking questions |
-| technical-planner | task-decomposer | Auto-continue |
+| clarifier | uiux-designer | Auto-continue IF spec or clarifier output indicates UI components (has_ui: true). Read the uiux-designer agent definition and adopt its behavior. It invokes framework-selector, ux-patterns, ui-designer, and accessibility skills. Produces design artifacts at `/.sigil/specs/###-feature/design.md`. |
+| clarifier | technical-planner | Auto-continue if no UI components AND no blocking questions |
+| uiux-designer | technical-planner | Auto-continue after design approved (pass UI framework as constraint) |
+| technical-planner | researcher | Auto-continue IF Enterprise track OR plan identifies unknowns requiring research. Read the researcher SKILL.md. |
+| technical-planner | task-decomposer | Auto-continue (Standard track, no research needed) |
+| researcher | adr-writer | Auto-continue IF significant decisions identified requiring formal documentation. Read the adr-writer SKILL.md. |
+| researcher | task-decomposer | Auto-continue if no ADRs needed |
+| adr-writer | task-decomposer | Auto-continue |
 | task-decomposer | implementation | Auto-continue — commit spec artifacts, show task summary, begin first task |
 
 **Pause conditions:**
@@ -290,21 +321,25 @@ For each incomplete task (respecting dependency order):
 - Agents (developer, qa-engineer) -> Read the agent .md file and adopt its behavior
 - Skills (validate, review) -> Read the skill's SKILL.md and follow its process
 
-#### After All Tasks: Code Review
+#### After All Tasks: Code Review and Security Review
 
-1. Invoke `specialist-selection` for security specialists, passing all files changed across all tasks. If `appsec-reviewer` or `data-privacy-reviewer` is assigned, load the specialist and merge with base `security` agent before the security review phase. If neither is assigned, use the base `security` agent.
-2. Read the code-reviewer SKILL.md and run code review with all changed files across all tasks + spec_path
-2. If blockers found -> present to user for decision
-3. **After security/code review completes:** If the review produced findings at severity Medium or above that were remediated, invoke `learning-capture` in review findings mode. Pass the resolved findings list (id, title, severity, OWASP category, resolution) from the security agent's Resolved Findings output. This is silent and non-blocking.
-4. If approved -> show completion summary (use Feature Complete format from output-formats.md)
-5. **Handoff-back** (ticket-driven features only): If `ticket_key` is present in the chain context, invoke the `handoff-back` skill to post a summary comment, transition the ticket status, and link artifacts. This is automatic and non-blocking — failures produce a warning, not a halt.
-6. Update context: Current Phase -> none
-7. Present next-action prompt using AskUserQuestion:
-   - Option 1: "Build another feature" → prompt for description → route to Step 3 (spec-writer)
-   - Option 2: "Hand off to an engineer" → read handoff-packager SKILL.md and generate package for current spec_path → show package location and summary
-   - Option 3: "Update ticket and close" → (only shown if `ticket_key` in context AND handoff-back hasn't already run) invoke handoff-back if not yet invoked
-   - Option 4: "Done for now" → show closing message: "Your work is saved. Run /sigil anytime to pick up where you left off."
-   Only show this prompt when review status is APPROVED. If blockers exist, the existing escalation flow handles it (no change to that path).
+1. Read the code-reviewer SKILL.md and run code review with all changed files across all tasks + spec_path
+2. If blockers found → present to user for decision. Do not proceed until resolved.
+3. **Security review** (conditional): If any task touched auth, session, input handling, file upload, user data, PII, or payment files, OR if override triggers fired for security:
+   a. Invoke `specialist-selection` for security specialists, passing all files changed across all tasks
+   b. If `appsec-reviewer` or `data-privacy-reviewer` is assigned, load the specialist and merge with base `security` agent
+   c. Read the security-reviewer SKILL.md and run security review with specialist overlay
+   d. If security blockers found → present to user for decision
+4. **Learning capture** (conditional): If code review or security review produced findings at severity Medium or above that were remediated, invoke `learning-capture` in review findings mode. Pass the resolved findings list. This is silent and non-blocking.
+5. If approved → show completion summary (use Feature Complete format from output-formats.md)
+6. **Handoff-back** (ticket-driven features only): If `ticket_key` is present in the chain context, invoke the `handoff-back` skill. Automatic and non-blocking.
+7. Update context: Current Phase → none
+8. Present next-action prompt using AskUserQuestion:
+   - Option 1: "Build another feature" → prompt for description → route to Step 3
+   - Option 2: "Hand off to an engineer" → read handoff-packager SKILL.md and generate package
+   - Option 3: "Update ticket and close" → (only if `ticket_key` in context AND handoff-back hasn't run)
+   - Option 4: "Done for now" → closing message
+   Only show this prompt when review status is APPROVED.
 
 #### Progress Indicator
 
@@ -361,7 +396,7 @@ Before displaying any output, verify format matches `templates/output-formats.md
 
 ```
 Welcome to Sigil OS! 👋
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Sigil helps you build software through structured specifications.
 No coding knowledge required — just describe what you want to build.

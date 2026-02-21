@@ -1,6 +1,6 @@
 # Templates Directory
 
-Contains templates for all Sigil artifacts and guided prompts for non-technical users.
+Contains templates for all Sigil artifacts.
 
 ## Templates
 
@@ -11,28 +11,16 @@ Contains templates for all Sigil artifacts and guided prompts for non-technical 
 | `plan-template.md` | Implementation plan |
 | `tasks-template.md` | Task breakdown |
 | `adr-template.md` | Architecture decision record |
-| `handoff-template.md` | Agent-to-agent transition |
 | `project-context-template.md` | Session state tracking |
+| `project-foundation.md` | Discovery track output |
 | `technical-review-package-template.md` | Engineer handoff package |
-
-## Guided Prompts
-
-The `prompts/` subdirectory contains conversational scripts that help non-technical users fill out templates:
-
-| Prompt File | Helps With |
-|-------------|------------|
-| `constitution-prompts.md` | 3-round guided constitution setup (plain language) |
-| `constitution-questions.md` | Question bank with tiered questions and cascade configs |
-| `constitution-errors.md` | User-friendly error message translations |
-| `spec-prompts.md` | Creating feature specifications |
-| `plan-prompts.md` | Technical planning decisions |
-| `clarify-prompts.md` | Resolving ambiguities |
+| `waiver-template.md` | Override and waiver tracking |
+| `output-formats.md` | Canonical output format definitions |
+| `skill-template.md` | Template for creating new skills |
 
 ## Usage
 
 Templates are used by skills when creating artifacts. The skill reads the template, fills in content based on context and user input, and writes the result to the appropriate location.
-
-Guided prompts are used when a skill enters conversational mode to help users provide the information needed for templates.
 
 ## Customization
 

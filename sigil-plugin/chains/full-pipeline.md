@@ -99,14 +99,11 @@ When the user provides a ticket key (e.g., `PROJ-123`) instead of a text descrip
 │              │                       │
 │              ▼                       │
 │  ┌─────────────────────────────┐    │
-│  │    learning-reader          │    │
-│  │    (load past learnings)    │    │
-│  └─────────────────────────────┘    │
-│              │                       │
-│              ▼                       │
-│  ┌─────────────────────────────┐    │
 │  │    Developer Agent          │    │
 │  │    (+ specialist overlay)   │    │
+│  │    (loads learnings         │    │
+│  │     internally via          │    │
+│  │     learning-reader)        │    │
 │  └─────────────────────────────┘    │
 │              │                       │
 │              ▼                       │
@@ -248,15 +245,11 @@ reads the task list and resumes the implementation loop at the current task.
 **Condition:** Always, before each Developer task
 **Data Passed:** `{ task_description, task_files }`
 
-### specialist-selection → learning-reader (per-task)
+### specialist-selection → Developer (per-task)
 **Trigger:** Specialist assigned (or base agent selected)
 **Condition:** Always
 **Data Passed:** `{ task_context, feature_id, developer_specialist }`
-
-### learning-reader → Developer
-**Trigger:** Learnings loaded
-**Condition:** Always (proceeds even if no learnings found)
-**Data Passed:** `{ relevant_highlights, patterns_loaded, gotchas_loaded }`
+**Note:** Developer invokes learning-reader internally as part of its workflow (load learnings → understand → test first → implement → verify → capture learnings).
 
 ### Developer → specialist-selection (validation)
 **Trigger:** Task implementation complete

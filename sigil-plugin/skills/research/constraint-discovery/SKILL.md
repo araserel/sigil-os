@@ -4,7 +4,7 @@ description: Progressively discovers project constraints through targeted questi
 version: 1.0.0
 category: research
 chainable: true
-invokes: []
+invokes: [stack-recommendation]
 invoked_by: [problem-framing]
 tools: Read, Write, Edit
 ---

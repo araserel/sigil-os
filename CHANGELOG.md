@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.28.0] - 2026-02-20
+
+### Fixed
+
+#### Post-Audit Fix Package (Round 1 — Structural)
+- **Complexity assessment in `/sigil` Step 3:** Plain-text feature descriptions now route through `complexity-assessor` before reaching spec-writer. Scores determine Quick Flow (7-10), Standard (11-16), or Enterprise (17-21) track. Quick Flow path defined with lightweight spec, no clarifier, 1 QA fix attempt, no formal code/security review.
+- **Conditional UI/UX, researcher, and ADR steps in `/sigil` Step 4:** Auto-continue table now includes `uiux-designer` (conditional on UI components), `researcher` (Enterprise track or unknowns), and `adr-writer` (significant decisions) between clarifier and task-decomposer.
+- **Separated security review from code review in `/sigil`:** Code review and security review are now sequential, distinct steps after all tasks complete. Security review is conditional on file types touched. Fixed duplicate step numbering.
+- **Quick Flow constitution handling:** Changed from warn-and-continue to block-and-redirect, matching sigil.md's blocking behavior. Added safety-net note for direct chain invocation.
+
+#### Post-Audit Fix Package (Round 2 — Hygiene)
+- **full-pipeline.md learning-reader model:** Removed separate learning-reader orchestration step. Developer Agent box now notes learnings are loaded internally. Updated state transitions to match sigil.md's model.
+- **Deleted 8 orphaned files:** Removed `handoff-template.md` and 6 unreferenced prompt files in `templates/prompts/`. Updated `templates/README.md` to reflect actual template inventory (11 templates).
+- **sigil-learn.md command names:** Fixed `/learn` → `/sigil-learn` references and duplicate `/sigil` entry → `/sigil status`.
+- **sigil-profile.md duplicate Related Commands:** Fixed duplicate `/sigil` entry → `/sigil status`.
+- **CLAUDE.md directory listing:** Updated stale skill category names (`quality/` → `qa/`, `ui-implementation/` → `ui/`, added `review/`, `specification/`, `integration/`).
+- **Discovery chain cross-references:** Fixed `invokes: []` → proper downstream targets for `problem-framing`, `constraint-discovery`, and `stack-recommendation`.
+- **QA Engineer version history:** Reordered entries to chronological (1.0.0 → 1.1.0 → 1.2.0 → 1.3.0).
+- **output-formats.md sync with sigil.md:** Added `/sigil PROJ-123` and `/sigil-config` to Help Output. Updated separator definition from 50 to 52 characters to match sigil.md canonical outputs.
+- **Scaffold waivers.md in sigil-setup:** Added Step 6.6 to scaffold `.sigil/waivers.md` from template during setup.
+- **Chain-alignment linter check:** New `check_chain_sigil_alignment()` function validates that skills in chain diagrams appear in sigil.md. Warns on missing references, excludes optional extensions (deploy-checker, DevOps).
+
 ## [0.27.0] - 2026-02-20
 
 ### Added

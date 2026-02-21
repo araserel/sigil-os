@@ -78,4 +78,4 @@ None required. `/sigil-profile` works in all states:
 
 - `/sigil` — Your project profile loads automatically at session start
 - `/sigil-connect` — Connect to a shared repo so sibling projects can see your profile
-- `/sigil` — Shows project status including tech stack (after profile exists)
+- `/sigil status` — Shows project status including tech stack

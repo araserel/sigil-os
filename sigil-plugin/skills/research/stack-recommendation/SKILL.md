@@ -4,7 +4,7 @@ description: Generates 2-3 viable technology stack options based on constraints,
 version: 1.0.0
 category: research
 chainable: true
-invokes: []
+invokes: [foundation-writer]
 invoked_by: [constraint-discovery]
 tools: Read, Write, Edit
 ---
