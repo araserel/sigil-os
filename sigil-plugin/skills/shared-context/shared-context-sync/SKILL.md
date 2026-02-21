@@ -756,6 +756,13 @@ Called by `connect-wizard` Step 8 and `sigil-setup` Step 3.5 to discover org-lev
      - mcp__claude_ai_Atlassian__searchJiraIssuesUsingJql
    config:                # org-level default configuration
      project_keys: [PROJ, TEAM]
+     category_mapping:      # issue type → Sigil category
+       bug: [Bug, Defect]
+       feature: [Story, Feature]
+       enhancement: [Task, Improvement]
+       maintenance: [Chore, "Tech Debt"]
+     label_overrides:        # label → category (overrides type mapping)
+       maintenance: [tech-debt, refactor, cleanup]
      status_mapping:
        done: ["Done", "Closed"]
        in_progress: ["In Progress", "In Review"]

@@ -111,11 +111,11 @@ Read the following files to understand current project state:
    - Exists? → Discovery track completed
    - Missing? → May need Discovery for greenfield projects
 
-5. **Project Context:** `/.sigil/project-context.md`
+6. **Project Context:** `/.sigil/project-context.md`
    - Check `Active Workflow` section for in-progress work
    - Check `Current Phase` for where to resume
 
-6. **Specs Directory:** `/.sigil/specs/`
+7. **Specs Directory:** `/.sigil/specs/`
    - Scan for existing feature directories
    - Check for incomplete specs (missing plan.md or tasks.md)
 
