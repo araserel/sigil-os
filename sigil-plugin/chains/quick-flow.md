@@ -1,7 +1,7 @@
 ---
 name: quick-flow
 description: Streamlined workflow for simple changes—bug fixes, small features, well-understood work.
-version: 1.1.0
+version: 1.2.0
 track: quick
 entry_skill: complexity-assessor
 ---
@@ -20,6 +20,15 @@ Quick Flow is a streamlined workflow for simple, well-understood changes. It ski
 - Text/copy changes
 - Configuration updates
 - User explicitly requests "quick" or "just do it"
+- Ticket-loader categorizes work as `maintenance` (forced Quick Flow)
+
+### Maintenance Flag Handling
+
+When the orchestrator routes a maintenance ticket to Quick Flow (category `maintenance` from ticket-loader):
+- Skip complexity assessor entirely (already determined to be Quick Flow)
+- Use a lighter quick-spec: pre-populate Type as "Maintenance" and include ticket metadata
+- Constitution constraints still apply but the spec can be minimal
+- `ticket_metadata` is preserved in context for handoff-back
 
 ## Chain Sequence
 
@@ -338,5 +347,6 @@ Quick Flow is "less ceremony," not "less quality."
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2.0 | 2026-02-20 | S4-104: Maintenance flag handling — maintenance tickets skip complexity assessor, use lighter quick-spec with ticket metadata. |
 | 1.1.0 | 2026-02-10 | Audit: Added constitution existence check, task count escalation (>5 tasks) |
 | 1.0.0 | 2026-01-20 | Initial release |

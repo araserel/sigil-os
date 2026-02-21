@@ -1,7 +1,7 @@
 ---
 name: qa-validator
 description: Run automated quality checks against completed tasks. Invoke after Developer marks task complete to verify quality standards are met.
-version: 1.1.0
+version: 1.2.0
 category: qa
 chainable: true
 invokes: [qa-fixer]
@@ -180,11 +180,25 @@ npx axe-core
 
 ### 7. Constitution Compliance
 
+**Override Loading:** Before checking constitution articles, auto-load active overrides from `/.sigil/waivers.md`. Parse the Active Overrides table for entries with `Status: active` and a non-expired date (or "permanent"). Store the list of overridden articles and their adjusted rules.
+
 Check against relevant constitution articles:
 - Article 2: Code Standards
 - Article 3: Testing requirements
 - Article 5: Anti-abstraction (no unnecessary complexity)
 - Article 7: Accessibility
+
+**Override-adjusted validation:** For articles with an active override, apply the adjusted rule from the override instead of the original constitution rule. Mark any findings affected by an override with `[OVERRIDE]` in the issue title. For example, if Article 3 requires 80% coverage but an active override reduces it to 50%, validate against the 50% threshold and mark it `[OVERRIDE] Coverage check (50% via active override)`.
+
+**Active Overrides Applied section:** If any overrides were applied during validation, add a section to the validation report:
+
+```markdown
+### Active Overrides Applied
+
+| Article | Override | Expires |
+|---------|----------|---------|
+| Article 3: Testing Requirements | Coverage reduced to 50% | 2026-03-15 |
+```
 
 ## Issue Fingerprinting
 
@@ -383,4 +397,5 @@ See [`qa-escalation-policy/SKILL.md`](../qa-escalation-policy/SKILL.md) for the 
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2026-01-20 | Initial release |
+| 1.2.0 | 2026-02-20 | S4-102: Override-adjusted validation — auto-loads active overrides from waivers.md, applies adjusted rules for overridden articles, marks results with [OVERRIDE], adds Active Overrides Applied section to report. |
 | 1.1.0 | 2026-02-09 | SX-005: Added issue fingerprints (FR-001), regression comparison step (FR-003), issue_history in inputs and qa-fixer handoff, Regressions section in validation report |

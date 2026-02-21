@@ -633,7 +633,55 @@ Once connected:
 - Learnings sync automatically between projects.
 - Project profiles let Sigil warn you when a change affects another project.
 - Organization-level standards (security policies, accessibility requirements, coding conventions) live in the shared repo's `shared-standards/` folder and flow into your project's constitution automatically. Sigil applies them during setup or connection, and refreshes them every session start. If a shared standard changes upstream, your project picks it up on the next `/sigil`.
-- If your local rules conflict with a shared standard, Sigil flags the discrepancy and asks you to resolve it.
+- External tool integrations (like Jira) can be shared across teams through the shared repo's `integrations/` directory.
+
+**Enforcement levels for shared standards:**
+
+Each shared standard has an enforcement level that controls how strictly it's applied:
+
+- **Required** — must be adopted. If a required standard is missing from your project, Sigil blocks the session until you apply it or request a waiver from your team.
+- **Recommended** — applied by default, but you can opt out. If your local rules conflict, Sigil shows a warning and asks how you'd like to resolve it.
+- **Informational** — reference material. Available in the shared repo for reading, but not added to your constitution.
+
+If your local rules conflict with a shared standard, Sigil flags the discrepancy with severity matching the enforcement level.
+
+### Starting Features from Tickets
+
+If your team uses Jira (or another supported issue tracker) and you've connected to a shared repo with adapter configs, you can start features directly from tickets:
+
+```
+/sigil PROJ-123
+```
+
+Sigil fetches the ticket details, figures out what kind of work it is (bug fix, new feature, maintenance task, enhancement), and routes it through the appropriate workflow:
+
+- **Maintenance tickets** go straight to Quick Flow for fast execution.
+- **Bug tickets** are capped at the Standard track (no Enterprise overhead for bug fixes).
+- **Feature and enhancement tickets** go through the normal assessment process.
+
+The ticket's description, priority, story points, and parent/epic context all feed into the specification, so you start with richer context than a plain-text description.
+
+After the feature is complete and code review passes, Sigil automatically updates the originating ticket: it posts a summary comment, transitions the status to Done, and links the spec artifacts. If the ticket tool is unreachable, the summary is saved locally instead.
+
+### Overrides (Temporary Exceptions to Rules)
+
+Sometimes you need to temporarily relax a rule in your constitution — for example, reducing test coverage during an MVP sprint. Overrides let you do this without changing the constitution itself.
+
+Overrides are recorded in `/.sigil/waivers.md` and include:
+- Which article is being overridden
+- What the override changes
+- Why it's needed
+- Who approved it
+- When it expires
+
+**How overrides affect your workflow:**
+
+- At every session start, Sigil checks for expired overrides and warns you.
+- During quality checks (QA validation), overridden articles use the adjusted rule instead of the original. Affected findings are marked with `[OVERRIDE]`.
+- During code review, findings related to overridden articles are downgraded from blockers to warnings.
+- Handoff packages include a summary of active overrides so reviewing engineers know what exceptions are in place.
+
+Overrides can be permanent or have an expiration date. When an override expires, the original constitution rule takes effect again automatically.
 
 See the [Shared Context Setup Guide](shared-context-setup.md) for step-by-step instructions and the [Multi-Team Workflow Guide](multi-team-workflow.md) for how shared context works across teams.
 

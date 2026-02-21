@@ -49,6 +49,7 @@ The unified entry point for all Sigil workflows. This is the recommended way to 
 ```
 /sigil
 /sigil "feature description"
+/sigil PROJ-123
 /sigil continue
 /sigil status
 /sigil help
@@ -60,6 +61,7 @@ The unified entry point for all Sigil workflows. This is the recommended way to 
 |-------|-------------|
 | `/sigil` | Show status dashboard and suggest next action |
 | `/sigil "description"` | Start building a new feature from your description |
+| `/sigil PROJ-123` | Start from an external ticket (Jira, etc.) — fetches ticket details and routes by work type |
 | `/sigil continue` | Resume where you left off |
 | `/sigil status` | Show detailed workflow status |
 | `/sigil help` | Show all available commands |
@@ -68,16 +70,21 @@ The unified entry point for all Sigil workflows. This is the recommended way to 
 
 1. Runs a **preflight check** to verify Sigil is installed correctly
 2. Loads your project context from `project-context.md`
-3. If shared context is active and your constitution has inherited standards, **pulls the latest standards** and refreshes them in your constitution. Flags any conflicts between shared and local rules.
-4. Detects your current workflow state
-5. Routes to the appropriate action:
+3. If shared context is active and your constitution has inherited standards, **pulls the latest standards** and refreshes them in your constitution. Flags any conflicts based on enforcement levels (required standards block, recommended standards warn).
+4. **Checks for expired overrides** in `/.sigil/waivers.md` and warns about any that need attention.
+5. Detects your current workflow state
+6. Routes to the appropriate action:
    - No active workflow → Suggests starting one
    - Active workflow → Shows status and suggests next step
    - With a description → Starts the spec-first workflow
-5. After a feature completes (code review passes), presents a **next-action prompt**:
-   - **Build another feature** — start a new spec immediately
-   - **Hand off to an engineer** — generate a review package inline (same as `/sigil-handoff`)
-   - **Done for now** — wrap up the session
+   - With a ticket key (e.g., `PROJ-123`) → Fetches ticket details and routes by work type
+7. After a feature completes (code review passes):
+   - If the feature came from a ticket, **automatically updates the ticket** with a summary and status transition
+   - Presents a **next-action prompt**:
+     - **Build another feature** — start a new spec immediately
+     - **Hand off to an engineer** — generate a review package inline (same as `/sigil-handoff`)
+     - **Update ticket and close** — (if ticket-driven) update the originating ticket
+     - **Done for now** — wrap up the session
 
 ### Natural Language Alternatives
 
@@ -86,6 +93,7 @@ You don't need to remember the exact syntax. These all work:
 | Instead of... | You can say... |
 |---------------|----------------|
 | `/sigil "Add login"` | "I want to add user login" |
+| `/sigil PROJ-123` | "Work on PROJ-123" or "Pick up PROJ-123" |
 | `/sigil status` | "What's the progress?" |
 | `/sigil continue` | "Keep going" or "Next step" |
 | `/sigil help` | "What can you do?" |
@@ -326,7 +334,8 @@ Connect your project to a shared context repository for cross-project learnings.
 2. Validates access to the shared repository
 3. Scaffolds the repo structure if empty (learnings, profiles, shared-standards)
 4. Creates a local connection file at `~/.sigil/registry.json`
-5. Discovers shared standards and offers to apply them to your constitution automatically
+5. Discovers shared standards (with enforcement levels) and applies them to your constitution — required standards are auto-applied, recommended standards ask for confirmation
+6. Discovers external tool integrations (e.g., Jira adapter) and imports org-level defaults
 
 ### After Connecting
 
@@ -334,6 +343,7 @@ Connect your project to a shared context repository for cross-project learnings.
 - Latest shared context loads automatically at session start
 - A "what's new" summary shows entries added since your last session
 - Shared standards refresh automatically at each session start
+- External tool adapters are available for ticket-driven workflows (e.g., `/sigil PROJ-123`)
 
 ### When to Use
 

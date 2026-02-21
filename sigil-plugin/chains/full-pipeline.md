@@ -1,7 +1,7 @@
 ---
 name: full-pipeline
 description: Complete spec-to-implementation workflow for Standard and Enterprise tracks.
-version: 1.3.0
+version: 1.4.0
 track: standard, enterprise
 entry_skill: complexity-assessor
 ---
@@ -29,9 +29,18 @@ After preflight, the Orchestrator reads `.sigil/config.yaml` (defaults apply if 
 
 ## Chain Sequence
 
+### Alternate Entry: Ticket-Loader
+
+When the user provides a ticket key (e.g., `PROJ-123`) instead of a text description, the `ticket-loader` skill runs before this chain. It fetches ticket data, categorizes the work type, and produces an `enriched_description` + `ticket_metadata` that enter the chain at complexity-assessor. The `ticket_metadata` is preserved in chain context for downstream skills.
+
 ```
 ┌─────────────────────┐
-│ complexity-assessor │ ← Entry point
+│   ticket-loader     │ ← Alternate entry (ticket key input)
+└─────────────────────┘
+         │ [enriched_description + ticket_metadata]
+         ▼
+┌─────────────────────┐
+│ complexity-assessor │ ← Standard entry point
 └─────────────────────┘
          │
          │ [If Standard/Enterprise]
@@ -350,6 +359,9 @@ Between skills, preserve:
 - `implementation_modified`: Whether QA fixes touched implementation files (S2-003)
 - `files_changed_classified`: File categorization from qa-fixer (test/implementation/config/other)
 - `fix_loop_summary`: Structured summary of QA fix loop activity
+- `ticket_key`: External ticket key if input came from ticket-loader (e.g., `PROJ-123`)
+- `ticket_metadata`: Full ticket metadata from ticket-loader (for handoff-back)
+- `ticket_category`: Sigil category from ticket categorization (feature/bug/enhancement/maintenance)
 
 ## Example Execution
 
@@ -429,6 +441,7 @@ If user requests "quick planning":
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.4.0 | 2026-02-20 | S4-104: Ticket-loader as alternate entry point. Added ticket_key, ticket_metadata, ticket_category to context preservation. |
 | 1.3.0 | 2026-02-19 | S3-100/S3-101: Added configuration loading pre-chain, specialist-selection in per-task loop (dev + QA), user_track/execution_mode to context preservation, updated agents vs skills note |
 | 1.1.0 | 2026-02-10 | Audit: Fixed researcher ordering (after technical-planner), added agent annotations, learning-reader in per-task loop, preflight-check note, optional deploy-checker/handoff-packager extensions |
 | 1.0.0 | 2026-01-20 | Initial release |

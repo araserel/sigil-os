@@ -52,23 +52,62 @@ Read the following files to understand current project state:
    a. Invoke the Standards Pull Protocol from `shared-context-sync` to fetch latest standards from the shared repo
    b. Invoke the Standards Expand Protocol to update `@inherit` blocks in `/.sigil/constitution.md` with fresh content
    c. Run Discrepancy Detection to check for conflicts between inherited and local content
-   d. If discrepancies found, show warnings with resolution options:
-      ```
-      ⚠️  Standards Discrepancy Detected
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   d. If discrepancies found, handle based on enforcement level:
+      - **Blocking discrepancies** (`blocking: true` — from `required` standards):
+        Display hard-block format and offer resolution. Do NOT proceed to Step 2 until all blocking discrepancies are resolved.
+        ```
+        🚫 Required Standard Missing
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-      Article 4: Security Mandates
-        Shared standard requires: All endpoints authenticated
-        Your local rule says: Public endpoints allowed
+        Article 4: Security Mandates (required)
+          Your organization requires this standard but it is
+          not applied to your project constitution.
 
-      Options:
-        1. Update local rule to match shared standard
-        2. Keep local rule and log a waiver
-        3. Skip for now
-      ```
+        Options:
+          1. Apply now — add @inherit marker and expand
+          2. Request waiver — log exception for team review
+        ```
+      - **Warning discrepancies** (`blocking: false` — from `recommended` standards):
+        Display warnings with resolution options, then proceed.
+        ```
+        ⚠️  Standards Discrepancy Detected
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        Article 3: Testing Requirements (recommended)
+          Shared standard requires: All endpoints authenticated
+          Your local rule says: Public endpoints allowed
+
+        Options:
+          1. Update local rule to match shared standard
+          2. Keep local rule and log a waiver
+          3. Skip for now
+        ```
+      - **Informational discrepancies** — not displayed, proceed silently.
    e. If no `@inherit` markers exist, skip this step silently
 
-4. **Project Foundation:** `/.sigil/project-foundation.md`
+4. **Override Expiration Check:**
+   a. Read `/.sigil/waivers.md` — if missing, skip this step
+   b. Parse the Active Overrides table for entries with `Status: active`
+   c. For each active override with an `Expires` date (not "permanent"):
+      - Compare expiration date to today's date
+      - If expired: update status to `expired` in the table
+   d. If any overrides expired during this check, show warning:
+      ```
+      ⚠️  Override Expired
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+      Article 3: Testing Requirements
+        Override: Reduce coverage target to 50% for MVP phase
+        Expired: 2026-02-15
+
+      Options:
+        1. Acknowledge — the original rule is now in effect
+        2. Extend — set a new expiration date
+        3. Convert to permanent waiver
+      ```
+   e. If active (non-expired) overrides exist, they are loaded into the session context for use by qa-validator and code-reviewer
+
+5. **Project Foundation:** `/.sigil/project-foundation.md`
    - Exists? → Discovery track completed
    - Missing? → May need Discovery for greenfield projects
 
@@ -131,12 +170,27 @@ When resuming implement phase:
 **"help":**
 → Show available commands and current capabilities
 
+**Ticket key (matches `[A-Z][A-Z0-9]+-\d+` pattern, e.g., `PROJ-123`):**
+→ Invoke `ticket-loader` skill with the ticket key
+→ If ticket-loader succeeds: use `enriched_description` as feature description, carry `ticket_metadata` through pipeline
+→ If ticket-loader fails: show error message, offer plain-text input as fallback
+→ Route by category from ticket-loader:
+  - `maintenance` → Quick Flow (skip complexity assessor, use lighter quick-spec)
+  - `bug` (no security labels) → Standard track (cap, skip Enterprise)
+  - `feature` / `enhancement` → normal routing via Step 3
+
 **Feature description (any other text):**
 → Start the spec-first workflow with user's description
 
 ### Step 3: Handle Feature Description
 
-If user provided a feature description:
+If input came from ticket-loader (enriched context):
+- Constitution and discovery checks still apply (do NOT skip them)
+- Pass `ticket_metadata` alongside the `enriched_description` to spec-writer
+- spec-writer receives the ticket context and uses it to pre-populate the spec
+- `ticket_metadata` is preserved in the chain context for downstream skills (complexity-assessor, handoff-back)
+
+If user provided a feature description (plain text or enriched):
 
 1. **No constitution?**
    ```
@@ -243,11 +297,13 @@ For each incomplete task (respecting dependency order):
 2. If blockers found -> present to user for decision
 3. **After security/code review completes:** If the review produced findings at severity Medium or above that were remediated, invoke `learning-capture` in review findings mode. Pass the resolved findings list (id, title, severity, OWASP category, resolution) from the security agent's Resolved Findings output. This is silent and non-blocking.
 4. If approved -> show completion summary (use Feature Complete format from output-formats.md)
-5. Update context: Current Phase -> none
-6. Present next-action prompt using AskUserQuestion:
+5. **Handoff-back** (ticket-driven features only): If `ticket_key` is present in the chain context, invoke the `handoff-back` skill to post a summary comment, transition the ticket status, and link artifacts. This is automatic and non-blocking — failures produce a warning, not a halt.
+6. Update context: Current Phase -> none
+7. Present next-action prompt using AskUserQuestion:
    - Option 1: "Build another feature" → prompt for description → route to Step 3 (spec-writer)
    - Option 2: "Hand off to an engineer" → read handoff-packager SKILL.md and generate package for current spec_path → show package location and summary
-   - Option 3: "Done for now" → show closing message: "Your work is saved. Run /sigil anytime to pick up where you left off."
+   - Option 3: "Update ticket and close" → (only shown if `ticket_key` in context AND handoff-back hasn't already run) invoke handoff-back if not yet invoked
+   - Option 4: "Done for now" → show closing message: "Your work is saved. Run /sigil anytime to pick up where you left off."
    Only show this prompt when review status is APPROVED. If blockers exist, the existing escalation flow handles it (no change to that path).
 
 #### Progress Indicator
@@ -276,7 +332,7 @@ When showing status (no args or "status"):
 
 [Foundation Status]
 ✅ Foundation    - [stack summary or "Not configured"]
-✅ Constitution  - [X articles (Y from shared standards) or "Not set up"]
+✅ Constitution  - [X articles (Y inherited: Z required, W recommended) or "Not set up"] [| N active override(s) (expires MMM DD) — if any]
 
 [Active Feature Status - if any]
 ✅ Specification - "[feature name]"
@@ -322,7 +378,7 @@ Run /sigil-setup to get started.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ✅ Foundation    - Next.js 14 + Supabase + TypeScript
-✅ Constitution  - 7 articles (3 from shared standards)
+✅ Constitution  - 7 articles (3 inherited: 1 required, 2 recommended) | 1 active override (expires Feb 28)
 
 Active Feature: "User Authentication"
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -346,6 +402,7 @@ Sigil OS Commands
 Primary Command:
   /sigil                    Show status and next steps
   /sigil "description"      Start building a new feature
+  /sigil PROJ-123           Start from a Jira/issue tracker ticket
   /sigil continue           Resume where you left off
   /sigil status             Detailed workflow status
   /sigil help               Show this help
@@ -422,6 +479,7 @@ When the user's message doesn't start with `/sigil`, the orchestrator should rec
 | "What's the status", "Where are we", "Show progress" | → `/sigil status` |
 | "Continue", "Keep going", "Next step", "What's next" | → `/sigil continue` |
 | "Help", "What can you do", "How does this work" | → `/sigil help` |
+| "Work on PROJ-123", "Pick up PROJ-123", "Start PROJ-123" | → `/sigil PROJ-123` (ticket-key routing) |
 
 ## Guidelines
 

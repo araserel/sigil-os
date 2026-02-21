@@ -1,7 +1,7 @@
 ---
 name: complexity-assessor
 description: Determines appropriate workflow track based on request complexity. Invoke at the start of any feature request to route to Quick Flow, Standard, or Enterprise track.
-version: 1.0.0
+version: 1.1.0
 category: workflow
 chainable: true
 invokes: []
@@ -30,6 +30,7 @@ Analyze incoming requests to determine the appropriate workflow track. Ensures m
 **Optional:**
 - `existing_context`: string — Any additional context provided
 - `force_track`: string — User override for track selection
+- `ticket_metadata`: object — From ticket-loader when input is a ticket key. Contains `category`, `priority`, `story_points`, `labels`, `type`, `related_ticket_count`
 
 **Auto-loaded:**
 - `project_context`: string — `/.sigil/project-context.md`
@@ -74,6 +75,19 @@ Score across dimensions:
 | **Risk** | Easily reversible | Some risk | Production/security |
 | **Ambiguity** | Clear requirements | Some questions | Many unknowns |
 
+#### Ticket Metadata Scoring Adjustments
+
+When `ticket_metadata` is provided, use it to refine dimension scores:
+
+| Ticket Field | Affects Dimension | Rule |
+|-------------|-------------------|------|
+| `story_points` ≤ 3 | Scope | Cap at Low (1) unless other signals override |
+| `story_points` ≥ 8 | Scope | Minimum Medium (2) |
+| `story_points` ≥ 13 | Scope | Set High (3) |
+| `labels` contain external service names | Integration | Minimum Medium (2) |
+| `related_ticket_count` ≥ 3 | Dependencies | Minimum Medium (2) |
+| `related_ticket_count` ≥ 5 | Dependencies | Set High (3) |
+
 ### Step 4: Track Determination
 
 ```
@@ -90,6 +104,12 @@ Total Score: Sum of all dimensions (7-21)
 - Production deployment → Minimum Standard
 - New service/system → Minimum Enterprise
 - Compliance requirements → Enterprise
+
+**Ticket Category Overrides** (when `ticket_metadata` is provided):
+- `category: maintenance` → Force Quick Flow (skip remaining assessment)
+- `category: bug` without security-related labels → Cap at Standard (never Enterprise)
+- `category: feature` → No override (full assessment)
+- `category: enhancement` → No override (full assessment)
 
 ### Step 5: Recommendation
 
@@ -291,4 +311,5 @@ Total: 21/21 → Enterprise
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1.0 | 2026-02-20 | S4-104: Ticket metadata input — story points → scope, labels → integration, related tickets → dependencies scoring. Category overrides: maintenance → Quick Flow, bug → cap Standard. |
 | 1.0.0 | 2026-01-20 | Initial release |

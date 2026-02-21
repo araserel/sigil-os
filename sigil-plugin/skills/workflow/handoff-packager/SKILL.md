@@ -1,7 +1,7 @@
 ---
 name: handoff-packager
 description: Generates a Technical Review Package for engineer handoff. Bundles all feature artifacts into a single, well-organized document that provides full context for technical review.
-version: 1.2.0
+version: 1.3.0
 category: workflow
 chainable: false
 invokes: [story-preparer]
@@ -99,6 +99,24 @@ Assemble the Technical Review Package using the template at `/templates/technica
 3. Technical Approach (how it was built)
 4. Code Changes (what changed)
 5. Quality Reports (what checks found)
+
+### Step 3e: Active Overrides Section
+
+Read `/.sigil/waivers.md` and extract active overrides. If any exist, add an "Active Overrides" section after Quality Reports:
+
+```markdown
+## Active Overrides
+
+The following constitution overrides were in effect during this feature's development:
+
+| Article | Override | Reason | Expires |
+|---------|----------|--------|---------|
+| Article 3: Testing Requirements | Coverage reduced to 50% | MVP deadline | 2026-03-15 |
+```
+
+If no overrides are active, omit this section entirely.
+
+Continue assembling the package:
 6. Flagged Items (what needs attention)
 7. How to Proceed (clear next steps)
 8. Appendix (links to full artifacts)
@@ -186,6 +204,7 @@ The user remains in control of whether to share the package and how to act on en
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.3.0 | 2026-02-20 | S4-102: Added Step 3e — extracts active overrides from waivers.md and includes summary table in handoff package. |
 | 1.2.0 | 2026-02-19 | Added handoff destination branching — Option A (Technical Review Package) or Option B (Backlog Stories via story-preparer). Single exit point for completed features. |
 | 1.1.0 | 2026-02-19 | S3-100: Added user_track branching — non-technical generates summary-focused package with business context, technical adds code walkthrough and architecture details |
 | 1.0.0 | 2026-01-20 | Initial release |

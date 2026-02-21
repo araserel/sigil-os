@@ -366,6 +366,47 @@ Your local rules conflict with a shared standard. Sigil asks you to resolve the 
 2. **Log a waiver** — keep your local rule and record an exception
 3. **Skip** — decide later (the warning will repeat next session)
 
+### Required standard blocks session
+
+```
+🚫 Required Standard Missing
+  Article 4: Security Mandates (required)
+  Your organization requires this standard...
+```
+
+A shared standard with enforcement level "required" is not applied to your constitution. Sigil blocks the session until this is resolved.
+
+**Options:**
+1. **Apply now** — Sigil adds the `@inherit` marker and expands the standard into your constitution
+2. **Request waiver** — log an exception for your team lead to review
+
+**Note:** Required standards are set by whoever manages your shared repo. If you believe a standard should not be required, contact your team lead.
+
+### Ticket key not recognized
+
+```
+No integration configured for project "PROJ".
+```
+
+You tried `/sigil PROJ-123` but Sigil doesn't have an adapter configured for that project prefix.
+
+**Likely causes:**
+- No shared context connection. Run `/sigil-connect` first.
+- The shared repo doesn't have an `integrations/` directory with adapter configs.
+- The project prefix doesn't match any `project_keys` in the adapter config.
+
+**Fix:** Check `.sigil/config.yaml` for an `integrations:` section. If missing, connect to a shared repo that has adapter configs, or add one manually.
+
+### No adapter configured
+
+```
+{Adapter name} MCP is not configured in this session.
+```
+
+An adapter was found for the ticket prefix but the required MCP tools are not available.
+
+**Fix:** Configure the required MCP server. For Jira, you need the Atlassian MCP connection. You can still describe the feature in plain text as a fallback.
+
 ### @inherit not expanding at session start
 
 The `@inherit` markers exist but the content between start/end markers is not updating.
@@ -376,6 +417,39 @@ The `@inherit` markers exist but the content between start/end markers is not up
 - The constitution file is not at the expected path (`/.sigil/constitution.md`).
 
 **Fix:** Run `/sigil` and check the status output. If it shows "Shared context unavailable," your MCP connection needs attention.
+
+### Override expired warning
+
+```
+⚠️  Override Expired
+  Article 3: Testing Requirements
+  Override: Reduce coverage target to 50%
+  Expired: 2026-02-15
+```
+
+An override in `/.sigil/waivers.md` has passed its expiration date. The original constitution rule is now in effect.
+
+**Options:**
+1. **Acknowledge** — accept that the original rule applies again
+2. **Extend** — set a new expiration date for the override
+3. **Convert to permanent** — make the override permanent (no expiration)
+
+### Handoff-back failed
+
+```
+⚠️  Ticket PROJ-123 partially updated:
+  ✅ Summary posted
+  ⚠️  Status transition failed
+```
+
+After a feature completes, Sigil tried to update the originating ticket but one or more steps failed.
+
+**Likely causes:**
+- The ticket's workflow doesn't allow the transition Sigil attempted
+- Your permissions don't include status changes
+- The MCP connection dropped
+
+**Fix:** Update the ticket status manually in your issue tracker. The summary comment was posted successfully, so the implementation details are captured.
 
 ---
 

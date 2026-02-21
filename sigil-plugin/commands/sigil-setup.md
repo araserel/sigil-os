@@ -86,10 +86,16 @@ Use the `AskUserQuestion` tool for this choice.
 1. Invoke the `connect-wizard` skill (same as `/sigil-connect`)
 2. After connection succeeds, invoke the Standards Discover protocol from `shared-context-sync` to list available standards
 3. Store discovered `shared_standards` array for use in Step 4
+4. Invoke the Integration Discovery Protocol from `shared-context-sync` to check for org-level tool configs
+5. For each discovered integration adapter:
+   a. Check MCP availability for the adapter's required tools (use `ToolSearch`)
+   b. If MCP available: import org defaults to `.sigil/config.yaml` under an `integrations:` key
+   c. If MCP not available: note as unavailable (can be configured later)
+6. Store discovered integrations for use in Step 8 summary
 
 **If No / Not sure:**
 
-Proceed to Step 4 with no `shared_standards`. The user can connect later with `/sigil-connect`.
+Proceed to Step 4 with no `shared_standards` and no integrations. The user can connect later with `/sigil-connect`.
 
 ### Step 4: Run Constitution Writer
 
@@ -179,6 +185,7 @@ Setup Complete!
 ✅ Directory structure created (.sigil/)
 ✅ Role selected ([Product / Business | Engineering / Technical])
 ✅ Shared context [Connected to org/repo | ⬚ Skipped — run /sigil-connect later]
+✅ Integrations [N adapters configured (e.g., Jira) | ⬚ None available | ⬚ Skipped]
 ✅ Constitution created (7 articles [, N from shared standards])
 ✅ Profile generated (or "⬚ Profile — skipped, run /sigil-profile later")
 ✅ Enforcement rules installed (SIGIL.md)

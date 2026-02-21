@@ -28,9 +28,6 @@ Thumbs.db
 .idea/
 *.swp
 
-# Generated printables
-docs/printables/
-
 # Build artifacts
 node_modules/
 __pycache__/

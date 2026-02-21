@@ -132,16 +132,49 @@ Standards flow into your project's constitution automatically at three points:
 
 The content between `@inherit-start` and `@inherit-end` is managed by Sigil — it gets refreshed from the shared repo every session. Your project-specific rules go in the `### Local Additions` section below, which Sigil never touches.
 
+**Enforcement levels:**
+
+Each shared standard can have an enforcement level set by whoever maintains the shared repo. There are three levels:
+
+| Level | What it means | What happens |
+|-------|--------------|--------------|
+| **Required** | Must be adopted — no exceptions without a waiver | Auto-applied during setup and connection. If missing from your constitution, Sigil blocks the session until you apply it or request a waiver. |
+| **Recommended** | Should be adopted — you can opt out | Sigil asks during setup and connection. If your local rules conflict, you see a warning with options to update, waive, or skip. |
+| **Informational** | Reference material — not enforced | Available in the shared repo for reading. Not added to your constitution. |
+
+To set an enforcement level, the standard file in the shared repo should include a YAML frontmatter block at the top:
+
+```markdown
+---
+enforcement: required
+---
+
+# Security Standards
+
+Your rules here...
+```
+
+If no enforcement level is set, Sigil treats the standard as **recommended** by default.
+
 **Discrepancy detection:**
 
-If your local rules conflict with a shared standard (for example, the standard requires 80% test coverage but your local rule says 60%), Sigil flags the discrepancy and asks you to resolve it. You can update your local rule, keep it and log a waiver, or skip the decision for now.
+If your local rules conflict with a shared standard (for example, the standard requires 80% test coverage but your local rule says 60%), Sigil flags the discrepancy and handles it based on the enforcement level:
+
+- **Required** standard conflict: blocks you from proceeding until resolved.
+- **Recommended** standard conflict: shows a warning with options to update, waive, or skip.
+- **Informational** standard conflict: silent (no warning shown).
+
+**External tool integrations:**
+
+If your shared repo has an `integrations/` directory with adapter configs (e.g., `jira.yaml`), Sigil discovers them during setup or connection. These adapters let you start features from tickets in external tools like Jira — just run `/sigil PROJ-123` with a ticket key instead of typing a feature description.
 
 **Why this matters:**
 
 - Update a standard once in the shared repo, and every connected project picks it up on the next session start.
 - New projects get your organization's standards immediately during setup.
 - Each project can still add its own rules on top of shared ones. The `### Local Additions` section is yours to edit freely.
-- Conflicts between shared and local rules are detected automatically.
+- Conflicts between shared and local rules are detected automatically, with severity matching the standard's importance.
+- External tool configs are shared across teams so everyone uses the same setup.
 
 For more details on the @inherit pattern, see the [Multi-Team Workflow Guide](multi-team-workflow.md#how-shared-standards-work).
 

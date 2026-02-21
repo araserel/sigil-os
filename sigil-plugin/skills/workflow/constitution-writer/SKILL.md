@@ -1,7 +1,7 @@
 ---
 name: constitution-writer
 description: Creates project constitution through guided conversation accessible to non-technical users. Uses tiered questions (auto-decide technical details, translate necessary questions, keep business decisions) with a maximum of 3 interaction rounds. Invoke when setting up a new project or when user says "constitution", "project principles", or "project setup". Can be pre-populated from project foundation or codebase assessment.
-version: 2.2.0
+version: 2.3.0
 category: workflow
 chainable: true
 invokes: []
@@ -144,15 +144,19 @@ Determine pre-population path (in priority order):
 
 ```
 IF shared_standards provided (non-empty array):
-  → Map each standard to its article via article_mapping
+  → Group standards by enforcement level:
+    - required: Always emit @inherit markers (no user choice)
+    - recommended: Default-include (user can skip individual ones)
+    - informational: Skip — do not add to constitution
+  → Map each included standard to its article via article_mapping
   → For mapped articles, plan to emit @inherit markers + expanded
     content instead of generating local content in Step 3
   → For standards with article_mapping = null, skip (user can
     add manually later)
-  → Store the mapping for use in Step 3
+  → Store the mapping (with enforcement levels) for use in Step 3
 ```
 
-This check runs regardless of which pre-population path was selected above. Shared standards override generated content for their mapped articles.
+This check runs regardless of which pre-population path was selected above. Shared standards override generated content for their mapped articles. Required standards are always included; recommended standards are included by default but can be skipped during Round 3 if the user opts out; informational standards are never embedded.
 
 ### Step 1: Check for Existing Constitution
 
@@ -325,15 +329,15 @@ Using the project type selection + stack detection + optional preferences:
 
 ### Step 3b: Standards Integration Summary (if shared_standards provided)
 
-Show the user which articles use shared standards and which are locally generated:
+Show the user which articles use shared standards (with enforcement levels) and which are locally generated:
 
 ```
 Standards Integration
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 From shared standards:
-  📋 Article 4: Security Mandates ← security-standards.md
-  📋 Article 7: Accessibility Standards ← accessibility.md
+  🔒 Article 4: Security Mandates ← security-standards.md (required)
+  📋 Article 7: Accessibility Standards ← accessibility.md (recommended)
 
 Generated locally:
   📋 Article 1: Technology Stack
@@ -341,6 +345,9 @@ Generated locally:
   📋 Article 3: Testing Requirements
   📋 Article 5: Architecture Principles
   📋 Article 6: Approval Requirements
+
+🔒 = required by your organization (cannot be removed)
+📋 = recommended (can be customized or removed)
 
 Want to add project-specific rules on top of any
 inherited article? You can edit the "Local Additions"
@@ -575,6 +582,7 @@ When invoked from `codebase-assessment`:
 | 1.0.0 | 2026-01-20 | Initial release |
 | 1.1.0 | 2026-01-20 | Added Foundation integration, pre-population support |
 | 1.2.0 | 2026-01-27 | Added Assessment Path integration for established repos |
+| 2.3.0 | 2026-02-20 | S4-101: Enforcement-aware @inherit — required standards always included, recommended default-included (user can skip), informational never embedded. Step 3b displays enforcement icons and legend. |
 | 2.2.0 | 2026-02-20 | Standards-aware generation — accepts `shared_standards` input, emits @inherit markers for articles with mapped shared standards, shows Standards Integration Summary (Step 3b), adds `### Local Additions` sections |
 | 2.1.0 | 2026-02-19 | S3-100: Added user_track branching — technical track shows Tier 1 decisions for override, uses technical framing for Tier 2, adds Round 3 technical questions |
 | 2.0.0 | 2026-01-29 | Non-technical user refactor: tiered questions, 3-round max, plain language, smart defaults, jargon translation, gitignore handling, friendly errors |

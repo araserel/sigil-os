@@ -176,6 +176,28 @@ When a shared standard applies to an article in your constitution, Sigil writes 
 - If the shared repo is unreachable, Sigil keeps the previously expanded content and logs a warning. Your session continues normally.
 - If a referenced standard file does not exist yet, Sigil inserts a `<!-- @inherit-pending -->` marker until the file becomes available.
 
+### Enforcement levels
+
+Each shared standard can be tagged with an enforcement level that controls how strictly it's applied:
+
+| Level | Icon | Behavior |
+|-------|------|----------|
+| **Required** | 🔒 | Auto-applied. Blocks your session if missing from your constitution. |
+| **Recommended** | 📋 | Applied by default during setup. Conflicts show warnings. You can opt out. |
+| **Informational** | ℹ️ | Available for reference. Not added to your constitution. |
+
+Standard authors set the enforcement level in the file's frontmatter:
+
+```markdown
+---
+enforcement: required
+---
+# Security Standards
+...
+```
+
+If no level is set, the standard defaults to **recommended**.
+
 ### Discrepancy detection
 
 After expanding standards, Sigil checks for conflicts between inherited and local content:
@@ -184,13 +206,19 @@ After expanding standards, Sigil checks for conflicts between inherited and loca
 - **Contradictory flags:** The standard marks something as "required" but your local rule marks it as "optional."
 - **Direct contradictions:** Your local rule says the opposite of the shared standard.
 
-When a discrepancy is found, Sigil shows a warning and asks you to resolve it — update the local rule, log a waiver, or skip for now.
+How Sigil handles discrepancies depends on the standard's enforcement level:
+
+- **Required** standards: conflicts block your session until resolved. You must either update your local rule or request a formal waiver.
+- **Recommended** standards: conflicts show a warning. You can update the local rule, log a waiver, or skip for now.
+- **Informational** standards: conflicts are logged silently — no interruption.
 
 ### What this means for your team
 
 - A new project gets your organization's standards immediately during setup.
 - When a security rule changes, one update in the shared repo reaches every project on the next session start.
 - Each project can still add its own rules in the `### Local Additions` section.
+- Required standards ensure critical rules (security, compliance) can't be accidentally skipped.
+- Recommended standards provide guidance without blocking — teams can tailor where appropriate.
 - Conflicts between shared and local rules are flagged automatically — no more silent drift.
 
 ## How Claude Code's Built-In Memory Fits In

@@ -1,5 +1,59 @@
 # Changelog
 
+## [0.27.0] - 2026-02-20
+
+### Added
+
+#### S4-102: Proactive Overrides
+- **Waiver template:** New `templates/waiver-template.md` with Active Overrides table format, field documentation, and examples.
+- **Override expiration check in `/sigil`:** New Step 1.4 reads `waivers.md`, parses active overrides, checks expiration dates, auto-marks expired overrides, and presents resolution options (acknowledge / extend / convert to permanent).
+- **Override-adjusted qa-validator v1.2.0:** Auto-loads active overrides from `waivers.md`. For overridden articles, validates against adjusted rules instead of original constitution rules. Marks findings with `[OVERRIDE]`. Adds "Active Overrides Applied" section to validation report.
+- **Override-adjusted code-reviewer v1.3.0:** Same pattern — loads overrides, applies adjusted rules, downgrades blockers to warnings for overridden articles, annotates with `[OVERRIDE]`, adds override section to report.
+- **Override section in handoff-packager v1.3.0:** New Step 3e extracts active overrides and includes summary table in handoff package so reviewing engineers know what exceptions are in effect.
+- **Status dashboard updated:** Constitution line now shows active override count and nearest expiration (e.g., "| 1 active override (expires Feb 28)").
+
+#### S4-104 Phase 2: Handoff-Back
+- **handoff-back skill v1.0.0:** 4-step process — check ticket context, assemble summary, invoke adapter write protocols, confirm. Graceful degradation on write failures. Automatic after code review for ticket-driven features.
+- **Jira adapter v1.1.0 write protocols:** Post Summary (addCommentToJiraIssue), Transition Status (transitionJiraIssue with available-transitions check), Link Artifact (remote links with fallback to comment).
+- **Handoff-back prompt in `/sigil`:** After code review passes for ticket-driven features, auto-invokes handoff-back. Adds "Update ticket and close" option to next-action prompt.
+- **Adapter authoring guide:** New `docs/adapter-authoring.md` — guide for creating new adapters using Jira as reference.
+
+### Changed
+- **Documentation updated:** user-guide.md (overrides section, handoff-back in ticket workflow), troubleshooting.md (expired overrides, handoff-back failures), glossary.md (override, handoff-back, adapter write protocol), command-reference.md (override checks, handoff-back behavior, ticket routing details).
+
+## [0.26.0] - 2026-02-20
+
+### Added
+
+#### S4-101: Enforcement Levels for Shared Standards
+- **Enforcement-level awareness in shared-context-sync v1.4.0:** Standards Pull and Standards Discover now parse YAML frontmatter `enforcement` field from standard files. Three levels: `required` (hard block if missing), `recommended` (warn on conflict), `informational` (silent). Defaults to `recommended` if absent.
+- **Enforcement-aware Discrepancy Detection:** New missing-required-standard pre-check verifies all `required` standards have `@inherit` markers. Discrepancies now include `enforcement`, `severity`, and `blocking` fields. Required conflicts block the session; recommended conflicts warn; informational conflicts are silent.
+- **Hard-block resolution in `/sigil` command:** Step 1.3 now inspects discrepancy results for blocking items. If any `blocking: true` discrepancies exist, displays hard-block format and halts until resolved. Warning-only discrepancies display and proceed.
+- **Enforcement-aware connect-wizard v1.3.0:** Step 7 groups standards by enforcement level — required standards auto-apply, recommended standards prompt user, informational standards mentioned only.
+- **Enforcement-aware constitution-writer v2.3.0:** Step 0c always emits `@inherit` for required standards, default-includes recommended (user can skip), skips informational. Step 3b displays enforcement icons and legend.
+- **Status dashboard updated:** Constitution line shows inherited standard counts with enforcement breakdown (e.g., "7 articles (3 inherited: 1 required, 2 recommended)").
+
+#### S4-103: External Tool Configuration
+- **Integration Discovery Protocol in shared-context-sync v1.5.0:** Fetches adapter configs from `integrations/` directory in shared repo. SHA-based caching, graceful MCP failure fallback. Added `integrations/` to cache structure and `integrations_hashes` to last-sync.json.
+- **Integration Pull Protocol:** Refreshes cached adapter configs at session start alongside standards pull.
+- **Integration discovery in `/sigil-setup`:** Step 3.5 now invokes Integration Discovery after standards discovery, checks MCP availability per adapter, and imports org defaults to `.sigil/config.yaml`.
+- **Integration setup in connect-wizard v1.4.0:** New Step 8 discovers integrations, displays available adapters with MCP status, fetches org defaults for configured ones. Previous Step 8 (Confirmation) renumbered to Step 9.
+- **Integration skill category:** New `sigil-plugin/skills/integration/` directory with README.
+
+#### S4-104 Phase 1: Ticket-Driven Entry
+- **ticket-loader skill v1.0.0:** 6-step process — validate adapter, fetch ticket, fetch parent, categorize (feature/bug/maintenance/enhancement), assemble enriched context, hand off to orchestrator. Returns structured context with ticket_key, category, ticket_metadata, enriched description.
+- **Jira adapter skill v1.0.0:** Phase 1 (read-only) — Fetch Ticket, Fetch Parent, Categorize protocols via Atlassian MCP tools. Configuration schema for `.sigil/integrations/jira.yaml`. Category mapping: Bug→bug, Story→feature, Task→enhancement, labels→maintenance.
+- **Ticket-key routing in `/sigil`:** Step 2 detects `[A-Z][A-Z0-9]+-\d+` pattern, invokes ticket-loader, routes by category. Maintenance → Quick Flow, bug → cap Standard, feature/enhancement → normal assessment.
+- **Enriched-context path in `/sigil` Step 3:** If input came from ticket-loader, passes ticket_metadata alongside enriched_description to spec-writer.
+- **Ticket metadata in complexity-assessor v1.1.0:** Optional `ticket_metadata` input — story points → scope, labels → integration, related tickets → dependencies scoring. Category overrides: maintenance → force Quick Flow, bug → cap Standard.
+- **Chain updates:** full-pipeline v1.4.0 documents ticket-loader as alternate entry, adds ticket fields to context preservation. quick-flow v1.2.0 documents maintenance flag handling.
+
+### Changed
+- **`/sigil` help output:** Added `/sigil PROJ-123` format for ticket-driven entry.
+- **Natural language triggers:** Added ticket-key patterns ("Work on PROJ-123", "Pick up PROJ-123").
+- **`/sigil-setup` completion summary:** Added integrations status line.
+- **Documentation updated:** shared-context-setup.md (enforcement levels, external tool integrations), multi-team-workflow.md (enforcement levels in shared standards), glossary.md (8 new terms), troubleshooting.md (required standard blocks, ticket key not recognized, no adapter configured), command-reference.md (ticket-key format, integration discovery), user-guide.md (ticket-driven workflow, enforcement levels).
+
 ## [0.25.1] - 2026-02-20
 
 ### Fixed

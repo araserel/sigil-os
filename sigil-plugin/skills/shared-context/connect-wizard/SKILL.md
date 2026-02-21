@@ -1,7 +1,7 @@
 ---
 name: connect-wizard
 description: Interactive setup flow for connecting a project to a shared context repository via GitHub MCP.
-version: 1.2.0
+version: 1.4.0
 category: shared-context
 chainable: false
 invokes: [shared-context-sync]
@@ -157,37 +157,53 @@ Use the `shared-context-sync` skill's Write Sentinel Entry procedure:
 
 ### Step 7: Shared Standards Integration
 
-After connecting, invoke the Standards Discover protocol from `shared-context-sync` to check for available standards.
+After connecting, invoke the Standards Discover protocol from `shared-context-sync` to check for available standards (which now include `enforcement` level).
 
 **If no standards found:** Skip silently — no standards to integrate yet.
 
 **If standards found AND constitution exists** (`/.sigil/constitution.md` is present):
 
-1. Show available standards and their article mappings:
+1. Group standards by enforcement level and display:
    ```
    Your team has shared standards available:
-     📋 security-standards.md → Article 4: Security Mandates
+
+   Required (auto-applied):
+     🔒 security-standards.md → Article 4: Security Mandates
+
+   Recommended:
      📋 accessibility.md → Article 7: Accessibility Standards
+     📋 coding-conventions.md → Article 2: Code Standards
 
-   Apply these to your project's constitution? [Y/n]:
+   Informational (reference only):
+     ℹ️  style-guide.md
    ```
 
-2. **If user says yes:**
-   a. For each standard with an `article_mapping`:
-      - Read the corresponding article from the constitution
-      - Insert `<!-- @inherit: shared-standards/{filename} -->` marker at the start of the article content
-      - If existing local content differs significantly from the standard (>70% overlap): remove the local content to avoid duplication
-      - If existing local content covers different topics than the standard (<70% overlap): move it to a `### Local Additions` section below the end marker
-      - Insert `<!-- @inherit-start -->` / `<!-- @inherit-end -->` block with the standard content
-   b. Invoke the Standards Expand protocol to write the updated constitution
-   c. Run Discrepancy Detection and present any conflicts to the user for resolution
+2. **Apply by enforcement level:**
+   a. **Required** (`enforcement: required`) — auto-apply without asking. These are organization mandates.
+      - For each required standard with an `article_mapping`:
+        - Read the corresponding article from the constitution
+        - Insert `<!-- @inherit: shared-standards/{filename} -->` marker at the start of the article content
+        - If existing local content differs significantly from the standard (>70% overlap): remove the local content to avoid duplication
+        - If existing local content covers different topics than the standard (<70% overlap): move it to a `### Local Additions` section below the end marker
+        - Insert `<!-- @inherit-start -->` / `<!-- @inherit-end -->` block with the standard content
+      - Show: `Applied N required standard(s) automatically.`
 
-3. **If user says no:** Keep current constitution as-is. Show:
-   ```
-   No changes made. You can apply shared standards later by
-   adding @inherit markers to your constitution, or re-run
-   /sigil-connect.
-   ```
+   b. **Recommended** (`enforcement: recommended`) — ask user:
+      ```
+      Apply recommended standards to your constitution? [Y/n]:
+      ```
+      - If yes: apply same process as required standards above
+      - If no: skip, show: "You can apply these later with /sigil-connect."
+
+   c. **Informational** (`enforcement: informational`) — mention only, do not apply:
+      ```
+      Informational standards are available for reference in
+      your shared repo. They are not added to your constitution.
+      ```
+
+3. After applying any standards:
+   a. Invoke the Standards Expand protocol to write the updated constitution
+   b. Run Discrepancy Detection and present any blocking or warning conflicts to the user for resolution
 
 **If standards found AND no constitution exists:**
 
@@ -197,7 +213,44 @@ applied automatically when you run /sigil-setup to create
 your project constitution.
 ```
 
-### Step 8: Confirmation
+### Step 8: Integration Discovery
+
+After standards integration, invoke the Integration Discovery Protocol from `shared-context-sync` to check for org-level tool adapter configs.
+
+**If no integrations found:** Skip silently.
+
+**If integrations found:**
+
+1. Display available adapters with MCP availability status:
+   ```
+   External Tool Integrations
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   Your team has tool integrations available:
+     ✅ Jira — MCP connected, ready to use
+     ⚠️  Linear — MCP not configured (optional)
+   ```
+
+2. For each adapter where MCP tools are available:
+   a. Fetch org-level default config from the adapter
+   b. Write defaults to `.sigil/config.yaml` under `integrations:` key:
+      ```yaml
+      integrations:
+        jira:
+          project_keys: [PROJ, TEAM]
+          status_mapping:
+            done: ["Done", "Closed"]
+            in_progress: ["In Progress", "In Review"]
+      ```
+   c. Show: `Imported org defaults for {adapter name}.`
+
+3. For adapters where MCP is not available:
+   ```
+   To enable {adapter name}, configure the {MCP server} MCP server.
+   You can do this later — the integration will activate automatically.
+   ```
+
+### Step 9: Confirmation
 
 ```
 Step 3 of 3: Confirm
@@ -207,6 +260,7 @@ Shared context is now active:
   - Repository: {owner/repo}
   - Learnings sync when you use /sigil-learn
   - Latest context loads automatically at session start
+  - Integrations: {N configured, M available}
   - This project: {current-project-identity}
 
 To disconnect later, remove this project's entry
@@ -224,7 +278,7 @@ When invoked with a repo path (e.g., `sigil connect my-org/platform-context`):
 1. Skip Steps 1-3 (introduction, MCP check prompt, repo selection prompt)
 2. Still perform MCP check silently — if MCP not available, show error and guidance
 3. Proceed directly to Step 4 (validate and connect) with the provided repo path
-4. Continue through Steps 5-8 as normal
+4. Continue through Steps 5-9 as normal
 
 ---
 
@@ -259,7 +313,10 @@ When invoked with a repo path (e.g., `sigil connect my-org/platform-context`):
   "shared_standards_available": true,
   "shared_standards_applied": true,
   "standards_applied": ["security-standards.md", "accessibility.md"],
-  "discrepancies_found": 0
+  "discrepancies_found": 0,
+  "integrations_discovered": ["jira"],
+  "integrations_configured": ["jira"],
+  "integrations_unavailable": []
 }
 ```
 
@@ -269,6 +326,8 @@ When invoked with a repo path (e.g., `sigil connect my-org/platform-context`):
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.4.0 | 2026-02-20 | S4-103: Integration discovery — new Step 8 discovers org-level adapter configs, checks MCP availability, imports defaults. Previous Step 8 (Confirmation) renumbered to Step 9. |
+| 1.3.0 | 2026-02-20 | S4-101: Enforcement-aware standards integration — Step 7 groups standards by enforcement level. Required standards auto-apply, recommended standards prompt user, informational standards mentioned only. |
 | 1.2.0 | 2026-02-20 | Active standards integration — Step 7 now offers to apply shared standards to existing constitutions with @inherit markers, handles duplication detection, runs discrepancy detection |
 | 1.1.0 | 2026-02-09 | Added MCP tool specifics to scaffolding and standards discovery, references shared-context-sync protocols |
 | 1.0.0 | 2026-02-09 | Initial release — interactive and direct connection flows |

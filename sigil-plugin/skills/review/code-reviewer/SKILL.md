@@ -1,7 +1,7 @@
 ---
 name: code-reviewer
 description: Perform structured code review against project standards and best practices. Invoke after qa-validator passes to review code quality before deployment.
-version: 1.2.0
+version: 1.3.0
 category: review
 chainable: true
 invokes: []
@@ -208,11 +208,25 @@ SUGGESTION: Similar code in 3 locations
 
 ### 8. Constitution Compliance
 
+**Override Loading:** Before checking constitution articles, auto-load active overrides from `/.sigil/waivers.md`. Parse the Active Overrides table for entries with `Status: active` and a non-expired date (or "permanent"). Store the list of overridden articles and their adjusted rules.
+
 **Checks:**
 - Article 2: Code style standards
 - Article 5: Anti-abstraction principle
 - Article 6: Simplicity preference
 - Any project-specific rules
+
+**Override-adjusted review:** For articles with an active override, apply the adjusted rule instead of the original constitution rule. Downgrade findings from Blocker to Warning for overridden articles. Note affected findings with `[OVERRIDE]` in the report. For example, if Article 5 has an override allowing a specific abstraction pattern, findings about that pattern are downgraded from Blocker to Warning with `[OVERRIDE]` annotation.
+
+**Active Overrides Applied section:** If any overrides were applied during review, add a section to the review report after the Summary:
+
+```markdown
+### Active Overrides Applied
+
+| Article | Override | Expires |
+|---------|----------|---------|
+| Article 5: Architecture Principles | Allow repository pattern for data access | permanent |
+```
 
 ## Review Report Template
 
@@ -441,6 +455,7 @@ Proceeding with focused review on changed sections only.
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.3.0 | 2026-02-20 | S4-102: Override-adjusted review — auto-loads active overrides from waivers.md, downgrades blockers to warnings for overridden articles, annotates with [OVERRIDE], adds Active Overrides Applied section. |
 | 1.2.0 | 2026-02-19 | Added user_track branching — non-technical gets summary-focused report, technical gets line-level detail |
 | 1.1.0 | 2026-02-09 | S2-003: Added QA Fix Impact Notice and `qa_fix_metadata` input. SX-002: Added tech-debt persistence for non-blocking suggestions. Added Write tool. |
 | 1.0.0 | 2026-01-20 | Initial release |

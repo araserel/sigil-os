@@ -1,7 +1,7 @@
 ---
 name: shared-context-sync
 description: Orchestrates shared context operations — sentinel detection, repo identity, push/pull sync, cache management, and offline queue via GitHub MCP.
-version: 1.3.0
+version: 1.5.0
 category: shared-context
 chainable: false
 invokes: []
@@ -161,6 +161,8 @@ The local cache mirrors the shared repo state and stores the offline queue.
         │   ├── security-standards.md
         │   ├── accessibility.md
         │   └── coding-conventions.md
+        ├── integrations/            # Cached integration adapter configs
+        │   └── jira.yaml
         └── queue/                   # Pending offline writes
             └── 1707234600000.json
 ```
@@ -180,6 +182,9 @@ Tracks when the last successful pull occurred and content hashes for "what's new
   "standards_hashes": {
     "shared-standards/security-standards.md": "sha256:jkl012...",
     "shared-standards/accessibility.md": "sha256:mno345..."
+  },
+  "integrations_hashes": {
+    "integrations/jira.yaml": "sha256:pqr678..."
   }
 }
 ```
@@ -189,8 +194,8 @@ Tracks when the last successful pull occurred and content hashes for "what's new
 When shared context activates for the first time (no cache directory exists):
 
 1. Create `~/.sigil/cache/shared/` directory tree
-2. Create empty `last-sync.json` with `{ "last_pull": null, "content_hashes": {}, "standards_hashes": {} }`
-3. Create empty `learnings/`, `profiles/`, `standards/`, and `queue/` directories
+2. Create empty `last-sync.json` with `{ "last_pull": null, "content_hashes": {}, "standards_hashes": {}, "integrations_hashes": {} }`
+3. Create empty `learnings/`, `profiles/`, `standards/`, `integrations/`, and `queue/` directories
 
 ---
 
@@ -509,8 +514,9 @@ Called by `/sigil` at session start and by `constitution-writer` during setup.
    a. Compare SHA from response with cached SHA in `~/.sigil/cache/shared/last-sync.json` under `standards_hashes`
    b. If changed: decode content (base64) and update local cache at `~/.sigil/cache/shared/standards/{filename}`
    c. If unchanged: skip (cache is current)
+   d. **Parse enforcement level from YAML frontmatter:** If the file begins with `---`, extract the `enforcement` field from the YAML block. Valid values: `required`, `recommended`, `informational`. If absent, malformed, or not one of the valid values, default to `recommended`.
 6. Update `~/.sigil/cache/shared/last-sync.json` with new SHAs under `standards_hashes`
-7. Return list of standard files with their content
+7. Return list of standard files with their content and parsed `enforcement` level
 
 **On MCP failure during pull:**
 
@@ -574,7 +580,8 @@ Called by `connect-wizard` and `constitution-writer` to list available standards
 1. Read `shared-standards/` directory via MCP (or from cache if MCP unavailable)
 2. For each `.md` file (excluding `.gitkeep`):
    a. Extract title (first `# ` heading) and first paragraph
-   b. Infer `article_mapping` from filename:
+   b. **Parse enforcement level from YAML frontmatter:** If the file begins with `---`, extract the `enforcement` field. Valid values: `required`, `recommended`, `informational`. Default to `recommended` if absent or invalid.
+   c. Infer `article_mapping` from filename:
 
    | Filename | Suggested Article |
    |----------|-------------------|
@@ -593,6 +600,7 @@ Called by `connect-wizard` and `constitution-writer` to list available standards
     "title": "Security Standards",
     "summary": "First paragraph of the file...",
     "article_mapping": "Article 4: Security Mandates",
+    "enforcement": "required",
     "content": "Full file content..."
   }
 ]
@@ -604,21 +612,48 @@ Called by `connect-wizard` and `constitution-writer` to list available standards
 
 ## Discrepancy Detection
 
-Runs after Standards Expand to flag conflicts between inherited and local content.
+Runs after Standards Expand to flag conflicts between inherited and local content. Uses enforcement levels to determine severity and blocking behavior.
 
 **Procedure:**
 
-1. For each article in the constitution that has both an expanded `@inherit` block AND local content (content outside the `@inherit-start`/`@inherit-end` markers but still within the same article):
+1. **Missing required standard check:** Before comparing content, verify that every standard with `enforcement: required` has a corresponding `@inherit` marker in the constitution. For each required standard:
+   - Look up its `article_mapping`
+   - Check if the constitution contains `<!-- @inherit: shared-standards/{filename} -->` for that standard
+   - If missing → add a hard-block discrepancy (the project cannot proceed without adopting this standard)
+
+2. For each article in the constitution that has both an expanded `@inherit` block AND local content (content outside the `@inherit-start`/`@inherit-end` markers but still within the same article):
    a. **Numeric threshold comparison:** Extract numeric values (e.g., coverage percentages, line limits, rate limits) from both inherited and local content. If local content specifies a weaker threshold than the inherited standard, flag it.
    b. **Required/optional flag comparison:** If the inherited standard marks something as "required" or "must" and local content marks the same item as "optional" or "should," flag it.
    c. **Contradictory rules:** If local content explicitly contradicts an inherited rule (e.g., inherited says "all endpoints authenticated," local says "public endpoints allowed"), flag it.
-2. Return list of discrepancies:
+
+3. **Apply enforcement-level severity** to each discrepancy based on the standard's enforcement level:
+
+   | Enforcement | Severity | Blocking | Behavior |
+   |-------------|----------|----------|----------|
+   | `required` | hard block | `true` | Must be resolved before proceeding. No skip option. |
+   | `recommended` | warning | `false` | Show warning with options: update / waive / skip this session. |
+   | `informational` | info | `false` | Silent — do not display to user. Log for audit only. |
+
+4. Return list of discrepancies:
 
 ```json
 [
   {
     "article": "Article 4: Security Mandates",
+    "type": "missing_required_standard",
+    "enforcement": "required",
+    "severity": "hard_block",
+    "blocking": true,
+    "inherited": "security-standards.md",
+    "local": null,
+    "suggestion": "This standard is required by your organization. Apply it now or request a waiver from your team lead."
+  },
+  {
+    "article": "Article 3: Testing Requirements",
     "type": "weaker_threshold",
+    "enforcement": "recommended",
+    "severity": "warning",
+    "blocking": false,
     "inherited": "Minimum 80% test coverage",
     "local": "60% coverage target",
     "suggestion": "Update local target to match shared standard (80%) or document a waiver"
@@ -626,15 +661,32 @@ Runs after Standards Expand to flag conflicts between inherited and local conten
 ]
 ```
 
-3. If no discrepancies found, return empty array
+5. If no discrepancies found, return empty array
 
 **Display format for user:**
 
+For **required** (hard block) discrepancies:
+```
+🚫 Required Standard Missing
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Article 4: Security Mandates (required)
+  Your organization requires this standard but it is
+  not applied to your project constitution.
+
+  Standard: security-standards.md
+
+Options:
+  1. Apply now — add @inherit marker and expand
+  2. Request waiver — log exception for team review
+```
+
+For **recommended** (warning) discrepancies:
 ```
 ⚠️  Standards Discrepancy Detected
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Article 4: Security Mandates
+Article 3: Testing Requirements (recommended)
   Shared standard requires: 80% test coverage
   Your local rule says: 60% coverage target
 
@@ -643,6 +695,8 @@ Options:
   2. Keep local rule and log a waiver
   3. Skip for now
 ```
+
+**Informational** discrepancies are not displayed.
 
 ---
 
@@ -671,6 +725,85 @@ Called by `connect-wizard` when a shared repo is empty or missing the expected s
    ```
 3. On success: return `{ scaffolded: true }`
 4. On failure: return error with message for connect-wizard to display
+
+---
+
+## Integration Discovery Protocol
+
+Called by `connect-wizard` Step 8 and `sigil-setup` Step 3.5 to discover org-level integration adapter configs from the shared repo.
+
+**Procedure:**
+
+1. Check sentinel → if not active, return `{ integrations: [] }`
+2. Determine shared repo from sentinel lookup
+3. Split shared repo into `owner` and `repo` parts
+4. **Read integrations directory via MCP:**
+   ```
+   mcp__github__get_file_contents(owner, repo, path="integrations/")
+   ```
+   - If 404 (directory doesn't exist) → return `{ integrations: [] }`
+   - If returns directory listing → proceed
+5. For each `.yaml` file in the directory:
+   ```
+   mcp__github__get_file_contents(owner, repo, path="integrations/{filename}")
+   ```
+6. Parse each adapter config. Expected schema:
+   ```yaml
+   adapter: jira          # adapter identifier
+   name: Jira             # display name
+   mcp_tools:             # required MCP tools
+     - mcp__claude_ai_Atlassian__getJiraIssue
+     - mcp__claude_ai_Atlassian__searchJiraIssuesUsingJql
+   config:                # org-level default configuration
+     project_keys: [PROJ, TEAM]
+     status_mapping:
+       done: ["Done", "Closed"]
+       in_progress: ["In Progress", "In Review"]
+   ```
+7. For each adapter, cache locally at `~/.sigil/cache/shared/integrations/{filename}`
+8. Update `~/.sigil/cache/shared/last-sync.json` with SHAs under `integrations_hashes`
+9. Return array of discovered integrations:
+   ```json
+   [
+     {
+       "adapter": "jira",
+       "name": "Jira",
+       "filename": "jira.yaml",
+       "mcp_tools": ["mcp__claude_ai_Atlassian__getJiraIssue", "..."],
+       "config": { "project_keys": ["PROJ", "TEAM"] }
+     }
+   ]
+   ```
+
+**On MCP failure:** Return cached integrations from `~/.sigil/cache/shared/integrations/` or empty array if no cache exists.
+
+---
+
+## Integration Pull Protocol
+
+Called at session start (alongside Standards Pull) to refresh cached adapter configs.
+
+**Procedure:**
+
+1. Check sentinel → if not active, return silently
+2. Determine shared repo from sentinel lookup
+3. Split shared repo into `owner` and `repo` parts
+4. **Read integrations directory via MCP:**
+   ```
+   mcp__github__get_file_contents(owner, repo, path="integrations/")
+   ```
+5. For each `.yaml` file found:
+   a. Compare SHA from response with cached SHA in `~/.sigil/cache/shared/last-sync.json` under `integrations_hashes`
+   b. If changed: decode content (base64) and update local cache at `~/.sigil/cache/shared/integrations/{filename}`
+   c. If unchanged: skip (cache is current)
+6. Update `~/.sigil/cache/shared/last-sync.json` with new SHAs under `integrations_hashes`
+7. Return list of available integrations
+
+**On MCP failure during pull:**
+
+1. Log warning: "Integration configs unavailable, using cached data."
+2. Return cached integrations from `~/.sigil/cache/shared/integrations/`
+3. Continue session normally — MCP failure must never block session start
 
 ---
 
@@ -704,6 +837,9 @@ Called by `connect-wizard` when a shared repo is empty or missing the expected s
 | @inherit marker references missing file | Leave existing expanded content if any; insert `@inherit-pending` marker if no prior expansion. |
 | @inherit expand fails (no constitution) | Return silently — nothing to expand. |
 | Discrepancy detected | Display warning to user with resolution options. Do not auto-resolve. |
+| Integrations directory missing (404) | Return empty array. No error, no message. |
+| Integration pull fails (MCP) | Use cached integrations. Log: "Integration configs unavailable, using cached data." |
+| Integration config invalid YAML | Skip that adapter, log warning. Continue with valid adapters. |
 
 ---
 
@@ -722,6 +858,9 @@ Called by `connect-wizard` when a shared repo is empty or missing the expected s
 | `sigil` (session start) | Standards Pull + Expand + Discrepancy Detection | At session start, when shared context active and constitution has @inherit markers |
 | `constitution-writer` | Standards Discover + Standards Pull | During setup, when shared_standards provided |
 | `connect-wizard` | Standards Discover + Standards Expand | During connection, when standards found and constitution exists |
+| `connect-wizard` | Integration Discovery | During connection Step 8, after standards integration |
+| `sigil-setup` | Integration Discovery | During setup Step 3.5, after standards discovery |
+| `prime` (session start) | Integration Pull | At session start, when shared context active |
 
 ---
 
@@ -729,6 +868,8 @@ Called by `connect-wizard` when a shared repo is empty or missing the expected s
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.5.0 | 2026-02-20 | S4-103: Integration Discovery and Pull protocols — fetches adapter configs from `integrations/` directory in shared repo. SHA-based caching, graceful MCP failure. Added `integrations/` to cache structure and `integrations_hashes` to last-sync.json. |
+| 1.4.0 | 2026-02-20 | S4-101: Enforcement-level awareness — Standards Pull parses YAML frontmatter `enforcement` field (required/recommended/informational, default recommended). Standards Discover returns `enforcement` in schema. Discrepancy Detection uses three-tier severity: required → hard block, recommended → warn with options, informational → silent. Added missing-required-standard pre-check. |
 | 1.3.0 | 2026-02-20 | Added Standards protocols — Standards Pull, Standards Expand, Standards Discover, Discrepancy Detection. Added `standards/` to cache structure. Updated `last-sync.json` schema with `standards_hashes`. New integration points for sigil, constitution-writer, connect-wizard. |
 | 1.2.0 | 2026-02-09 | S2-102: Added Profile Protocol — profile push, pull, change detection, profile hash cache |
 | 1.1.0 | 2026-02-09 | Added specific MCP tool references, scaffolding protocol, duplicate detection V1, expanded error paths, graceful fallback details |
