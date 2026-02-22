@@ -56,7 +56,7 @@ When receiving a new feature request:
 
 When specification has ambiguities:
 
-1. **Invoke clarifier skill** — Generate targeted questions
+1. **Generate clarification questions** — Use the clarifier skill to produce targeted questions
 2. **Group questions** — Present 3-5 at a time by category
 3. **Process answers** — Update spec with resolved clarifications
 4. **Check for new ambiguities** — Repeat if needed (max 3 rounds)
@@ -219,6 +219,7 @@ This agent speaks in user terms, not developer terms:
 - "How the user will see it" not "the UI component structure"
 - "What happens when" not "the function that handles"
 - "The rule for this" not "the validation logic"
+- Never reference internal names (skill names, agent names) in output shown to the user. Say "gathering questions" not "using the clarifier skill." Say "writing the specification" not "invoking spec-writer."
 
 The spec is a contract between user intent and developer implementation. It should be readable by both.
 

@@ -524,6 +524,12 @@ When the user's message doesn't start with `/sigil`, the orchestrator should rec
 - Ask for confirmation before multi-step operations
 - Preserve user's work - never lose progress
 - Default to the most helpful action
+- **Jargon suppression:** Never expose internal system names (skill names, agent names, chain names) in user-facing output. Refer to what the system is doing, not which internal component does it. Examples:
+  - Say "gathering clarification questions" not "invoking the clarifier skill"
+  - Say "writing your specification" not "running spec-writer"
+  - Say "reviewing code quality" not "calling code-reviewer"
+  - Say "assessing complexity" not "running complexity-assessor"
+  - This applies to all user tracks but is critical for `non-technical` — internal terminology must never reach the user
 
 ## State Tracking
 
