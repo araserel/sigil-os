@@ -25,6 +25,18 @@ Start here if you use Sigil to build features, manage projects, or work with spe
 
 ---
 
+## Printable Guides
+
+Downloadable DOCX versions for offline reference or sharing with your team.
+
+| Guide | Description |
+|-------|-------------|
+| [Setup Guide](printables/Sigil_OS_Setup_Guide.docx) | Install, configure, and start your first project |
+| [Quick Reference](printables/Sigil_OS_Quick_Reference.docx) | Commands, workflows, and key concepts at a glance |
+| [Setup Testing Guide](printables/Sigil_OS_Setup_Testing_Guide.docx) | Verify your installation is working correctly |
+
+---
+
 ## For Developers and Contributors
 
 These documents cover Sigil's internals, architecture, and extension points.
