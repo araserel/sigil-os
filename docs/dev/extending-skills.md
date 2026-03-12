@@ -16,11 +16,12 @@ Sigil organizes skills into 8 categories. Before creating a new skill, review ex
 
 | Category | Purpose | Skills |
 |----------|---------|--------|
-| **Workflow** | Core development workflow | `spec-writer`, `clarifier`, `technical-planner`, `task-decomposer`, `complexity-assessor`, `handoff-packager`, `constitution-writer`, `status-reporter`, `foundation-writer`, `visual-analyzer` |
+| **Workflow** | Core orchestration and handoff | `clarifier`, `complexity-assessor`, `handoff-packager`, `constitution-writer`, `status-reporter`, `visual-analyzer`, `ticket-loader`, `handoff-back`, `preflight-check`, `specialist-selection`, `story-preparer`, `quick-spec` |
 | **Design** | UI/UX design and accessibility | `framework-selector`, `ux-patterns`, `ui-designer`, `accessibility`, `design-system-reader`, `figma-review` |
 | **UI Implementation** | Framework-specific UI code | `react-ui`, `react-native-ui`, `flutter-ui`, `vue-ui`, `swift-ui`, `design-skill-creator` |
-| **Engineering** | Code and architecture | `adr-writer` |
-| **Quality** | Validation and fixing | `qa-validator`, `qa-fixer` |
+| **Engineering** | Technical implementation | `adr-writer`, `foundation-writer`, `task-decomposer`, `technical-planner`, `commit-conventions`, `test-generator`, `database-migration`, `documentation-generator`, `refactoring-backend`, `refactoring-frontend` |
+| **Specification** | Spec authoring | `spec-writer` |
+| **Quality** | Validation and fixing | `qa-validator`, `qa-fixer`, `qa-escalation-policy` |
 | **Review** | Code, security, deploy checks | `code-reviewer`, `security-reviewer`, `deploy-checker` |
 | **Research** | Information gathering | `researcher`, `knowledge-search`, `codebase-assessment`, `problem-framing`, `constraint-discovery`, `stack-recommendation` |
 | **Learning** | Institutional memory | `learning-capture`, `learning-reader`, `learning-review` |
@@ -61,7 +62,7 @@ When creating a new skill, determine which chain(s) it fits into and update your
 
 ## Skill Anatomy
 
-Every skill uses the **directory/SKILL.md** format. Each skill lives in its own directory (e.g., `sigil-plugin/skills/workflow/spec-writer/SKILL.md`). The SKILL.md file consists of two parts:
+Every skill uses the **directory/SKILL.md** format. Each skill lives in its own directory (e.g., `sigil-plugin/skills/specification/spec-writer/SKILL.md`). The SKILL.md file consists of two parts:
 
 ### 1. Frontmatter (YAML)
 
@@ -70,7 +71,7 @@ Every skill uses the **directory/SKILL.md** format. Each skill lives in its own 
 name: skill-name
 description: One-line description of what this skill does
 version: 1.0.0
-category: workflow|design|ui|qa|review|research|learning|engineering
+category: workflow|design|ui|qa|review|research|learning|engineering|specification|shared-context|integration
 chainable: true|false
 invokes: [list, of, skills, this, calls]
 invoked_by: [list, of, skills, that, call, this]

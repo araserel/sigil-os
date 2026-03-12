@@ -1,8 +1,8 @@
 ---
 name: technical-planner
 description: Creates implementation plans from clarified specifications. Invoke when spec is clarified and user requests planning, says "plan", or "how should we build".
-version: 1.1.0
-category: workflow
+version: 1.2.0
+category: engineering
 chainable: true
 invokes: [researcher, adr-writer]
 invoked_by: [architect, orchestrator]
@@ -290,5 +290,6 @@ Technical Planner: Creating implementation plan for user authentication...
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2.0 | 2026-03-11 | Moved from workflow/ to engineering/ category |
 | 1.1.0 | 2026-02-09 | S2-102: Added Cross-Repo Impact Gate, auto-loaded current_profile and sibling_profiles inputs |
 | 1.0.0 | 2026-01-20 | Initial release |

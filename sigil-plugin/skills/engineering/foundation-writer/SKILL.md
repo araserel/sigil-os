@@ -1,8 +1,8 @@
 ---
 name: foundation-writer
 description: Compiles discovery outputs into a project-foundation.md document. Captures one-time decisions that inform the constitution and all subsequent development.
-version: 1.0.0
-category: workflow
+version: 1.1.0
+category: engineering
 chainable: true
 invokes: [constitution-writer]
 invoked_by: [stack-recommendation]
@@ -377,4 +377,5 @@ Simple, distraction-free task management without the complexity of enterprise to
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1.0 | 2026-03-11 | Moved from workflow/ to engineering/ category. Added references/example-foundation.md. |
 | 1.0.0 | 2026-01-20 | Initial release |

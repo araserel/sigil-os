@@ -1,8 +1,8 @@
 ---
 name: spec-writer
 description: Generates feature specifications from natural language descriptions. Invoke when user describes a feature, says "spec", "specify", or "write spec".
-version: 1.0.0
-category: workflow
+version: 1.1.0
+category: specification
 chainable: true
 invokes: [clarifier, visual-analyzer]
 invoked_by: [orchestrator, business-analyst, quick-spec]
@@ -206,4 +206,5 @@ User: /sigil "Create the checkout flow based on these mockups"
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1.0 | 2026-03-11 | Moved from workflow/ to specification/ category |
 | 1.0.0 | 2026-01-20 | Initial release |

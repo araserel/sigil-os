@@ -86,6 +86,9 @@ Present plan to user for review:
 | `technical-planner` | Generate implementation plan | After spec received |
 | `researcher` | Investigate unknowns | When research needed |
 | `adr-writer` | Document architecture decisions | Significant decisions |
+| `database-migration` | Generate schema migrations | When data model changes in plan |
+| `refactoring-backend` | Plan backend restructuring | When refactoring identified in plan |
+| `refactoring-frontend` | Plan frontend restructuring | When component restructuring needed |
 | `learning-reader` | Load past decisions, architecture gotchas | Before starting plan (Step 1) |
 | `knowledge-search` | Search project knowledge for similar implementations and decisions | During research (Step 2) |
 

@@ -1,6 +1,6 @@
 # Agents Directory
 
-Contains definitions for the 9 core Sigil OS agents.
+Contains definitions for the 10 core Sigil OS agents.
 
 ## Core Team
 
@@ -12,6 +12,7 @@ Contains definitions for the 9 core Sigil OS agents.
 | Architect | `architect.md` | Technical design, research, ADRs |
 | Task Planner | `task-planner.md` | Task breakdown, sprint planning |
 | Developer | `developer.md` | Code implementation |
+| Code Reviewer | `code-reviewer.md` | Structured code review with verdicts |
 | QA Engineer | `qa-engineer.md` | Validation, quality assurance |
 | Security | `security.md` | Security review |
 | DevOps | `devops.md` | Deployment, infrastructure |
@@ -21,7 +22,7 @@ Contains definitions for the 9 core Sigil OS agents.
 For features with UI components, the standard handoff sequence is:
 
 ```
-Orchestrator → Business Analyst → UI/UX Designer → Architect → Task Planner → Developer → QA Engineer → [Security/DevOps]
+Orchestrator → Business Analyst → UI/UX Designer → Architect → Task Planner → Developer → QA Engineer → Code Reviewer → [Security/DevOps]
 ```
 
 For backend-only features, UI/UX Designer is skipped.

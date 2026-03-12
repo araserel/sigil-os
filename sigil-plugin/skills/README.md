@@ -5,18 +5,41 @@ Contains reusable, chainable skill definitions organized by category.
 ## Categories
 
 ### workflow/
-Core development workflow skills:
+Core orchestration and handoff skills:
 - `complexity-assessor.md` — Determine workflow track
 - `constitution-writer.md` — Create project principles
-- `spec-writer.md` — Generate specifications
 - `clarifier.md` — Reduce ambiguity
-- `technical-planner.md` — Create implementation plans
-- `task-decomposer.md` — Break plans into tasks
 - `handoff-packager.md` — Generate technical review packages
+- `handoff-back.md` — Auto-update originating tickets after completion
 - `status-reporter.md` — Generate workflow status reports
-- `foundation-writer.md` — Compile Discovery outputs into foundation document
 - `visual-analyzer.md` — Analyze mockups and wireframes
 - `story-preparer.md` — Convert tasks to user story format
+- `ticket-loader.md` — Load and categorize external tickets
+- `specialist-selection.md` — Assign specialist agents to tasks
+- `preflight-check.md` — Verify installation and enforcement
+- `routing-rules/` — Reference skill for orchestrator routing logic
+
+### specification/
+Spec authoring skills:
+- `spec-writer.md` — Generate feature specifications
+- `quick-spec.md` — Rapid specification mode for Quick Flow
+
+### engineering/
+Technical implementation skills:
+- `technical-planner.md` — Create implementation plans
+- `task-decomposer.md` — Break plans into tasks
+- `foundation-writer.md` — Compile Discovery outputs into foundation document
+- `adr-writer.md` — Architecture Decision Records
+- `commit-conventions.md` — Commit message conventions reference
+- `test-generator.md` — Framework-agnostic test generation
+- `database-migration.md` — Tool-agnostic migration generation
+- `documentation-generator.md` — Code-analysis-based doc generation
+- `refactoring-backend.md` — Structured backend refactoring
+- `refactoring-frontend.md` — Structured frontend refactoring
+
+### shared-protocols/
+Reusable cross-skill protocols:
+- `pre-execution-check.md` — Standardized project-context.md update protocol
 
 ### design/
 UI/UX design and accessibility skills (invoked by UI/UX Designer agent):
@@ -40,6 +63,7 @@ Framework-specific UI implementation skills (invoked by Developer agent):
 Validation and fixing skills:
 - `qa-validator.md` — Run quality checks
 - `qa-fixer.md` — Fix validation failures
+- `qa-escalation-policy.md` — Escalation rules for validation failures
 
 ### review/
 Code and deployment review skills:
@@ -77,7 +101,7 @@ Each skill file follows this structure:
 name: skill-name
 description: What this skill does
 version: 1.0.0
-category: workflow|design|ui|qa|review|research|learning|engineering
+category: workflow|specification|engineering|design|ui|qa|review|research|learning|shared-context|integration
 chainable: true|false
 invokes: [skills this may call]
 invoked_by: [skills that may call this]

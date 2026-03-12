@@ -1,8 +1,8 @@
 ---
 name: task-decomposer
 description: Breaks implementation plans into executable tasks. Invoke when plan is approved and user requests task breakdown, says "tasks", or "break down".
-version: 1.1.0
-category: workflow
+version: 1.2.0
+category: engineering
 chainable: true
 invokes: [specialist-selection]
 invoked_by: [task-planner, orchestrator]
@@ -281,5 +281,6 @@ Phase 2: Core Implementation
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2.0 | 2026-03-11 | Moved from workflow/ to engineering/ category |
 | 1.1.0 | 2026-02-19 | S3-101: Added specialist assignment via specialist-selection skill, Specialist field in task format, specialist check in quality checklist |
 | 1.0.0 | 2026-01-20 | Initial release |

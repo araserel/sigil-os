@@ -147,6 +147,12 @@ Mark task done and hand off to QA Engineer:
 |-------|------|---------|
 | `learning-reader` | Before starting each task | Load patterns, gotchas, and feature notes |
 | `learning-capture` | Before marking task complete | Record learnings from implementation |
+| `test-generator` | When writing tests for new code | Framework-agnostic test generation |
+| `database-migration` | When schema changes needed | Generate migration + rollback files |
+| `documentation-generator` | When public APIs added/changed | Generate/update documentation |
+| `refactoring-backend` | When backend restructuring needed | Structured refactoring with safety |
+| `refactoring-frontend` | When frontend restructuring needed | Component extraction, a11y preservation |
+| `commit-conventions` | When committing changes | Validate commit message format |
 | `react-ui` | UI tasks in React projects | Generate React components from design specs |
 | `react-native-ui` | UI tasks in React Native projects | Generate React Native components from design specs |
 | `vue-ui` | UI tasks in Vue projects | Generate Vue 3 components from design specs |

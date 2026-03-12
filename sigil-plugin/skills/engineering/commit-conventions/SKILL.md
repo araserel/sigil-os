@@ -1,0 +1,330 @@
+---
+name: commit-conventions
+description: Define and enforce commit message conventions based on project constitution and team standards. Invoke when committing code or reviewing commit messages.
+version: 1.0.0
+category: engineering
+chainable: false
+invokes: []
+invoked_by: [developer, orchestrator]
+tools: Read, Bash, Grep
+---
+
+# Skill: Commit Conventions
+
+## Purpose
+
+Define and enforce commit message conventions for a project. Detects existing patterns, reads constitution-defined standards, and applies Conventional Commits as the default format. Ensures every commit message is consistent, traceable, and informative.
+
+## Type
+
+Reference — this skill provides guidance and validation rather than producing a persistent artifact.
+
+## When to Invoke
+
+- Developer is about to commit code
+- Code review identifies inconsistent commit messages
+- New project needs commit conventions established
+- User asks about commit message format
+- Pre-commit validation of message format
+
+## Inputs
+
+**Required:**
+- `action`: string — One of: `format`, `validate`, `detect`, `configure`
+
+**Optional:**
+- `message`: string — Commit message to validate or format
+- `branch_name`: string — Current branch name for ticket prefix extraction
+- `changed_files`: string[] — List of changed files for scope inference
+
+**Auto-loaded:**
+- `constitution`: string — `/.sigil/constitution.md` (Article 2 for commit conventions)
+- `project_context`: string — `/.sigil/project-context.md`
+
+## Process
+
+### Step 1: Load Convention Source
+
+```
+1. Read /.sigil/constitution.md
+2. Check Article 2 (Engineering Standards) for commit convention definitions
+3. If constitution defines conventions:
+   - Extract format pattern, allowed types, scope rules
+   - Use constitution as authoritative source
+4. If constitution has no commit conventions:
+   - Fall back to Conventional Commits as default format
+5. Scan recent git history (last 50 commits) to detect existing patterns
+6. Note any deviations between constitution and actual usage
+```
+
+### Step 2: Detect Project Context
+
+```
+1. Read current branch name via: git rev-parse --abbrev-ref HEAD
+2. Extract ticket prefix using regex: [A-Z][A-Z0-9]+-\d+
+   - Match patterns like PROJ-123, FEAT-42, BUG-7
+   - Check branch naming formats:
+     - feature/PROJ-123-description
+     - PROJ-123/description
+     - PROJ-123-description
+     - fix/PROJ-123
+3. Detect if project uses any commit tooling:
+   - commitlint config (.commitlintrc, commitlint.config.js)
+   - husky hooks (.husky/commit-msg)
+   - conventional-changelog config
+4. If tooling detected, align conventions with tooling config
+```
+
+### Step 3: Define Convention Rules
+
+The default convention follows Conventional Commits with optional extensions:
+
+**Message Format:**
+```
+<type>(<scope>): <subject>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Allowed Types:**
+
+| Type | Usage |
+|------|-------|
+| `feat` | New feature or capability |
+| `fix` | Bug fix |
+| `docs` | Documentation-only changes |
+| `style` | Formatting, whitespace, no code change |
+| `refactor` | Code restructuring, no behavior change |
+| `test` | Adding or updating tests |
+| `chore` | Build process, tooling, dependencies |
+| `perf` | Performance improvement |
+| `ci` | CI/CD configuration changes |
+| `revert` | Reverting a previous commit |
+
+**Scope Rules:**
+```
+1. Scope is optional but recommended
+2. Use the primary module, component, or area affected
+3. Keep scope to a single word or hyphenated-phrase
+4. Examples: auth, api, user-profile, database, ci
+```
+
+**Subject Rules:**
+```
+1. Imperative mood ("add" not "added" or "adds")
+2. No period at the end
+3. Lowercase first letter
+4. Maximum 72 characters for the full header line
+5. Summarize the "what", not the "how"
+```
+
+**Ticket Reference Rules:**
+```
+1. If ticket prefix detected from branch: include in footer
+2. Format: Refs: PROJ-123 or Closes: PROJ-123
+3. If constitution specifies ticket placement (subject vs footer), follow that
+4. Multiple tickets separated by commas: Refs: PROJ-123, PROJ-124
+```
+
+**Breaking Changes:**
+```
+1. Add ! after type/scope: feat(api)!: remove deprecated endpoint
+2. Include BREAKING CHANGE: footer with description
+3. Always document migration path in body
+```
+
+### Step 4: Execute Action
+
+**Action: `format`**
+```
+1. Receive raw description of changes
+2. Infer type from changed files and description:
+   - Test files only → test
+   - Docs files only → docs
+   - New feature code → feat
+   - Bug description → fix
+   - Restructuring → refactor
+3. Infer scope from primary directory of changes
+4. Extract ticket from branch name if available
+5. Compose message following convention rules
+6. Return formatted message
+```
+
+**Action: `validate`**
+```
+1. Receive commit message
+2. Check header format: <type>(<scope>): <subject>
+3. Verify type is in allowed list
+4. Verify subject is imperative mood (heuristic check)
+5. Verify header length ≤ 72 characters
+6. Check for ticket reference if branch has ticket prefix
+7. Check body/footer formatting if present
+8. Return validation result with specific issues
+```
+
+**Action: `detect`**
+```
+1. Read last 50 commit messages from git log
+2. Classify each message by pattern:
+   - Conventional Commits format
+   - Ticket-prefixed (PROJ-123: message)
+   - Freeform
+   - Angular-style
+3. Report dominant pattern and consistency percentage
+4. Identify most-used types and scopes
+5. Note any ticket reference patterns
+6. Return detection report
+```
+
+**Action: `configure`**
+```
+1. Analyze detected patterns (run detect first)
+2. Propose convention rules aligned with existing patterns
+3. Present recommendation to user in plain language
+4. If user approves, suggest constitution Article 2 update
+5. Do NOT modify constitution directly — hand off to constitution skill
+```
+
+### Step 5: Branch Naming Conventions
+
+Define standard branch naming patterns (reference only — not enforced):
+
+| Pattern | Usage | Example |
+|---------|-------|---------|
+| `feature/<ticket>-<slug>` | New features | `feature/PROJ-123-user-auth` |
+| `fix/<ticket>-<slug>` | Bug fixes | `fix/PROJ-456-login-crash` |
+| `chore/<slug>` | Maintenance | `chore/update-dependencies` |
+| `docs/<slug>` | Documentation | `docs/api-reference` |
+| `release/<version>` | Release prep | `release/2.1.0` |
+| `hotfix/<slug>` | Urgent fixes | `hotfix/security-patch` |
+
+## Outputs
+
+### Formatted Message (action: format)
+
+```
+feat(auth): add OAuth2 login flow
+
+Implement Google and GitHub OAuth providers using NextAuth.
+Includes callback handling and session persistence.
+
+Refs: PROJ-123
+```
+
+### Validation Result (action: validate)
+
+```json
+{
+  "valid": false,
+  "message": "Added new login feature",
+  "issues": [
+    {
+      "rule": "type-required",
+      "message": "Missing type prefix. Expected format: <type>(<scope>): <subject>",
+      "suggestion": "feat: add new login feature"
+    },
+    {
+      "rule": "imperative-mood",
+      "message": "Use imperative mood: 'add' instead of 'added'",
+      "suggestion": "feat: add new login feature"
+    }
+  ],
+  "suggested_message": "feat(auth): add new login feature\n\nRefs: PROJ-456"
+}
+```
+
+### Detection Report (action: detect)
+
+```json
+{
+  "total_commits_analyzed": 50,
+  "dominant_pattern": "conventional",
+  "consistency": 0.78,
+  "types_used": {
+    "feat": 18,
+    "fix": 12,
+    "chore": 8,
+    "docs": 5,
+    "refactor": 4,
+    "test": 3
+  },
+  "scopes_used": ["auth", "api", "ui", "db"],
+  "ticket_pattern": "PROJ-\\d+",
+  "ticket_placement": "footer",
+  "deviations": [
+    "11 commits lack type prefix",
+    "3 commits exceed 72 character header limit"
+  ]
+}
+```
+
+## Human Checkpoints
+
+| Action | Tier | Behavior |
+|--------|------|----------|
+| format | Auto | Returns formatted message, no approval needed |
+| validate | Auto | Returns validation result, no approval needed |
+| detect | Auto | Returns detection report, no approval needed |
+| configure | Review | User reviews and approves proposed conventions |
+
+## Error Handling
+
+| Error | Resolution |
+|-------|------------|
+| No git repository | Cannot detect patterns — use default Conventional Commits |
+| No commits in history | Cannot detect patterns — use default Conventional Commits |
+| Constitution not found | Use Conventional Commits as default |
+| Branch name unparseable | Skip ticket prefix extraction |
+| Commit tooling config conflicts with constitution | Flag conflict, constitution takes precedence |
+| Ambiguous type inference | Ask user to specify type |
+
+## Example Invocations
+
+**Format a commit message:**
+```
+Input: "I fixed the bug where users couldn't log in with special characters in their password"
+Branch: fix/PROJ-789-special-char-login
+
+Output: fix(auth): handle special characters in password login
+
+Resolve encoding issue for passwords containing &, <, > characters
+during the authentication flow.
+
+Closes: PROJ-789
+```
+
+**Validate a commit message:**
+```
+Input: "updated the tests"
+
+Output:
+  valid: false
+  issues:
+    - Missing type prefix
+    - Past tense "updated" should be "update"
+  suggestion: "test: update test suite"
+```
+
+## Integration Points
+
+- **Invoked by:** `developer` agent during commit phase, `orchestrator` for convention setup
+- **References:** `/.sigil/constitution.md` Article 2
+- **Complements:** Code review skill (reviews commit message quality)
+- **Works with:** Git hooks (commit-msg) for automated validation
+
+## Best Practices
+
+1. **Consistency over perfection** — Pick a convention and stick with it
+2. **Ticket traceability** — Always reference tickets when they exist
+3. **Atomic commits** — One logical change per commit makes conventions easier
+4. **Body for context** — Use the body to explain "why", not "what"
+5. **Scope narrows focus** — Helps reviewers understand impact area at a glance
+6. **Breaking changes are loud** — Always use `!` suffix and footer for visibility
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | 2026-03-11 | Initial release — full implementation |

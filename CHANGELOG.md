@@ -1,5 +1,43 @@
 # Changelog
 
+## [0.30.0] - 2026-03-11
+
+### Added
+
+#### New Reference Files
+- **Shared Protocol: Pre-Execution Check** — Reusable protocol for updating project-context.md before skill execution. Skills reference this instead of inlining identical instructions. (`skills/shared-protocols/pre-execution-check.md`)
+- **Constitution Writer article templates** — Project-type cascade (MVP/Production/Enterprise) with auto-config defaults per article, plus jargon translation table for non-technical users. (`skills/workflow/constitution-writer/references/article-templates.md`)
+- **Constitution Writer question bank** — Tiered question strategy (Auto-Decide / Translate / Ask Directly) with project category detection and context-filtered questions. (`skills/workflow/constitution-writer/references/question-bank.md`)
+- **Routing Rules reference skill** — Single source of truth for orchestrator routing logic: trigger word matrix, natural language patterns, routing precedence, context-aware routing. (`skills/workflow/routing-rules/SKILL.md`)
+- **Code Reviewer review checklist** — Detailed review criteria covering code style, architecture, error handling, complexity, DRY, security, performance, and testing with severity levels. (`skills/review/code-reviewer/references/review-checklist.md`)
+- **QA Fixer fix categories** — Categorizes fix types (lint, format, import, type, test, accessibility) with auto-fix capabilities, escalation rules, and language-specific tool mappings. (`skills/qa/qa-fixer/references/fix-categories.md`)
+- **Foundation Writer example** — Complete worked example of a foundation document (TaskFlow project). (`skills/engineering/foundation-writer/references/example-foundation.md`)
+- **Knowledge Search scoring algorithm** — Explicit scoring formula with keyword match, recency, source weight, and context relevance components. (`skills/research/knowledge-search/references/scoring-algorithm.md`)
+- **Connect Wizard standards integration** — Protocol for applying shared team standards to constitutions with enforcement levels, integration discovery for tool adapters. (`skills/shared-context/connect-wizard/references/standards-integration.md`)
+
+#### New Agent
+- **Code Reviewer agent v1.0.0** — Dedicated agent for code review with structured verdict system (Approve/Request Changes/Block), learning integration, tech debt tracking, and override awareness.
+
+#### New Engineering Skills
+- **Commit Conventions v1.0.0** — Generalized commit conventions reference skill. Conventional Commits format, configurable ticket prefix detection from branch name, constitution-based overrides.
+- **Test Generator v1.0.0** — Framework-agnostic test generation. Auto-detects test framework (Jest, pytest, Go test, RSpec, Vitest, etc.), generates tests following project patterns, supports coverage-driven and TDD modes.
+- **Database Migration v1.0.0** — Tool-agnostic migration generation. Detects migration tool (Prisma, Knex, Alembic, Flyway, etc.), generates migration + rollback files, validates data integrity and destructive change safety.
+- **Documentation Generator v1.0.0** — Code-analysis-based documentation generation. README generation, API doc extraction, inline doc standards per language (JSDoc, docstrings, GoDoc).
+- **Refactoring Backend v1.0.0** — Structured backend refactoring with safety guarantees. Service extraction, dependency analysis, API compatibility preservation, test-first refactoring.
+- **Refactoring Frontend v1.0.0** — Structured frontend refactoring with safety guarantees. Component extraction, state management refactoring, bundle impact analysis, accessibility preservation.
+
+### Changed
+
+#### Skill Reorganization
+- **foundation-writer v1.1.0** — Moved from `workflow/` to `engineering/` category. Engineering skills handle technical implementation; workflow skills handle orchestration mechanics.
+- **task-decomposer v1.2.0** — Moved from `workflow/` to `engineering/` category.
+- **technical-planner v1.2.0** — Moved from `workflow/` to `engineering/` category.
+- **spec-writer v1.1.0** — Moved from `workflow/` to `specification/` category. Specification authoring is a distinct concern from orchestration.
+
+#### Version
+- Plugin version bumped from 0.29.0 to 0.30.0 (plugin.json, marketplace.json, README.md).
+- `docs/dev/extending-skills.md` — Updated skill category table to reflect reorganization and new skills.
+
 ## [0.29.0] - 2026-03-09
 
 ### Added
